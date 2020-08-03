@@ -2,21 +2,15 @@
     SUBROUTINE mrm(mm,rm)
 !=======================================================================
 !
-!   Computes the matrix representation of the operator
-!
-!             r^mm
+!   The matrix representation of the operator        r^mm
 !
 !   in the B-spline basis.
 !
 !-----------------------------------------------------------------------
 !
-!   on entry
-!   --------
-!       mm      integer defining the power of r
+!   on entry:    mm  -    integer defining the power of r
 !
-!   on exit
-!   -------
-!       rm      <B_i,r^mm B_j> in symmetric storage mode
+!   on exit:     rm  -    <B_i,r^mm B_j> in symmetric storage mode
 !
 !-----------------------------------------------------------------------
 

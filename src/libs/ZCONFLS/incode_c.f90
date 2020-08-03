@@ -6,11 +6,12 @@
       Use conf_LS
 
       Implicit none
-      
-      Character(4), External :: ELF4
-      Character(1), External :: AL
-      Character(4) :: BLANK = '    '
-      Integer(4) :: i,k,m
+      Character(4), external :: ELF4
+      Character(1), external :: AL
+      Integer :: i,k,m
+
+      CONFIG = ' '
+      COUPLE = ' '
 
       k=0; m=1
       Do i=1,no; k=k+iq(i); if(iq(i).eq.0) m=0; End do
@@ -33,12 +34,6 @@
         k=k+8
        End do
 
-       Do i=no+1,msh
-        CONFIG(k+1:k+4)=BLANK
-        CONFIG(k+5:k+8)=BLANK
-        k=k+8
-       End do
-
        k=0
        Do i=1,no
         write(COUPLE(k+1:k+4),'(i2,a1,i1)')  &
@@ -52,12 +47,12 @@
         k=k+4
        End do
 
-       Do i=no+no,msh+msh
-        COUPLE(k+1:k+4)=BLANK
-        k=k+4
-       End do
+       if(LS(1,5).eq.-1) couple(k:k) ='a'
+       if(LS(1,5).eq.-2) couple(k:k) ='b'
+
 
        End Subroutine Incode_c
+
 
 
 !======================================================================
@@ -65,8 +60,7 @@
 !======================================================================
 !      decode the config. from c-file format to ZOI format
 !----------------------------------------------------------------------
-
-       USE conf_LS
+       Use conf_LS
 
        no=0
        ii = LEN_TRIM(CONFIG)
@@ -92,6 +86,9 @@
         LS(i,4)=2*LA(COUPLE(j+1:j+1))+1
         j=j+4
        End do
+       j = j - 2
+       if(couple(j:j).eq.'a') LS(1,5)=-1 
+       if(couple(j:j).eq.'b') LS(1,5)=-2 
 
        Ltotal = LS(no,4)
        Stotal = LS(no,5)
@@ -296,7 +293,7 @@
 !======================================================================
 !      decode the config. from c-file format to ZOI format
 !----------------------------------------------------------------------
-       Use conf_LS
+       USE conf_LS
 
        no=0
        ii = LEN_TRIM(CONFIG)

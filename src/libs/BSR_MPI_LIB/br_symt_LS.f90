@@ -22,13 +22,11 @@
        if(allocated(IT_conf)) Deallocate(IT_conf)
        if(allocated(ip_term)) Deallocate(ip_term)
        if(allocated(LS_term)) Deallocate(LS_term)
-       if(allocated(IT_stat)) Deallocate(IT_stat)
-       Allocate(IT_conf(msymt),ip_term(msymt),LS_term(ksymt,5),IT_stat(msymt))    
+       Allocate(IT_conf(msymt),ip_term(msymt),LS_term(ksymt,5))    
       end if
 
       Call MPI_BCAST(IT_conf,msymt,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
       Call MPI_BCAST(ip_term,msymt,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      Call MPI_BCAST(IT_stat,msymt,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
 
       Call MPI_BCAST(LS_term,ksymt*5,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
 

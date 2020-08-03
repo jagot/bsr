@@ -10,7 +10,8 @@
 !     CHARACTER(LEN=10) :: T
 !     INTEGER :: id,ih,im,is,ims
 
-      Real :: TM(2), ETIME !, DTIME
+!     Real :: TM(2), ETIME !, DTIME
+      Real :: time
  
 ! ... Power station Fortran 4.0:
 
@@ -22,7 +23,11 @@
 
 ! ... Digital Fortran 6.0:
 
-      RRTC = ETIME(TM); ! RRTC = TM(1)
+!     RRTC = ETIME(TM); ! RRTC = TM(1)
+
+      Call CPU_time(time)
+
+      RRTC = time
  
       End Function RRTC
                                                                                         

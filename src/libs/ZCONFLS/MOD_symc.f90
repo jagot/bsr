@@ -21,15 +21,17 @@
       Integer :: ksymc = 0       ! max.dimension of all symc.s 
       Integer :: lsymc = 0       ! last element 
       
-      Integer, allocatable :: LT_conf(:), ST_conf(:)   
-      Integer, allocatable :: no_conf(:)   
-      Integer, allocatable :: ip_conf(:)   
-      Integer, allocatable :: iq_conf(:)   
-      Integer, allocatable :: ln_conf(:)   
+      Integer, allocatable :: LT_conf(:), ST_conf(:)  ! total terms   
+      Integer, allocatable :: no_conf(:)              ! number of shells
+                                                      ! (we can avoid this array)
+      Integer, allocatable :: ip_conf(:)              ! pointer for the given config.
+                                                      ! in the common list {iq,ln}
+      Integer, allocatable :: iq_conf(:)              ! occupation numbers
+      Integer, allocatable :: ln_conf(:)              ! l-values
 
-! ... IC_term1(ic), IC_term2(ic) - gives for given configuration 'ic' 
-! ... the range of corr. terms in the ordered list of terms
-
+! ... IC_term1(ic), IC_term2(ic) - gives, for the configuration 'ic', 
+! ... the range of related terms in the ordered list of terms
+                                                                          
       Integer, allocatable :: IC_term1(:), IC_term2(:)
 
 ! ... IC_need(:) - define the need of calc. for two given config.s
@@ -240,3 +242,6 @@
       no_conf_LS = no_conf(ic)
 
       End Function no_conf_LS
+
+
+

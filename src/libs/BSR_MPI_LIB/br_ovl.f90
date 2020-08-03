@@ -11,7 +11,7 @@
       
       Call MPI_COMM_RANK(MPI_COMM_WORLD, myid, ierr)
 
-      Call MPI_BCAST(norb,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
+      Call MPI_BCAST(norb, 1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
       Call MPI_BCAST(max_l,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
       Call MPI_BCAST(nobs ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
       mem_orb_overlaps = 2*nobs + 4*norb + 3*max_l
@@ -30,8 +30,8 @@
       Call MPI_BCAST(ipl ,norb,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
       Call MPI_BCAST(jpl ,norb,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
 
-      Call MPI_BCAST(ip_l(0:max_l),max_l+1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      Call MPI_BCAST(jp_l(0:max_l),max_l+1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
+      Call MPI_BCAST(ip_l  (0:max_l),max_l+1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
+      Call MPI_BCAST(jp_l  (0:max_l),max_l+1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
       Call MPI_BCAST(ip_ovl(0:max_l),max_l+1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
 
       Call MPI_BCAST(Cobs,nobs,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)

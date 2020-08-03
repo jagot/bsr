@@ -118,7 +118,7 @@
 !----------------------------------------------------------------------
       Implicit none
       Character(*) :: name
-      Integer :: iarg,i
+      Integer :: iarg,i,i1,i2,iname
       Character(80) :: AS
 
       iarg = command_argument_count(); if(iarg.eq.0) Return 

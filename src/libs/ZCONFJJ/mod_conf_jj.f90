@@ -83,8 +83,6 @@
       Integer :: njbl2 = 0
       Integer, allocatable :: JJ2c(:),JT2c1(:),JT2c2(:),Jncfg2(:), JTp2(:)
 
-      Real(8) :: memory_conf_jj = 0.d0
-
       End Module conf_jj
 
 
@@ -318,6 +316,9 @@
       jot_ic = Get_jot(iconf)
 
       End Function jot_ic
+
+
+
 
 !======================================================================
       Subroutine Save_cfg_jj(i)

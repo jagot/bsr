@@ -13,14 +13,14 @@
       Real(8), intent(in) :: Z,AWT
       Real(8), intent(out) :: au_cm, au_ev   
       Integer, intent(in) :: ipri
-      Real(8) :: A=1000000
+      Real(8) :: A
       Real(8), parameter :: RATIO = 5.485799110d-4
       Real(8), parameter :: Ry_cm = 109737.31568549d0
       Real(8), parameter :: Ry_ev = 13.6056917d0
 
 ! ... determine suitable atomic weight if any
  
-      if(AWT.gt.0.5d0.and.AWT.lt.1000000.d0) then
+      if(AWT.ne.0.d0) then
         A = AWT
       else
         if ( Z .eq. 1.) then 

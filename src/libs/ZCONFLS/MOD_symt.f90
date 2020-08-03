@@ -51,7 +51,7 @@
       Real(8) :: mem_symt = 0.d0,  mem_oper = 0.d0
       Integer :: m_symt
 
-      Integer(8) :: ij, ij_oper, ii8, jj8
+      Integer(8) :: ij, ij_oper, ij_done, ii8, jj8, ij8
 
       End Module symt_list_LS
 
@@ -159,7 +159,7 @@
 ! ... Add new symt:
 
       if(nsymt.ge.msymt.or.lsymt+no.gt.ksymt) &
-      Call Alloc_symt_LS(msymt+isymt)
+        Call Alloc_symt_LS(msymt+isymt)
       nsymt=nsymt+1
       IT_conf(nsymt)=iconf
       ip_term(nsymt)=lsymt
@@ -168,6 +168,34 @@
       Iadd_symt_LS=nsymt
 
       End Function Iadd_symt_LS
+
+
+!======================================================================
+      Integer Function Jadd_symt_LS(iconf,no,LS)
+!======================================================================
+!     add new angular symmetry to symt_list_LS,
+!     witout checking of the existent one
+!----------------------------------------------------------------------
+      Use symt_list_LS
+
+      Implicit none 
+      Integer :: iconf,no, i,j,ip,jp
+      Integer :: LS(msh,5)
+      Integer, external :: no_conf_LS
+
+      Jadd_symt_LS = 0
+      if(no.le.0) Return
+
+      if(nsymt.ge.msymt.or.lsymt+no.gt.ksymt) &
+        Call Alloc_symt_LS(msymt+isymt)
+      nsymt=nsymt+1
+      IT_conf(nsymt)=iconf
+      ip_term(nsymt)=lsymt
+      Do i=1,no; lsymt=lsymt+1; LS_term(lsymt,:)=LS(i,:); End do
+
+      Jadd_symt_LS=nsymt
+
+      End Function Jadd_symt_LS
 
 
 !======================================================================
@@ -231,7 +259,9 @@
 
       End Subroutine Write_symt_LS
 
-!======================================================================
+
+
+!=================	=====================================================
       Subroutine Write_oper_LS(nu)
 !======================================================================
       Use symt_list_LS 
@@ -264,7 +294,7 @@
       write(nu) ij_oper
       Do ij = 1,ij_oper
        Do j=1,noper
-        if(IT_oper(j,ij).eq. 0) IT_oper(j,ij)=1
+!        if(IT_oper(j,ij).eq. 0) IT_oper(j,ij)=1
         if(IT_oper(j,ij).eq.-1) IT_oper(j,ij)=0
        End do 
       End do
@@ -283,7 +313,7 @@
       Integer(8) :: i,j
 
       read(nu) ij
-      if(ij_oper.lt.ij) Stop 'Read_oper_LS: nsymt too small' 
+      if(ij_oper.lt.ij) Stop 'Load_oper_LS: nsymt too small' 
       read(nu) ((IT_oper(i,j),i=1,noper),j=1,ij)
 
       End Subroutine Load_oper_LS
@@ -307,6 +337,34 @@
 
 
 !======================================================================
+      Subroutine Load_done_LS(nu)
+!======================================================================
+      Use symt_list_LS 
+
+      Implicit none
+      Integer, intent(in) :: nu
+
+      read(nu) ij8
+      if(ij_done.lt.ij8) Stop 'Load_oper_LS: nsymt too small' 
+      read(nu) (IT_done(ii8),ii8=1,ij8)
+
+      End Subroutine Load_done_LS
+
+!======================================================================
+      Subroutine Record_done_LS(nu)
+!======================================================================
+      Use symt_list_LS 
+
+      Implicit none
+      Integer, intent(in) :: nu
+
+      write(nu) ij_done
+      write(nu) IT_done
+
+      End Subroutine Record_done_LS
+
+
+!======================================================================
       Subroutine Write_done_LS(nu)
 !======================================================================
       Use symt_list_LS, only: nsymt, IT_done 
@@ -323,6 +381,7 @@
       if(i1.le.n) go to 1
 
       End Subroutine Write_done_LS
+
 
 !======================================================================
       Subroutine Read_done_LS(nu)

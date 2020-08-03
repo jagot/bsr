@@ -14,7 +14,7 @@
 
       Implicit none 
       Integer, intent(in ) :: l,q,id
-      Integer, intent(out) :: ML, MS, Idet(q)
+	     Integer, intent(out) :: ML, MS, Idet(q)
       Integer :: i,j,k,nd,nq
       Integer, External :: ML_id, MS_id
 
@@ -85,7 +85,7 @@
 
       Integer, Intent(in) :: l,q,id
 
-      write(*,*) 'DET_sh_LS: input is out of range: l,q,id = ',l,q,id
+	     write(*,*) 'DET_sh_LS: input is out of range: l,q,id = ',l,q,id
       Stop  ' '
 
       End Subroutine DET_LS_stop

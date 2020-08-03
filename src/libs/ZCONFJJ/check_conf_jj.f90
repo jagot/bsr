@@ -80,8 +80,6 @@
       End do
       if(k.eq.1) Stop 'int_bnk file is not complete; run DBSR_BREIT first'
 
-      Deallocate(IT_done)
-
       End Subroutine Check_conf_jj
 
 

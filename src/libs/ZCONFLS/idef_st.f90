@@ -7,7 +7,6 @@
 
       Idef_st = 0
       rewind(in)
-
     1 read(in,'(a)',end=2) AS
       if(AS(1:1).eq.'*') go to 2
       if(AS(15:20).ne.'NUMBER') go to 1

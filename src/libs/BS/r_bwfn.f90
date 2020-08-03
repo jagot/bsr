@@ -3,18 +3,16 @@
 !======================================================================
 !     read radial orbitals in B-spline representation from file 'nu'
 !----------------------------------------------------------------------
-
-      USE spline_atomic
-      USE spline_param
-      USE spline_orbitals
+      Use spline_atomic
+      Use spline_param
+      Use spline_orbitals
       
-      IMPLICIT NONE
-      
-      Integer(4), Intent(in) :: nu
-      Character(4) :: el
+      Implicit none
+      Integer, intent(in) :: nu
       Real(8) :: zw,hw,hmw,rmw
-      Integer(4) :: ksw,nsw,mw,n,l,k,i
-      Integer(4), External :: Iadd_bsorb
+      Integer :: ksw,nsw,mw,n,l,k,i
+      Integer, external :: Iadd_bsorb
+      Character(4) :: el
 
       rewind(nu)
     1 read(nu,end=2) el,zw,hw,hmw,rmw,ksw,nsw,mw

@@ -45,7 +45,7 @@
 !====================================================================    
 ! . deallocates arrays in module "spline_integrals"
 !--------------------------------------------------------------------
-    Use spline_integrals
+    USE spline_integrals
 
     if(allocated(rkb)) DEALLOCATE(rkb)
     itype='aaa'

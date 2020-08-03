@@ -9,7 +9,7 @@
       Integer, intent(in)  :: mch,n
       Real(8), intent(in)  :: g, kma(*)
       Real(8), intent(out) :: om(mch,mch)      
-      Integer :: i,j
+      Integer :: i,j,ij
       Real(8) :: x,y, AK(n,n),AK1(n,n),AK2(n,n)
 
       Call Put_ijmatr(n,AK,n,kma)      !  kma -> AK, as a full matrix

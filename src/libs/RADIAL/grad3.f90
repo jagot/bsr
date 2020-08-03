@@ -12,6 +12,8 @@
       Implicit real(8) (A-H,O-Z)
       Integer(4), Intent(in) :: I,J
 
+      DIMENSION Q(NR)
+
       LI=L(I); LJ=L(J); IL = IABS(LI - LJ)
       IF (IL .NE. 0 .AND. IL .NE. 2) Stop 'GRAD2: LI - LJ <> 0,2'
 

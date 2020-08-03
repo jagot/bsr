@@ -1,9 +1,9 @@
 !======================================================================
       Module zoef_list
 !======================================================================
-!     Containes the list of coefficients, Zoef, with two identifiers: 
-!                        iz_int and iz_df
-!     the pointers to integral and overlap factors, respectively. 
+!     Containes the coefficients for two configuration symmetries.
+!     Each coefficient has two identifiers: iz_int and iz_df,
+!     the pointers for integral and overlap factor, respectively. 
 !----------------------------------------------------------------------
       Implicit none
 
@@ -14,7 +14,11 @@
       Integer, allocatable :: IZ_int(:),IZ_df(:)   
       Real(8), allocatable :: Zoef(:)
 
-      Real(8) :: eps_z = 1.d-7
+! ... debug paramters:
+
+      Real(8) :: mem_zoef = 0.d0, mem_max_zoef = 0.d0
+      Integer :: zoef_realloc = 0
+      Integer :: max_zoef = 0
 
       End Module zoef_list
 
@@ -22,8 +26,6 @@
 !======================================================================
       Subroutine alloc_zoef(m)
 !======================================================================
-!     allocate, deallocate or reallocate arrays in module "zoef"
-!----------------------------------------------------------------------
       Use zoef_list
 
       Implicit none
@@ -57,8 +59,12 @@
        ra=Zoef(1:nzoef); Deallocate(Zoef)
        Allocate(Zoef(mzoef)); Zoef(1:nzoef)=ra 
        Deallocate(ra)
-       write(*,*) ' realloc_zoef: m = ', m
+       zoef_realloc = zoef_realloc + 1 
+       write(*,*) ' realloc_zoef: m = ', m,izoef
       end if
+
+      mem_zoef = 16.d0*mzoef / (1024*1024)
+      if(mem_zoef.gt.mem_max_zoef) mem_max_zoef = mem_zoef
 
       End Subroutine alloc_zoef
 
@@ -90,6 +96,7 @@
       if(nzoef.eq.mzoef) Call Alloc_zoef(mzoef+izoef)
       nzoef = nzoef+1 
       Zoef(nzoef)=C; IZ_int(nzoef)=int; IZ_DF(nzoef)=idf
+      if(nzoef.gt.max_zoef) max_zoef=nzoef
 
       End Subroutine Iadd_zoef
 

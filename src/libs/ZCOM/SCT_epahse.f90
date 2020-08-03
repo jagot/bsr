@@ -18,9 +18,6 @@
 ! ... get the eigenvalues and eigenvectors of the K-matrix:
 
       uk=K;   Call LAP_DSYEV('V','L',n,m,uk,ui,info)
-      if(info.ne.0) then
-       ui=0; us=0; Return 
-      end if
 
 ! ... eigenphases:
 

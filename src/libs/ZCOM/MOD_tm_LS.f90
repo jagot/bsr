@@ -1,17 +1,8 @@
 !======================================================================
       Module tm_LS
 !======================================================================
-!     Containes the allocatable set of records with three real and five 
-!     integer  parameters
-!     Used to save T-matrix elements (for one transition):
-!     STpar  -  total spin of the given partial wave 
-!     LTpar  -  total orbital momemtum of the given partial wave 
-!     l1, l2 -  l-values for ingoing and outgoing electron
-!     ip     -  
-!     EK     -  electron energy
-!     TR, TI -  real and imaginary parts of T-matrix element
-!     jp     -
-!     kcase  -  
+!     Containes the allocatable data with three real and five integer
+!     parameters
 !----------------------------------------------------------------------
       Implicit none
 
@@ -24,7 +15,6 @@
       Real(8), allocatable :: EK(:),TR(:),TI(:)
 
       Integer, allocatable :: jp(:,:)
- 
       Integer :: kcase
 
       End Module tm_LS
@@ -105,7 +95,7 @@
        Return
       End do
 
-! ... add new record:
+! ... add new integral:
 
       if(ndata.eq.mdata) Call Alloc_tm_LS(mdata+idata)
 

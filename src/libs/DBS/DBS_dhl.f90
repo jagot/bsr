@@ -98,6 +98,7 @@
       Integer, Intent(in) :: k1,k2
       Real(8), Intent(in) :: v1(ms),v2(ms)
       Real(8) :: v(ms)
+      Integer :: i,j
 
       Vp_dhl = 0.d0; if(k1.ne.k2) Return
       Call Mat_dhl_pq(k1)

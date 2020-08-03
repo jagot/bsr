@@ -113,7 +113,7 @@
 
       A(1:n,1:k) = Z(1:n,1:k)
 
-      Deallocate(work,iwork,ifail,Z)
+      Deallocate(work,ifail,Z)
 
       End Subroutine LAP_DSYEVX
 
@@ -188,7 +188,7 @@
 
       A(1:n,1:k) = Z(1:n,1:k)
 
-      Deallocate(work,iwork,ifail,Z)
+      Deallocate(work,ifail,Z)
 
       End Subroutine LAP_DSYGVX
 

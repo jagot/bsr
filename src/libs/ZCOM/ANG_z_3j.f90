@@ -123,7 +123,7 @@
 !====================================================================
       Real(8) Function Z_3jj(j1,m1,j2,m2,j3,m3)
 !====================================================================
-!     3j-symbols for L-moments (without 2J+1 representation)
+!     3j-symbols for L-moments (without 2J+1 representation
 !--------------------------------------------------------------------
       Implicit none
       Integer, intent(in) :: j1,m1,j2,m2,j3,m3
@@ -283,9 +283,10 @@
       Implicit none
       Integer, intent(in) :: k1,k2,k3
       Real(8), external :: ZCB
+      Real(8) :: A,B,C
+      Integer :: I,J, K,L, M,N, N1,N2,N3, M1,M2,M3
 
       CLB = ZCB(k1,k2,k3)* (k3+k3+1)
       CLB = sqrt(CLB) * (-1)**(k1-k2)       ! sign?
 
       END FUNCTION CLB
-

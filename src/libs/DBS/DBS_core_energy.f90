@@ -126,8 +126,8 @@
 
       Implicit none
       Integer, intent(in) :: ncore, mbreit, kbs(*)
-      Integer :: i,j,k,v, ka,ja,la, kb,jb,lb, int
-      Real(8) :: C, ca,cb, S(8)
+      Integer :: i,j,k,v, ka,ja,la, kb,jb,lb, int, i1,i2,j1,j2
+      Real(8) :: C, ca,cb, CK, S(8)
       Integer, external :: l_kappa,j_kappa
       Real(8), external :: Cjkj, SMU
 

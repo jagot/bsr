@@ -27,12 +27,13 @@
 
       Integer :: mch  =  0 !  maximum number of one-electron channels
 
-      CHARACTER(20), allocatable :: AFP(:) ! file-name for perturber
+      Character(20), allocatable :: AFP(:) ! file-name for perturber
 
       Integer, allocatable :: ncp(:)  !  number of configurations in perturber	
       Integer, allocatable :: nwp(:)  !  number of orbitals in perturber
 
       End Module channels_ion
+
 
 
 !=======================================================================    

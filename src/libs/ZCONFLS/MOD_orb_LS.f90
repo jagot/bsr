@@ -28,7 +28,6 @@
 ! ... orbital orthogonality and AFTER conditions
 
       Integer :: JORT = 1        
-      Integer, allocatable :: IORT(:,:)
 
       End Module orb_LS
 
@@ -42,54 +41,44 @@
 
       Implicit none
       Integer, intent(in) :: m
-      Integer, allocatable :: ia(:), ib(:,:)
+      Integer, allocatable :: ia(:)
       Character(4), allocatable :: aa(:)
 
       if(m.le.0) then
-       if(allocated(NEF)) Deallocate (NEF,LEF,KEF,IEF,ELF,IORT)
+       if(allocated(NEF)) Deallocate (NEF,LEF,KEF,IEF,ELF)
        mwf = 0; nwf = 0
        if(m.lt.0) then
         mwf = iwf
-        Allocate(NEF(mwf),LEF(mwf),KEF(mwf),IEF(mwf),ELF(mwf), &
-                 IORT(mwf,mwf))
+        Allocate(NEF(mwf),LEF(mwf),KEF(mwf),IEF(mwf),ELF(mwf))
         NEF = 0; LEF = -1; KEF = 0; IEF = 0; ELF = '    '  
-        IORT = 0
        end if  
       elseif(.not.allocated(NEF)) then
        mwf = m
-       Allocate(NEF(mwf),LEF(mwf),KEF(mwf),IEF(mwf),ELF(mwf), &
-                IORT(mwf,mwf))
+       Allocate(NEF(mwf),LEF(mwf),KEF(mwf),IEF(mwf),ELF(mwf))
        NEF = 0; LEF = -1; KEF = 0; IEF = 0; ELF = '    '  
-       IORT = 0
       elseif(m.le.mwf) then
        Return
       elseif(nwf.eq.0) then
-       Deallocate (NEF,LEF,KEF,IEF,ELF,IORT)
+       Deallocate (NEF,LEF,KEF,IEF,ELF)
        mwf = m
-       Allocate(NEF(mwf),LEF(mwf),KEF(mwf),IEF(mwf),ELF(mwf), &
-                IORT(mwf,mwf))
+       Allocate(NEF(mwf),LEF(mwf),KEF(mwf),IEF(mwf),ELF(mwf))
        NEF = 0; LEF = -1; KEF = 0; IEF = 0; ELF = '    '  
-       IORT = 0
       else
        mwf = m
        Allocate(ia(nwf))
-       ia=NEF(1:nwf); Deallocate(NEF)
-       Allocate(NEF(mwf)); NEF(1:nwf)=ia
-       ia=LEF(1:nwf); Deallocate(LEF)
-       Allocate(LEF(mwf)); LEF(1:nwf)=ia
-       ia=KEF(1:nwf); Deallocate(KEF)
-       Allocate(KEF(mwf)); KEF(1:nwf)=ia
-       ia=IEF(1:nwf); Deallocate(IEF)
-       Allocate(IEF(mwf)); IEF(1:nwf)=ia
+	ia=NEF(1:nwf); Deallocate(NEF)
+	Allocate(NEF(mwf)); NEF(1:nwf)=ia
+	ia=LEF(1:nwf); Deallocate(LEF)
+	Allocate(LEF(mwf)); LEF(1:nwf)=ia
+	ia=KEF(1:nwf); Deallocate(KEF)
+	Allocate(KEF(mwf)); KEF(1:nwf)=ia
+	ia=IEF(1:nwf); Deallocate(IEF)
+	Allocate(IEF(mwf)); IEF(1:nwf)=ia
        Deallocate(ia)
        Allocate(aa(nwf))
-       aa=ELF(1:nwf); Deallocate(ELF)
-       Allocate(ELF(mwf)); ELF(1:nwf)=aa
+	aa=ELF(1:nwf); Deallocate(ELF)
+	Allocate(ELF(mwf)); ELF(1:nwf)=aa
        Deallocate(aa)
-       Allocate(ib(nwf,nwf))
-       ib=IORT(1:nwf,1:nwf); Deallocate(IORT)
-       Allocate(IORT(mwf,mwf)); IORT(1:nwf,1:nwf)=ib
-       Deallocate(ib)
       end if
 
       End Subroutine Alloc_orb_LS
@@ -170,4 +159,39 @@
     2 Close(nu)
 
       End Subroutine Read_bsw_orb_LS
+           
+
+!======================================================================
+      Subroutine Read_orb_LS(nu,nclosd)
+!======================================================================
+!     read only spectroscopic notation from bsw-file (unit nu)
+!----------------------------------------------------------------------
+      Use orb_LS
+
+      Call Alloc_orb_LS(0)
+      read(nu) nwf,nclosd
+      mwf = nwf
+      Allocate(NEF(mwf),LEF(mwf),KEF(mwf),IEF(mwf),ELF(mwf))
+      read(nu) (NEF(i),i=1,nwf)
+      read(nu) (LEF(i),i=1,nwf)
+      read(nu) (KEF(i),i=1,nwf)
+      read(nu) (ELF(i),i=1,nwf)
+
+      End Subroutine Read_orb_LS
+           
+
+!======================================================================
+      Subroutine write_orb_LS(nu,nclosd)
+!======================================================================
+!     write only spectroscopic notation from bsw-file (unit nu)
+!----------------------------------------------------------------------
+      Use orb_LS
+
+      write(nu) nwf,nclosd
+      write(nu) (NEF(i),i=1,nwf)
+      write(nu) (LEF(i),i=1,nwf)
+      write(nu) (KEF(i),i=1,nwf)
+      write(nu) (ELF(i),i=1,nwf)
+
+      End Subroutine write_orb_LS
            

@@ -2,7 +2,7 @@
       Real(8) Function quadr_pq (io,jo,m)
 !======================================================================
 !     Evaluates   <p_io | r^m | p_jo>     with respect to r
-!     between orbitals io and jo
+!     where p  - two-component Dirac functions in module DF_orbitals
 !----------------------------------------------------------------------
       Use DBS_grid    
       Use DBS_gauss
@@ -69,18 +69,3 @@
       End Select
 
       End Function quadr_qp
-
-
-!======================================================================
-      Real(8) Function quadr_00 (io,jo)
-!======================================================================
-!     Evaluates overlaps  <p_io | p_jo>    between orbitals io and jo
-!----------------------------------------------------------------------
-      Use DBS_orbitals_pq
- 
-      quadr_00 = SUM(pq(:,:,io)*bpq(:,:,jo)) 
-
-      End Function quadr_00 
-
-
-      

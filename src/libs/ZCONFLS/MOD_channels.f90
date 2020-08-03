@@ -18,7 +18,7 @@
       Integer, allocatable :: ipch(:,:)   !  pointer on the place in the common list of orbitals
 
       Integer, allocatable :: ipconf(:,:) !  pointer on the last configuration
-      Integer, allocatable :: jkch(:,:)   !  k-number in jK-coupling - (2*J+1) mode
+      Integer, allocatable :: jkch(:,:)   !  k-number in jK-coupling - (2*J+1) ???
 
       CHARACTER(3), allocatable :: Tpar(:)  ! spectroscopic notation for partial wave
       CHARACTER(4), allocatable :: ELC(:,:) ! spectroscopic symbol for channel orbital
@@ -157,7 +157,7 @@
        write(nut,'(i3,a,i5.3,a,i6,a,2i10)') ilsp,'.',ilsp,' nch = ',nch(ilsp), &
         ' nc = ',ipconf(ilsp,nch(ilsp)),ncp(ilsp)
        Do i = 1,nch(ilsp)
-        write(nut,'(3x,a4,2x,3i6,2i8)') &
+        write(nut,'(a4,2x,3i6,2i8)') &
          ELC(ilsp,i),lch(ilsp,i),iptar(ilsp,i),i,ipconf(ilsp,i),jkch(ilsp,i)
        End do
        write(nut,'(80(''-''))')

@@ -63,13 +63,17 @@
 !======================================================================
 !     Generates HD-matrixes and integrals
 !----------------------------------------------------------------------
-      Use DBS_grid,        only: ms
+      Use DBS_grid,        only: ns,ms
+      Use DBS_orbitals_pq, only: nbf,kbs
       Use DBS_dhl_pq,      only: dhl
       Use dhl_core
 
       Implicit none
       Integer, intent(in) :: ncore,mbreit,kappa
-      Integer :: k,ik
+      Integer :: i,j,k,ik
+      Real(8) :: C
+      Real(8) :: vv(ms),ww(ms)
+      Integer, external :: ipointer
 
       Call Alloc_dhl_core(ms,ncore)
       Call Alloc_bk4_data(0)
