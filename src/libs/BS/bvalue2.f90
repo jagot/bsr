@@ -245,12 +245,12 @@
 
 !     ... now x .lt. xt(ilo) . decrease  ilo  to capture  x
 
-      istep = 1
-   31 ihi = ilo
-      ilo = ihi - istep
-      if (ilo .le. 1)                   go to 35
-      if (x .ge. xt(ilo))               go to 50
-      istep = istep*2
+   30 istep = 1
+   31    ihi = ilo
+         ilo = ihi - istep
+         if (ilo .le. 1)                go to 35
+         if (x .ge. xt(ilo))            go to 50
+         istep = istep*2
                                         go to 31
    35 ilo = 1
       if (x .lt. xt(1))                 go to 90

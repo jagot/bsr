@@ -131,7 +131,7 @@
       Implicit none
       Integer, intent(in) :: i,j,kpol,met
       Real(8), intent(in) :: wfact
-      Real(8) :: CP,CM,S1,S2
+      Real(8) :: CP,CM,S1,S2,v(ns)
       Real(8), external :: vav
 
       Call dip_mat_pq(wfact,kpol)
@@ -230,13 +230,13 @@
 ! Coulomb (length) gauge:  D = 1/sqrt(k)/sqrt(k+1) [k*II+  -  (k+1)*II-]  
 ! Babushkin (velocity)  :  D = (2k+1)/sqrt(k)/sqrt(k+1) [II+  +- Jk]
 !-----------------------------------------------------------------------
-      Use DBS_orbitals_pq, only: kbs,lbs,jbs
+      Use DBS_orbitals_pq, only: kbs,lbs,jbs,ebs
 
       Implicit none
       Integer, intent(in) :: i,j,kpol
       Real(8), intent(in) :: wfact
       Real(8) :: C,CP1,CM1,CP2,CM2,CJ,CL,CV,C1,C2
-      Integer :: k
+      Integer :: k,li,lj,ji,jj
       Integer, external :: ITRA
       Real(8), external :: DQUADRL_pq,DQUADRV_pq,JKDIP_pq
 
@@ -270,10 +270,11 @@
 !     electriv dipole radial integral in low frequency limit
 !     in  Babushkin (length) gauge:   <Pi|r^k|Pj> + <Qi|r^k|Qj>
 !----------------------------------------------------------------------
-      Use DBS_orbitals_pq, only: lbs,jbs
+      Use DBS_orbitals_pq, only: kbs,lbs,jbs
 
       Implicit none
       Integer, intent(in) :: i,j,k
+      Integer :: li,lj,ji,jj
       Integer, external :: l_kappa,j_kappa,ITRA
       Real(8), external :: QUADR_pq
 

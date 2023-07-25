@@ -150,7 +150,8 @@
      
       Integer, intent(in) :: nut,met
 
-      write(nut,'(a,i4,5x,a)') 'nlsp  = ',nlsp,' !   number of partial waves' 
+      write(nut,'(a,i4,5x,a)') &
+           'nlsp  = ',nlsp,' !   number of partial waves' 
       write(nut,'(80(''-''))')
 
       Do i = 1,nlsp
@@ -173,8 +174,8 @@
        write(nut,'(i3,a,a,i6)')  ilsp,'.',' nch =',nch(ilsp)
        write(nut,'(80(''-''))')
        Do i = 1,nch(ilsp)
-        write(nut,'(i4,2x,a,2x,2i6,i8)') &
-         i,ELC(ilsp,i),kch(ilsp,i),iptar(ilsp,i),ipconf(ilsp,i)
+        write(nut,'(i3,a,2x,a,2x,2i6,i8)') &
+         i,'.',ELC(ilsp,i),kch(ilsp,i),iptar(ilsp,i),ipconf(ilsp,i)
        End do
        write(nut,'(80(''-''))')
       End do

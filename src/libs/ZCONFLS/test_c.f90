@@ -43,6 +43,7 @@
 
 ! ... check that subshell term is an allowed one ...
 
+      if(LS(1,5).gt.0) then
       Do i=1,no
        k = Iterm_LS(ln(i),iq(i),0,LS(i,1),LS(i,2),LS(i,3))
        if(k.eq.0) then
@@ -51,9 +52,11 @@
         Stop
        end if
       End do
+      end if
 
 ! ... check the coupling scheme ...
 
+      if(LS(1,5).gt.0) then
        Do i=2,no
         kl = ITRI(LS(i-1,4),LS(i,2),LS(i,4))
         ks=ITRI(LS(i-1,5),LS(i,3),LS(i,5))
@@ -63,5 +66,6 @@
          Stop
         end if
        End do
+      end if 
 
       End Subroutine TEST_c

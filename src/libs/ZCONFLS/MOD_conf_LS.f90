@@ -46,8 +46,8 @@
 
       Integer :: ncfg  = 0       !  current number of configurations
       Integer :: mcfg  = 0       !  max. number of configurations
-      Integer :: icfg  = 2**16   !  initial prediction of mcfg
-      Integer :: jcfg  = 2**3    !  average number of shells
+      Integer :: icfg  = 1000000 !  initial prediction of mcfg
+      Integer :: jcfg  = 5       !  average number of shells
       Integer :: kcfg  = 0       !  max. dimensionr
       Integer :: lcfg  = 0       !  last element
 
@@ -55,7 +55,7 @@
       Integer :: ncfg1,ncfg2
       Integer :: kshift1,kshift2
 
-      Integer :: L_min,L_max, S_min,S_max, J_min,J_max
+      Integer :: L_min,L_max, S_min,S_max, J_min,J_max, conf_mode = 0
 
 ! ... expansion coeficients
 
@@ -198,7 +198,6 @@
 
       ncfg=ncfg+1
       if(ncfg.eq.mcfg.or.lcfg+no.gt.kcfg) Call Alloc_cfg_LS(mcfg+icfg)
-
       IC_term(ncfg)=iterm
       ip_state (ncfg)=lcfg
       Do i=1,no; lcfg=lcfg+1; IP_orb(lcfg)=np(i); End do
@@ -328,4 +327,68 @@
       no_ic_LS = no_term_LS ( IC_term(ic) )
 
       End Function no_ic_LS
+
+
+!======================================================================
+      Subroutine Write_conf_LS(nu)
+!======================================================================
+      Use conf_LS 
+
+      Implicit none
+      Integer :: nu,i
+
+      write(nu) ncfg,lcfg,ne
+      write(nu) (ip_state(i),i=1,ncfg)
+      write(nu) (ic_term(i),i=1,ncfg)
+      write(nu) (ip_orb(i),i=1,lcfg)
+      write(nu) (WC(i),i=1,ncfg)
+
+      End Subroutine Write_conf_LS
+
+
+!======================================================================
+      Subroutine Read_conf_LS(nu)
+!======================================================================
+      Use conf_LS 
+
+      Implicit none
+      Integer :: nu,i
+
+      Call Alloc_cfg_LS(0)
+      read(nu) ncfg,lcfg,ne
+      Allocate(ip_state(ncfg),IC_term(ncfg),ip_orb(lcfg),WC(ncfg))
+      mcfg = ncfg; kcfg = lcfg; jcfg = kcfg/mcfg + 1
+      read(nu) (ip_state(i),i=1,ncfg)
+      read(nu) (ic_term(i),i=1,ncfg)
+      read(nu) (ip_orb(i),i=1,lcfg)
+      read(nu) (WC(i),i=1,ncfg)
+
+      End Subroutine Read_conf_LS
+
+
+!======================================================================
+      Subroutine Symc_conf(ic,conf)
+!======================================================================
+!     get label for configuration
+!----------------------------------------------------------------------
+      Use conf_LS, only: LTOTAL,STOTAL,no,nn,ln,iq,kn 
+
+      Implicit none
+      Integer, intent(in) :: ic
+      Integer :: i,k
+      Character(*) :: conf
+      Character(4), external :: AL
+
+      conf = ' '
+
+      Call Get_symc_LS(ic,LTOTAL,STOTAL,no,nn,ln,iq,kn)
+
+      k=0
+      Do i=1,no; if(iq(i).eq.0) Cycle
+       conf(k+2:k+2) = AL(ln(i),1)
+       write(conf(k+3:k+6),'(a1,i2,a1)') '(',iq(i),')'
+       k=k+6
+      End do
+
+      End Subroutine Symc_conf
 

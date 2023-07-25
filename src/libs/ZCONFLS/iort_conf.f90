@@ -18,7 +18,7 @@
         if(np1(i).eq.0) Exit
        End do
       End do
-      k = SUM(np2(1:no2));  if(k.gt.2) Iort_conf = 1
+      Iort_conf = SUM(np2(1:no2))
 
       End Function Iort_conf
 
@@ -29,15 +29,21 @@
 ! ... orthogonality on l between config.1 and config.2 
 ! ... for different operators
 !-----------------------------------------------------------------------
-
-      Use conf_LS, L1=>Ltotal1, L2=>Ltotal2, S1=>Stotal1, S2=>Stotal2 
+      Use conf_LS, only: L1=>Ltotal1, L2=>Ltotal2, S1=>Stotal1, S2=>Stotal2 
 
       Implicit none
       Integer :: joper(7)
       Integer :: i,j,k     
       Integer, external :: Iort_conf, ITRI
 
-      i=Iort_conf(); joper=i; if(i.eq.1) Return
+      joper = 0     
+      if(Iort_conf().gt.2) then; joper=1; Return; end if
+
+      if(Iort_conf().ne.0) then
+       joper(1)=1
+       joper(2)=1
+       joper(4)=1
+      end if
 
       if(L1.ne.L2.or.S1.ne.S2) then
        joper(1:3)=1; joper(7)=1
@@ -56,6 +62,7 @@
       Integer Function Kort_conf()
 !=======================================================================
 ! ... orthogonality on l between config.1 and config.2
+!     = Iort_conf ???
 !----------------------------------------------------------------------
       Use conf_LS
 

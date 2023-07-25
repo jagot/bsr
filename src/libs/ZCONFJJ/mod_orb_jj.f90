@@ -37,7 +37,7 @@
 
 ! ... current allocated memory (in Mb)
 
-      Real(8) :: memory_orb_jj = 0.d0  
+      Real(8) :: memory_orb_jj   
 
       End Module orb_jj
 
@@ -95,7 +95,7 @@
 
       end if
 
-      memory_orb_jj = 41*mwf / (1024d0*1024d0)
+      memory_orb_jj = (29*mwf + 4*mwf*mwf)/(1024d0*1024d0)
 
       End Subroutine alloc_orb_jj
 

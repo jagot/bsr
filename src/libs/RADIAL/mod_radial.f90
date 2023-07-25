@@ -111,7 +111,7 @@
        rewind(iscr)
        Do i = 1,nrf
         write(iscr) nro(i),lro(i),kro(i),ero(i),mro(i),AZ(i), &
-                    aexp(i),bexp(i),mexp(i)
+		            aexp(i),bexp(i),mexp(i)
         write(iscr) P(1:NR,i)
         write(iscr) Overlaps(1:nrf,i)
        End do
@@ -125,7 +125,7 @@
        rewind(iscr)
        Do i = 1,nrf
         read(iscr) nro(i),lro(i),kro(i),ero(i),mro(i),AZ(i), &
-                   aexp(i),bexp(i),mexp(i)
+		           aexp(i),bexp(i),mexp(i)
         read(iscr) P(1:NR,i)
         read(iscr) Overlaps(1:nrf,i)
        End do  

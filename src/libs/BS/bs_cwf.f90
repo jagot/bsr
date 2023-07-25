@@ -35,7 +35,7 @@
       eta = -z/k
       Do i = 1,ks
        rho = k*gr(nv,i)
-       Call Zcoulfg90 (rho,eta,fl,fc,gc,fcp,gcp,0,ifail)
+       Call Zcoulfg90 (rho,eta,fl, fc,gc,fcp,gcp, 0,ifail)
        cf(i) = fc
       End do
 
@@ -73,7 +73,9 @@
 
       aa(1:n,1:n) = a(ii+1:ns,ii+1:ns)
       bb(1:n,1:n) = b(ii+1:ns,ii+1:ns)
+
       aa(n-1,n) = aa(n,n-1) 
+
       aa = aa - ee*bb
       cc = 0.d0;  cc(n-1) = 1.d0
       Call DGESV( n,1, aa, ns, IPIV, cc, ns, INFO )    
@@ -99,7 +101,9 @@
 
       aa(1:n,1:n) = a(ii+1:ns,ii+1:ns)
       bb(1:n,1:n) = b(ii+1:ns,ii+1:ns)
+
       aa(n,n-1) = aa(n-1,n) 
+
       aa = aa - ee*bb
       cc = 0.d0; cc(n) = 1.d0
       Call DGESV( n,1, aa, ns, IPIV, cc, ns, INFO )    
@@ -126,6 +130,7 @@
       else
        acc = acc1; c = c1
       end if
+
 
       End Subroutine bs_cwf
 

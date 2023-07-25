@@ -13,10 +13,10 @@
       Integer :: nwt     !  total number of taget orbitals
 
       Integer, allocatable :: istarg(:) !  (2*S+1) for target i 
-      Integer, allocatable :: ltarg (:) !  total L 
+      Integer, allocatable :: ltarg(:)  !  total L 
       Integer, allocatable :: iptarg(:) !  parity (+-1)
-      Integer, allocatable :: jtarg (:) !  (2*J+1) 
-      Real(8), allocatable :: etarg (:) !  target energy in au
+      Integer, allocatable :: jtarg(:)  !  (2*J+1) 
+      Real(8), allocatable :: etarg(:)  !  target energy in au
 
       Integer, allocatable :: nctarg(:) !  number of target configurations
       Integer, allocatable :: nwtarg(:) !  number of new orbitals

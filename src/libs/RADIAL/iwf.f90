@@ -17,8 +17,8 @@
        end if
       End do
 
-      write(*,'(/'' IWF --> cannot find the orbital:'', &    
-         5x,''N='',i3,3x,''L='',i3,3x,''K='',i3)')  NN,LL,KK  
+      write(*,'(/'' IWF --> cannot find the orbital:'', &
+         5x,''N='',i3,3x,''L='',i3,3x,''K='',i3)')  NN,LL,KK
       Stop
 
       END FUNCTION IWF

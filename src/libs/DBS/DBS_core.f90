@@ -18,7 +18,7 @@
       Integer, external :: l_kappa,j_kappa
       Real(8), external :: Cjkj, Vp_dhl, SMU, zint 
       Real(8), parameter :: zero=0.d0, one=1.d0, two=2.d0, half=0.5d0, &
-                            eps_c = 1.d-6
+         eps_c = 1.d-6
       Integer, parameter :: ibr=2**16
 
       DBS_core_pq = zero; if(nclosed.le.0) Return

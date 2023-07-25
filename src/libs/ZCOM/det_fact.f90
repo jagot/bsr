@@ -19,6 +19,7 @@
       Integer :: i,j,ii,jj,io,jo,kd,ip,id,iext,kn,k
 
       nndef = 0       ! number of new det.factors in module new_defs
+
 !----------------------------------------------------------------------
 ! ... trivial case:
 

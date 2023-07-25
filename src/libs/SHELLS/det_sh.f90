@@ -16,7 +16,7 @@
 
       Implicit none 
       Integer,Intent(in ) :: l,q,id
-      Integer,Intent(out) :: ML,MS, Idet(q)
+	     Integer,Intent(out) :: ML,MS, Idet(q)
       Integer :: i,j,k,nd,nq
       Integer, External :: ML_id, MS_id
 
@@ -39,7 +39,7 @@
 
 !----------------------------------------------------------------------
 
-      elseif(q.eq.1) then                    ! l^1 - subshell:
+	     elseif(q.eq.1) then                    ! l^1 - subshell:
        if(id.gt.4*l+2) Call DET_shw (l,q,id)
        ML=ML_id(id); MS=MS_id(id); Idet(1)=id; Return
 
@@ -56,7 +56,7 @@
        End do
        Return
      
-      else
+	     else
 
 !----------------------------------------------------------------
       SELECT CASE(l*100+q)
@@ -129,7 +129,7 @@
 
       Integer, Intent(in) :: l,q,id
 
-      write(6,'(a,a,3i5)') 'DET_sh: id is out the range: ', &
+	     write(6,'(a,a,3i5)') 'DET_sh: id is out the range: ', &
                            'l,q,id = ',l,q,id
       Stop  'DET_sh: it(id) is out the range:'
 

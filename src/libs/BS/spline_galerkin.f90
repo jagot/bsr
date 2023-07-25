@@ -1,12 +1,12 @@
 !====================================================================
-    MODULE spline_galerkin
+    Module spline_galerkin
 !====================================================================
 !   contains common arrays used in the application of splines and 
 !   the Galerkin method 
 !--------------------------------------------------------------------
-    IMPLICIT NONE
-    REAL(8), ALLOCATABLE, DIMENSION(:,:):: r1, rm1, rm2, rm3
-    REAL(8), ALLOCATABLE, DIMENSION(:,:):: sb, bs, db1, db2, bb
+    Implicit none
+    Real(8), ALLOCATABLE, DIMENSION(:,:):: r1, rm1, rm2, rm3
+    Real(8), ALLOCATABLE, DIMENSION(:,:):: sb, bs, db1, db2, bb
 
 ! . sb (1:ns,1:ks)  -  sb (i,j) -->  <B_i|B_i+j-k>
 ! . r1 (1:ns,1:ks)  -  r1 (i,j) -->  <B_i|r|B_i+j-k>

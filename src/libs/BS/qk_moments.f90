@@ -77,7 +77,7 @@
 
     ! .. local variables
 
-    INTEGER(4) :: iv
+    INTEGER(4) :: iv,ik,jk
     REAL(8) :: hp
 
     ! .. non-exponential grid
@@ -142,7 +142,7 @@
     REAL(KIND=8), DIMENSION(ks) :: x,w,gx,gw,gv, bi
     REAL(KIND=8), DIMENSION(ks,ks) :: bspTmp,bspdTmp
     REAL(KIND=8), DIMENSION(ks,ks,ks) ::Int1,Int2
-    REAL(KIND=8), DIMENSION(nv,ks,ks) :: dbiatx
+    REAL(KIND=8), DIMENSION(nv,ks,ks) :: dbiatx	          
 
     left = iv+ks-1
     xbase = t(left)
@@ -196,7 +196,7 @@
        END DO
       END DO
 
-    END DO     !  over m
+    END DO	!  over m
 
 ! ... second integration
 

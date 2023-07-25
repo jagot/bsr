@@ -121,21 +121,16 @@
 
 
 !======================================================================
-      Subroutine Sort_tm_list(mode)
+      Subroutine Sort_tm_list
 !====================================================================== 
 !     sortin data in tm_list 
 !---------------------------------------------------------------------- 
       Use tm_list
 
       Implicit none
-      Integer :: i,j,mode
+      Integer :: i,j
 
       Do i=1,ndata-1;  Do j=i+1,ndata
-
-       if(mode.eq.1) then
-       if(ip(i).lt.ip(j)) Cycle
-       if(ip(i).gt.ip(j)) then; Call Change_ij_tm(i,j); Cycle; end if
-       end if
 
        if(io(i).lt.io(j)) Cycle
        if(io(i).gt.io(j)) then; Call Change_ij_tm(i,j); Cycle; end if
@@ -146,10 +141,8 @@
        if(jjpar(i).lt.jjpar(j)) Cycle
        if(jjpar(i).gt.jjpar(j)) then; Call Change_ij_tm(i,j); Cycle; end if
 
-       if(mode.eq.0) then
        if(ip(i).lt.ip(j)) Cycle
        if(ip(i).gt.ip(j)) then; Call Change_ij_tm(i,j); Cycle; end if
-       end if
 
        if(l1(i).lt.l1(j)) Cycle
        if(l1(i).gt.l1(j)) then; Call Change_ij_tm(i,j); Cycle; end if

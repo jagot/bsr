@@ -25,5 +25,6 @@
        j=Ifind_nlk(n,l,k,2)
        i=i+4
       End do
+      ncore = nclosd
 
       End Subroutine R_CLOSED

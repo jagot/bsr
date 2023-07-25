@@ -86,7 +86,6 @@
       Integer, intent(out) :: IPT(n) 
       Integer :: i,i1,j1,i2,j2
       Do i=1,n; IPT(i)=i;  End do
-
       Do i1=1,n-1; j1=IPT(i1)
        Do i2=i1+1,n;  j2=IPT(i2)
         if(abs(S(j1)).lt.abs(S(j2))) then
@@ -154,6 +153,7 @@
       End do
 
       End Subroutine SORT_it
+
 
 !====================================================================
       Subroutine SORTI2(n,IS1,iS2,IPT)

@@ -131,7 +131,7 @@
     REAL(8), DIMENSION(ks) :: x,w,gx,gw, bi
     REAL(8), DIMENSION(ks,ks) :: bspTmp,bspdTmp
     REAL(8), DIMENSION(ks,ks,ks) ::Int1,Int2
-    REAL(8), DIMENSION(nv,ks,ks) :: dbiatx 
+    REAL(8), DIMENSION(nv,ks,ks) :: dbiatx	          
 
     left = iv+ks-1
     xbase = t(left)
@@ -183,7 +183,7 @@
        END DO
       END DO
 
-     END DO    !  over m
+     END DO	!  over m
 
 ! .. second integration
 

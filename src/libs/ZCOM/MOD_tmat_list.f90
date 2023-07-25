@@ -13,9 +13,6 @@
       Integer, allocatable :: jjpar(:),ip(:),l1(:),l2(:),jk1(:),jk2(:)   
       Real(8), allocatable :: EK(:),TR(:),TI(:)
 
-      Integer :: kcase, jj_max
-      Integer, allocatable :: jo(:,:)
-
       End Module tmat_list
 
 
@@ -117,21 +114,16 @@
 
 
 !======================================================================
-      Subroutine Sort_tmat_list(mode)
+      Subroutine Sort_tmat_list
 !====================================================================== 
 !     sortin data in tmat_list 
 !---------------------------------------------------------------------- 
       Use tmat_list
 
       Implicit none
-      Integer :: i,j,mode
+      Integer :: i,j
 
       Do i=1,ndata-1;  Do j=i+1,ndata
-
-       if(mode.eq.1) then
-       if(ip(i).lt.ip(j)) Cycle
-       if(ip(i).gt.ip(j)) then; Call Change_ij(i,j); Cycle; end if
-       end if
 
        if(EK(i).lt.EK(j)) Cycle
        if(EK(i).gt.EK(j)) then; Call Change_ij(i,j); Cycle; end if
@@ -139,10 +131,8 @@
        if(jjpar(i).lt.jjpar(j)) Cycle
        if(jjpar(i).gt.jjpar(j)) then; Call Change_ij(i,j); Cycle; end if
 
-       if(mode.eq.0) then
        if(ip(i).lt.ip(j)) Cycle
        if(ip(i).gt.ip(j)) then; Call Change_ij(i,j); Cycle; end if
-       end if
 
        if(l1(i).lt.l1(j)) Cycle
        if(l1(i).gt.l1(j)) then; Call Change_ij(i,j); Cycle; end if
@@ -185,141 +175,3 @@
       k = jk2(i);   jk2(i)=jk2(j);     jk2(j)=k
 
       End Subroutine Change_ij
-
-
-
-!=======================================================================
-      Subroutine Def_patten
-!======================================================================= 
-!     define different subsets in T-matrix list
-!------------------------------------------------------------------------
-      Use tmat_list
-
-      Implicit none
-      Integer :: i,j,k
-
-! ... define number of symmetris for maxinum J:
-                                                              
-      jj_max = maxval(jjpar(1:ndata))
-      kcase=0                                                     
-      Do i=1,ndata;  if(jjpar(i).ne.jj_max)  Cycle; kcase=kcase+1;  End do
-
-! ... define case pattens:
-
-      allocate(jo(5,kcase))
-      k=0
-      Do i=1,ndata
-       if(jjpar(i).ne.jj_max)  Cycle
-       k=k+1
-       jo(1,k) = ip(i)
-       jo(2,k) = 2*l1(i) - jj_max
-       jo(3,k) = 2*l2(i) - jj_max
-       jo(4,k) = jk1(i)  - jj_max
-       jo(5,k) = jk2(i)  - jj_max
-      End do
-
-! ... define case index:
-
-      ip = 0
-      Do i=1,ndata
-       if(jjpar(i).lt.2) Cycle
-       Do j=1,k
-        if(2*l1(i)-jjpar(i).ne.jo(2,j)) Cycle
-        if(2*l2(i)-jjpar(i).ne.jo(3,j)) Cycle
-        if(jk1(i) -jjpar(i).ne.jo(4,j)) Cycle
-        if(jk2(i) -jjpar(i).ne.jo(5,j)) Cycle
-        ip(i)=j
-        Exit
-       End do
-       if(ip(i).eq.0) Stop 'Unknown case'
-      End do
-
-      End Subroutine Def_patten
-
-
-!===============================================================
-      Subroutine T_extend(JJ_extend,AF_inp,AF_out)
-!===============================================================
-
-      Use tmat_list
-
-      Implicit real(8) (A-H,O-Z)
-
-      Character(*) :: AF_inp, AF_out
-      Integer, allocatable :: ko(:,:)   !  subset patten
-      Integer, allocatable :: jp_max(:) !  subset patten
-      Real(8), allocatable :: SS(:,:)   !  subset multipier
-      Real(8), allocatable :: ST(:,:)   !  base value
-
-      Call Check_file(AF_inp)
-      nus = 1;  Open(nus,file=AF_inp)
-
-! ... read subset information:
-
-      kcase=0; Call Read_ipar(nus,'kcase',kcase)         ! number of subsets
-      if(kcase.eq.0) Stop 'kcase = 0 in tmat.done_inp'
-      Allocate(SS(2,kcase),ST(2,kcase),ko(5,kcase),jp_max(kcase))
-
-      Do k=1,kcase      
-       read(nus,*) e, jp_max(k), i,i1,i2,i3,i4, ST(:,i), SS(:,i), ko(:,i) 
-      End do
-
-! ... read saved T-marix elements:
-
-      Call alloc_tmat_list(-1)
-      rewind(nus)
-      read(nus,*) itr1,itr2,JT1,JT2,ip1,ip2,ncase,ne,E1,E2
-      Do i=1,ncase
-        read(nus,'(D15.7,6I5,2D15.7)')  e,jj,ii,m1,k1,m2,k2,ar,ai
-        if(ii.gt.0) then; if(jj.gt.jp_max(ii)) Cycle; end if
-        Call Add_tmat_list(e,ar,ai,jj,ii,m1,m2,k1,k2)
-      End do
-      Close(nus)
-
-! ... extrapolate to higher J:
-
-      Do k = 1, kcase
-
-      Do jj = jp_max(k)+2,jj_extend,2
-       ST(1,k) = ST(1,k) * SS(1,k)     !  extrapolation
-       ST(2,k) = ST(2,k) * SS(2,k)     !
-       k1 = jj + ko(4,k)
-       k2 = jj + ko(5,k)
-       m1 = (jj + ko(2,k))/2
-       m2 = (jj + ko(3,k))/2                                 
-       Call Add_tmat_list(e,ST(1,k),ST(2,k),jj,k,m1,m2,k1,k2)
-      End do; End do
-
-      Call Sort_tmat_list(1)
-
-! ... record all data:
-
-      nut = 2;  Open(nut,file=AF_out)
-      rewind(nut)
-      write(nut,'(6i6,2i8,2D15.7)')  itr1,itr2,JT1,JT2,ip1,ip2,ndata,ne,E1,E2
-
-      Do i=1,ndata; if(ip(i).ne.0) Cycle
-       write(nut,'(D15.7,6I5,2D15.7,2f10.5)')  &
-         e,jjpar(i),ip(i),l1(i),jk1(i),l2(i),jk2(i),TR(i),TI(i)
-      End do
-
-      Do k = 1, kcase
-
-      Do i=1,ndata; if(ip(i).ne.k) Cycle
-       a=0.d0; aa=0.d0
-       if(jjpar(i).gt.10) then; if(TR(i-1).ne.0.d0.and.TI(i-1).ne.0) then
-         a=TR(i)/TR(i-1);  if(a.lt.0.001.or.a.gt.0.999) a=0.d0  
-         aa=TI(i)/TI(i-1); if(a.lt.0.001.or.a.gt.0.999) a=0.d0  
-       end if; end if
-       write(nut,'(D15.7,6I5,2D15.7,2f10.5)')  &
-         e,jjpar(i),ip(i),l1(i),jk1(i),l2(i),jk2(i),TR(i),TI(i),a,aa
-      End do
-
-      End do
-
-      Stop 'tmat.done_out is written'
-
-      End Subroutine T_extend
-
-
-

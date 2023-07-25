@@ -53,7 +53,6 @@
 !               (-1 -> nulify them)
 !----------------------------------------------------------------------
       Use DBS_grid
-      Use DBS_gauss
       Use DBS_orbitals_pq
 
       Implicit none
@@ -81,10 +80,6 @@
       mbs(m)=mw
       read(nu) pq(1:mw,1,m)
       read(nu) pq(1:mw,2,m)
-
-      bpq(1:ns,1,m) = MATMUL(fpbs, pq(:,1,m))
-      bpq(1:ns,2,m) = MATMUL(fqbs, pq(:,2,m))
-
       go to 1
     2 Close(nu)
 

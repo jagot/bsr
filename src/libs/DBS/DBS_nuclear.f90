@@ -63,11 +63,13 @@
       Use DBS_nuclear
 
       Implicit none
-      Integer :: nu, an
+      Integer :: nu, i, an
       Real(8) :: apar,cpar, z,atw, rms, A
       Character(200) :: atom, core, conf
 
+
 ! ... read parameters from file:
+
 
       if(nu.gt.0) then
                                             
@@ -151,12 +153,12 @@
       if(r.le.zero) then
        Z_nuclear = zero
       elseif(nuclear.eq.'point') then       ! point nucleus
-       Z_nuclear = zero                                          ! ???
+       Z_nuclear = zero
        if(r.le.0.0219)  Z_nuclear = Z       ! after GRASP
       elseif(nuclear.eq.'uniform') then     ! uniform distribution
        ro_uniform = Z/(4*pi/3*b**3)        
        Z_nuclear = zero
-       if(r.le.b)  Z_nuclear = ro           ! ???
+       if(r.le.b)  Z_nuclear = ro
       elseif(nuclear.eq.'Fermi') then       ! Fermi distribution
        if(ro_fermi.eq.zero) Call  DEF_ro_fermi
        Z_nuclear = ro_fermi/(one+exp((r-c)/a)) 

@@ -198,7 +198,7 @@
        END DO
       END DO
 
-     END DO     !  over m
+    END DO	!  over m
 
 ! ... second integration
 

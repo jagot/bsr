@@ -24,9 +24,6 @@
       Real(8), allocatable :: dbs(:,:,:)  ! L- (or d-) integrals
       Real(8), allocatable :: vbs(:,:,:)  ! dipV-integrals
 
-      Real(8), allocatable :: obs1(:)     ! auxiliary array
-      Real(8), allocatable :: obs2(:)     ! auxiliary array
-
       Real(8) :: memory_DBS_orbitals = 0.d0
       Integer :: ns_bf = 0
 
@@ -53,27 +50,29 @@
       Integer, intent(in) :: m,ns
       Integer :: i
       Integer, allocatable :: iarr(:)
-      Real(8), allocatable :: parr(:,:,:), oarr(:)
+      Integer, allocatable :: jarr(:,:)
+      Real(8), allocatable :: rarr(:,:)
+      Real(8), allocatable :: parr(:,:,:)
       Character(5), allocatable :: carr(:)
 
       if(m.le.0) then
        if(allocated(nbs)) &
-        Deallocate(nbs,kbs,lbs,jbs,ibs,mbs,ipbs,ebs,pq,bpq,obs1,obs2)
+        Deallocate(nbs,kbs,lbs,jbs,ibs,mbs,ipbs,ebs,pq,bpq)
        nbf=0; mbf=0
       elseif(.not.allocated(nbs)) then
        mbf=m
        Allocate(nbs(m),kbs(m),lbs(m),jbs(m),ibs(m),mbs(m),ebs(m),ipbs(m),&
-                pq(ns,2,m),bpq(ns,2,m),obs1(m),obs2(m))
-       nbs=0; kbs=0; lbs=0; jbs=0; ibs=0; mbs=0; ipbs=0; obs1=0.d0; obs2=0.d0
+                pq(ns,2,m),bpq(ns,2,m))
+       nbs=0; kbs=0; lbs=0; jbs=0; ibs=0; mbs=0; ipbs=0
        pq=0.d0; bpq=0.d0; nbf=0
       elseif(m.le.mbf) then
        Return
       elseif(nbf.eq.0) then
-       Deallocate(nbs,kbs,lbs,jbs,ibs,mbs,ipbs,ebs,pq,bpq,obs1,obs2)
+       Deallocate(nbs,kbs,lbs,jbs,ibs,mbs,ipbs,ebs,pq,bpq)
        mbf=m
        Allocate(nbs(m),kbs(m),lbs(m),jbs(m),ibs(m),mbs(m),ebs(m),ipbs(m),&
-                pq(ns,2,m),bpq(ns,2,m),obs1(m),obs2(m))
-       nbs=0; kbs=0; lbs=0; jbs=0; ibs=0; mbs=0; ipbs=0; obs1=0.d0; obs2=0.d0
+                pq(ns,2,m),bpq(ns,2,m))
+       nbs=0; kbs=0; lbs=0; jbs=0; ibs=0; mbs=0; ipbs=0
        pq=0.d0; bpq=0.d0
       else
        mbf=m
@@ -106,15 +105,10 @@
        ebs(1:nbf)=carr(1:nbf)
        Deallocate(carr)
 
-       Allocate(oarr(nbf))
-       oarr(1:nbf)=obs1(1:nbf); Deallocate(obs1); Allocate(obs1(m))
-       obs1(1:nbf)=oarr(1:nbf)
-       oarr(1:nbf)=obs2(1:nbf); Deallocate(obs2); Allocate(obs2(m))
-       obs2(1:nbf)=oarr(1:nbf)
-       Deallocate(oarr)
       end if
 
-      memory_DBS_orbitals = (4.0*12*mbf +  4.0*8*mbf*ns)/(1024d0*1024d0)
+      i = max(0,m)
+      memory_DBS_orbitals = (32*i + 12*i*i + 4*8*i*ns)/(1024d0*1024d0)
       ns_bf = ns
 
       End Subroutine alloc_DBS_orbitals_pq
@@ -259,7 +253,7 @@
 
       Implicit none
       Integer, intent(in) :: i,j
-      Integer :: k,l,m
+      Integer :: ij, k,l,m
 
       KBORT = 0; if(nv_ch.eq.0) Return
 
@@ -405,8 +399,11 @@
        Call Get_v (i,j,V_ch(1,k))
       End do      
 
-      memory_DBS_orbitals = (48.0*mbf +  4.0*8*mbf*ns)/(1024d0*1024d0)  &
-                         +  (8.0*nv_ch + 16.0*ns*nv_ch)/(1024d0*1024d0)
+      i = mbf
+      memory_DBS_orbitals = (32*i + 12*i*i + 4*8*i*ns)/(1024d0*1024d0)
+      i = nv_ch
+      memory_DBS_orbitals = memory_DBS_orbitals +  &
+        (8*i + 16*i*ns)/(1024d0*1024d0)
 
       End Subroutine Get_v_ch
 

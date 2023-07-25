@@ -112,7 +112,7 @@
 !======================================================================
       Subroutine Idel_obs(io)
 !======================================================================
-!     remove all  entries with orbital "io"
+!     add new entry( or replace) in the ordered list of overlaps
 !----------------------------------------------------------------------
       Use radial_overlaps
 

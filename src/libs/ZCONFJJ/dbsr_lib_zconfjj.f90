@@ -51,6 +51,7 @@
 ! ... orbital orthogonality and AFTER conditions
 
       Integer :: JORT = 1
+      Integer, allocatable :: IORT(:,:)
 
 ! ... possible set indexes for orthogonal subsets:
 
@@ -62,10 +63,6 @@
 ! ... shift for the set indexes:
 
       Integer :: kshift = 0
-
-! ... current allocated memory (in Mb)
-
-      Real(8) :: memory_orb_jj
 
       End Module orb_jj
 
@@ -81,24 +78,25 @@
       Integer, intent(in) :: m
       Integer :: i,j
       Integer, allocatable :: iarr(:)
+      Integer, allocatable :: jarr(:,:)
       Character(5), allocatable :: carr(:)
 
       if(m.le.0) then
-       if(allocated(nef)) Deallocate (nef,kef,lef,jef,ief,ipef,ELF)
+       if(allocated(nef)) Deallocate (nef,kef,lef,jef,ief,ipef,ELF,IORT)
        mwf = 0; nwf = 0
       elseif(.not.allocated(nef)) then
        mwf = m
        Allocate(nef(mwf),kef(mwf),lef(mwf),jef(mwf),ief(mwf),ipef(mwf), &
-                ELF(mwf))
-       nef=0; kef=0; lef=0; jef=0; ief=0; ipef=0
+                ELF(mwf), IORT(mwf,mwf))
+       nef=0; kef=0; lef=0; jef=0; ief=0; ipef=0; IORT=0
       elseif(m.le.mwf) then
        Return
       elseif(nwf.eq.0) then
-       Deallocate (nef,kef,lef,jef,ief,ipef,ELF)
+       Deallocate (nef,kef,lef,jef,ief,ipef,ELF,IORT)
        mwf = m
        Allocate(nef(mwf),kef(mwf),lef(mwf),jef(mwf),ief(mwf),ipef(mwf), &
-                ELF(mwf))
-       nef=0; kef=0; lef=0; jef=0; ief=0; ipef=0
+                ELF(mwf), IORT(mwf,mwf))
+       nef=0; kef=0; lef=0; jef=0; ief=0; ipef=0; IORT=0
       else
        mwf=m
        Allocate(iarr(nwf))
@@ -116,6 +114,11 @@
        ipef(1:nwf)=iarr(1:nwf)
        Deallocate(iarr)
 
+       Allocate(jarr(nwf,nwf))
+       jarr(1:nwf,1:nwf)=IORT(1:nwf,1:nwf); Deallocate(IORT)
+       Allocate(IORT(m,m)); IORT(1:nwf,1:nwf)=jarr(1:nwf,1:nwf)
+       Deallocate(jarr)
+
        Allocate(carr(nwf))
        carr(1:nwf)=ELF(1:nwf); Deallocate(ELF); Allocate(ELF(m))
        ELF(1:nwf)=carr(1:nwf)
@@ -123,9 +126,17 @@
 
       end if
 
-      memory_orb_jj = (29*mwf + 4*mwf*mwf)/(1024d0*1024d0)
-
       End Subroutine alloc_orb_jj
+
+!=======================================================================
+      Real(8) Function memory_orb_jj(m)
+!=======================================================================
+!     return requred memory for module orb_jj
+!------------------------------------------------------------------------
+      Implicit none
+      Integer, intent(in) :: m
+      memory_orb_jj = (6*4*m + 5*m + 4*m*m)/(1024d0*1024d0)
+      End Function memory_orb_jj
 
 
 !=======================================================================
@@ -143,7 +154,7 @@
       Integer :: n,k,i,ii,j,job
       Character(5), external :: ELi
 
-      Ifind_jjorb=0;  i = ii !   + kshift    !   ???
+      Ifind_jjorb=0; i = ii + kshift
 
       Do j=1,nwf
        if(n.ne.nef(j)) Cycle
@@ -221,7 +232,7 @@
 
 
 !======================================================================
-      Module symc_list
+      MODULE symc_list
 !======================================================================
 !     Containes the "pure-configuration" list  (i.e., without terms)
 !----------------------------------------------------------------------
@@ -255,7 +266,7 @@
 
       Integer, allocatable :: JC_need(:)
 
-      End Module symc_list
+      End MODULE symc_list
 
 
 !======================================================================
@@ -361,7 +372,7 @@
       Use symc_list
 
       Implicit none
-      Integer :: ic,JT,no,i,ip
+      Integer :: ic,JT,no,i,ii,ip
       Integer, Dimension(*) :: nn,kn,ln,jn,iq,in
       Integer, External :: l_kappa, j_kappa
 
@@ -393,18 +404,6 @@
       Integer :: iconf
       Get_no = no_conf(iconf)
       End Function Get_no
-
-
-!======================================================================
-      Integer Function Get_jot(iconf)
-!======================================================================
-!     number of shells in configuration 'iconf'
-!----------------------------------------------------------------------
-      Use symc_list
-      Implicit none
-      Integer :: iconf
-      Get_jot = JT_conf(iconf)
-      End Function Get_jot
 
 
 !======================================================================
@@ -476,7 +475,7 @@
 
 
 !======================================================================
-      Module symt_list
+      MODULE symt_list
 !======================================================================
 !     Containes the configuration angular symmetries (i.e. all terms)
 !----------------------------------------------------------------------
@@ -514,7 +513,7 @@
 
       Integer, parameter ::  mrecl = 100000 ! just to record IT_done
 
-      End Module symt_list
+      End MODULE symt_list
 
 
 !======================================================================
@@ -835,7 +834,6 @@
       Character(250) :: core, closed
       Integer :: ncore = 0
       Integer :: nn_core(mcore),k_core(mcore),l_core(mcore),j_core(mcore)
-      Character(5) :: e_core(mcore)
 
 ! ... configuration list:
 
@@ -1090,26 +1088,6 @@
 
 
 !======================================================================
-      Integer Function jot_ic (ic)
-!======================================================================
-!     total momentum state "ic"
-!----------------------------------------------------------------------
-      Use conf_jj
-
-      Implicit none
-      Integer, intent(in) :: ic
-      Integer, external :: Get_iconf, Get_jot
-
-      iterm=IS_term(ic)
-      iconf=Get_iconf(iterm)
-      jot_ic = Get_jot(iconf)
-
-      End Function jot_ic
-
-
-
-
-!======================================================================
       Subroutine Save_cfg_jj(i)
 !======================================================================
 !     save(restore) curent state in position i = (1|2)
@@ -1144,7 +1122,7 @@
 
 
 !======================================================================
-      Module boef_list
+      MODULE boef_list
 !======================================================================
 !     Containes two-electron integrals for matrix elements
 !     in uncouple nlmj-representation.
@@ -1191,7 +1169,7 @@
       Integer, parameter :: ib10  = 2**10
       Integer, parameter :: ib20  = 2**20
 
-      End Module BOEF_list
+      End MODULE BOEF_list
 
 
 !======================================================================
@@ -1291,6 +1269,7 @@
       Implicit none
       Integer, Intent(in) :: int
       Real(8), Intent(in) :: C
+      Integer :: i
 
       if(mboef.eq.0.or.nboef.eq.mboef) Call Alloc_boef(mboef+iboef)
 
@@ -1307,11 +1286,11 @@
 !     Procedure uses "packing" the orbitals parameters, and that
 !     restricts the max. l to 2**10=1024.
 !----------------------------------------------------------------------
-      Use boef_list
+      USE boef_list
 
       Implicit none
       Integer :: l1,j1,m1, l2,j2,m2, l3,j3,m3, l4,j4,m4
-      Integer :: k,l,m,ipm
+      Integer :: i1,i2,i3,i4, k,l,m,ipm
 
       if(mblk.eq.0) Call Alloc_blk(iblk)
 
@@ -3391,7 +3370,6 @@
 
       End  Function  DETC_jq
 
-
 !======================================================================
       Subroutine DETC_stop (j,q,it,id)
 !======================================================================
@@ -3444,7 +3422,7 @@
       end if
 
       if(j.lt.1.or.(j.ge.9.and.q.gt.2)) then
-       write(*,*) 'cfp_jj: j is out of scope:',j,q
+       write(*,*) 'cfp_jj: j is out of scope:',j
        Stop 'Stop in cfp_jj'
       end if
 
@@ -4166,6 +4144,7 @@ CONTAINS
        l = LA(EL(4:4))
        n1 = INDEX(ASET,EL(3:3))
        n2 = INDEX(ASET,EL(2:2))
+       n = n2*kset+n1
 
       elseif(jj.eq.4) then
 
@@ -4173,6 +4152,7 @@ CONTAINS
        l = LA(EL(3:3))
        n1 = INDEX(ASET,EL(2:2))
        n2 = INDEX(ASET,EL(1:1))
+       n = n2*kset+n1
 
       elseif(jj.eq.3) then
 
@@ -4180,8 +4160,7 @@ CONTAINS
        k2 = INDEX(ASET,EL(4:4))
        k = k2*kset+k1
        l = LA(EL(2:2))
-       n1 = INDEX(ASET,EL(1:1))
-       n2 = 0
+       n = INDEX(ASET,EL(1:1))
 
       else
 
@@ -4190,21 +4169,11 @@ CONTAINS
 
       end if
 
-       if(n1.le.9.and.n2.le.9) then
-        n = n2*10+n1
-       elseif(n2.eq.0.and.n1.eq.20) then
-        n=ICHAR('k')
-       elseif(n2.eq.0.and.n1.eq.23) then
-        n=ICHAR('n')
-       else
-        n = n2*kset+n1
-       end if
-
-
-       j = l+l+1; if(EL(jj:jj).eq.'-') j = l+l-1
-       kappa = kappa_lj(l,j)
+      j = l+l+1; if(EL(jj:jj).eq.'-') j = l+l-1
+      kappa = kappa_lj(l,j)
 
       End Subroutine EL_NLJK
+
 
 
 !=======================================================================
@@ -4250,16 +4219,16 @@ CONTAINS
       EL(i:i)=AL(l,1);  i=i-1
 
       if(n.lt.0) Stop 'ELi: n < 0'
-      if(n.eq.ICHAR('k')) then
-        EL(i:i)='k'
-      elseif(n.eq.ICHAR('n')) then
-        EL(i:i)='n'
-      elseif(n.lt.10) then
-        write(EL(i:i),'(i1)') n
-      elseif(i.ge.2.and.n.lt.100) then
-        write(EL(i-1:i),'(i2)') n
-      else
-        EL(i:i)='k'
+      if(n.gt.0) then
+       if(n.le.kset) then
+        EL(i:i)=ASET(n:n)
+       else
+        n1=n/kset; n2=mod(n,kset);
+        if(n2.eq.0) then; n1=n1-1; n2=kset; end if
+        if(n1.gt.kset) Stop 'ELi: n is too big'
+        EL(i:i)=ASET(n2:n2); i=i-1
+        EL(i:i)=ASET(n1:n1); i=i-1
+       end if
       end if
 
       ELi = EL
@@ -4306,16 +4275,16 @@ CONTAINS
       EL(i:i)=AL(l,1);  i=i-1
 
       if(n.lt.0) Stop 'ELi: n < 0'
-      if(n.eq.ICHAR('k')) then
-        EL(i:i)='k'
-      elseif(n.eq.ICHAR('n')) then
-        EL(i:i)='n'
-      elseif(n.lt.10) then
-        write(EL(i:i),'(i1)') n
-      elseif(i.ge.2.and.n.lt.100) then
-        write(EL(i-1:i),'(i2)') n
-      else
-        EL(i:i)='k'
+      if(n.gt.0) then
+       if(n.le.kset) then
+        EL(i:i)=ASET(n:n)
+       else
+        n1=n/kset; n2=mod(n,kset);
+        if(n2.eq.0) then; n1=n1-1; n2=kset; end if
+        if(n1.gt.kset) Stop 'ELi: n is too big'
+        EL(i:i)=ASET(n2:n2); i=i-1
+        EL(i:i)=ASET(n1:n1); i=i-1
+       end if
       end if
 
       ELj = EL
@@ -4657,133 +4626,6 @@ CONTAINS
 
 
 !======================================================================
-      Subroutine Decode_configuration(conf)
-!======================================================================
-!     decodes configuration from the string
-!----------------------------------------------------------------------
-      Use conf_jj
-      Implicit none
-      Integer :: i,i1,i2,start
-      Character(*) :: conf
-      Character(5) :: EL, ELi
-
-      no = 0
-      start = 1
-      Do
-       i = index(conf(start:),')')
-       if(i.eq.0) Exit
-       no = no +1
-       start = start+i
-      End do
-
-      if(no.eq.0) Return
-
-      Call Clean_a(conf)
-      start = 1
-      Do i=1,no
-       i1 = index(conf(start:),'(')+start-1
-       i2 = index(conf(start:),')')+start-1
-       EL = conf(start:i1-1)
-       read(conf(i1+1:i2-1),*) iq(i)
-       Call EL_NLJK(EL,nn(i),kn(i),ln(i),jn(i),in(i))
-       start = i2+1
-      End do
-
-      End Subroutine Decode_configuration
-
-
-!======================================================================
-      Subroutine Decode_core(string)
-!======================================================================
-!     decodes core subshells  from the string
-!----------------------------------------------------------------------
-      Use conf_jj
-      Implicit none
-      Integer :: i,ii
-      Character(*) :: string
-      Character(5), external :: ELi
-
-      Do i = 1,mcore
-       read(string,*,IOSTAT=ii) e_core(1:i)
-       if (ii /= 0) Exit
-      End do
-      ncore = i-1
-
-      Do i = 1,ncore
-       e_core(i) = adjustl(e_core(i))
-       Call EL_NLJK(e_core(i),nn_core(i),k_core(i),l_core(i),j_core(i),ii)
-       e_core(i) = ELi(nn_core(i),k_core(i),0)
-      End do
-
-      End Subroutine Decode_core
-
-
-!======================================================================
-      Subroutine Reduce_LS_jj(no,nn,kn,ln,jn,iq,in,iq_min,iq_max)
-!======================================================================
-! ... convert LS- to jj-configuration
-!----------------------------------------------------------------------
-      Implicit none
-      Integer :: no,i,n,l,k,j,jj
-      Integer :: nn(*),kn(*),ln(*),jn(*),iq(*),in(*),iq_min(*),iq_max(*)
-      Integer :: n1(no),l1(no),q1(no),i1(no)
-
-      n1(1:no) = nn(1:no)
-      l1(1:no) = ln(1:no)
-      q1(1:no) = iq(1:no)
-      i1(1:no) = in(1:no)
-
-      n=0
-      Do i=1,no; l=l1(i)
-
-       if(l.eq.0) then
-        j=l+l+1; k=(l+l-j)*(j+1)/2
-        n = n + 1
-        nn(n) = n1(i); kn(n)=k; ln(n)=l; jn(n)=j; iq(n)=0; in(n)=i1(i)
-        iq_min(n)=q1(i); iq_max(n)=q1(i)
-        Cycle
-       end if
-
-       j=l+l-1; k=(l+l-j)*(j+1)/2; jj=l+l+1
-       n = n + 1
-       nn(n) = n1(i); kn(n)=k; ln(n)=l; jn(n)=j; iq(n)=0; in(n)=i1(i)
-       iq_min(n)=max(0,q1(i)-jj-1); iq_max(n)=min(q1(i),j+1)
-
-       j=l+l+1; k=(l+l-j)*(j+1)/2; jj=l+l-1
-       n = n + 1
-       nn(n) = n1(i); kn(n)=k; ln(n)=l; jn(n)=j; iq(n)=q1(i); in(n)=i1(i)
-       iq_min(n)=max(0,q1(i)-jj-1); iq_max(n)=min(q1(i),j+1)
-
-      End do
-      no = n
-
-      End Subroutine Reduce_LS_jj
-
-
-!======================================================================
-      Subroutine Reduce_jj_LS(no,nn,kn,ln,jn,iq,in)
-!======================================================================
-! ... convert jj- to LS-configuration
-!----------------------------------------------------------------------
-      Implicit none
-      Integer :: no,i,n
-      Integer :: nn(*),kn(*),ln(*),jn(*),iq(*),in(*)
-
-      n=1
-      Do i=2,no
-       if(nn(n).eq.nn(i).and.ln(n).eq.ln(i)) then
-        iq(n)=iq(n)+iq(i)
-       else
-        n=n+1
-        nn(n)=nn(i); ln(n)=ln(i); iq(n)=iq(i); in(n)=in(i)
-       end if
-      End do
-      no = n
-
-      End Subroutine Reduce_jj_LS
-
-
-!======================================================================
       Integer Function Jdef_ncfg(nu)
 !======================================================================
 !     defines the number of configuration in c-file (unit nu)
@@ -5030,11 +4872,11 @@ CONTAINS
 
 
 
-!======================================================================
+!=====================================================================
       Subroutine Gen_jj_states (AF_inp,AF_out,jmin,jmax)
 !======================================================================
-!     preparation the ASF list from a list of (nlj)^q configurations
-!----------------------------------------------------------------------
+!     preparation  the ASF list from a list of (nlj)^q configurations
+!--------------------------------------------------------------------
       Use conf_jj; Use orb_jj
 
       Character(*), intent(in) :: AF_inp, AF_out

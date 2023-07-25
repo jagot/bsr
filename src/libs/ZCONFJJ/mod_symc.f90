@@ -139,7 +139,7 @@
       Use symc_list
 
       Implicit none 
-      Integer :: ic,JT,no,i,ip
+      Integer :: ic,JT,no,i,ii,ip
       Integer, Dimension(*) :: nn,kn,ln,jn,iq,in
       Integer, External :: l_kappa, j_kappa
       

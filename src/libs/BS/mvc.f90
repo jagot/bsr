@@ -31,7 +31,7 @@
     ! .. local variables
 
     INTEGER :: m, ith, jth, i, irow, jcol
-    REAL(KIND=8) :: fll, y1, y2, S
+    REAL(KIND=8) :: fll, y1, y2, S, B
 
     ! .. initialize the vc array
 

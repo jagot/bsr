@@ -85,12 +85,12 @@
 !======================================================================
       Subroutine Read_channel_jj(nut,klsp)
 !======================================================================
-! ... read information for channel 'klsp' from file 'nut'
+! ... read from file 'nut' information for channel klsp
 !----------------------------------------------------------------------
-      Use channel_jj
+      USE channel_jj
 
       Implicit none
-      Integer, intent(in) :: nut,klsp
+      Integer, Intent(in) :: nut,klsp
       Character(20) :: AF
       Character(80) :: line
       Integer :: i,j, nlsp, ncfg, nu
@@ -159,7 +159,6 @@
 !       ippert = ippert + ipconf(nch)     ???
 
       End Subroutine R_pert
-
 
 !=======================================================================
       Subroutine Allocate_pert(m)

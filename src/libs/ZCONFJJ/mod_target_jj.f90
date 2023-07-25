@@ -20,8 +20,8 @@
       Integer, allocatable :: nwtarg(:)  ! number of new orbitals           
       Integer, allocatable :: ictarg(:)  ! pointer to target in conf. list 
 
-      Character(80), allocatable :: AFT(:)  ! given file-names for target states
-      Character(80), allocatable :: BFT(:)  ! original file-names for target states
+      Character(30), allocatable :: AFT(:)  ! given file-names for target states
+      Character(10), allocatable :: BFT(:)  ! original file-names for target states
 
       End Module target_jj
 
@@ -97,8 +97,8 @@
       Use target_jj 
 
       Implicit none
-      Integer, intent(in) :: nut
-      Integer :: i,ia,ib
+      Integer, Intent(in) :: nut
+      Integer :: i
 
       rewind(nut)
       write(nut,'(a)') TRIM(title) 
@@ -111,20 +111,10 @@
       write(nut,'(a,i4,5x,a)') &
                 'ntarg = ',ntarg,' !   number of target states'
       write(nut,'(80(''-''))')
-
-      ia = 0; ib = 0
       Do i=1,ntarg
-       ia = max(ia,LEN_TRIM(AFT(i)))
-       ib = max(ib,LEN_TRIM(BFT(i)))
-      End do
-      ia = max(ia,30)
-      ib = max(ib,10)
-
-      Do i=1,ntarg
-       write(nut,'(a,2x,a,2x,2i4,f18.8,2i5)') AFT(i)(1:ia),BFT(i)(1:ib), &
+       write(nut,'(a30,2x,a10,2x,2i4,f18.8,2i5)') AFT(i),BFT(i), &
         jtarg(i),ptarg(i),etarg(i),nctarg(i),nwtarg(i)
       End do
-
       write(nut,'(80(''-''))')
       write(nut,'(a,i7)') 'nct =',nct
       write(nut,'(a,i7)') 'nwt =',nwt

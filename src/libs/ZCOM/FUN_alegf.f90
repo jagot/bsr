@@ -12,22 +12,18 @@
 
       ALEGF=one
       FACT=one 
-
       if(M.ne.0) then
        Do I=L-MA+1,L+MA; FACT=FACT*I; End do; FACT=one/FACT
       end if     
-
       if(M.lt.0) ALEGF=FACT
       if(norm.eq.1.and.m.ge.0) ALEGF = ALEGF * sqrt(FACT*(L+L+1)/2)
       if(norm.eq.1.and.m.lt.0) ALEGF = ALEGF * sqrt((L+L+1)/(2*FACT))
       if(L.eq.0) Return
 
-
       if(abs(x).eq.one) then
        if(m.ne.0) ALEGF=zero; if(x.lt.zero) ALEGF=ALEGF*(-1)**L
        Return
       end if
-
 
       FACT=one; Do I=1,L+L-1,2; FACT=FACT*I; End do
       
@@ -68,8 +64,6 @@
       ALEGF=PM*ALEGF; Return
 
       End Function ALEGF
-
-
 
 !=====================================================================
       Real(8) Function ALEGFM (L,M,X,norm)

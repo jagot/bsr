@@ -3,10 +3,7 @@
 !======================================================================
 !     term of the state ic                   
 !----------------------------------------------------------------------
-
-      Use conf_LS
-      Use symc_list_LS
-      Use symt_list_LS
+      Use conf_LS;  Use symc_list_LS;  Use symt_list_LS
 
       Implicit none 
       Integer :: ic,L,S

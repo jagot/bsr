@@ -17,7 +17,7 @@
       Integer, intent(in) :: l,q,it,id
 
       Integer :: i,j,k,nd,nq,m,ll, IL,IS, ML,ML1,ML2, MS,MS1,MS2
-      Real(8) :: D1 = 1.d0
+      Real(8) :: C, D1 = 1.d0
       Integer, External :: ML_id, MS_id
       Real(8), External :: Clebsh
       Real(8), External :: Detc_p2, Detc_p3, Detc_p4
@@ -102,8 +102,7 @@
 
       Integer, Intent(in) :: l,q,it,id
 
-      write(*,*) 'DETC_lq_LS: input is out of range: l,q,it,id = ',l,q,it,id
-
+	     write(*,*) 'DETC_lq_LS: input is out of range: l,q,it,id = ',l,q,it,id
       Stop  ' '
 
       End Subroutine DETC_lq_stop

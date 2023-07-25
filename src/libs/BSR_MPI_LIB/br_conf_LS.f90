@@ -1,7 +1,7 @@
 !======================================================================
       Subroutine br_conf_LS
 !======================================================================
-!     broadcast data from module "conf_LS"  (with it_state arrays)
+!     broadcast data from module "conf_LS"
 !======================================================================
       Use MPI
       Use conf_LS

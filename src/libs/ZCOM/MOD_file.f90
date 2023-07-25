@@ -18,7 +18,7 @@
 !======================================================================
       Subroutine alloc_file(m)
 !======================================================================
-!     allocate, deallocate or reallocate array in module "internal_file"
+!     allocate, deallocate or reallocate arrays in module "internal_file"
 !----------------------------------------------------------------------
       Use internal_file
 

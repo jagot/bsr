@@ -30,7 +30,6 @@
 !----------------------------------------------------------------------
 
 
-
 !======================================================================
       Module DET_list
 !======================================================================
@@ -268,7 +267,7 @@
 
       Integer :: ndef = 0       ! number of determinants
       Integer :: mdef = 0       ! current dimentsion of list
-      Integer :: idef = 2**16   ! supposed max. dimentsion  
+      Integer :: idef = 2**15   ! supposed max. dimentsion  
       Integer :: jdef = 2**3    ! average number of det.s 
       Integer :: kdef = 0       ! dimension of all def.s 
       Integer :: ldef = 0       ! dimension of all def.s 
@@ -613,7 +612,7 @@
 
       Integer :: ndef = 0       ! number of determinants
       Integer :: mdef = 0       ! current dimentsion of list
-      Integer :: idef = 2**16   ! supposed max. dimentsion  
+      Integer :: idef = 2**15   ! supposed max. dimentsion  
       Integer :: jdef = 2**3    ! average number of det.s 
       Integer :: kdef = 0       ! dimension of all def.s 
       Integer :: ldef = 0       ! dimension of all def.s 

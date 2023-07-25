@@ -40,7 +40,7 @@
       
       Integer, allocatable :: KPF(:), IPF(:), NPF(:), JPF(:)
 
-      End MODULE dets
+      End Module dets
 
 
 !======================================================================
