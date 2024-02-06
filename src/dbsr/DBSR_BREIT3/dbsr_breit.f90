@@ -1,5 +1,5 @@
 !=====================================================================
-!     PROGRAM   D B S R _ B R E I T  
+!     PROGRAM   D B S R _ B R E I T
 !
 !               C O P Y R I G H T -- 2015
 !
@@ -26,7 +26,7 @@
 !----------------------------------------------------------------------
 !     INPUT FILES:   c-files with list of atomic states in GRASP format:
 !                    name.c or rcsl.inp
-!                    
+!
 !     OUTPUT FILES:  data bank for angular coefficients:
 !                    int_bnk (or name.bnk, or int_bnk.nnn)
 !---------------------------------------------------------------------
@@ -80,12 +80,12 @@
        if(new)      write(pri,'(/a/)') 'It is a new calculation '
        if(.NOT.new) write(pri,'(/a/)') 'It is a continued calculation '
 
-       if(mbreit.eq.1) write(pri,'(a/)') 'Breit contribution is included '    
-       if(mbreit.eq.0) write(pri,'(a/)') 'Breit contribution is not included '    
+       if(mbreit.eq.1) write(pri,'(a/)') 'Breit contribution is included '
+       if(mbreit.eq.0) write(pri,'(a/)') 'Breit contribution is not included '
 
 ! ...  read the configuration list:
-                           
-       Call Read_conf_jj   
+
+       Call Read_conf_jj
 
        if(.not.icalc) then; Close(nur,STATUS='DELETE'); Cycle; end if
 

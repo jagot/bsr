@@ -11,9 +11,9 @@
 !----------------------------------------------------------------------
 
       Implicit none
-      
+
       Integer(4), intent(in) :: k1,k2,k3
- 
+
       Real(8) :: A,B,C
       Integer(4) :: I,J, K,L, M,N, N1,N2,N3, M1,M2,M3
 
@@ -36,10 +36,10 @@
        IF(N3.GE.I) K=K-2
 
        J = I + N
-       L = -1 
-       IF(M1.GE.J) L=L+1 
-       IF(M2.GE.J) L=L+1 
-       IF(M3.GE.J) L=L+1 
+       L = -1
+       IF(M1.GE.J) L=L+1
+       IF(M2.GE.J) L=L+1
+       IF(M3.GE.J) L=L+1
 
        B=I;  C=J;  A = A * B**K * C**L
 

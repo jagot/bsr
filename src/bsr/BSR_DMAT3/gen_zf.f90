@@ -9,7 +9,7 @@
 
       Implicit none
       Integer :: i,ns1,ns2,nhm1,nhm2
-      Integer, external ::  Idef_st     
+      Integer, external ::  Idef_st
 
 !----------------------------------------------------------------------
 ! ... define the number of solutions and open relevant file:
@@ -24,21 +24,21 @@
 
        if(ns1 .ne.kns ) Stop 'gen_zf:  ns1 <> ns '
        if(nch1.ne.kch1) Stop 'gen_zf:  nch1 --> ?'
-       if(ncp1.ne.kcp1) then 
+       if(ncp1.ne.kcp1) then
         write(pri,*) 'gen_zf: ncp1, kcp1 =', ncp1,kcp1
         Stop 'gen_gf:  ncp1 --> ?'
        end if
        if(nhm1.ne.kdm1) Stop 'gen_zf:  nhm1 --> ? '
 
       elseif(ctype1.eq.'c') then
-	   
+
        inb1=in1; nstate1=1
 
       else
 
        i = LEN_TRIM(name1)-1; AF = name1(1:i)//ctype1
        Open(inb1,file=AF,status='OLD',action='READ')
-       nstate1 = Idef_st(inb1)                                  
+       nstate1 = Idef_st(inb1)
 
       end if
 
@@ -56,14 +56,14 @@
        if(nhm2.ne.kdm2) Stop ' nhm2 --> ? '
 
       elseif(ctype2.eq.'c') then
-	   
+
        inb2=in2; nstate2=1
 
       else
 
        i = LEN_TRIM(name2)-1; AF = name2(1:i)//ctype2
        Open(inb2,file=AF,status='OLD',action='READ')
-       nstate2 = Idef_st(inb2)                                  
+       nstate2 = Idef_st(inb2)
 
       end if
 

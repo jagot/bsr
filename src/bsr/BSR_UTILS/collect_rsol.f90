@@ -4,7 +4,7 @@
 
       Implicit real(8) (A-H,O-Z)
 
-      Character(80) :: AF_r = 'rsol.nnn',  AF_all = 'rsol.all' 
+      Character(80) :: AF_r = 'rsol.nnn',  AF_all = 'rsol.all'
       Character(80) :: AF, AF1,AF2
       Integer, allocatable :: nchn(:), nstk(:)
       Real(8), allocatable :: v(:)
@@ -23,15 +23,15 @@
        Call Check_file(AF)
        inp=1; open(inp,file=AF,form='UNFORMATTED')
 
-       read(inp)  nhm,khm,kch,kcp,ns 
+       read(inp)  nhm,khm,kch,kcp,ns
        read(inp)  (e,i=1,khm)
 
        Allocate(v(kch*ns))
 
-       Do  j = 1,khm 
+       Do  j = 1,khm
         read(inp) v
         write(iout) v
-       End do 
+       End do
 
        Deallocate(v)
 
@@ -65,4 +65,3 @@
 
       End ! program
 
-      

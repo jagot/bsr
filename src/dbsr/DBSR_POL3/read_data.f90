@@ -3,17 +3,17 @@
 !======================================================================
 !     read data for given partial wave, klsp
 !----------------------------------------------------------------------
-      Use dbsr_pol;            Use DBS_grid 
+      Use dbsr_pol;            Use DBS_grid
       Use conf_jj;             Use DBS_gauss
       Use orb_jj;              Use DBS_orbitals_pq
-      Use channel_jj;          
-                               
+      Use channel_jj;
+
       Implicit none
       Integer :: i,j,l,k,m,n, ich
       Integer, external :: Ifind_bsorb, Ifind_jjorb, Icheck_file, IORT
 
 ! ... set up B-splines:
- 
+
       Call read_knot_dat
       Call alloc_DBS_gauss
 
@@ -24,8 +24,8 @@
 ! ... read target and channel information:
 
       Call Check_file(AF_tar)
-      Open(nut,file=AF_tar)  
-      Call Read_target_jj (nut)                                    
+      Open(nut,file=AF_tar)
+      Call Read_target_jj (nut)
       Call Read_channel_jj(nut,klsp)
       Close(nut)
 
@@ -46,7 +46,7 @@
 
       Call Read_core_jj(nuc)
       Call Read_conf_jj(nuc,0,'add','nocheck')
-      Call Prepare_iort_jj(nuc)                   
+      Call Prepare_iort_jj(nuc)
 
       write(pri,'(/a)') 'c-file data: '
       write(pri,*)
@@ -69,7 +69,7 @@
       Do ich = 1,nch
        Call EL_NLJK(ELC(ich),n,k,l,j,i)
        m = Ifind_jjorb(n,k,i,1); ipef(m) = ich
-       m = Ifind_bsorb(n,k,i,1); ipbs(m) = ich; ipch(ich)=m 
+       m = Ifind_bsorb(n,k,i,1); ipbs(m) = ich; ipch(ich)=m
       End do
 
       write(pri,'(/a/)')   'channel data: '
@@ -82,7 +82,7 @@
 
 !----------------------------------------------------------------------
 ! ... read B-spline expantions for bound orbitals:
-   
+
 ! ... target radial functions:
 
       Open(nuw, file=AF_bsw, STATUS='OLD', form='UNFORMATTED')
@@ -106,7 +106,7 @@
        Close(nuw)
       end if
 
-! ... check the correspondence between c- and bsw-files: 
+! ... check the correspondence between c- and bsw-files:
 
       j = 0
       Do i = 1,nwf
@@ -131,4 +131,4 @@
       write(pri,'( a,i5,a)') 'nortb  = ',nortb,'  - number of orth. states'
 
       End Subroutine Read_data
-    
+

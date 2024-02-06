@@ -4,16 +4,16 @@
 
       Implicit none
 
-! ... subshell  f3 
+! ... subshell  f3
 
       Integer, parameter :: kd_f3  = 364
       Integer, parameter :: nt_f3  = 17
- 
+
       Integer :: Idet_f3 ( 3,  364)
- 
+
       Integer :: ML_f3 (  364)
       Integer :: MS_f3 (  364)
- 
+
       Integer :: ID_f3 (  364, 17)
       Integer :: JD_f3 (  364, 17)
 

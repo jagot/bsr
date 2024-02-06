@@ -2,28 +2,28 @@
       MODULE spin_orbitals
 !======================================================================
 !     contains rather fancy but effective description of two determinant
-!     wave function under consideration 
+!     wave function under consideration
 !----------------------------------------------------------------------
 
       Implicit none
 
-! ... possible ml and ms values in chosen order: 
+! ... possible ml and ms values in chosen order:
 
       Integer :: mls_max
       Integer, Allocatable :: ml_orb(:), ms_orb(:)
 
 ! ... common list of different orbital symmetries for two determinants:
 !
-!     NSYM  - number of symmetries:  l,ml,ms ->  Lsym,Msym,Ssym 
+!     NSYM  - number of symmetries:  l,ml,ms ->  Lsym,Msym,Ssym
 !     IPSYM - pointer on the last given symmetry in the list
 !     KSYM  - number of orbitals with given symmetry
-!     nnsym - principal quantum numbers 
+!     nnsym - principal quantum numbers
 !     Isym  - pointer on the original position in configuration
 
       Integer :: nsym, nsym1
       Integer, Allocatable ::  Lsym (:),Msym(:),Ssym(:),               &
       Lsym1(:),Msym1(:),Ssym1(:),IPsym1(:),Ksym1(:),nnsym1(:),Isym1(:),&
-      Lsym2(:),Msym2(:),Ssym2(:),IPsym2(:),Ksym2(:),nnsym2(:),Isym2(:) 
+      Lsym2(:),Msym2(:),Ssym2(:),IPsym2(:),Ksym2(:),nnsym2(:),Isym2(:)
 
 ! ... shell values:
 
@@ -47,7 +47,7 @@
       Integer, intent(in) :: ne
       Integer :: i,m
       Integer, external :: ML_id, MS_id
-      
+
 ! ... define possible mls orbitals:
 
       if(Allocated(ml_orb)) Deallocate(ml_orb,ms_orb)
@@ -66,9 +66,9 @@
                 Msym(m),Msym1(m),Msym2(m),  &
                 Ssym(m),Ssym1(m),Ssym2(m),  &
                 IPsym1(m),IPsym2(m),Ksym1(m),Ksym2(m), &
-                nnsym1(m),nnsym2(m),Isym1(m),Isym2(m)  ) 
+                nnsym1(m),nnsym2(m),Isym1(m),Isym2(m)  )
        Allocate(md(ne),in(ne))
 
-      end if      
+      end if
 
       End Subroutine Alloc_spin_orbitals

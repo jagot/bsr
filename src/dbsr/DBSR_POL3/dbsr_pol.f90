@@ -1,5 +1,5 @@
 !======================================================================
-!     PROGRAM       D B S R _ P O L         
+!     PROGRAM       D B S R _ P O L
 !
 !               C O P Y R I G H T -- 2016
 !
@@ -12,8 +12,8 @@
 !
 !    INPUT  ARGUMENTS:
 !
-!     klsp  - indexes of partial waves under consideration  
-! 
+!     klsp  - indexes of partial waves under consideration
+!
 !    INPUT FILES:
 !
 !     dbsr_par       -  description of partial waves
@@ -21,8 +21,8 @@
 !     cfg.nnn        -  c-file for close-coupling expansion
 !
 !    OUTPUT FILES:
-!   
-!     pol_nnn.log    -  running information 
+!
+!     pol_nnn.log    -  running information
 !     bound.nnn      -  pol. solutions
 !
 !     Above, "nnn" indicates the index of partial wave
@@ -30,8 +30,8 @@
 !=====================================================================
       Use dbsr_pol
       Use DBS_grid
-      Use target_jj   
-      
+      Use target_jj
+
       Implicit none
       Real(8) :: t1,t2
       Real(8), external :: RRTC
@@ -48,8 +48,8 @@
 
 ! ... read additional orthogonal constraints:
 
-      Call Add_nortb 
-                    
+      Call Add_nortb
+
 ! ... read the d-vector:
 
       Call R_dvector

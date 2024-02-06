@@ -1,6 +1,6 @@
 !======================================================================
       Subroutine Check_perturbers
-!======================================================================     
+!======================================================================
 !     read the perturber configurations, substitute physical orbitals
 !     and check the "double"  configurations if any
 !     We are supposed that pertuber expansions are ordered
@@ -10,9 +10,9 @@
 
       Implicit none
       Character(80) :: AS
-      Integer :: i,j,ii,jj,is,ic,ip,jp  
+      Integer :: i,j,ii,jj,is,ic,ip,jp
       Real(8) :: W
-      Integer, external :: Ifind_cfg_LS, Ifind_nlk, Ifind_position 
+      Integer, external :: Ifind_cfg_LS, Ifind_nlk, Ifind_position
 
       if(ncp.eq.0) Return
 
@@ -20,7 +20,7 @@
 
       Call Read_sub_pert_LS(nuo,ilsp)
 
-! ... find substitution pointers for pertuber orbitals:    
+! ... find substitution pointers for pertuber orbitals:
 
       if(nwf_pert.gt.nwf_targ) IEF(nwf_targ+1:nwf_pert)=0
 
@@ -42,7 +42,7 @@
       Open(nuc,file=AF,status='OLD')
       Call R_pert(nuc)
       Do ip = 1,npert; jp=1; if(ip.gt.1) jp=ippert(ip-1)+1
-       
+
       rewind(nuc)
       is = 0
     1 read(nuc,'(a)',end=2) AS
@@ -91,7 +91,7 @@ go to 2
        write(pri,'(/a,i5)') &
         'Check the double pertubers for given partial wave'
 !        Stop 'Check the double pertubers'
-      end if       
+      end if
 
       write(pri,'(/a,T40,i8)') 'Number of perturber configurations:', ncp
       write(pri,'( a,T40,i8)') 'Number of physical perturbers:', &

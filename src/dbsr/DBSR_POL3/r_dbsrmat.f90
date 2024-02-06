@@ -3,7 +3,7 @@
 !======================================================================
 !     read the data from dbsr_mat.nnn file for the given partial wave
 !----------------------------------------------------------------------
-      Use dbsr_pol 
+      Use dbsr_pol
       Use channel_jj
 
       Implicit none
@@ -104,5 +104,5 @@ write(*,*) 'nhm,mhm,khm',nhm,mhm,khm
       Do i=1,mhm; write(nua) hm(1:mhm,i); End do
       Deallocate(bval)
 
-      End Subroutine R_dbsrmat 
+      End Subroutine R_dbsrmat
 

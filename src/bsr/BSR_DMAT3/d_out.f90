@@ -3,7 +3,7 @@
 !=======================================================================
 !     define and output dipole matrix for R-matrix solutions:
 !-----------------------------------------------------------------------
-      Use bsr_dmat 
+      Use bsr_dmat
       Use dmatrix
       Use target, only: etarg
 
@@ -14,10 +14,10 @@
       Real(8) :: S,SL,SV,E1,E2
       Integer :: i,j,ns1,nhm1,nhm,khm,kch,kcp,isol1,isol2
       Integer :: JLT1,JST1,JLT2,JST2
-      Integer, external :: Idef_st 
+      Integer, external :: Idef_st
 
-      if(jmode.eq.1) Stop 'D_out: jmode = 1 ' 
-      
+      if(jmode.eq.1) Stop 'D_out: jmode = 1 '
+
       i = INDEX(AF_d,'.'); AF = AF_d(1:i)//ALS2
       Open(nud,file=AF,form='UNFORMATTED')
 
@@ -36,14 +36,14 @@
        if(nhm1.ne.kdm1) Stop ' nhm1 --> ? '
 
       elseif(ctype1.eq.'c') then
-	   
+
        inb1=in1; nstate1=1
 
       else
 
        i = LEN_TRIM(name1)-1; AF = name1(1:i)//ctype1
        Open(inb1,file=AF,status='OLD')
-       nstate1 = Idef_st(inb1)                                  
+       nstate1 = Idef_st(inb1)
 
       end if
 
@@ -57,7 +57,7 @@
       if(nhm.ne.kdm2) Stop 'D_out, rsol: nhm <> kdm2 '
       if(kch.ne.kch2) Stop 'D_out, rsol: kch <> kch2 '
       if(kcp.ne.kcp2) Stop 'D_out, rsol: kcp <> kcp2 '
-      Allocate(eval(khm)) 
+      Allocate(eval(khm))
       read(nuo) eval
       nstate2 = khm
 
@@ -75,7 +75,7 @@
        JLT1 = JOT1-1; JLT2 = JOT2-1; JST1=0; JST2=0
       end if
       E2 = Etarg(1)
-      write(nud) JLT2,JST2,IPT2,E2,nstate2                          
+      write(nud) JLT2,JST2,IPT2,E2,nstate2
 
 ! ... read initial state:
 
@@ -97,8 +97,8 @@
        CL(isol2)=SL; CV(isol2)=SV
       End do
 
-      write(nud) JLT1,JST1,IPT1,E1                   
-      write(nud) (cl(i),cv(i),i=nstate2,1,-1)        
+      write(nud) JLT1,JST1,IPT1,E1
+      write(nud) (cl(i),cv(i),i=nstate2,1,-1)
 
       Deallocate(CL,CV)
 

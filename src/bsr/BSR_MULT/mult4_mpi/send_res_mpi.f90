@@ -6,7 +6,7 @@
       Use mult_par,  only: myid, ierr, JT_oper
       Use term_exp,  only: kt1,kt2, IP_kt1,IP_kt2
       Use ndet_list, only: ndet,ldet,KPD,IPD,NPD
-      Use ndef_list, only: ndef,ldef,KPF,IPF,NPF 
+      Use ndef_list, only: ndef,ldef,KPF,IPF,NPF
       Use coef_list, only: ntrm,ncoef,idfc,intc,coef
 
       Implicit none

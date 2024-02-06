@@ -1,8 +1,8 @@
 !======================================================================
-      Subroutine Pre_det_exp 
+      Subroutine Pre_det_exp
 !======================================================================
 !     defines the determinant expansions and write the information
-!     in scratch files 'nud' 
+!     in scratch files 'nud'
 !-----------------------------------------------------------------------
 
       USE param_jj
@@ -12,7 +12,7 @@
       Use nljm_orbitals
       Use term_exp
 
-      Implicit none 
+      Implicit none
 
       Integer :: i,j, k,kt,kdt,ktm, it,it1,it2, JW,JQ
 
@@ -51,7 +51,7 @@
        if(Allocated(JTs)) Deallocate(JTs); Allocate(JTs(no,ktm))
        if(Allocated(JTi)) Deallocate(JTi); Allocate(JTi(no,ktm))
        if(Allocated(IPs)) Deallocate(IPs); Allocate(IPs(no,ktm))
-       kt = 0       
+       kt = 0
        Do k =it1,it2
         it=JP_term(k); if(IT_need(it).eq.0) Cycle
         kt = kt + 1; IP_kt(kt) = it
@@ -75,9 +75,9 @@
 
 ! ... record results (from 'nua' to 'nud'):
 
-       write(nud) ic,kt,kdt             
+       write(nud) ic,kt,kdt
        write(nud) IP_kt(1:kt)
-       rewind(nua)      
+       rewind(nua)
        Allocate(CC_det(kt,kdt),IP_det(ne,kdt))
        Do i = 1,kdt;  read(nua) IP_det(:,i),CC_det(:,i); End do
        write(nud) IP_det
@@ -96,12 +96,12 @@
       if(Allocated(C_det)) Deallocate(C_det)
 
 
-     
+
 
 Contains
 
 !======================================================================
-      Subroutine Det_expn_jj  
+      Subroutine Det_expn_jj
 !======================================================================
 !
 !     procedure of exaustion of all possible determinants for given
@@ -116,7 +116,7 @@ Contains
       Real(8) :: C
       Real(8), External :: DETC_jq, Clebsh2
 
-      kdt=0; i=1; nd(i)=1              
+      kdt=0; i=1; nd(i)=1
     1 Call DET_sh_jq(jn(i),iq(i),nd(i),MJs(i),Idet(ipn(i)))
 
       if(i.eq.1) then
@@ -166,4 +166,4 @@ Contains
       End Subroutine Det_expn_jj
 
 
-      End Subroutine Pre_det_exp 
+      End Subroutine Pre_det_exp

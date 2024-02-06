@@ -14,9 +14,9 @@
       Integer, Intent(in) :: nu
       Integer :: i,j,ij, it,jt, k,k1,k2, n
 
-! ... convert det.factors from ndef_list to common det_list: 
+! ... convert det.factors from ndef_list to common det_list:
 
-      k = 0; Do i=1,ncoef; k=k+idfc(i); End do 
+      k = 0; Do i=1,ncoef; k=k+idfc(i); End do
       if(k.gt.0) then
        Call Ndet_Idet
        Do i=1,ncoef
@@ -28,8 +28,8 @@
 ! ... record the coef.s:
 
       k = 0
-      Do k1=1,jt1; it=JP_kt1(k1) 
-      Do k2=1,jt2; jt=JP_kt2(k2)  
+      Do k1=1,jt1; it=JP_kt1(k1)
+      Do k2=1,jt2; jt=JP_kt2(k2)
        if(IP_kt12(k1,k2).eq.0) Cycle
 
        k = k + 1
@@ -41,7 +41,7 @@
 
        i=max(it,jt); j=min(it,jt); IT_done(i*(i-1)/2+j)=1
 
-      End do; End do 
+      End do; End do
 
       End Subroutine Add_res
 

@@ -1,7 +1,7 @@
 !======================================================================
       Subroutine SUB_nlLS(C)
 !======================================================================
-!     get LS configurations 
+!     get LS configurations
 !----------------------------------------------------------------------
       Use jj2ls; Use conf_jj; Use conf_LS, only: LS
 
@@ -51,7 +51,7 @@
 
       USE conf_LS, only: msh,LS
 
-      Implicit none 
+      Implicit none
 
       Integer :: Jtotal,n,ll(n),qq(n), i,i1,i2, j1,j2
       Integer :: IL_min(msh),IL_max(msh),IS_min(msh),IS_max(msh)
@@ -109,17 +109,17 @@
       Implicit none
 
       Integer :: Jtot,n,ll(n),qq(n), i,Ltot,Stot
-      Integer, external :: ITRI,Iadd_symc_LS,Iadd_symt_LS 
+      Integer, external :: ITRI,Iadd_symc_LS,Iadd_symt_LS
       Real(8) :: C,Z
       Real(8), external :: ZRECUP
 
       Ltot = LS(n,4)
-      Stot = LS(n,5) 
+      Stot = LS(n,5)
 
       if(ITRI(Ltot,Stot,Jtot+1).eq.0) Return
 
       Do i=1,n
-       moments(i    ) = LS(i,2) 
+       moments(i    ) = LS(i,2)
        moments(i+n  ) = LS(i,3)
        moments(i+3*n) = LS(i,4)
        moments(i+4*n) = LS(i,5)
@@ -132,7 +132,7 @@
       end if
 
       Z=Z*C;  if(Z.eq.0.d0) Return
- 
+
       iconf = Iadd_symc_LS(Ltot,Stot,n,qq,ll)
       iterm = Iadd_symt_LS(iconf,n,LS)
 

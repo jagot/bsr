@@ -6,14 +6,14 @@
 !     Written by:   Oleg Zatsarinny
 !                   email: oleg_zoi@yahoo.com
 !======================================================================
-!     A CONFIGURATION INTERACTION program in the DIRAC-COULOMB-BREIT 
+!     A CONFIGURATION INTERACTION program in the DIRAC-COULOMB-BREIT
 !     approach including the case of NON-ORTHOGONAL radial orbitals.
 !     It is a part of the DBSR project, where B-spline is used for
 !     represantation of radial orbitals.
 !----------------------------------------------------------------------
-!     INPUT:  command-line arguments 
-!             name.inp_ci - input parameters (optional) 
-!             name.c      - list of configurations in the GRASP format 
+!     INPUT:  command-line arguments
+!             name.inp_ci - input parameters (optional)
+!             name.c      - list of configurations in the GRASP format
 !             name.bsw    - radial functions in B-spline representation
 !             name.bnk    - data bank for angular coefficients
 !
@@ -22,16 +22,16 @@
 !             name.d      - debug information (optional)
 !----------------------------------------------------------------------
 !     The parameters in command line has structure:   param=value
-!     except 'name' of case - should be given as the first argument 
+!     except 'name' of case - should be given as the first argument
 !----------------------------------------------------------------------
 !     List of main parameters with default values:
 !     (all arguments except "name" are optional)
 !
-!     name        - name of case 
-!     mbreit=1    - include (1) or not (0) Breit oprerators 
+!     name        - name of case
+!     mbreit=1    - include (1) or not (0) Breit oprerators
 !     msol=0      - how many eigensolution you need (0 -> all)
 !     nzero=0     - zero-order dimension (0 -> all configurations)
-!     debug=0     - if /= 0, file name.d contain debug information 
+!     debug=0     - if /= 0, file name.d contain debug information
 !
 !     eps_c    = 1.0D-10  -  tolerance for coefficients
 !     eps_det  = 1.0D-10  -  tolerance for determinant overlaps
@@ -60,7 +60,7 @@
 
       Call Def_jblocks
 
-! ... define the fine-turn parameters for configuration energies 
+! ... define the fine-turn parameters for configuration energies
 
       Call Read_shift
 
@@ -68,7 +68,7 @@
 
       Call Read_int_corr
 
-! ... define core energy: 
+! ... define core energy:
 
       t1 = RRTC()
       Ecore = DBS_core_pq(ncore,mbreit)

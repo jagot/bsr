@@ -1,7 +1,7 @@
 !=====================================================================
       Subroutine get_LS_terms
 !======================================================================
-!     generate all possible LS states from list of configurations 
+!     generate all possible LS states from list of configurations
 !--------------------------------------------------------------------
       Use conf_jj
 
@@ -14,7 +14,7 @@
 
        no1 = 1; ln1(1)=ln(1); iq1(1)=iq(1)
        Do i=2,no
-        if(nn(i).eq.nn(i-1).and.ln(i).eq.ln(i-1)) then    
+        if(nn(i).eq.nn(i-1).and.ln(i).eq.ln(i-1)) then
          iq1(no1)=iq1(no1)+iq(i)
         else
          no1=no1+1; ln1(no1)=ln(i); iq1(no1)=iq(i)
@@ -81,7 +81,7 @@
 !     exhaustion of intermediate terms
 !----------------------------------------------------------------------
       USE conf_LS
- 
+
       Implicit none
 
       Integer :: IL_min(msh),IL_max(msh),IS_min(msh),IS_max(msh)
@@ -138,14 +138,14 @@
       Integer :: Jtot, Ltot,Stot
       Integer, external :: Itri, Iadd_symc_LS, Iadd_symt_LS
 
-! ... check the total term: 
+! ... check the total term:
 
       Ltot=LS(no,4)
       Stot=LS(no,5)
 
       if(Itri(Jtot+1,Ltot,Stot).eq.0) Return
 
-! ... add term: 
+! ... add term:
 
       iconf = Iadd_symc_LS(Ltot,Stot,no,iq,ln)
       iterm = Iadd_symt_LS(iconf,no,LS)

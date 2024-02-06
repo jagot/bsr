@@ -8,7 +8,7 @@
       Implicit none
       Integer, intent(in) :: nu,ii,kset
       Integer :: nc
-      
+
       if(allocated(Label)) Deallocate(Label)
       Allocate(Label(ncfg))
 

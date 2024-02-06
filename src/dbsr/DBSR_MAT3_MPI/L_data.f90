@@ -1,5 +1,5 @@
 !======================================================================
-      Subroutine L_data(itype) 
+      Subroutine L_data(itype)
 !======================================================================
 !     processing of L-integrals from the module 'c_data'
 !----------------------------------------------------------------------
@@ -7,12 +7,12 @@
 !
 !     1.1   L( . . )  ic, jc             -  k1=i  k2=j  k3= ic  k4= jc
 !     1.2   L( . . ) < i | . > ic        -  k1=i  k2=j  k3=-io  k4= ic
-!     1.3   L( . . ) < i | . > < j | . > -  k1=i  k2=j  k3=-io  k4=-jo  
+!     1.3   L( . . ) < i | . > < j | . > -  k1=i  k2=j  k3=-io  k4=-jo
 !     1.4   L( . . ) < i | j >           -  k1=i  k2=j  k3=-io  k4=  0
-!    
+!
 !     2.1   L( i . )  ic                 -  k1=j  k2=ich  k3= ic  k4=0
 !     2.2   L( i . ) < j | . >           -  k1=j  k2=ich  k3=-io  k4=0
-!    
+!
 !     3.0   L( i j )                     -  k1=ich  k2=jch  k3=0  k4=0
 !
 !     where .  denotes bound orbital, i,j - channels.
@@ -28,8 +28,8 @@
 !     interaction with core which is included in L(i,j)
 !
 !----------------------------------------------------------------------
-      Use dbsr_mat;  Use c_data;  Use dhl_core    
-      
+      Use dbsr_mat;  Use c_data;  Use dhl_core
+
       Implicit none
       Integer, intent(in) :: itype
       Integer :: i,j, i1,i2, j1,j2, ich,jch, k, io,jo, ic,jc
@@ -43,7 +43,7 @@
 
       Select Case(itype)
 !----------------------------------------------------------------------
-      Case(1)                                                 !  L(..)  
+      Case(1)                                                 !  L(..)
 
        Do j=1,ncdata; i=IPT(j); C=cdata(i); if(abs(C).lt.Eps_C) Cycle
         i1 = k1(i); i2 = k2(i); S = Lval(i1,i2); C = C * S
@@ -56,16 +56,16 @@
         elseif(ic.lt.0.and.jc.gt.0) then                      !  L(..)  <i|.> jc
          io=-ic; i1=io/ibo; i2=mod(io,ibo)
          k=KBORT(i1,i2); if(k.eq.0) Stop 'O: KBORT=0'
-         v = V_ch(:,k)     
+         v = V_ch(:,k)
          ich=ipbs(i1); Call UPDATE_HV(ich,jc,v,C)
 
         elseif(ic.lt.0.and.jc.lt.0) then                      !  L(..)  <i|.> <.|j>
          io=-ic; i1=io/ibo; i2=mod(io,ibo)
          k=KBORT(i1,i2); if(k.eq.0) Stop 'O: KBORT=0'
-         v = V_ch(:,k)     
+         v = V_ch(:,k)
          jo=-jc; j1=jo/ibo; j2=mod(jo,ibo)
          k=KBORT(j1,j2); if(k.eq.0) Stop 'O: KBORT=0'
-         w = V_ch(:,k)     
+         w = V_ch(:,k)
          ich=ipbs(i1); jch=ipbs(j1);  Call UPDATE_HW(ich,jch,v,w,C)
 
         elseif(ic.lt.0.and.jc.eq.0) then                      !  L(..) <i|j>
@@ -83,23 +83,23 @@
         if(pri_coef.gt.0) &
         Call pri_L_coef(pri,itype,k1(i),k2(i),k3(i),k4(i),cdata(i),S)
 
-       End do 
+       End do
 !-----------------------------------------------------------------------
-      Case(2)                                                 ! L(.i) <.|j> 
+      Case(2)                                                 ! L(.i) <.|j>
 
        Do j=1,ncdata; i=IPT(j); C=cdata(i); if(abs(C).lt.Eps_C) Cycle
         i1=k1(i);   Call Gen_Lvec(i1,v)
         ich=k2(i);  jc=k3(i)
 
-        if(jc.gt.0) then                                      ! L(.i)  jc 
+        if(jc.gt.0) then                                      ! L(.i)  jc
          Call UPDATE_HV(ich,jc,v,C)
-          
-        elseif(jc.lt.0) then                                  ! L(.i) <.|j> 
+
+        elseif(jc.lt.0) then                                  ! L(.i) <.|j>
          jo=-jc; j1=jo/ibo; j2=mod(jo,ibo)
          k=KBORT(j1,j2); if(k.eq.0) Stop 'O: KBORT=0'
-         w = V_ch(:,k)   
+         w = V_ch(:,k)
          jch=ipbs(j1);  Call UPDATE_HW (ich,jch,v,w,C)
-        
+
         else
          Stop 'L_data:  wrong value jc = 0 for itype=2'
         end if
@@ -110,7 +110,7 @@
        End do
 
 !----------------------------------------------------------------------
-      Case(3)                                                  ! L(ij) 
+      Case(3)                                                  ! L(ij)
 
        Do j=1,ncdata; i=IPT(j); C=cdata(i); if(abs(C).lt.eps_C) Cycle
         i1=k1(i); j1=k2(i); ich=ipbs(i1); jch=ipbs(j1)
@@ -168,29 +168,29 @@
        if(ic.gt.0.and.jc.gt.0) then                   ! L(..) (ic,jc)
 
         write(nu,'(f10.5,3x,5a,2i6,T64,D20.10)') &
-         C, 'L (',ebs(i1),',',ebs(i2),')',ic,jc,S  
+         C, 'L (',ebs(i1),',',ebs(i2),')',ic,jc,S
 
        elseif(ic.lt.0.and.jc.gt.0) then               ! L(..) <i|.> jc
-        io1=io/ibo; io2=mod(io,ibo)  
+        io1=io/ibo; io2=mod(io,ibo)
 
         write(nu,'(f10.5,3x,10a,i6,T64,D20.10)') &
-         C, 'L (',ebs(i1),',',ebs(i2),')', &    
-         ' <',ebs(io1),'|',ebs(io2),'>',-jc,S  
+         C, 'L (',ebs(i1),',',ebs(i2),')', &
+         ' <',ebs(io1),'|',ebs(io2),'>',-jc,S
 
        elseif(ic.lt.0.and.jc.lt.0) then               ! L(..) <i|.> <.|j>
-        io1=io/ibo; io2=mod(io,ibo)  
-        jo1=jo/ibo; jo2=mod(jo,ibo)  
+        io1=io/ibo; io2=mod(io,ibo)
+        jo1=jo/ibo; jo2=mod(jo,ibo)
 
         write(nu,'(f10.5,3x,15a,T64,D20.10)') &
-         C, 'L (',ebs(i1),',',ebs(i2),')', &    
+         C, 'L (',ebs(i1),',',ebs(i2),')', &
          ' <',ebs(io1),'|',ebs(io2),'>',' <',ebs(jo1),'|',ebs(jo2),'>',S
 
-       elseif(ic.lt.0.and.jc.eq.0) then               ! L(..) <i|j>      
-        io1=io/ibo; io2=mod(io,ibo)  
+       elseif(ic.lt.0.and.jc.eq.0) then               ! L(..) <i|j>
+        io1=io/ibo; io2=mod(io,ibo)
 
         write(nu,'(f10.5,3x,10a,T64,D20.10)') &
-         C,'L (',ebs(i1),',',ebs(i2),')',' <',ebs(io1),'|',ebs(io2),'>', S  
- 
+         C,'L (',ebs(i1),',',ebs(i2),')',' <',ebs(io1),'|',ebs(io2),'>', S
+
        else
 
         Stop 'pri_L_coef: unknown structure for itype=1'
@@ -202,9 +202,9 @@
        i2 = K1; i1 = K2; io = -K3
 
        if(io.gt.0) then
-        io1=io/ibo; io2=mod(io,ibo)  
+        io1=io/ibo; io2=mod(io,ibo)
         write(nu,'(f10.5,3x,10a)') &
-         C,'L (',elc(i1),',',ebs(i2),')',' <',ebs(io1),'|',ebs(io2),'>'  
+         C,'L (',elc(i1),',',ebs(i2),')',' <',ebs(io1),'|',ebs(io2),'>'
        else
         write(nu,'(f10.5,3x,5a,i6)') C,'L (',elc(i1),',',ebs(i2),')',-io
        end if

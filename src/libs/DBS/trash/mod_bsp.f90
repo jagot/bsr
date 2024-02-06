@@ -14,7 +14,7 @@
       Integer :: i,j,nw
       Real(8) :: gamma
 
-      if(m.le.0) Return      
+      if(m.le.0) Return
 
       gamma = sqrt(kappa**2 - (z/c_au)**2)
 

@@ -1,8 +1,8 @@
 !======================================================================
       Subroutine Read_Wdat
 !----------------------------------------------------------------------
-!     read W.DAT file (weight coefficient data) 
-!----------------------------------------------------------------------      
+!     read W.DAT file (weight coefficient data)
+!----------------------------------------------------------------------
 
       Use bsr_phot
       Implicit none
@@ -16,27 +16,27 @@
       Open(nuw, file=AF, form='UNFORMATTED')
 
       read(nuw) kch, kcp, khm
- 
+
       if(kch.ne.nch) Stop ' other nch in W.DAT'
       if(khm.ne.nhm) Stop ' other nhm in W.DAT'
       ncp=kcp
- 
+
       nwt = nch + ncp;  Allocate (WT(nwt,nhm),AK(nwt,nch),WTch(nwt))
       Do i = 1,nhm; read(nuw) (WT(j,i),j=1,nwt); End do
- 
+
       Close(nuw)
 
       End Subroutine Read_Wdat
 
-!====================================================================== 
-      Subroutine Br_Wdat 
-!====================================================================== 
+!======================================================================
+      Subroutine Br_Wdat
+!======================================================================
 
-      USE MPI 
-      USE bsr_phot 
+      USE MPI
+      USE bsr_phot
 
-      Implicit none 
-      
+      Implicit none
+
       Call MPI_BCAST(ncp, 1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
       Call MPI_BCAST(nwt, 1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
 

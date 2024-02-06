@@ -11,16 +11,16 @@
       Integer, external :: Ifind_jjorb
 
       rewind(nu)
-      Do 
+      Do
        read(nu,'(a)',end=1) AS
        if(AS(1:1).eq.'*') Exit
        if(AS.ne.'Peel subshells:') Cycle
-       Do 
+       Do
         read(nu,'(a)',end=1) AS
         if(AS(1:1).eq.'*') Exit
         if(AS.eq.'CSF(s):') go to 1
         k=1
-        Do 
+        Do
          EL = AS(k:k+4); if(len_trim(EL).eq.0) Exit
          Call EL_NLJK(EL,n,ka,l,j,iset)
          j=Ifind_jjorb(n,ka,iset,2)

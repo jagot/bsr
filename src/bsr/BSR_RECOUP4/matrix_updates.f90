@@ -9,10 +9,10 @@
       Integer :: ich,jch, i,k,m, mycase
 
       m = 0
-      if(allocated(hcc)) Deallocate(hcc) 
-      if(allocated(icc)) Deallocate(icc) 
-      if(allocated(x))   Deallocate(x) 
-      if(allocated(hcb)) Deallocate(hcb,hbb,icb,ibb) 
+      if(allocated(hcc)) Deallocate(hcc)
+      if(allocated(icc)) Deallocate(icc)
+      if(allocated(x))   Deallocate(x)
+      if(allocated(hcb)) Deallocate(hcb,hbb,icb,ibb)
 
       if(nch.eq.0.or.ns.eq.0) Return
 
@@ -22,10 +22,10 @@
       m=m+nch*nch
 
       i=0; k=0
-      Do ich=1,nch 
-      Do jch=1,ich 
+      Do ich=1,nch
+      Do jch=1,ich
        if(nprocs.gt.1) then
-        k=k+1; if(k.gt.nprocs-1) k=1; if(myid.ne.k) Cycle 
+        k=k+1; if(k.gt.nprocs-1) k=1; if(myid.ne.k) Cycle
        end if
        i=i+1; icc(ich,jch) = i; icc(jch,ich) = i
        my_channel(ich) = 1
@@ -38,7 +38,7 @@
       hcc=0.d0
 
 !-----------------------------------------------------------------------
-      if(npert.gt.0) then  
+      if(npert.gt.0) then
 
       Allocate(icb(nch,npert));  icb = 0
       m = m + 2 * nch * nch
@@ -46,7 +46,7 @@
       Do ich=1,nch
       Do jch=1,npert
        if(nprocs.gt.1) then
-        k=k+1; if(k.gt.nprocs-1) k=1; if(myid.ne.k) Cycle 
+        k=k+1; if(k.gt.nprocs-1) k=1; if(myid.ne.k) Cycle
        end if
        i=i+1; icb(ich,jch) = i
        my_channel(ich) = 1
@@ -62,7 +62,7 @@
       Do ich=1,npert; if(ich+nch.lt.I1_channel.or.ich+nch.gt.I2_channel) Cycle
       Do jch=1,ich; if(jch+nch.lt.J1_channel.or.jch+nch.gt.J2_channel) Cycle
        if(nprocs.gt.1) then
-        k=k+1; if(k.gt.nprocs-1) k=1; if(myid.ne.k) Cycle 
+        k=k+1; if(k.gt.nprocs-1) k=1; if(myid.ne.k) Cycle
        end if
        i=i+1; ibb(ich,jch) = i; ibb(jch,ich) = i
        my_channel(nch+ich) = 1

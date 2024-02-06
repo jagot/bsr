@@ -1,13 +1,13 @@
 
 !======================================================================
-      Real(8) Function rk_df (i1,j1,i2,j2,k) 
+      Real(8) Function rk_df (i1,j1,i2,j2,k)
 !======================================================================
 !     Returns  rk_df (i1, j1; i2, j2), base on the assembling two-electron
 !     B-spline integrals (see module DBS_integral)
 !----------------------------------------------------------------------
       Use DBS_grid,         only: ns,ks
-      Use df_orbitals 
-  
+      Use df_orbitals
+
       Implicit none
       Integer, intent(in) :: i1,j1,i2,j2,k
       Real(8), external :: SUM_AmB
@@ -42,7 +42,7 @@
        kk = k
        iconv=iconv+1
       end if
- 
+
       rk =  SUM_AmB(ns,ks,conv1,dens2,'s') + &
             SUM_AmB(ns,ks,conv2,dens4,'s') + &
             SUM_AmB(ns,ks,conv3,dens2,'s') + &
@@ -53,13 +53,13 @@
       End Function rk_df
 
 !======================================================================
-      Real(8) Function rk_pppp_df (i1,j1,i2,j2,k) 
+      Real(8) Function rk_pppp_df (i1,j1,i2,j2,k)
 !======================================================================
-!     Returns  Rk (P_i1, P_j1; P_i2, P_j2) 
+!     Returns  Rk (P_i1, P_j1; P_i2, P_j2)
 !----------------------------------------------------------------------
       Use DBS_grid,      only: ns,ks
-      Use df_orbitals,   only: p  
-  
+      Use df_orbitals,   only: p
+
       Implicit none
       Integer, intent(in) :: i1,j1,i2,j2,k
       Real(8) :: dens(ns,ks),conv(ns,ks)
@@ -70,18 +70,18 @@
       Call convol  (ns,ks,conv,dens,2,'s','s')
       Call density (ns,ks,dens,p(1,1,j1),p(1,1,j2),'s')
       rk_pppp_df = SUM_AmB(ns,ks,conv,dens,'s')
-  
+
       End Function rk_pppp_df
 
 
 !======================================================================
-      Real(8) Function rk_qqqq_df (i1,j1,i2,j2,k) 
+      Real(8) Function rk_qqqq_df (i1,j1,i2,j2,k)
 !======================================================================
-!     Returns  Rk (Q_i1, Q_j1; Q_i2, Q_j2) 
+!     Returns  Rk (Q_i1, Q_j1; Q_i2, Q_j2)
 !----------------------------------------------------------------------
       Use DBS_grid,      only: ns,ks
-      Use df_orbitals,   only: p  
-  
+      Use df_orbitals,   only: p
+
       Implicit none
       Integer, intent(in) :: i1,j1,i2,j2,k
       Real(8) :: dens(ns,ks),conv(ns,ks)
@@ -97,13 +97,13 @@
 
 
 !======================================================================
-      Real(8) Function rk_qpqp_df (i1,j1,i2,j2,k) 
+      Real(8) Function rk_qpqp_df (i1,j1,i2,j2,k)
 !======================================================================
-!     Returns  Rk (Q_i1, P_j1; Q_i2, P_j2) 
+!     Returns  Rk (Q_i1, P_j1; Q_i2, P_j2)
 !----------------------------------------------------------------------
       Use DBS_grid,         only: ns,ks
       Use df_orbitals,      only: p
-  
+
       Implicit none
       Integer, intent(in) :: i1,j1,i2,j2,k
       Real(8) :: dens(ns,ks),conv(ns,ks)
@@ -119,13 +119,13 @@
 
 
 !======================================================================
-      Real(8) Function rk_pqpq_df (i1,j1,i2,j2,k) 
+      Real(8) Function rk_pqpq_df (i1,j1,i2,j2,k)
 !======================================================================
-!     Returns  Rk (P_i1, Q_j1; P_i2, Q_j2) 
+!     Returns  Rk (P_i1, Q_j1; P_i2, Q_j2)
 !----------------------------------------------------------------------
       Use DBS_grid,      only: ns,ks
-      Use df_orbitals,   only: p 
-  
+      Use df_orbitals,   only: p
+
       Implicit none
       Integer, intent(in) :: i1,j1,i2,j2,k
       Real(8) :: dens(ns,ks),conv(ns,ks)
@@ -148,7 +148,7 @@
 !----------------------------------------------------------------------
       Use DBS_grid,          only: ns,ks
       Use df_orbitals,       only: p
-  
+
       Implicit none
       Integer, intent(in) :: i1,j1,i2,j2,k
       Real(8) :: di(ns,ns),dj(ns,ns),dc(ns,ns)
@@ -173,13 +173,13 @@
 !----------------------------------------------------------------------
       Use DBS_grid,          only: ns,ks
       Use df_orbitals,       only: p
-  
+
       Implicit none
       Integer, intent(in) :: i1,j1,i2,j2,k
       Real(8) :: di(ns,ns),dj(ns,ns),dc(ns,ns)
       Real(8), external :: SUM_AmB
 
-      if(k.lt.0) Stop 'Stop in sk_pqqp: k < 0'                   
+      if(k.lt.0) Stop 'Stop in sk_pqqp: k < 0'
 
       Call msk_pqqp(k)
       Call density (ns,ks,di,p(1,1,i1),p(1,2,i2),'n')
@@ -203,12 +203,12 @@
       Character AINT(0:3)/'O','L','R','S'/
 
       if(icase.eq.1) then
-       write(nu,'(a,a,a,a,a,a,f20.10,f10.5)') &        
-        AINT(icase),'(',EBS(i1),',',EBS(i2),')=',S,SS  
+       write(nu,'(a,a,a,a,a,a,f20.10,f10.5)') &
+        AINT(icase),'(',EBS(i1),',',EBS(i2),')=',S,SS
       else
        write(nu,'(a,i2,a,a,a,a,a,a,a,a,a,f20.10,f10.5)') &
-        AINT(icase),k,'(',EBS(i1),',',EBS(i2),';', &    
-        EBS(i3),',',EBS(i4),')=',S,SS  
+        AINT(icase),k,'(',EBS(i1),',',EBS(i2),';', &
+        EBS(i3),',',EBS(i4),')=',S,SS
       end if
 
       End Subroutine pri_int

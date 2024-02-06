@@ -13,11 +13,11 @@
 
       IMPLICIT NONE
       Integer(4), Intent(in) :: i,j,kk
-      Integer(4) :: k,m,mm 
+      Integer(4) :: k,m,mm
       Real(8) :: A,B,DEN
 
 ! ... (0,r1) region ...
- 
+
       A = azk + aexp(i) + aexp(j)
       B = bzk + bexp(i) + bexp(j) +  &
           azk*aexp(i) + azk*aexp(j) + aexp(i)*aexp(j)

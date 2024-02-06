@@ -2,7 +2,7 @@
 !     UTILITY  oma_omb
 !=====================================================================
 !
-!     Change fortmat from zarm.omb to original zarm.om 
+!     Change fortmat from zarm.omb to original zarm.om
 !
 !     Arguments: omb  -   zarm.omb file
 !                om   -   zarm.om  file
@@ -12,7 +12,7 @@
 
       Implicit real(8) (A-H,O-Z)
 
-      Real(8), Allocatable :: om(:),y(:) 
+      Real(8), Allocatable :: om(:),y(:)
 
       Character(20)  :: AT
 
@@ -43,12 +43,12 @@
       Ry = au_eV/2.d0
 
 ! ... define files:
-      
-      Call Read_aarg('oma',AF_oma)     
+
+      Call Read_aarg('oma',AF_oma)
       Call Check_file(AF_oma)
       open(nua,file=AF_oma)
 
-      Call Read_aarg('omb',AF_omb)     
+      Call Read_aarg('omb',AF_omb)
       Call Check_file(AF_omb)
       open(nub,file=AF_omb)
 
@@ -61,15 +61,15 @@
     1 read(nua,*,end=2) E,ns, (y(i),i=1,ns)
 
       om = 0.d0
-     
+
       jop = Iopen(ntarg,E,ETARG)
-      
+
       if(ion.eq.0.and.jop*(jop+1)/2.ne.ns.or. &
        ion.ne.0.and.jop*(jop-1)/2.ne.ns) then
         write(*,*) E,ns, jop
         go to 1
       end if
-                
+
       iop = jop; if(iop.gt.np) iop=np
       if(ion.eq.0) ntr = iop*(iop+1)/2
       if(ion.ne.0) ntr = iop*(iop-1)/2
@@ -82,10 +82,10 @@
        Do i=iop+1,jop
         Do j=1,ni
          itr = i*(i-1)/2 + j
-         if(itr.gt.ns) Stop 'itr > ns' 
+         if(itr.gt.ns) Stop 'itr > ns'
          jtr = ntr + (i-iop-1)*ni + j
          if(jtr.gt.ktr) Stop 'jtr > ktr'
-         om(jtr)=y(itr) 
+         om(jtr)=y(itr)
         End do
        End do
       end if
@@ -110,7 +110,7 @@
 
       iarg = command_argument_count()
       if(iarg.eq.0) Return
-      Call GET_COMMAND_ARGUMENT(1,A)        
+      Call GET_COMMAND_ARGUMENT(1,A)
       if(A.ne.'?'.and.A.ne.'!') Return
 
       write(*,'(a)') &

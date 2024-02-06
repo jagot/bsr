@@ -1,7 +1,7 @@
 !=====================================================================
-      Module bsr_phot      
+      Module bsr_phot
 !=====================================================================
-!     Contains common variable and arrays 
+!     Contains common variable and arrays
 !---------------------------------------------------------------------
       Implicit none
 
@@ -17,7 +17,7 @@
       Integer :: ics = 16; Character(ma) :: AF_out  = 'bsr_phot.nnn'
       Integer :: iph = 17; Character(ma) :: AF_ph   = 'photo.nnn'
 
-      Character(ma) :: AF,BF,AS   
+      Character(ma) :: AF,BF,AS
 
 ! ... arguments:
 
@@ -35,7 +35,7 @@
       Integer :: iauto = 1         ! automatic choice of method
       Integer :: mfgi  = 300       ! number of point in outer region
       Real(8) :: AC = 0.01         ! accuracy, < 0.1, but < 0.0001
-      Real(8) :: DR = 0.1          ! r1 - r2, < 0.2 
+      Real(8) :: DR = 0.1          ! r1 - r2, < 0.2
 
 ! ... target data:
 
@@ -43,12 +43,12 @@
       Integer :: nz                ! nuclear charge
       Integer :: ion               ! residual charge
       Integer :: ntarg             ! number of target states
-      Real(8), Allocatable :: Etarg(:) 
-      Integer, Allocatable :: Ltarg(:),IStarg(:),IPtarg(:) 
+      Real(8), Allocatable :: Etarg(:)
+      Integer, Allocatable :: Ltarg(:),IStarg(:),IPtarg(:)
 
 ! ... scattering channels:
 
-      Integer :: klsp = 0             
+      Integer :: klsp = 0
       Integer :: IL,IS,IP
       Real(8) :: E1
 
@@ -62,20 +62,20 @@
 
       Integer, Allocatable :: NCONAT(:),LCH(:)
       Real(8), Allocatable :: VALUE(:), ECH(:)
-      Real(8), Allocatable :: WMAT(:,:) 
-      Real(8), Allocatable :: CF(:,:,:) 
-      Real(8), Allocatable :: RMAT(:,:), RMATI(:,:) 
+      Real(8), Allocatable :: WMAT(:,:)
+      Real(8), Allocatable :: CF(:,:,:)
+      Real(8), Allocatable :: RMAT(:,:), RMATI(:,:)
       Real(8), Allocatable :: KMAT(:,:), uk(:,:)
       Real(8), Allocatable :: ui(:)
- 
-      Real(8), Allocatable :: F(:,:),G(:,:),FP(:,:),GP(:,:) 
+
+      Real(8), Allocatable :: F(:,:),G(:,:),FP(:,:),GP(:,:)
 
 ! ... weights:
 
-      Integer :: ikm = 0                        
-      Integer :: nwt = -1                         
-      Real(8), Allocatable :: WT(:,:) 
-      Real(8), Allocatable :: AK(:,:) 
+      Integer :: ikm = 0
+      Integer :: nwt = -1
+      Real(8), Allocatable :: WT(:,:)
+      Real(8), Allocatable :: AK(:,:)
       Integer, Allocatable :: ipak(:,:)
       Real(8), Allocatable :: WTch(:)
       Real(8) :: CC = 0.d0, CE = 0.d0
@@ -88,19 +88,19 @@
 
       Integer :: ILI,ISI,IPI
       Real(8) :: EI
-      Integer :: ndm 
+      Integer :: ndm
 
 ! ... radiative data:
 
-      Real(8), Allocatable :: DKL(:),DKV(:) 
+      Real(8), Allocatable :: DKL(:),DKV(:)
       Real(8), Allocatable :: DLr(:),DLi(:),DVr(:),DVi(:)
       Real(8), Allocatable :: SL(:),SV(:)
       Real(8) :: SLP,SVP
 
 ! ... work arrays:
 
-      Real(8), Allocatable :: AA(:,:),BB(:,:),FF(:,:),FFF(:,:),FFP(:,:) 
-      Real(8), Allocatable :: v(:), eps(:) 
+      Real(8), Allocatable :: AA(:,:),BB(:,:),FF(:,:),FFF(:,:),FFP(:,:)
+      Real(8), Allocatable :: v(:), eps(:)
 
 ! ... MPI connected:
 
@@ -108,7 +108,7 @@
 
       Integer :: me = 0
       Integer, Allocatable :: iek(:)
-      Real(8), Allocatable :: ek(:)      
+      Real(8), Allocatable :: ek(:)
 
       End module bsr_phot
 

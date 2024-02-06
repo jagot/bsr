@@ -1,8 +1,8 @@
 !=======================================================================
-!     merging the set of bsw-files with choice of orbitals and 
+!     merging the set of bsw-files with choice of orbitals and
 !     with optional changing the spectroscopic notation
-! 
-!       1.bsw + 2.bsw + 3.bsw + ... --> result.bsw 
+!
+!       1.bsw + 2.bsw + 3.bsw + ... --> result.bsw
 !
 !     Interactive input; knot.dat is required
 !=======================================================================
@@ -24,14 +24,14 @@
       Call Read_name(AF)
 
       if(AF == '?') then
-       write(*,*) 
-       write(*,*) 'merging the set of bsw-files with choice of orbitals and' 
-       write(*,*) 'with optional changing the spectroscopic notation'        
-       write(*,*)                                                           
-       write(*,*) '  1.bsw + 2.bsw + 3.bsw + ... --> result.bsw '             
-       write(*,*)                                                           
-       write(*,*) 'Interactive input; knot.dat is required'                  
-       write(*,*) 
+       write(*,*)
+       write(*,*) 'merging the set of bsw-files with choice of orbitals and'
+       write(*,*) 'with optional changing the spectroscopic notation'
+       write(*,*)
+       write(*,*) '  1.bsw + 2.bsw + 3.bsw + ... --> result.bsw '
+       write(*,*)
+       write(*,*) 'Interactive input; knot.dat is required'
+       write(*,*)
        Stop ' '
       end if
 
@@ -44,10 +44,10 @@
    10 write(*,*) 'Enter file-name for input w-file  or  end: '
       read(*,'(a)') AF
       if(AF(1:3).eq.'end') go to 20
- 
+
       i=Icheck_file(AF)
       if(i.eq.0) then
-       write(*,'(a,a)') 'Can not find file  ',TRIM(AF) 
+       write(*,'(a,a)') 'Can not find file  ',TRIM(AF)
        go to 10
       end if
 
@@ -56,13 +56,13 @@
       read(inp) itype,nsw,ksw,tt,ksp,ksq
       if(ksw.ne.ks) Stop ' ksw <> ks'
       if(nsw.ne.ns) Stop ' nsw <> ns'
-      if(itype.ne.grid_type) Stop ' another grid_type ?'    
-      
+      if(itype.ne.grid_type) Stop ' another grid_type ?'
+
     1 read(inp,end=3) elw,mw
 
     2 write(*,'(a)') elw
       write(*,'(a)') 'add, rename or skip ? [ |s|EL]: '
-      read(*,'(a5)') ELn 
+      read(*,'(a5)') ELn
       if(ELN(1:1).eq.'s') then; read(inp) x; read(inp) x; goto 1; endif
       if(LEN_TRIM(ELn).eq.0) ELn=elw
 
@@ -70,7 +70,7 @@
       m = Ifind_bsorb(n,k,i,0)
       if(m.ne.0) then
        write(*,'(a)') 'we already have this name'
-       go to 2 
+       go to 2
       end if
 
       m = Ifind_bsorb(n,k,i,2)

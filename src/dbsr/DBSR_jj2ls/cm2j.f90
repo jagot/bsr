@@ -9,7 +9,7 @@
 !     list of configurations are placed in module conf_jj
 !----------------------------------------------------------------------
       Use conf_jj
-     
+
       Implicit real(8) (A-H,O-Z)
 
       Character(6) :: G92MIX
@@ -37,28 +37,28 @@
 
       ic2=0
       Do ib = 1,NBLOCK
-       read(num) NB, NCFBLK, NEVBLK, IATJP, IASPA 
+       read(num) NB, NCFBLK, NEVBLK, IATJP, IASPA
        ic1=ic2+1; ic2=ic2+NCFBLK
 
        JBtot(ib) = IATJP-1
        JBsol(ib) = NEVBLK
 
-       if(allocated(ICCMIN)) Deallocate(ICCMIN) 
+       if(allocated(ICCMIN)) Deallocate(ICCMIN)
        Allocate(ICCMIN(NEVBLK))
        read(num) (ICCMIN(I),I=1,NEVBLK)
 
-       if(allocated(EVAL)) Deallocate(EVAL) 
+       if(allocated(EVAL)) Deallocate(EVAL)
        Allocate(EVAL(NEVBLK))
        read(num) EAV, (EVAL(i), I = 1, NEVBLK)
 
-       if(allocated(EVEC)) Deallocate(EVEC) 
+       if(allocated(EVEC)) Deallocate(EVEC)
        Allocate(EVEC(NCFBLK,NEVBLK))
        read(num) ((EVEC(i,j), i=1,NCFBLK), J=1,NEVBLK)
 
        Do k=1,NEVBLK
         nsol = nsol+1
         write(nuj,'(i8,2x,2F16.8)') nsol
-        write(nuj,'(f16.8,3i8)') EVAL(k)+EAV, IATJP-1, ic1,ic2       
+        write(nuj,'(f16.8,3i8)') EVAL(k)+EAV, IATJP-1, ic1,ic2
         write(nuj,'(6f12.8)') (EVEC(i,k),i=1,NCFBLK)
        End do
 

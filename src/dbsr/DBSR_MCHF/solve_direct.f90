@@ -1,11 +1,11 @@
 !=====================================================================
       Subroutine Solve_direct (i,hfm,v,rhs)
 !=====================================================================
-!     Direct solution of the one-electron equation:  hfm v - e v = rhs 
+!     Direct solution of the one-electron equation:  hfm v - e v = rhs
 !---------------------------------------------------------------------
       Use dbsr_mchf
       Use df_orbitals
- 
+
       Implicit none
       Integer :: i
       Real(8), intent(in)  :: hfm(ms,ms), rhs(ms)
@@ -25,7 +25,7 @@
 
       aa = 0.d0;  aa(1:ms,1:ms) = hfm - e(i)*fppqq
       res = 0.d0; res(1:ms) = rhs
- 
+
 ! ... add orthogonality with all orbitals:
 
       Do j = 1,i-1                             !  ???
@@ -48,7 +48,7 @@
         k=k+1; xx(k)=aa(jp,j)
        End do
        ax(1:k,ii)=xx(1:k); yy(ii)=res(j)
-      End do 
+      End do
 
 ! ... solve the matrx equation with LAPACK routines:
 
@@ -62,7 +62,7 @@
       v=0.d0; k=0
       Do j=1,ms
        if(iprm(j,i).eq.0) Cycle; k=k+1; v(j)=yy(k)
-      End do 
+      End do
 
 ! ... normalize the solution:
 

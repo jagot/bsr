@@ -18,7 +18,7 @@
       Read(nu,'(a)') COUPLE
       Call DECODE_c
       IPT=SUM(ln(1:no)*iq(1:no)); IPT=(-1)**IPT
-      ILT=LS(no,4); IST=LS(no,5) 
+      ILT=LS(no,4); IST=LS(no,5)
 
 ! ... check if it is a J-case:
 
@@ -51,7 +51,7 @@
       Read(nu,'(a)') COUPLE
       Call DECODE_c
       IPT=SUM(ln(1:no)*iq(1:no)); IPT=(-1)**IPT
-      ILT=(LS(no,4)-1)/2; IST=LS(no,5) 
+      ILT=(LS(no,4)-1)/2; IST=LS(no,5)
 
 ! ... check if it is a J-case:
 

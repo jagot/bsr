@@ -9,9 +9,9 @@
 !
 !     prepares the ASF list from a list of (nlj)^q configurations
 !
-!     Calling:  genjterm  inp=file1  out=file2  jmin=...  jmax=... 
+!     Calling:  genjterm  inp=file1  out=file2  jmin=...  jmax=...
 !
-!     Default:  inp -> rcsl.conf 
+!     Default:  inp -> rcsl.conf
 !               out -> rcsl.inp
 !
 !--------------------------------------------------------------------
@@ -24,23 +24,23 @@
 
       Integer :: jmin=-1, jmax=-1
 
-      iarg = command_argument_count() 
+      iarg = command_argument_count()
       if(iarg.gt.0) Call GET_COMMAND_ARGUMENT(1,AF)
 
       if(AF.eq.'?') then
        write(*,*) 'GENJCONF: prepares the ASF list from a list of (nlj)^q configurations'
-       write(*,*) 
+       write(*,*)
        write(*,*) 'Call as:  genjterm inp=.. out=.. jmin=.. jmax=..'
        write(*,*) 'or'
        write(*,*) 'Call as:  genjterm name jmin=.. jmax=..'
        write(*,*)
        write(*,*) 'default input and output files: conf.inp and cfg.inp'
        write(*,*) 'or                              name.conf and name.c  '
-       write(*,*) 
+       write(*,*)
        write(*,*) 'jmin is the only compalsory parameter'
        write(*,*) 'if jmax < jmin, jmax = jmin'
        Stop ' '
-      end if      
+      end if
 
 
 ! ... files:
@@ -53,7 +53,7 @@
        Call Read_aarg('inp',AF_inp)
        Call Read_aarg('out',AF_out)
       end if
-   
+
 ! ... input data:
 
       Call Read_iarg('jmin',jmin)
@@ -70,7 +70,7 @@
        write(*,*)
        write(*,*) 'default input and output files: conf.inp and cfg.inp'
        write(*,*) 'or                              name.conf and name.c  '
-       write(*,*) 
+       write(*,*)
        write(*,*) 'jmin is the only compalsory parameter'
        write(*,*) 'if jmax < jmin, jmax = jmin'
        Stop
@@ -129,8 +129,8 @@
 
       BACKSPACE(nu2)
       write(nu2,'(a)') '* '
-      
- 
+
+
       End  ! utility     G E N J T E R M
 
 
@@ -167,7 +167,7 @@
       else
          CALL Sum_Iterm
       end if
-                                         
+
     2 nt(i)=nt(i)+1
       if(nt(i).gt.mt(i)) then
         if(i.eq.i1) go to 3
@@ -186,7 +186,7 @@
 !     exhaustion of intermediate terms
 !----------------------------------------------------------------------
       USE conf_jj; Use orb_jj
- 
+
       Integer :: js_min(msh),js_max(msh)
 
       Jintra(1)=Jshell(1)
@@ -202,7 +202,7 @@
     1 j1=i-1; j2=i
 
       js_min(i)=IABS(Jintra(j1)-Jshell(j2))
-      js_max(i)=     Jintra(j1)+Jshell(j2) 
+      js_max(i)=     Jintra(j1)+Jshell(j2)
       Jintra(i)=js_min(i)
 
     2 if(i.lt.i2) then
@@ -222,7 +222,7 @@
       end if
 
     4 Continue
-       
+
       End  ! Subroutine Sum_Iterm
 
 

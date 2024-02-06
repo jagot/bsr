@@ -9,7 +9,7 @@
       USE coef_list, only: ntrm
       USE spin_orbitals, only: NNsym1,NNsym2, Lsym1,Lsym2
       USE term_exp
-          
+
       Implicit none
 
       Integer :: status(MPI_STATUS_SIZE), ic,jc

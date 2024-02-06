@@ -40,7 +40,7 @@
     ! .. compute the moments in the spline basis
 
     Call wk_moments(k)
-    
+
     ! .. assemble the moments
 
     rkb = 0.d0
@@ -62,7 +62,7 @@
                ii = ii + 1
 
          IF( iv < jv ) THEN
-                  c  = rkd3(ii,iv)*rkd2(jj,jv) 
+                  c  = rkd3(ii,iv)*rkd2(jj,jv)
          ELSE IF( iv > jv ) THEN
                   c  = rkd1(jj,jv)*rkd4(ii,iv)
          ELSE

@@ -2,8 +2,8 @@
 !     UTILITY  add_stgf
 !=====================================================================
 !     accumulates results STGF calculations (v.4.7.1 and pstgf format)
-!     
-!     OMEGA, KMAT.DAT + target  --> zarm.kma, zarm.om, zarm.om_par 
+!
+!     OMEGA, KMAT.DAT + target  --> zarm.kma, zarm.om, zarm.om_par
 !
 !     Call:   add_stgf   [klsp=..]
 !
@@ -11,15 +11,15 @@
       Use target; Use channels
 
       Implicit real(8) (a-h,o-z)
-      Character(80) :: AS 
+      Character(80) :: AS
       Real(8), allocatable :: kmat(:,:), tmat(:,:), om(:,:)
-      Integer, parameter :: nproc = 9999  
-      
+      Integer, parameter :: nproc = 9999
+
 ! ... files:
 
       Integer :: inp=1;   Character(80) :: tname   = 'TMAT.DAT'
-                          Character(80) :: kname   = 'KMAT.DAT' 
-                          Character(80) :: oname   = 'OMEGA'    
+                          Character(80) :: kname   = 'KMAT.DAT'
+                          Character(80) :: oname   = 'OMEGA'
       Integer :: out=2;   Character(80) :: ztname  = 'zarm.tma'
                           Character(80) :: zkname  = 'zarm.kma'
                           Character(80) :: zoname  = 'zarm.om'
@@ -29,7 +29,7 @@
                           Character(80) :: fname
 
       Call inf_add_stgf
-      open(pri,file=AF_log)      
+      open(pri,file=AF_log)
 
       Call CPU_time(t1)
 
@@ -37,7 +37,7 @@
 ! ... target information:
 
       Call Check_file(targ)
-      Open(nut,file=targ) 
+      Open(nut,file=targ)
       Call R_target(nut)
       Call R_channels(nut)
 
@@ -48,7 +48,7 @@
       ni=ntarg; Call Read_iarg('ni',ni)
 
       Close(nut)
-       	
+
       E1 = etarg(1); ETARG = (ETARG-E1)*2
       ion = nz-nelc;  zion=ion; if(ion.eq.0) zion=1.d0
 
@@ -70,11 +70,11 @@
 
     1 Continue
       if(coupling.eq.'LS') then
-       read(inp,'(3i5,e14.5)',end=2) nopen,IST,ILT,EK 
+       read(inp,'(3i5,e14.5)',end=2) nopen,IST,ILT,EK
        IPT = 1; if(IST.lt.0) IPT=-1
        IST = iabs(IST)
       else
-       read(inp,'(3i5,e14.5)',end=2) nopen,ILT,IPT,EK 
+       read(inp,'(3i5,e14.5)',end=2) nopen,ILT,IPT,EK
        IPT = IPT + 1;  if(IPT.eq.2) IPT=-1
        IST = 0
       end if
@@ -84,7 +84,7 @@
       Do i=1,nopen; read(inp,*) lt,lc; End do
       if(nopen.le.0.and.ii.eq.-1) read(inp,*) lt
       if(nopen.le.0) go to 1
-      
+
       ilsp = 0
       Do i=1,nlsp
        if(IST.ne.ispar(i)) Cycle
@@ -97,12 +97,12 @@
        write(*,*) 'IST,ILT,IPT=',IST,ILT,IPT
        write(pri,*) 'IST,ILT,IPT=',IST,ILT,IPT
        write(pri,*) 'Stop: unknown symmetry in KMAT.DAT'
-       Stop 'unknown symmetry in KMAT.DAT'        
-      end if  
+       Stop 'unknown symmetry in KMAT.DAT'
+      end if
 
       Do i=1,nopen; Do j=1,nopen
        read(inp,*) kmat(i,j)
-      End do; End do  
+      End do; End do
 
 ! ... save K-matrix:
 
@@ -135,11 +135,11 @@
 
    10 Continue
       if(coupling.eq.'LS') then
-       read(inp,'(3i5,e14.5)',end=20) nopen,IST,ILT,EK 
+       read(inp,'(3i5,e14.5)',end=20) nopen,IST,ILT,EK
        IPT = 1; if(IST.lt.0) IPT=-1
        IST = iabs(IST)
       else
-       read(inp,'(3i5,e14.5)',end=20) nopen,ILT,IPT,EK 
+       read(inp,'(3i5,e14.5)',end=20) nopen,ILT,IPT,EK
        IPT = IPT + 1;  if(IPT.eq.2) IPT=-1
        IST = 0
       end if
@@ -161,12 +161,12 @@
        write(*,*) 'IST,ILT,IPT=',IST,ILT,IPT
        write(pri,*) 'IST,ILT,IPT=',IST,ILT,IPT
        write(pri,*) 'Stop: unknown symmetry in KMAT.DAT'
-       Stop 'unknown symmetry in KMAT.DAT'        
-      end if  
+       Stop 'unknown symmetry in KMAT.DAT'
+      end if
 
       Do i=1,nopen; Do j=1,nopen
        read(inp,*) kmat(i,j),tmat(i,j)
-      End do; End do  
+      End do; End do
 
 ! ... save T-matrix:
 
@@ -192,14 +192,14 @@
       Open(out,file=fname,POSITION='APPEND')
 
       Do ii = -1,nproc
-     
+
        write(fname,'(a,i4.4)') trim(oname),ii
        if(ii.eq.-1) fname = trim(oname)
-       i = Icheck_file(fname) 
+       i = Icheck_file(fname)
        if(i.eq.0) Cycle
 
-!       if(i.eq.0.and.ii.eq.-1) Cycle 
-!       if(i.eq.0.and.ii.gt.-1) Exit 
+!       if(i.eq.0.and.ii.eq.-1) Cycle
+!       if(i.eq.0.and.ii.gt.-1) Exit
 
        Open(inp,file=fname)
 
@@ -254,7 +254,7 @@
        End do  ! over ii
 
       Call CPU_time(t2)
-      write(pri,'(/a,f10.1,a)') 'time: ',(t2-t1)/60,' min' 
+      write(pri,'(/a,f10.1,a)') 'time: ',(t2-t1)/60,' min'
 
       End  ! UTILITY  add_stgf
 
@@ -267,19 +267,19 @@
 
       Character :: A = ' '
 
-      Call get_command_argument(1,A)  
+      Call get_command_argument(1,A)
       if(A.ne.'?'.and.A.ne.'!') Return
 
       write(*,'(a)') &
-'                                                          ',& 
-'     add_stgf accumulates results after STGF (PSTGF) runs ',& 
-'                                                          ',& 
-'     OMEGA, KMAT.DAT, TMAT.DAT + target  --> zarm.om, zarm.kma, zarm.tma',& 
-'                                                          ',& 
-'     Call as:   add_stgf   [klsp=..]                      ',& 
-'                                                          ',& 
-'     klsp - index of partial wave, if calculations for one partial wave only,',& 
-'            in this case output is recorded in zarm.om_par file ',& 
+'                                                          ',&
+'     add_stgf accumulates results after STGF (PSTGF) runs ',&
+'                                                          ',&
+'     OMEGA, KMAT.DAT, TMAT.DAT + target  --> zarm.om, zarm.kma, zarm.tma',&
+'                                                          ',&
+'     Call as:   add_stgf   [klsp=..]                      ',&
+'                                                          ',&
+'     klsp - index of partial wave, if calculations for one partial wave only,',&
+'            in this case output is recorded in zarm.om_par file ',&
 '                                                        '
       Stop ' '
 

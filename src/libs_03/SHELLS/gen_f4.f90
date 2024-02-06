@@ -2,31 +2,31 @@
   Real(8) Function gen_f4 (ip,id)
 !=======================================================================
 !
-! contains f4-shell cfp coefficients as  sqrt(m1/m2) 
+! contains f4-shell cfp coefficients as  sqrt(m1/m2)
 !
 ! ip - index of parent term
 ! id - index of daughter term
 !
 !-----------------------------------------------------------------------
- 
+
   Implicit none
- 
+
   Integer, parameter :: nd =   47  ! number of daughter terms
   Integer, parameter :: np =   17  ! number of parent terms
   Integer, parameter :: ng =  367  ! number of non-zero cfp's
- 
+
   Integer(2) :: ind(0:nd)
   Integer(1) :: ipa(ng)
   Integer(4) :: m1(ng)
   Integer(4) :: m2(ng)
- 
+
   Integer :: ip,id,i
- 
+
   if(id.le.0) Stop "gen_f4: id < 0"
   if(ip.le.0) Stop "gen_f4: ip < 0"
   if(id.gt.nd) Stop "gen_f4: id > nd"
   if(ip.gt.np) Stop "gen_f4: ip > np"
- 
+
   gen_f4 = 0.d0
   Do i=ind(id-1)+1,ind(id)
    if(ip.ne.ipa(i)) Cycle
@@ -34,14 +34,14 @@
    if(m1(i).lt.0) gen_f4 = -gen_f4
    Exit
   End Do
- 
+
   Data ind/  &
     0,    1,    4,    9,   13,   16,   25,   33,   40,   51,   61,   72, &
    82,   93,  102,  116,  129,  140,  154,  167,  179,  191,  202,  211, &
   220,  228,  234,  238,  239,  240,  249,  257,  265,  269,  277,  288, &
   298,  308,  313,  322,  328,  337,  345,  350,  357,  362,  365,  367  /
- 
- 
+
+
   Data ipa/  &
   3,  2,  3,  4,  1,  2,  3,  4,  5,  2,  3,  4,  5,  3,  4,  5,  2,  3, &
   4,  7,  8,  9, 10, 11, 12,  2,  3,  4,  7,  8, 10, 11, 12,  2,  4,  7, &
@@ -64,8 +64,8 @@
  12, 14, 16, 17,  9, 10, 11, 12, 13, 14, 15, 16, 17, 10, 11, 12, 13, 14, &
  15, 16, 17, 10, 12, 14, 16, 17, 11, 12, 13, 14, 15, 16, 17, 13, 14, 15, &
  16, 17, 14, 16, 17, 16, 17  /
- 
- 
+
+
   Data m1/  &
        -1,       -2,       -1,       33,        1,        5,        3, &
         9,       13,       55,       -1,     -125,       91,       -1, &
@@ -120,8 +120,8 @@
        18,      -12,       -1,      121,     -153,      -17,      323, &
        -1,       -5,       27,     -285,       19,       38,      -21, &
        -5,       -5,       11  /
- 
- 
+
+
   Data m2/  &
         1,        7,        8,       56,        7,       56,        8, &
        56,       56,      168,        8,      616,      264,        8, &
@@ -176,5 +176,5 @@
        77,      455,        8,      910,      616,     1456,     1456, &
         8,      182,       56,     1456,      112,       91,       52, &
        28,       16,       16  /
- 
+
   End Function gen_f4

@@ -5,7 +5,7 @@
 !----------------------------------------------------------------------
       Use dbsr_prep
 
-      Implicit none 
+      Implicit none
 
       Call Read_rpar(nup,'eps_ovl' ,eps_ovl )
       Call Read_rpar(nup,'eps_core',eps_core)

@@ -1,5 +1,5 @@
 !======================================================================
-      Subroutine Read_arg 
+      Subroutine Read_arg
 !======================================================================
 !     read arguments from command line and check default settings
 !======================================================================
@@ -7,7 +7,7 @@
 
       Implicit none
 
-      Character(7) :: oper='1110000'	
+      Character(7) :: oper='1110000'
 
 ! ... read arguments in command line:
 
@@ -25,7 +25,7 @@
       Call Read_rarg('eps_soo',eps_soo)
 
       if(klsp.ne.0) klsp1=klsp
-      if(klsp2.lt.klsp1) klsp2=klsp1 
+      if(klsp2.lt.klsp1) klsp2=klsp1
 
 ! ... define the operators under consideration:
 

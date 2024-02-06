@@ -4,8 +4,8 @@
 !     extracts the data from int_bnk for specific case
 !----------------------------------------------------------------------
       Use bsr_mat
-      Use conf_LS 
-      Use def_list; Use def_list    
+      Use conf_LS
+      Use def_list; Use def_list
       Use new_dets; Use new_defs
       Use c_data, only: ntype,kpol1,kpol2
 
@@ -39,7 +39,7 @@
       if(myid.eq.0) then; rewind(nub); read(nub) nbuf; end if
 
       nnbuf = 0
-    1 if(myid.eq.0) Call Read_buffer(nbuf)  
+    1 if(myid.eq.0) Call Read_buffer(nbuf)
 
       nnbuf=nnbuf+1
 
@@ -52,18 +52,18 @@
 
       Do ibuf=1,ncbuf
 
-      Call Decode_INT (jcase,k,i1,i2,i3,i4,intb(ibuf)) 
-      
+      Call Decode_INT (jcase,k,i1,i2,i3,i4,intb(ibuf))
+
       if(icase.ne.jcase) Cycle
 
-      kpol = k 
+      kpol = k
       Select case(icase)
        Case(4,8,9,10); kpol=k-1
        Case(6,7,11);   kpol=0
       End select
       if(kpol.gt.mk) Cycle
 
-! ... determine the range of states for given coeff. 
+! ... determine the range of states for given coeff.
 
       it = itb(ibuf);   jt = jtb(ibuf)
       is1 = IT_state1(it); js1 = IT_state1(jt)
@@ -73,7 +73,7 @@
       idf = idfb(ibuf)
       C = CBUF(ibuf)
 !----------------------------------------------------------------------
-! ... loop over all relevant states: 
+! ... loop over all relevant states:
 
       Do ik=is1,is2; is=IP_stat(ik); ich=IP_channel(is)
        if(my_channel(ich).eq.0) Cycle
@@ -87,7 +87,7 @@
 
 ! ... consider only low-half of interaction matrix
 
-       if(it.eq.jt.and.js.gt.is) Cycle                   
+       if(it.eq.jt.and.js.gt.is) Cycle
 
 ! ... restriction of two-electron rel. matrix elements:
 
@@ -95,7 +95,7 @@
         Case(3,4,8,9,10); if(abs(WC(is)*WC(js)).lt.Eps_soo) Cycle
        End Select
 
-! ... include the expansion coefficients 
+! ... include the expansion coefficients
 
        C=CBUF(ibuf)
        if(ich.eq.jch.and.is.ne.js) C = C + C
@@ -123,8 +123,8 @@
        if(icase.eq.6.or.icase.eq.7) kpol = lbs(j1)
        if(icase.eq.7.and.kpol.gt.mlso) Cycle
 
-! ... J-dependence for relativistic ccorrections 
-       
+! ... J-dependence for relativistic ccorrections
+
        if(icase.gt.6.and.icase.lt.11) then
         Call Term_ic (is,ILT1,IST1)
         Call Term_ic (js,ILT2,IST2)
@@ -137,8 +137,8 @@
 
        end if
 
-! ... we do not need anymore the configuration index, 
-! ... only pertuber index if any:   
+! ... we do not need anymore the configuration index,
+! ... only pertuber index if any:
 
        i=0; if(ich.gt.nch) i=ich-nch
        j=0; if(jch.gt.nch) j=jch-nch
@@ -149,7 +149,7 @@
 
        Call Jsym_int(icase,j1,j2,j3,j4)
 
-! ... find overlap factors with extracted continuum:  
+! ... find overlap factors with extracted continuum:
 
        Call Det_fact(idf,np1,np2); if(nndef.eq.0) Cycle
 
@@ -165,7 +165,7 @@
         end if
 
         Call Add_coef(CCC,kpol,k1,k2,k3,k4,itype)
-       End do            
+       End do
 
       End do   !  over js
       End do   !  over is
@@ -184,7 +184,7 @@
       if(pri.gt.0.and.debug.gt.0)  write(pri,'(a,i4,a,f8.2,a)') &
        'Bufer:',nnbuf,' time:',(t2-t1)/60,' min'
 
-      if( time_delay.gt.0.and.(t2-time0)/60 .gt. time_delay) then 
+      if( time_delay.gt.0.and.(t2-time0)/60 .gt. time_delay) then
        interrupt = nnbuf; intercase=icase
        if(myid.eq.0.and.pri.gt.0)  write(pri,'(/a,3i10)') &
          'Interrupt, intercase, nnbuf:',interrupt,intercase,nnbuf
@@ -204,12 +204,12 @@
 
 
 !======================================================================
-      Subroutine Read_buffer(nbuf)  
+      Subroutine Read_buffer(nbuf)
 !======================================================================
       Use bsr_mat
 
       Implicit none
- 
+
       Integer :: nbuf, i1,i2
 
       if(nbuf.gt.maxnc) then
@@ -219,7 +219,7 @@
       end if
       if(nbuf.le.0) Return
       ncbuf =0
-       
+
     1 i1 = ncbuf+1; i2=ncbuf+nbuf
       read(nub) cbuf (i1:i2)
       read(nub) itb  (i1:i2)
@@ -232,9 +232,9 @@
       go to 1
 
     2 nbuf=0
-      
-      End Subroutine Read_buffer  
-             
+
+      End Subroutine Read_buffer
+
 
 !======================================================================
       Subroutine State_res_bp
@@ -263,7 +263,7 @@
       if(nc.gt.maxnc)  then
         maxnc = nc
         Deallocate(cbuf,k1,k2,k3,k4)
-        Allocate(cbuf(maxnc),k1(maxnc),k2(maxnc),k3(maxnc),k4(maxnc)) 
+        Allocate(cbuf(maxnc),k1(maxnc),k2(maxnc),k3(maxnc),k4(maxnc))
         write(*,*) 'Warning: maxnc = ',maxnc
       end if
 
@@ -301,7 +301,7 @@
 
       End Subroutine State_res_bp
 
-     
+
 
 
 

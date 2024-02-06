@@ -2,7 +2,7 @@
       Real(8) Function cfp_jj(j,q,JP,VP,JD,VD)
 !=====================================================================
 !     fractional parentage coefficients for j^q subshells
-!     j  - 2*j value 
+!     j  - 2*j value
 !     q  - the number of electrons in daughter subshell
 !     JP - 2*J value of parent subshell
 !     VP - seniority of parent term
@@ -18,10 +18,10 @@
       Real(8) :: zero = 0.d0, one = 1.d0
       Integer, external :: Jterm
 
-      Integer, parameter :: n2_j3=2, n3_j3=1            
+      Integer, parameter :: n2_j3=2, n3_j3=1
       Integer :: num3_j3(n3_j3,n2_j3), norm3_j3(n3_j3)
 
-      Integer, parameter :: n2_j5=3, n3_j5=3            
+      Integer, parameter :: n2_j5=3, n3_j5=3
       Integer :: num3_j5(n3_j5,n2_j5), norm3_j5(n3_j5)
 
       Integer, parameter :: n2_j7=4, n3_j7=6, n4_j7=8
@@ -31,12 +31,12 @@
 ! ... check of j and q values
 
       if(q.lt.1.or.q.gt.j+1) then
-       write(*,*) 'cfp_jj: q is out of scope:',q 
+       write(*,*) 'cfp_jj: q is out of scope:',q
        Stop 'Stop in cfp_jj'
       end if
 
       if(j.lt.1.or.(j.ge.9.and.q.gt.2)) then
-       write(*,*) 'cfp_jj: j is out of scope:',j,q 
+       write(*,*) 'cfp_jj: j is out of scope:',j,q
        Stop 'Stop in cfp_jj'
       end if
 
@@ -54,8 +54,8 @@
 
 ! ... select different subshells:
 
-      phase = one 
-      Select case(j*100+q)  
+      phase = one
+      Select case(j*100+q)
       Case(303)                                  !  3/2 ^ 3
        CN = num3_j3(ID,IP)
        CD = norm3_j3(ID)
@@ -117,10 +117,10 @@
                       9, 2,-11 /
       DATA norm3_j5/ 18, 7, 14 /
 
-      DATA num3_j7 /  9,   0,   0,   0,   0,   0, & 
-                     -5,   3, 121, 143, -55,   0, & 
-                     -9, -11,  12,-900,  39,   5, & 
-                    -13,   0, -65, 343, 104, -17  / 
+      DATA num3_j7 /  9,   0,   0,   0,   0,   0, &
+                     -5,   3, 121, 143, -55,   0, &
+                     -9, -11,  12,-900,  39,   5, &
+                    -13,   0, -65, 343, 104, -17  /
       DATA norm3_j7/ 36,  14, 198,1386, 198,  22  /
 
       DATA num4_j7 /  1,  280,  308, 1144,    0,    0,    0,   0, &

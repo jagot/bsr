@@ -23,7 +23,7 @@
       if(Ssym(i1)+Ssym(i2).ne.Ssym(j1)+Ssym(j2)) Return
 !----------------------------------------------------------------------
 
-      Call Check_boef(Lsym(i1),Msym(i1),Ssym(i1), & 
+      Call Check_boef(Lsym(i1),Msym(i1),Ssym(i1), &
                       Lsym(i2),Msym(i2),Ssym(i2), &
                       Lsym(j1),Msym(j1),Ssym(j1), &
                       Lsym(j2),Msym(j2),Ssym(j2))
@@ -36,12 +36,12 @@
       j21 = 1;  if(j2.gt.1) j21 = IPsym2(j2-1)+1;  j22 = IPsym2(j2)
 
       Do k1 = i11,i12;  i=Isym1(k1); ibint(1)=nnsym1(i)
-      Do k2 = i21,i22;  j=Isym1(k2); ibint(2)=nnsym1(j)  
-                         if(k2.le.k1) Cycle 
+      Do k2 = i21,i22;  j=Isym1(k2); ibint(2)=nnsym1(j)
+                         if(k2.le.k1) Cycle
 
       Do k3 = j11,j12;  i=Isym2(k3);  ibint(3)=nnsym2(i)
       Do k4 = j21,j22;  j=Isym2(k4);  ibint(4)=nnsym2(j)
-                         if(k4.le.k3) Cycle 
+                         if(k4.le.k3) Cycle
 
        idf = Idet_fact(k1,k2,k3,k4)
        if(idf.lt.0) Cycle
@@ -51,7 +51,7 @@
        ii1 = 1; if(kblk.gt.1) ii1=ncblk(kblk-1)+1; ii2=ncblk(kblk)
        Do i = ii1,ii2
         Call Decode_int (met,k,ib1,ib2,ib3,ib4,IB_int(i))
-        io1 = ibint(ib1); io2 = ibint(ib2) 
+        io1 = ibint(ib1); io2 = ibint(ib2)
         io3 = ibint(ib3); io4 = ibint(ib4)
         Call Jsym_int(met,io1,io2,io3,io4)
         int = Incode_Int (met,k,io1,io2,io3,io4)

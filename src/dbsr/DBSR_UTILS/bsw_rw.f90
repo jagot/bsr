@@ -7,22 +7,22 @@
 !                   email: oleg_zoi@yahoo.com
 !
 !======================================================================
-!     Rewrite the  double (p,q) B-spline representation for orbitals 
-!     in GRASP package format, w-files 
+!     Rewrite the  double (p,q) B-spline representation for orbitals
+!     in GRASP package format, w-files
 !----------------------------------------------------------------------
 !
 !     INPUT ARGUMENTS:
-!     
+!
 !     name.bsw              -  input w-file (or file with list of w-files)
 !
 !     INPUT FILES:
 !
-!     name.bsw              -  B-spline representation for orbitals 
+!     name.bsw              -  B-spline representation for orbitals
 !     knot.dat              -  parameters of B-splines
 !
 !     OUTPUT FILES:
 !
-!     name.w                -  w-files 
+!     name.w                -  w-files
 !
 !---------------------------------------------------------------------
       Use DBS_grid
@@ -45,21 +45,21 @@
       Call Read_name(A)
 
       if(A.eq.'?') then
-        write(*,*) 
+        write(*,*)
         write(*,*) 'bsw_rw: convert the DBSR bsw-file to GRASP w-format'
-        write(*,*) 
+        write(*,*)
         write(*,*) 'knot.dat is needed'
-        write(*,*) 
-        write(*,*) 'Call as:  bsw_rw  name.bsw' 
-        write(*,*) 
+        write(*,*)
+        write(*,*) 'Call as:  bsw_rw  name.bsw'
+        write(*,*)
         write(*,*) 'OUTPUT:  name.w '
         Stop ' '
        end if
 
 !----------------------------------------------------------------------
-! ... sets up grid points and initializes the values of the spline: 
+! ... sets up grid points and initializes the values of the spline:
 
-      Call Read_knot_dat           
+      Call Read_knot_dat
 
       Call alloc_DBS_gauss
 
@@ -92,21 +92,21 @@
       Use zconst,      only: c_au
       Use DBS_nuclear, only: nuclear, atomic_number
       Use DBS_grid
-      Use DBS_gauss 
+      Use DBS_gauss
       Use DBS_orbitals_pq
- 
+
       Implicit none
 
-      Integer, parameter :: ng = 540  ! max. number of points in GRASP 
+      Integer, parameter :: ng = 540  ! max. number of points in GRASP
       Real(8) :: yp(ng),yq(ng),r(ng), e(*)
       Real(8) :: P0, gamma, r_max, RNT,HNT, z
       Integer :: i,j, io,m,np,nr, nuw
-      Real(8), external :: bvalu2 
-      
+      Real(8), external :: bvalu2
+
 ! ... radial points for output:
 
       z = atomic_number
-      if(nuclear.eq.'point') then 
+      if(nuclear.eq.'point') then
        RNT = EXP (-65.0d0/16.0d0) / z
        HNT = 0.5d0**4
        np  = ng
@@ -138,7 +138,7 @@
       Do io = 1,nbf; m = mbs(io)
 
        r_max = t(m+ks)
-write(*,*) ebs(io), m, r_max 
+write(*,*) ebs(io), m, r_max
 
        yp = 0.d0; if(m.lt.ns) pq(m+1:ns,1,io)=0.d0
        yq = 0.d0; if(m.lt.ns) pq(m+1:ns,2,io)=0.d0
@@ -154,11 +154,11 @@ write(*,*) ebs(io), m, r_max
        P0 = yp(2)/r(2)**gamma
 
        write(nuw) nbs(io),kbs(io),e(io),nr
-       write(nuw) P0,yp(1:nr),yq(1:nr)  
+       write(nuw) P0,yp(1:nr),yq(1:nr)
        write(nuw) r(1:nr)
 
       End do
-  
+
 
       End Subroutine GRASP_wfn
 
@@ -176,8 +176,8 @@ write(*,*) ebs(io), m, r_max
       Integer, intent(in) :: nu
       Integer :: i,j,k,l,n,m,itype,nsw,ksw,mw,kp,kq
       Character(5) :: elw
-      Integer, external :: Ifind_bsorb 
-      Real(8) :: tt(ns+ks), e(*), S 
+      Integer, external :: Ifind_bsorb
+      Real(8) :: tt(ns+ks), e(*), S
 
       rewind(nu)
       read(nu) itype,nsw,ksw,tt,kp,kq
@@ -190,14 +190,14 @@ write(*,*) ebs(io), m, r_max
       k=1
       Do i=1,ns+ks
        if(abs(t(i)-tt(i)).lt.1.d-12) Cycle; k=0; Exit
-      End do    
+      End do
       if(k.eq.0) Stop 'Stop in read_pqbs: another knot grid ?'
 
     1 read(nu,end=2) elw,mw,S
       Call EL_NLJK(elw,n,k,l,j,i)
-      m = Ifind_bsorb(n,k,i,2) 
+      m = Ifind_bsorb(n,k,i,2)
       e(m) = S
-      mbs(m)=mw 
+      mbs(m)=mw
       pq(1:ns,1,m)=0.d0; read(nu) pq(1:mw,1,m)
       pq(1:ns,2,m)=0.d0; read(nu) pq(1:mw,2,m)
       bpq(:,1,m) = MATMUL(fpbs,pq(:,1,m))

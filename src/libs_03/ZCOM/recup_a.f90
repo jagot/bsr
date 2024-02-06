@@ -13,7 +13,7 @@
 
 ! ... number of 6j-sysmbols
 
-      Integer, parameter :: mw = 100         
+      Integer, parameter :: mw = 100
       Integer, parameter :: mj = mw + mm
       Integer :: JD(2,mj),Jsign(mj),Jfact(mj),JW(6,mw)
       Integer :: nw,nd
@@ -306,7 +306,7 @@
 !----------------------------------------------------------------------
       go to 9               ! repeat the above analysis of Y1 and Y2
                             ! from the begining
-      End Subroutine RECUP          
+      End Subroutine RECUP
 
 
 !======================================================================
@@ -415,7 +415,7 @@
 
       ZRECUP=RR*S
       if(abs(ZRECUP).lt.Eps_r) ZRECUP=0.d0
-                                     
+
     5 Return
 
       End Function ZRECUP

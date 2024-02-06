@@ -4,11 +4,11 @@
 !     extracts the data from int_bnk for specific case
 !----------------------------------------------------------------------
       Use bsr_mat
-      Use conf_LS; Use orb_LS 
+      Use conf_LS; Use orb_LS
       Use channel; Use target
       Use cmdata
       Use dets; Use new_dets; Use new_defs
-      Use z_core, only: mlz 
+      Use z_core, only: mlz
 
       Implicit none
       Integer :: i,j,k,it,jt,is,js,is1,is2,js1,js2,ik,jk,ich,jch,ip1,ip2
@@ -46,18 +46,18 @@
       Do ibuf=1,ncbuf
 
       nccoef=nccoef+1
-      Call Decode_INT (jcase,k,i1,i2,i3,i4,intb(ibuf)) 
-      
+      Call Decode_INT (jcase,k,i1,i2,i3,i4,intb(ibuf))
+
       if(icase.ne.jcase) Cycle
 
-      kpol = k 
+      kpol = k
       Select case(icase)
        Case(4,8,9,10); kpol=k-1
        Case(6,7,11);   kpol=0
       End select
       if(kpol.gt.mk) Cycle
 
-! ... determine the range of states for given coeff. 
+! ... determine the range of states for given coeff.
 
       ijt=ijtb(ibuf)
       it = ijt/ibc;   jt = mod(ijt,ibc)
@@ -68,7 +68,7 @@
       idf = idfb(ibuf)
       C = CBUF(ibuf)
 !----------------------------------------------------------------------
-!                                        loop over all relevant states: 
+!                                        loop over all relevant states:
 
       Do ik=is1,is2; is=IP_stat(ik); ip1=IP_state(is)
        no1=no_ic_LS (is); np1(1:no1)=IP_orb(ip1+1:ip1+no1)
@@ -81,7 +81,7 @@
 
 ! ... consider only low-half of interaction matrix
 
-       if(it.eq.jt.and.js.gt.is) Cycle                   
+       if(it.eq.jt.and.js.gt.is) Cycle
 
 ! ... restriction of two-electron rel. matrix elements:
 
@@ -89,15 +89,15 @@
         Case(3,4,8,9,10); if(abs(WC(is)*WC(js)).lt.Eps_soo) Cycle
        End Select
 
-! ... include the expansion coefficients 
+! ... include the expansion coefficients
 
        C=CBUF(ibuf)
        if(ich.eq.jch.and.is.ne.js) C = C + C
        CC = C * WC(is) * WC(js)
        if(abs(CC).lt.Eps_C) Cycle
 
-! ... we do not need anymore the configuration index, 
-! ... only pertuber index if any:   
+! ... we do not need anymore the configuration index,
+! ... only pertuber index if any:
 
        i=0; if(ich.gt.nch) i=ich-nch
        j=0; if(jch.gt.nch) j=jch-nch
@@ -117,8 +117,8 @@
        if(icase.eq.6.or.icase.eq.7) kpol = LEF(j1)
        if(icase.eq.7.and.kpol.gt.mlz) Cycle
 
-! ... J-dependence for relativistic ccorrections: 
-       
+! ... J-dependence for relativistic ccorrections:
+
        if(icase.gt.6.and.icase.lt.11) then
         k = 3; if(icase.eq.10) k = 5
         CC = CC * (-1)**((ILT2+IST1+jpar-3)/2)*   &
@@ -130,7 +130,7 @@
 
        Call Jsym_int(icase,j1,j2,j3,j4)
 
-! ... find overlap factors with extracted continuum:  
+! ... find overlap factors with extracted continuum:
 
        Call Det_fact(idf,np1,np2); if(nndef.eq.0) Cycle
 

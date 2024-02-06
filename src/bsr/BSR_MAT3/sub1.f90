@@ -12,7 +12,7 @@
 
       Use spline_atomic,   only: EC,kclosd
       Use spline_orbitals, only: nbf,lbs
-      Use spline_param,    only: ns,ks      
+      Use spline_param,    only: ns,ks
       Use spline_galerkin, only: sb
       Use spline_grid,     only: t
 
@@ -22,7 +22,7 @@
       Character(100) :: line
 
 !-----------------------------------------------------------------------
-! ... read configuration expansion and orbitals information: 
+! ... read configuration expansion and orbitals information:
 
       Call Read_data
 
@@ -37,7 +37,7 @@
       write(pri,'( a,i6,a)') 'kcp    = ',kcp, &
        '  -  number of perturbers '
       write(pri,'( a,i6,a)') 'kns    = ',kns, &
-       '  -  number of splines ' 
+       '  -  number of splines '
       i = kch*kns+kcp; C = i*(i+1)/2; C = C /(128*1024)
       write(pri,'(/a,T33,i8)') 'Interaction matrix dimension:',i
       write(pri,'(/a,T33,f8.1,a)') 'Reqired memory for bsr-matrix:',C,' Mb'
@@ -52,10 +52,10 @@
       i = nb*(4+mb);  C = 28*i; C = C /(1024*1024)
       write(pri,'(/a,T33,f8.1,a)') 'Reqired memory for cmdata:',C,' Mb'
 
-      Call Allocate_cmdata 
+      Call Allocate_cmdata
 
-      Call Allocate_ndets(-1)  
-      Call Allocate_ndefs(-1)  
+      Call Allocate_ndets(-1)
+      Call Allocate_ndefs(-1)
 
       if(.not.allocated(CBUF)) &
        Allocate(CBUF(maxnc),ijtb(maxnc),intb(maxnc),idfb(maxnc))
@@ -102,12 +102,12 @@
 
       end if
 
-! ... record overlap matrix: 
+! ... record overlap matrix:
 
       rewind(nui)
       write(nui) ns,nch,kcp
 
-      Call Record_matrix(nui)  
+      Call Record_matrix(nui)
 
       Call CPU_time(t4)
       write(pri,'(/a,f10.2,a)') 'Overlaps:     ',(t4-t3)/60,' min '
@@ -118,7 +118,7 @@
 !----------------------------------------------------------------------
 ! ... core-energy shift
 
-      hcc = hcc * EC       
+      hcc = hcc * EC
       if(kcp.gt.0) then;  hcb = hcb * EC; hbb = hbb * EC;  end if
 !----------------------------------------------------------------------
 !                                                          L-integrals:
@@ -126,7 +126,7 @@
 
       Call Gen_Lval
 
-      icase=6; Call State_res   
+      icase=6; Call State_res
 
       Call Alloc_Lcore(0,0,0)
 
@@ -137,16 +137,16 @@
 
 !----------------------------------------------------------------------
 !                                                          Z-integrals:
-      if(mso.gt.0) then    
+      if(mso.gt.0) then
 
        Call CPU_time(t3)
 
-       Call Gen_Zval;  icase=7;  Call State_res   
+       Call Gen_Zval;  icase=7;  Call State_res
 
        Call Alloc_zcore(0,0,0)
 
        Call CPU_time(t4)
-       
+
        write(*,'(a,f10.2,a)') 'Z-integrals:  ',(t4-t3)/60,' min '
 
        write(pri,'(/a,f10.2,a)') 'Z-integrals:  ',(t4-t3)/60,' min '
@@ -197,12 +197,12 @@
       write(pri,'(/a,4x,f10.2,a)') 'BS_ORTH:  ',(t4-t3)/60,' min '
       write(*  ,'( a,4x,f10.2,a)') 'BS_ORTH:  ',(t4-t3)/60,' min '
 
-! ... record interaction matrix: 
+! ... record interaction matrix:
 
       Call Record_matrix(nui)
 
 !----------------------------------------------------------------------
-! ... asymptotic coefficients:  
+! ... asymptotic coefficients:
 
 ! ... Symmetrize the ACF - matrix and add the correction
 ! ... from core screening for k=0:
@@ -234,16 +234,16 @@
        k=k+1
        write(pri,'(i5,2F15.6)') i,ACF(i,i,0)-2*nelc
       End do
-      
+
       if(pri_ac.gt.0) then
       write(pri,'(/a/)') 'Asymptotic coefficients: i,j, ACF(i,j,k)'
       Do k=0,mk
        if(SUM(acf(:,:,k)).eq.0) Cycle
        write(pri,'(a,i2)') 'k = ',k
        ij = 0
-       Do i=1,nch; Do j = 1,i      
+       Do i=1,nch; Do j = 1,i
         if(abs(acf(i,j,k)).lt.eps_acf) Cycle
-        i1=ij*20+1; i2=i1+19 
+        i1=ij*20+1; i2=i1+19
         write(line(i1:i2),'(2i4,E12.3)') j,i,acf(i,j,k)
         ij=ij+1
         if(ij.lt.5) Cycle
@@ -270,8 +270,8 @@
       close(nui)
 
       Call Target_print(pri,EC,eps_tar)
-      
-      End Subroutine SUB1 
+
+      End Subroutine SUB1
 
 
 

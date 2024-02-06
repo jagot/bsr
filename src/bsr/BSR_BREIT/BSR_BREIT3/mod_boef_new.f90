@@ -18,15 +18,15 @@
 ! ... ib_int(1:mboef) - integral indentifier
 ! ... boef(1:mboef) - correspondent angular coefficient
 
-      Integer, allocatable :: ib_int(:)     
+      Integer, allocatable :: ib_int(:)
       Real(8), allocatable :: boef(:)
 
 ! ... packing parameters:
- 
+
       Integer, parameter :: jbl  = 2**13       ! in Check_BOEF
       Integer, parameter :: jbm  = 2**12       ! in Check_BOEF
       Integer, parameter :: jbs  = 2**4        ! in Check_BOEF
- 
+
       Integer :: nblk  = 0       ! number of blocks
       Integer :: mblk  = 0       ! current dimension of list
       Integer :: iblk  = 50000   ! initial dimentsion
@@ -34,16 +34,16 @@
 
 ! ... identifiers of block:
 
-      Integer, allocatable :: ind1(:),ind2(:),ind3(:),ind4(:) 
+      Integer, allocatable :: ind1(:),ind2(:),ind3(:),ind4(:)
 
 ! ... current identifiers:
 
-      Integer :: in1,in2,in3,in4     
+      Integer :: in1,in2,in3,in4
 
 ! ... ncblk - pointer on the last element in the block
 ! ... ipblk - ordering pointer
 
-      Integer, allocatable :: ipblk(:),ncblk(:) 
+      Integer, allocatable :: ipblk(:),ncblk(:)
 
       End Module BOEF_list
 
@@ -52,7 +52,7 @@
       Subroutine alloc_boef(m)
 !======================================================================
 !     allocate/deallocate arrays in module boef
-!---------------------------------------------------------------------- 
+!----------------------------------------------------------------------
       Use boef_list
 
       Implicit none
@@ -78,11 +78,11 @@
        mboef = m
    	   Allocate(ia(nboef))
        ia=IB_int(1:nboef); Deallocate(IB_int)
-	      Allocate(IB_int(mboef)); IB_int(1:nboef)=ia 
+	      Allocate(IB_int(mboef)); IB_int(1:nboef)=ia
        Deallocate(ia)
 	      Allocate(ra(nboef))
        ra=Boef(1:nboef); Deallocate(Boef)
-	      Allocate(Boef(mboef)); Boef(1:nboef)=ra 
+	      Allocate(Boef(mboef)); Boef(1:nboef)=ra
        Deallocate(ra)
        write(*,*) 'realloc_boef: m = ', m, iboef
       end if
@@ -94,7 +94,7 @@
       Subroutine alloc_blk(m)
 !======================================================================
 !     allocate/deallocate 'block' arrays in module boef
-!---------------------------------------------------------------------- 
+!----------------------------------------------------------------------
       Use boef_list
 
       Implicit none
@@ -119,17 +119,17 @@
        mblk = m
    	   Allocate(ia(nblk))
        ia=ipblk(1:nblk); Deallocate(ipblk)
-	      Allocate(ipblk(mblk)); ipblk(1:nblk)=ia 
+	      Allocate(ipblk(mblk)); ipblk(1:nblk)=ia
        ia=ncblk(1:nblk); Deallocate(ncblk)
-	      Allocate(ncblk(mblk)); ncblk(1:nblk)=ia 
+	      Allocate(ncblk(mblk)); ncblk(1:nblk)=ia
        ia=ind1(1:nblk); Deallocate(ind1)
-	      Allocate(ind1(mblk)); ind1(1:nblk)=ia 
+	      Allocate(ind1(mblk)); ind1(1:nblk)=ia
        ia=ind2(1:nblk); Deallocate(ind2)
-	      Allocate(ind2(mblk)); ind2(1:nblk)=ia 
+	      Allocate(ind2(mblk)); ind2(1:nblk)=ia
        ia=ind3(1:nblk); Deallocate(ind3)
-	      Allocate(ind3(mblk)); ind3(1:nblk)=ia 
+	      Allocate(ind3(mblk)); ind3(1:nblk)=ia
        ia=ind4(1:nblk); Deallocate(ind4)
-	      Allocate(ind4(mblk)); ind4(1:nblk)=ia 
+	      Allocate(ind4(mblk)); ind4(1:nblk)=ia
        Deallocate(ia)
        write(*,*) 'realloc_blk: m,iblk = ', m,iblk
       end if
@@ -171,17 +171,17 @@
       Subroutine Check_boef(l1,m1,s1,l2,m2,s2,l3,m3,s3,l4,m4,s4)
 !=======================================================================
 !     Check if the m.e. for given orbitals is already in the list,
-!     otherwise - calculate them. 
+!     otherwise - calculate them.
 !     Procedure use incoding the orbitals parameters, and that
-!     restrict the max. l to 64 (see parameter jbm, jbl). 
-!     We can reduce this restriction  by using four identifiers 
-!     (instead three), one for each orbital.  
+!     restrict the max. l to 64 (see parameter jbm, jbl).
+!     We can reduce this restriction  by using four identifiers
+!     (instead three), one for each orbital.
 !----------------------------------------------------------------------
       Use boef_list
-      
+
       Implicit none
       Integer, intent(in) :: l1,m1,s1,l2,m2,s2,l3,m3,s3,l4,m4,s4
-      Integer :: i1,i2,i3,i4, k,l,m,ipm 
+      Integer :: i1,i2,i3,i4, k,l,m,ipm
 
 ! ... prepare indentifiers:
 
@@ -195,18 +195,18 @@
        Stop 'Check_boef: ml out of limits '
       end if
 
-      in1 = (l1*jbl+i1)*jbs+s1    
-      in2 = (l2*jbl+i2)*jbs+s2    
-      in3 = (l3*jbl+i3)*jbs+s3    
-      in4 = (l4*jbl+i4)*jbs+s4    
+      in1 = (l1*jbl+i1)*jbs+s1
+      in2 = (l2*jbl+i2)*jbs+s2
+      in3 = (l3*jbl+i3)*jbs+s3
+      in4 = (l4*jbl+i4)*jbs+s4
 
 ! ... look for the same case in the list:
 
-      k=1; l = nblk 
-    1 if(k.gt.l) go to 2              
- 
+      k=1; l = nblk
+    1 if(k.gt.l) go to 2
+
       m=(k+l)/2; ipm=ipblk(m)
- 
+
       if(in1.lt.ind1(ipm)) then;      l = m - 1
       elseif(in1.gt.ind1(ipm)) then;  k = m + 1
       else
@@ -226,23 +226,23 @@
       end if; end if; end if; end if
 
       go to 1
-    2 Continue 
-    
-! ... new block:    
-            
+    2 Continue
+
+! ... new block:
+
       jboef = nboef + 1
       Call ZNO_breit(1,l1,m1,s1,2,l2,m2,s2,3,l3,m3,s3,4,l4,m4,s4,+1)
       Call ZNO_breit(1,l1,m1,s1,2,l2,m2,s2,4,l4,m4,s4,3,l3,m3,s3,-1)
 
-      nblk = nblk + 1;  ncblk(nblk) = nboef; kblk = nblk   
-      ind1(nblk)=in1; ind1(nblk)=in2; ind3(nblk)=in3; ind4(nblk)=in4 
-      
+      nblk = nblk + 1;  ncblk(nblk) = nboef; kblk = nblk
+      ind1(nblk)=in1; ind1(nblk)=in2; ind3(nblk)=in3; ind4(nblk)=in4
+
       if(k.eq.nblk) then
        ipblk(k)=nblk
       else
        Do m = nblk,k+1,-1; ipblk(m) = ipblk(m-1); End do
        ipblk(k)=nblk
-      end if        
+      end if
 
 ! ... it is time for re-allocation:
 

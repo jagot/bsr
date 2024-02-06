@@ -21,10 +21,10 @@
       Character(6) :: Atom,Term
       Character(40) :: AF,BF
       Real(8), allocatable :: v(:), w(:), R(:), R2(:)
-      
-      iarg = COMMAND_ARGUMENT_COUNT() 
-      if(iarg.gt.0) Call GET_COMMAND_ARGUMENT(1,AF) 
-     
+
+      iarg = COMMAND_ARGUMENT_COUNT()
+      if(iarg.gt.0) Call GET_COMMAND_ARGUMENT(1,AF)
+
       if(iarg.eq.0.or.AF.eq.'?') then
         write(*,'(/a)') 'bsw_w  converts  name.bsw  to name.w'
         write(*,'(/a)') 'w   - unformatted MCHF-CFF format for radial functions'
@@ -32,13 +32,13 @@
         write(*,'(/a)') 'Call as:  bsw_w  name.bsw '
         write(*,'(/a)') 'Results:  name.w'
         write(*,'(/a)') 'Warning:  set index in bsw-files may be too big for name.w format'
-        Stop 
+        Stop
       end if
 
 !----------------------------------------------------------------------
-! ... input data: 
-         
-      i=index(AF,'.') 
+! ... input data:
+
+      i=index(AF,'.')
       if(AF(i+1:i+3).ne.'bsw') Stop 'input file should have bsw-extention'
 
       inp=1; Open(inp,file=AF,status='OLD',form='UNFORMATTED')
@@ -46,8 +46,8 @@
       iout=2; BF=AF(1:i)//'w';  Open(iout,file=BF,form='UNFORMATTED')
 
 !----------------------------------------------------------------------
-! ... sets up grid points and initializes the values of the spline: 
-    
+! ... sets up grid points and initializes the values of the spline:
+
       read(inp) el4,z,h,hmax,rmax,ks,ns; rewind(inp)
 
       CALL define_grid(z);  CALL define_spline
@@ -59,35 +59,35 @@
       DO i=1,NR; R(I)=EXP(RHO+(I-1)*HR)/Z; R2(I)=SQRT(R(I)); END DO
 
       Rm = t(ns+1);  mx = 0;   Do i=1,NR; if(R(i).lt.Rm) mx=i; End do
-      mx = mx + 1; 
+      mx = mx + 1;
 !----------------------------------------------------------------------
-!                                                          
+!
     1 read(inp,end=2) el4,zw,hw,hmw,rmw,ksw,nsw,m
       read(inp) v(1:m); if(m.lt.ns) v(m+1:ns)=0.d0
 
-      Call EL4_nlk(el4,n,l,k); 
+      Call EL4_nlk(el4,n,l,k);
 
       EL3 = ELF3(n,l,k)
 
       Do j=1,mx; w(j) = bvalu2(t,v,ns,ks,r(j),0)/r2(j); End do
 
       AZ = azl(z,h,ks,l+1) * v(l+2)
-              
+
       Atom = 'atom'
       TERM = 'term'
       EI = 0.d0
-      ZI = 0.d0        
-        
+      ZI = 0.d0
+
       write(iout) Atom, Term, EL3, mx, Z,EI,ZI,AZ, w(1:mx)
 
       S = BVMV (ns,ks, sb,'s',v,v)
       write(*,'(3a10,f16.8)') el4,el3,'norma = ',S
 
-      go to 1               
+      go to 1
     2 Continue
-      
+
       END   !  program bsr_w
-          
+
 
 
 !=====================================================================
@@ -165,4 +165,3 @@
     END SUBROUTINE mkgridb
 
 
-   

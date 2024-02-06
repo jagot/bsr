@@ -1,11 +1,11 @@
 !======================================================================
-      Subroutine Full_mat_sym(ns,ks,x,y,sym)  
+      Subroutine Full_mat_sym(ns,ks,x,y,sym)
 !======================================================================
 ! ... provide full matrix from band format
 !----------------------------------------------------------------------
-      IMPLICIT NONE 
+      IMPLICIT NONE
       INTEGER :: ns,ks
-      REAL(8) :: x(ns,*),y(ns,ns) 
+      REAL(8) :: x(ns,*),y(ns,ns)
       CHARACTER(1) :: sym
       INTEGER ::  i,j, jp, imin,imax
 

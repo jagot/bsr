@@ -2,7 +2,7 @@
       Module zconst
 !=======================================================================
 !     contains basic processor-dependent constants as well as
-!     a larger variety of physical constants 
+!     a larger variety of physical constants
 !-----------------------------------------------------------------------
 
 ! ... kind-constants
@@ -10,11 +10,11 @@
       integer, parameter :: int4 = selected_int_kind(9)
       integer, parameter :: int2 = selected_int_kind(4)
       integer, parameter :: int1 = selected_int_kind(2)
-   
+
       integer, parameter :: sp = kind(1.0)
       integer, parameter :: dp = selected_real_kind(2*precision(1.0_sp))
       integer, parameter :: qp = selected_real_kind(2*precision(1.0_dp))
-   
+
 ! ... simple constants
 
       real(dp), parameter :: zero  = 0.0_dp,    &
@@ -33,7 +33,7 @@
 
 ! ... some useful physical constants
 ! ... (based on NIST compilation 2001)
-  
+
       real(dp), parameter ::                            &
        bohr_radius_in_cm      =    0.5291772083e-8_dp,  &
        ao_cm                  =    0.5291772083e-8_dp,  &
@@ -54,7 +54,7 @@
        Ry_eV_inf              =    13.60569175e+0_dp,   &
        Ry_cm_inf              =    109737.31568549_dp,  &
        time_au_in_sec         =    4.134138e+16_dp,     &
-       time_au                =    2.4189e-17_dp,       &   
+       time_au                =    2.4189e-17_dp,       &
        pi_a0_2                =    0.87973e+0_dp,       &
        fermi_in_cm            =    1.0e-13_dp,          &
        pi                     =    3.141592653589793238462643e+0_dp
@@ -77,7 +77,7 @@
 
       Integer(int4) :: ib1 = 2,     ib2 = 2**2,  ib3 = 2**3,  ib4 = 2**4, &
                        ib5 = 2**5,  ib6 = 2**6,  ib7 = 2**7,  ib8 = 2**8, &
-                       ib9 = 2**9,  ib10= 2**10, ib15= 2**15, ib20= 2**20       
+                       ib9 = 2**9,  ib10= 2**10, ib15= 2**15, ib20= 2**20
 
-      End Module zconst 
+      End Module zconst
 

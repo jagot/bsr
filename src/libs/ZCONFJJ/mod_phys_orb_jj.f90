@@ -1,25 +1,25 @@
 !======================================================================
       MODULE phys_orb_jj
 !======================================================================
-!     contains the list of physical and substitution orbitals 
-!     for each target state: "ip_phy" and "ip_sub" 
-!     jp_sub - just total list of substitution orbitals 
+!     contains the list of physical and substitution orbitals
+!     for each target state: "ip_phy" and "ip_sub"
+!     jp_sub - just total list of substitution orbitals
 !----------------------------------------------------------------------
       Implicit none
-   
+
       Integer :: nphys_orb = 0           !  number of phys.orbitals
 
-      Integer, allocatable :: ip_tar(:)  !  target pointer 
-      Integer, allocatable :: ip_phy(:)  !  orbital pointer 
-      Integer, allocatable :: ip_sub(:)  !  substitution pointer 
+      Integer, allocatable :: ip_tar(:)  !  target pointer
+      Integer, allocatable :: ip_phy(:)  !  orbital pointer
+      Integer, allocatable :: ip_sub(:)  !  substitution pointer
       Real(8), allocatable :: S_orb (:)  !  occupation
 
       Integer :: nphys_sub = 0           !  number of all sub.orbitals
-      Integer, allocatable :: jp_sub(:)  !  index of sub. orbitals 
+      Integer, allocatable :: jp_sub(:)  !  index of sub. orbitals
 
       Integer :: npert_sub = 0           !  number of sub.orbitals for pertuber
-      Integer, allocatable :: np_phy(:)  !  orbital pointer 
-      Integer, allocatable :: np_sub(:)  !  substitution pointer 
+      Integer, allocatable :: np_phy(:)  !  orbital pointer
+      Integer, allocatable :: np_sub(:)  !  substitution pointer
       Real(8), allocatable :: SP_orb (:) !  occupation
 
       END MODULE phys_orb_jj

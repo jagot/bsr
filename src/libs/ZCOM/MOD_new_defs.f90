@@ -34,18 +34,18 @@
       Integer, allocatable :: iarray(:)
 
       if(m.lt.0) then
-       if(allocated(adef)) Deallocate(adef,iof,jof) 
+       if(allocated(adef)) Deallocate(adef,iof,jof)
         mndef = indef; nndef = 0
        Allocate(adef(mndef),iof(mndef),jof(mndef))
       elseif(m.eq.0) then
-       if(allocated(adef)) Deallocate(adef,iof,jof) 
+       if(allocated(adef)) Deallocate(adef,iof,jof)
         mndef = 0; nndef = 0
       elseif(m.gt.mndef) then
        if(nndef.eq.0) then
-        if(allocated(adef)) Deallocate(adef,iof,jof) 
+        if(allocated(adef)) Deallocate(adef,iof,jof)
         mndef = m; nndef = 0
         Allocate(adef(mndef),iof(mndef),jof(mndef))
-       else 
+       else
         Allocate(rarray(nndef)); rarray(1:nndef)=adef(1:nndef)
         Deallocate(adef); Allocate(adef(m))
         adef(1:nndef)=rarray(1:nndef); Deallocate(rarray)

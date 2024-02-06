@@ -7,7 +7,7 @@
 
       Implicit none
 
-! ... main files: 
+! ... main files:
 
 !     AF  -  standard (default) names
 !     BF  -  names with indication of partial wave number
@@ -36,14 +36,14 @@
 !----------------------------------------------------------------------
 
 
-      Real(8) :: eps_c  = 1.d-10         ! tolerence for coefficients   
-      Real(8) :: eps_so = 0.1            ! tolerence for so-interaction   
+      Real(8) :: eps_c  = 1.d-10         ! tolerence for coefficients
+      Real(8) :: eps_so = 0.1            ! tolerence for so-interaction
 
       Integer :: mk = 7                  ! maximum multipole index
 
-      Integer :: new        ! pointer on the previous calculation  
+      Integer :: new        ! pointer on the previous calculation
       Integer :: icalc      ! pointer to the need of new calculations
-      Integer :: fail = 0   
+      Integer :: fail = 0
 
 ! ... range of partial waves:
 
@@ -63,7 +63,7 @@
 !                    subset of term between two configurations
 !
 !-----------------------------------------------------------------------
-!      Integer, parameter :: noper=7      
+!      Integer, parameter :: noper=7
 !      Integer ioper(noper)/1,1,1,0,0,0,0/, joper(noper)
 !      Integer koper(noper)     !  MPI copy
 !      Real(8) :: coper(noper)

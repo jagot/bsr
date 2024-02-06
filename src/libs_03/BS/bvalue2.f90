@@ -1,41 +1,41 @@
 !=========================================================================
       Real(8) Function bvalu2 (t, bcoef, ns, ks, x, jderiv)
 !=========================================================================
-!  
+!
 !     This routine is a modification of de Boor's bvalue routine, modified
 !     to return the value at right endpoint continuous from the left,
 !     instead of 0. It assumes the usual knot multiplicity ks at the right
 !     endpoint.
-!  
+!
 !     It calculates the value at  x of the jderiv-th derivative of spline
 !     from b-representation. The spline is taken to be continuous from the
 !     right.
-!  
+!
 !     SUBROUTINES contained:  interv
-!  
+!
 !-------------------------------------------------------------------------
-!  
+!
 !     on entry
 !     --------
-!  
+!
 !         t      knot sequence, of length  ns+ks, assumed nondecreasing.
 !         bcoef  coefficient sequence, of length  ns .
 !         ns     length of  bcoef, assumed positive.
 !         ks     order of the spline .
-!  
+!
 !               . . . W A R N I N G . . .
 !         The restriction  ks <= kmax (=15)  is imposed
 !         arbitrarily by the parameter statement defining dimensions
 !         for aj, dm, dp  below, but is  NEVER CHECKED.
-!  
+!
 !         x      the point at which to evaluate the spline.
 !         jderiv integer giving the order of the derivative to be evaluated
 !                ASSUMED to be zero or positive.
-!  
+!
 !     on exit
 !     -------
 !     bvalu2 - the value of the (jderiv)-th derivative of  f  at  x .
-!  
+!
 !     method
 !     ------
 !       the nontrivial knot interval  (t(i),t(i+1))  containing  x  is lo-
@@ -44,75 +44,75 @@
 !     not explicitly available) and are then differenced  jderiv  times to
 !     obtain the b-coeffs of  (d**jderiv)f  relevant for that interval.
 !     precisely, with  j = jderiv, we have from x.(12) of the text that
-!  
+!
 !             (d**j)f  =  sum ( bcoef(.,j)*b(.,ks-j,t) )
-!  
+!
 !     where
 !                    / bcoef(.),                     ,  j = 0
 !                    /
 !     bcoef(.,j)  =  / bcoef(.,j-1) - bcoef(.-1,j-1)
 !                    / ----------------------------- ,  j > 0
 !                    /    (t(.+ks-j) - t(.))/(ks-j)
-!  
+!
 !     then, we use repeatedly the fact that
-!  
+!
 !       sum ( a(.)*b(.,m,t)(x) )  =  sum ( a(.,x)*b(.,m-1,t)(x) )
 !     with
 !                    (x - t(.))*a(.) + (t(.+m-1) - x)*a(.-1)
 !       a(.,x)  =    ---------------------------------------
 !                    (x - t(.))      + (t(.+m-1) - x)
-!  
+!
 !     to write  (d**j)f(x)  eventually as a linear combination of b-splines
 !     of order  1 , and the coefficient for  b(i,1,t)(x)  must then
 !     be the desired number  (d**j)f(x). (see x.(17)-(19) of text).
-!  
+!
 !     current fortran standard makes it impossible to specify the length
 !     of t  precisely without the introduction of otherwise superfluous
 !     additional arguments.
-!  
+!
 !-------------------------------------------------------------------------
       IMPLICIT NONE
-   
+
       INTEGER, INTENT(IN) :: ns, ks, jderiv
       REAL(8), INTENT(IN) :: x, bcoef(ns), t(ns+ks)
-   
+
       ! ..  local variable
-   
+
       REAL(8), DIMENSION(ks) :: aj, dm, dp        !  ???
       REAL(8) :: fkmj
       INTEGER(4) :: i, mflag, km1, jcmin, imk, nmi, jcmax, jc, &
                     j, jj, kmj, ilo
-   
+
       bvalu2 = 0.d0
-   
+
       IF (jderiv >= ks) RETURN
-   
+
 !   ... find  i  such that 1 <= i < ns+ks  and  t(i) < t(i+1) and
 !   ... t(i) <= x < t(i+1) . if no such i can be found,  x  lies
 !   ... outside the support of  the spline  f  and  bvalu2 = 0.
 !   ... (the asymmetry in this choice of i makes f rightcontinuous)
-   
+
       IF( x /= t(ns+1) .OR. t(ns+1) /= t(ns+ks) ) THEN
         CALL interv1(t,ns+ks,x, i, mflag)
         IF (mflag /= 0) RETURN
       ELSE
         i = ns
       END IF
-   
+
 !   ... if ks = 1 (and jderiv = 0), bvalu2 = bcoef(i).
-   
+
       km1 = ks - 1
       IF ( km1 <= 0 ) THEN
         bvalu2 = bcoef(i)
         RETURN
       END IF
-   
+
 !   ... store the ks b-spline coefficients relevant for the knot interval
 !   ... (t(i),t(i+1)) in aj(1),...,aj(ks); compute dm(j) = x - t(i+1-j),
 !   ... dp(j) = t(i+j) - x, j=1,...,ks-1. Set any of the aj not obtainable
 !   ... from input to zero. set any t.s not obtainable equal to t(1) or
 !   ... to t(ns+ks) appropriately.
-   
+
       jcmin = 1
       imk = i - ks
       IF (imk < 0) THEN
@@ -129,7 +129,7 @@
           dm(j) = x - t(i+1-j)
         end do
       END IF
-   
+
       jcmax = ks
       nmi = ns - i
       IF (nmi < 0) THEN
@@ -149,9 +149,9 @@
         do jc=jcmin,jcmax
           aj(jc) = bcoef(imk + jc)
         end do
-   
+
 !   ... difference the coefficients  jderiv  times.
-   
+
       IF (jderiv /= 0) THEN
         DO j=1,jderiv
           kmj = ks-j
@@ -163,10 +163,10 @@
           END DO
         END DO
       END IF
-   
+
 !   ... compute value at  x  in (t(i),t(i+1)) of jderiv-th derivative,
 !   ... given its relevant b-spline coeffs in aj(1),...,aj(ks-jderiv).
-   
+
       IF (jderiv /= km1) THEN
         DO j=jderiv+1,km1
           kmj = ks-j
@@ -178,7 +178,7 @@
         END DO
       END IF
       bvalu2 = aj(1)
-   
+
       END FUNCTION bvalu2
 
 

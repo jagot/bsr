@@ -7,7 +7,7 @@
 !     2. Form a Cholesky factorization of the overlap matrix if any.
 !     3. Transform problem to standard eigenvalue problem.
 !     4. Transform to experimental thresholds energies if any.
-!     5. Solve standard eigenvalue problem. 
+!     5. Solve standard eigenvalue problem.
 !     6. Call w_out for weights if required.
 !     7. Backtransform eigenvectors to the original generalized problem.
 !        Solutions are still in "diagonal-blocks" basis!!!
@@ -51,7 +51,7 @@
 
       Call descinit (descv, khm, 1, khm, 1, rsrc, csrc, ctxt, khm,info)
       Call p_error(info,'descv descriptor error in diag_hd')
-      if(allocated(v)) Deallocate(v); Allocate(v(khm))     
+      if(allocated(v)) Deallocate(v); Allocate(v(khm))
 
 !----------------------------------------------------------------------
 ! ... read transformed overlap matrixes:
@@ -70,12 +70,12 @@
 ! ... diagonalize using the SCALAPACK routines:
 !----------------------------------------------------------------------
 ! ... default parameters:
- 
+
       ibtype =  1    ! A * x = lambda * B * x generalized eigenproblem
       range  = 'A'   ! compute all eigenvalues
       job    = 'V'   ! compute both eigenvalues and eigenvectors
       uplo   = 'L'   ! use lower triangles of A and B matrices
-      trans  = 'T'   ! 
+      trans  = 'T'   !
 
 !----------------------------------------------------------------------
 ! ... Form a Cholesky factorization of the overlap matrix:
@@ -102,7 +102,7 @@
       ! ...    A ->  inv(L)*A*inv(L^T),  uplo = 'L'
       ! ....   A ->  inv(U^T)*A*inv(U),  uplo = 'U'
 
-      lwork = 2 
+      lwork = 2
       allocate (work(lwork), stat=status)
       Call p_error (status, 'error memory allocation of work array')
 
@@ -117,7 +117,7 @@
                    &  scale, work, lwork, info)
 
       Call p_error (info, 'pdsyngst error')
-      Deallocate(work) 
+      Deallocate(work)
 
       end if  ! over diag_ovl
 
@@ -143,7 +143,7 @@
       write (pri,'(/a,T20,f10.2,a)') 'Add_exp:', (t1-t0)/60, ' min.'
 
 !-----------------------------------------------------------------------
-! ... solve standard eigenvalue problem 
+! ... solve standard eigenvalue problem
 ! ... (note:  divide and concer algorith requires much more space)
 
       Call descinit(descz,khm,khm,nblock,nblock,rsrc,csrc,ctxt,ld,info)
@@ -188,7 +188,7 @@
 !...  define weights:
 
       if(itype.ne.0.or.cwt.gt.zero.or.iwt.gt.0) then
-       Call W_out 
+       Call W_out
        Call cpu_time (t1)
        if(io_processor) &
        write (*  ,'(/a,T20,f10.2,a)') 'W_out:', (t1-t0)/60, ' min.'

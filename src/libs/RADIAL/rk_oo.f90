@@ -2,7 +2,7 @@
       REAL(8) FUNCTION RK_oo (i1,i2,i3,i4,k)
 !====================================================================
 !
-!     Correction to RK integral due to o-o interaction 
+!     Correction to RK integral due to o-o interaction
 !
 !==================================================================
 
@@ -31,7 +31,7 @@
 
       C  = C1*C2/D2
       C1 = C*(k-2)/k/(k+k-1)
-      C2 = C*(k+3)/(k+1)/(k+k+3)/D2                     
+      C2 = C*(k+3)/(k+1)/(k+k+3)/D2
       RK_oo = RK_oo - C1*M1 + C2*M2
 
       END function RK_oo

@@ -4,21 +4,21 @@
 !
 !   Defines moments for Mk-integrals in the B-spline cells
 !
-!   Calling sequence:          mk_moments             
-!                              ----------             
-!                               /    \\           
-!                           moments mk_pdiag      
-!                                     ||          
-!                                   mk_triang     
-!                                    /   \        
-!                                 gauss  vbsplvb  
-! 
+!   Calling sequence:          mk_moments
+!                              ----------
+!                               /    \\
+!                           moments mk_pdiag
+!                                     ||
+!                                   mk_triang
+!                                    /   \
+!                                 gauss  vbsplvb
+!
 !-------------------------------------------------------------------------
 !
 !   on entry    k  -  multipole index
 !   --------
-!       
-!   on exit     rkd1,rkd2,rkd - off-diagonal and diagonal moments 
+!
+!   on exit     rkd1,rkd2,rkd - off-diagonal and diagonal moments
 !   -------                     (in module spline_moments)
 !
 !-------------------------------------------------------------------------
@@ -35,11 +35,11 @@
 
     if(mtype == 'aaa') Call allocate_moments
     if(mtype == 'mk ' .and. kmk == k) Return
-  
+
     CALL moments(  k   , rkd1,'s','b')
     CALL moments(-(k+3), rkd2,'s','b')
     CALL mk_pdiag
- 
+
     mtype = 'mk '
     kmk = k
 
@@ -100,16 +100,16 @@
 !
 !   Returns the two-dimensional array of B-splin Mk-integrals
 !         <B_i B_j| r2^k/r1^(k+3) |B_i' B_j'>
-!   over the given triangle diagonal cell 
-!                                                           
+!   over the given triangle diagonal cell
+!
 !   Calls:   gauss, vbsplvd
 !
 !   On entry   iv  -  the index of the diagonal cell
 !   --------
 !
-!   On exit    rkd(.,.,iv) - arrays of B-spline Mk-integrals for given 
+!   On exit    rkd(.,.,iv) - arrays of B-spline Mk-integrals for given
 !   --------                 interval iv in the reduced-dimension mode
-!                            (in module spline_moments)      
+!                            (in module spline_moments)
 !----------------------------------------------------------------------
 
     IMPLICIT NONE
@@ -125,7 +125,7 @@
     REAL(KIND=8), DIMENSION(ks,ks,ks) ::  Int
     REAL(KIND=8), DIMENSION(nv,ks,ks) :: dbiatx
     REAL(KIND=8), DIMENSION(ks*(ks+1)/2,ks*(ks+1)/2) :: a
-    
+
     left=iv+ks-1
     xbase=t(left)
 

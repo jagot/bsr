@@ -1,7 +1,7 @@
 !=======================================================================
       Real(8) FUNCTION grad(i,j)
 !=======================================================================!
-!     <p(i)| d + [l(j)(l(j)+1)-l(i)*(l(i)+1)]/2r |p(j)> 
+!     <p(i)| d + [l(j)(l(j)+1)-l(i)*(l(i)+1)]/2r |p(j)>
 !-----------------------------------------------------------------------
       USE spline_param
       USE spline_galerkin
@@ -18,7 +18,7 @@
       grad = ll * SUM(p(:,i)*p(:,j)*rm1(:,ks))
 
       do jp=1,ks-1;  do ii=ks+1-jp,ns;  jj=jp+ii-ks
-         grad =  grad & 
+         grad =  grad &
            +     db1(ii,jp) * (p(jj,j)*p(ii,i) - p(jj,i)*p(ii,j)) &
            +  ll*rm1(ii,jp) * (p(jj,j)*p(ii,i) + p(jj,i)*p(ii,j))
       end do;  end do

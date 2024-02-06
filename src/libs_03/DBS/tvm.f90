@@ -1,7 +1,7 @@
 !======================================================================
       Subroutine TVM(k,p,q,TA,VA,MA)
 !======================================================================
-!     Calculate the expectation values for 
+!     Calculate the expectation values for
 !     TA - kinatic energy
 !     VA - potential energy
 !     MA - mass energy
@@ -33,14 +33,14 @@
 
 ! ... kinetic average:
 
-! ... matrix of (2:1) = c <B | D+ | B> 
+! ... matrix of (2:1) = c <B | D+ | B>
 
       sa = c_au; sb = dble(k)*c_au
       a(1:ns,1:ns) = sa*fqpbsd + sb*fqpbs
       vv=MATMUL(a,p)
       TA = dot_product(q,vv)
 
-! ... matrix of (1:2) = c <B | D- | B> 
+! ... matrix of (1:2) = c <B | D- | B>
 
       sa = -c_au; sb = dble(k)*c_au
       a(1:ns,1:ns) = sa*fpqbsd + sb*fpqbs

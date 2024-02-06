@@ -10,7 +10,7 @@
 !     4. Form a Cholesky factorization of the overlap matrix.
 !     5. Transform problem to standard eigenvalue problem.
 !     6. Transform to experimental thresholds energies if any.
-!     7. Solve standard eigenvalue problem. 
+!     7. Solve standard eigenvalue problem.
 !     8. Call w_out for weights if required.
 !     9. Backtransform eigenvectors to the original problem.
 !        Solutions are still in new (one-electron) basis!!!
@@ -39,9 +39,9 @@
 
 ! ... overlap matrix:
 
-      Do ich=1,kch; read(nui) cd(:,:,ich); End do 
+      Do ich=1,kch; read(nui) cd(:,:,ich); End do
 
-      Do 
+      Do
        read(nui) ic,jc
        if(ic.le.0) Exit
        idim=1; if(ic.le.kch) idim=ns
@@ -52,9 +52,9 @@
 
 ! ... interaction matrix:
 
-      Do ich=1,kch; read(nui) ad(:,:,ich); End do 
+      Do ich=1,kch; read(nui) ad(:,:,ich); End do
 
-      Do 
+      Do
        read(nui) ic,jc
        if(ic.le.0) Exit
        idim=1; if(ic.le.kch) idim=ns
@@ -65,10 +65,10 @@
 
       if(kcp.gt.0) diag_ovl=0
 
-      if(diag_ovl.eq.0) & 
-       write(pri,'(/a)') 'Problem is a GENERALIZED eigenvalue problem' 
-      if(diag_ovl.ne.0) & 
-       write(pri,'(/a)') 'Problem is reduced to a STANDARD eigenvalue problem' 
+      if(diag_ovl.eq.0) &
+       write(pri,'(/a)') 'Problem is a GENERALIZED eigenvalue problem'
+      if(diag_ovl.ne.0) &
+       write(pri,'(/a)') 'Problem is reduced to a STANDARD eigenvalue problem'
 
 !----------------------------------------------------------------------
 ! ... find eigensolutions for each channel (new basis):
@@ -79,23 +79,23 @@
 
       ipsol=0; ksol=0; isol=0; bb = 0.d0
       if(debug.gt.0) write(pri,'(/a/)') 'Channel eigenvalues:'
-      Do ich = 1,kch;  it=iptar(ich); E_ch = Etarg(it) 
+      Do ich = 1,kch;  it=iptar(ich); E_ch = Etarg(it)
        l=lch(ich); if(l.gt.ks-2) l=ks-2; if(ilzero.eq.0) l=0; i1=l+2
        i2=ns; if(itype.eq.-1) i2=ns-ibzero
-       nsol=i2-i1+1 
+       nsol=i2-i1+1
        aa(1:nsol,1:nsol) = ad(i1:i2,i1:i2,ich)
        cc(1:nsol,1:nsol) = cd(i1:i2,i1:i2,ich)
-       Call LAP_DSYGV ('V','U',nsol,ns,aa,cc,w,info) 
+       Call LAP_DSYGV ('V','U',nsol,ns,aa,cc,w,info)
        if(info.ne.0) then
         write(pri,*) 'channel diagonalization failed, channel = ',ich, lch(ich)
         Stop 'BSR_HD: channel diagonalization failed'
        end if
        if(debug.gt.0) then
         write(pri,'(/a,a,i5,a,i5,a,i5/)') elc(ich), &
-         '   ich =',ich,' nsol =',nsol,'  lch =',lch(ich)  
+         '   ich =',ich,' nsol =',nsol,'  lch =',lch(ich)
         write(pri,'(5f15.7)') w(1:nsol)
        end if
-       jj = (ich-1)*ns + i1 - 1 
+       jj = (ich-1)*ns + i1 - 1
        ipseudo = 0
 
 if(iedel.gt.0) Edmax = Edel(it)
@@ -118,39 +118,39 @@ if(iedel.gt.0) Edmax = Edel(it)
 
       rewind(nui)
       read(nui) i1,i2,i3
-      Do ich=1,kch; read(nui) (S,i=1,ns*ns); End do 
+      Do ich=1,kch; read(nui) (S,i=1,ns*ns); End do
 
       if(diag_ovl.eq.0) then
 
       if(allocated(c)) deallocate(c); allocate(c(khm,khm)); c=0.d0
       Do i=1,khm; c(i,i) = 1.d0; End do
 
-      Do 
+      Do
        read(nui) ic,jc;  if(ic.le.0) Exit
 
 !---------------------------------------------------------------------
        if(ic.gt.kch.and.jc.gt.kch) then  !  pert-pert
 
         read(nui) S
-        c(ic-idel,jc-idel) = S 
-         
-        ic=ic-kch; jc=jc-kch       
-        if(ic.ne.jc.and.abs(S).gt.eps_o) & 
-        write(pri,'(a,f6.3,2i5)') 'Warning: perturber overlap =',S, ic,jc 
+        c(ic-idel,jc-idel) = S
+
+        ic=ic-kch; jc=jc-kch
+        if(ic.ne.jc.and.abs(S).gt.eps_o) &
+        write(pri,'(a,f6.3,2i5)') 'Warning: perturber overlap =',S, ic,jc
 
 !---------------------------------------------------------------------
        elseif(ic.gt.kch) then            !  ch-pert
 
         read(nui) w(1:ns)
         j1=ipsol(jc-1)+1; j2=ipsol(jc); i=ic-idel
-        Do j=j1,j2; c(i,j)=SUM(w(:)*bb(:,j));  End do 
+        Do j=j1,j2; c(i,j)=SUM(w(:)*bb(:,j));  End do
 
-        S = zero 
-        Do j=j1,j2; SS=abs(c(i,j)); if(SS.gt.S) S=SS;  End do 
-        if(S.gt.eps_o) & 
+        S = zero
+        Do j=j1,j2; SS=abs(c(i,j)); if(SS.gt.S) S=SS;  End do
+        if(S.gt.eps_o) &
          write(pri,'(a,f6.3,a,i5,a,a,i5,5x,a,i5)') &
          'Warning: perturber-channel overlap =',S, &
-         '  pertuber',ic-kch, '  channel ',elc(jc),jc,'target',iptar(jc) 
+         '  pertuber',ic-kch, '  channel ',elc(jc),jc,'target',iptar(jc)
 
 !---------------------------------------------------------------------
        else                              !  ch-ch
@@ -159,18 +159,18 @@ if(iedel.gt.0) Edmax = Edel(it)
         i1=ipsol(ic-1)+1; i2=ipsol(ic)
         j1=ipsol(jc-1)+1; j2=ipsol(jc)
         Do i=i1,i2
-         Do j=1,ns; w(j)=SUM(bb(:,i)*cc(:,j)); End do 
-         Do j=j1,j2; c(i,j)=SUM(w(:)*bb(:,j)); End do 
-        End do       
+         Do j=1,ns; w(j)=SUM(bb(:,i)*cc(:,j)); End do
+         Do j=j1,j2; c(i,j)=SUM(w(:)*bb(:,j)); End do
+        End do
 
-        S = zero 
+        S = zero
         Do i=i1,i2;  Do j=j1,j2
          SS=abs(c(i,j)); if(SS.gt.S) S=SS
-        End do; End do 
-        if(S.gt.eps_o) & 
+        End do; End do
+        if(S.gt.eps_o) &
          write(pri,'(a,f6.3,3x,2(a,a,i5,a,i4,3x))') &
          'Warning: channel-channel overlap =',S, &
-          elc(ic),'  channel',ic,'  target',iptar(ic), & 
+          elc(ic),'  channel',ic,'  target',iptar(ic), &
           elc(jc),'  channel',jc,'  target',iptar(jc)
 
        end if
@@ -185,24 +185,24 @@ if(iedel.gt.0) Edmax = Edel(it)
 !----------------------------------------------------------------------
 ! ... transform the interaction matrix to new basis:
 
-      Do ich=1,kch; read(nui) (S,i=1,ns*ns); End do 
+      Do ich=1,kch; read(nui) (S,i=1,ns*ns); End do
 
       if(allocated(a)) deallocate(a); allocate(a(khm,khm)); a=0.d0
       Do i=1,ksol; a(i,i) = bval(i); End do
 
-      Do 
+      Do
        read(nui) ic,jc;  if(ic.le.0) Exit
 
        if(ic.gt.kch.and.jc.gt.kch) then  !  pert-pert
 
         read(nui) S
-        a(ic-idel,jc-idel) = S 
+        a(ic-idel,jc-idel) = S
 
        elseif(ic.gt.kch) then            !  ch-pert
 
         read(nui) w(1:ns)
         j1=ipsol(jc-1)+1; j2=ipsol(jc); i=ic-idel
-        Do j=j1,j2; a(i,j)=SUM(w(:)*bb(:,j));  End do 
+        Do j=j1,j2; a(i,j)=SUM(w(:)*bb(:,j));  End do
 
        else                              !  ch-ch
 
@@ -210,9 +210,9 @@ if(iedel.gt.0) Edmax = Edel(it)
         i1=ipsol(ic-1)+1; i2=ipsol(ic)
         j1=ipsol(jc-1)+1; j2=ipsol(jc)
         Do i=i1,i2
-         Do j=1,ns; w(j)=SUM(bb(:,i)*cc(:,j)); End do 
-         Do j=j1,j2; a(i,j)=SUM(w(:)*bb(:,j)); End do 
-        End do       
+         Do j=1,ns; w(j)=SUM(bb(:,i)*cc(:,j)); End do
+         Do j=j1,j2; a(i,j)=SUM(w(:)*bb(:,j)); End do
+        End do
 
        end if
 
@@ -234,23 +234,23 @@ if(iedel.gt.0) Edmax = Edel(it)
 
        if(diag_ovl.ne.0.and.ich.ne.jch) Cycle
        if(ich.ne.jch) Cycle                           ! ???
-       if(diag_ovl.eq.0) then                         
+       if(diag_ovl.eq.0) then
         S = SUM(abs(c(i1:i2,j1:j2)))
         if(S.eq.0.d0) Cycle
        end if
- 
+
        if(debug.gt.1) &
        write(pri,'(/a,a,a/)') &
         'mass-velocity corrections for channels,  ', ELC(ich), ELC(jch)
 
-       Do i=i1,i2; if(i-i1+1.gt.iabs(jmvc)) Cycle; !if(bval(i).gt.Etarg(it)) Cycle 
-       Do j=j1,j2; if(j-j1+1.gt.iabs(jmvc)) Cycle; !if(bval(j).gt.Etarg(it)) Cycle 
+       Do i=i1,i2; if(i-i1+1.gt.iabs(jmvc)) Cycle; !if(bval(i).gt.Etarg(it)) Cycle
+       Do j=j1,j2; if(j-j1+1.gt.iabs(jmvc)) Cycle; !if(bval(j).gt.Etarg(it)) Cycle
          if(jmvc.lt.0.and.i.ne.j) Cycle
          S = - 0.5*BVMV(ns,ks,vc,'s',bb(:,i),bb(:,j))
          a(i,j) = a(i,j) + S
          if(debug.gt.1) write(pri,'(2i5,F10.5)') i,j,S
        End do; End do
- 
+
        End do   ! jch
        End do   ! ich
 
@@ -290,7 +290,7 @@ if(iedel.gt.0) Edmax = Edel(it)
 
       if(iexp.ne.0) then
 
-       if(debug.gt.0)  write(pri,'(/a/)') 'Experimental energies:'  
+       if(debug.gt.0)  write(pri,'(/a/)') 'Experimental energies:'
 
        Do ich = 1,kch; it=iptar(ich); S=E_exp(it)-Etarg(it)
         Do i=ipsol(ich-1)+1,ipsol(ich); a(i,i)=a(i,i)+S; End do
@@ -301,7 +301,7 @@ if(iedel.gt.0) Edmax = Edel(it)
 
       end if
 !-----------------------------------------------------------------------
-! ... Solve standard eigenvalue problem 
+! ... Solve standard eigenvalue problem
 ! ... (note:  divide and concer algorith requires much more space)
 
       write(*,'(/a,i3,a,i6,a,i6)') &
@@ -309,14 +309,14 @@ if(iedel.gt.0) Edmax = Edel(it)
 
       if(allocated(eval)) deallocate(eval); allocate(eval(khm))
 
-      Call LAP_DSYEV(job,uplo,khm,khm,A,eval,INFO)   
+      Call LAP_DSYEV(job,uplo,khm,khm,A,eval,INFO)
 
       write(  *,'(/a,5f15.5)') 'Eval(1:5) =',eval(1:5)
       write(pri,'(/a,5f15.5)') 'Eval(1:5) =',eval(1:5)
 !-----------------------------------------------------------------------
 !...  define weights:
 
-      if(itype.ne.0.or.cwt.gt.0.d0)  Call W_out 
+      if(itype.ne.0.or.cwt.gt.0.d0)  Call W_out
 
 !-----------------------------------------------------------------------
 ! ... Backtransform eigenvectors to the original problem.

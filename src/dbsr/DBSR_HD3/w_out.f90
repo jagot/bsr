@@ -122,7 +122,7 @@
        Do jch=1,mwt; ich=ipt(jch); if(WT(ich).lt.cwt) Exit
 
         Call Find_channel_label_jj(ich,jch,is,eval(is),Lab)
-        
+
         if(ich.gt.nch) then
          AA = 'perturber:'
          write(pri,'(a,i6,f9.5,5x,a)') AA(1:12),ich-nch,WT(ich),TRIM(Lab)
@@ -131,7 +131,7 @@
          it = iptar(ich)
          if(Etarg(it).gt.eval(is))  AA = 'closed ch:'
          write(pri,'(a,i6,f9.5,5x,a)') AA(1:12),ich,WT(ich),TRIM(Lab)
-        end if 
+        end if
 
        End do
 

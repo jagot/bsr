@@ -3,8 +3,8 @@
 !======================================================================
 !     run calculations for one partial wave
 !----------------------------------------------------------------------
-      Use dbsr_mat                      
-      Use c_data           
+      Use dbsr_mat
+      Use c_data
       Use DBS_integrals, only: memory_DBS_integrals
 
       Implicit none
@@ -14,7 +14,7 @@
 
       Call CPU_time(t0)
 
-! ... read configuration expansion and orbitals information: 
+! ... read configuration expansion and orbitals information:
 
       Call Read_data
 
@@ -52,9 +52,9 @@
       write(pri,'(a,i8,a)') 'nch    = ',nch,  '  - number of channels'
       write(pri,'(a,i8,a)') 'npert  = ',npert,'  - number of perturbers'
       write(pri,'(a,i8,a)') 'ncp    = ',ncp,  '  - number of perturber config.s'
-      write(pri,'(a,i8,a)') 'ms     = ',ms,   '  - number of splines' 
+      write(pri,'(a,i8,a)') 'ms     = ',ms,   '  - number of splines'
       mhm = nch*ms+npert
-      write(pri,'(a,i8,a)') 'mhm    = ',mhm,  '  - matrix dimension' 
+      write(pri,'(a,i8,a)') 'mhm    = ',mhm,  '  - matrix dimension'
 
       write(pri,'(/a/)') 'Main memory consumings:'
       write(pri,'(a,T40,f10.2,a)') 'memory of conf_jj module:', memory_conf_jj,' Mb'
@@ -75,7 +75,7 @@
 !-----------------------------------------------------------------------
 ! ... full overlap matrix:
 
-      icase=0; Call Alloc_c_data(ntype_O,0,mk,mblock,nblock,kblock,eps_c) 
+      icase=0; Call Alloc_c_data(ntype_O,0,mk,mblock,nblock,kblock,eps_c)
       Do ich=1,nch;  Call UPDATE_HX(ich,ich,fppqq,1.d0);  End do
       Call State_res
 
@@ -98,8 +98,8 @@
 
 ! ... L-integrals:
 
-      icase=1; Call Alloc_c_data(ntype_L,0,0,mblock,nblock,kblock,eps_c) 
-      Call State_res   
+      icase=1; Call Alloc_c_data(ntype_L,0,0,mblock,nblock,kblock,eps_c)
+      Call State_res
 
       Call CPU_time(t2)
       write(pri,'(/a,T40,f10.2,a)') 'Diag. L-integrals:',(t2-t1)/60,' min'
@@ -108,8 +108,8 @@
 
       Call CPU_time(t1)
 
-      icase=2; Call Alloc_c_data(ntype_R,0,mk,mblock,nblock,kblock,eps_c) 
-      Call State_res  
+      icase=2; Call Alloc_c_data(ntype_R,0,mk,mblock,nblock,kblock,eps_c)
+      Call State_res
 
       Call CPU_time(t2)
       write(pri,'(/a,T40,f10.2,a)') 'Diag. R-integrals:',(t2-t1)/60,' min'
@@ -118,8 +118,8 @@
 
       if(mbreit.eq.1) then
        Call CPU_time(t1)
-       icase=3; Call Alloc_c_data(ntype_S,0,mk+1,mblock,nblock,kblock,eps_c) 
-       Call State_res  
+       icase=3; Call Alloc_c_data(ntype_S,0,mk+1,mblock,nblock,kblock,eps_c)
+       Call State_res
        Call CPU_time(t2)
        write(pri,'(/a,T40,f10.2,a)') 'Diag. S-integrals:',(t2-t1)/60,' min'
       end if
@@ -132,7 +132,7 @@
 
 ! ... orthogonal conditions:
 
-      Call DBS_ORTH 
+      Call DBS_ORTH
 
 ! ... diagonalize the diagonal blocks:
 
@@ -145,12 +145,12 @@
       write(pri,'(a,i6,a)') 'nsol =',nsol,'  -  number of channel solutions (new basis)'
       write(pri,'(72("-")/)')
 
-! ... record overlap matrix:      
+! ... record overlap matrix:
 
       if(allocated(eval)) Deallocate(eval); Allocate(eval(nsol))
       k = 0
       Do ich = 1,nch; Do is = 1,ipsol(ich)
-       k=k+1; eval(k) = diag(is,ms,ich) 
+       k=k+1; eval(k) = diag(is,ms,ich)
       End do; End do
 
       if(allocated(jpsol)) Deallocate(jpsol); Allocate(jpsol(0:nch))
@@ -158,19 +158,19 @@
       Do i=1,nch;  jpsol(i)=jpsol(i-1)+jpsol(i); End do
 
       rewind(nui)
-      write(nui) ns,nch,npert,nsp,nsq    
+      write(nui) ns,nch,npert,nsp,nsq
       write(nui) nsol
       write(nui) jpsol
       write(nui) eval
       write(nui) (((diag(i,js,ich),i=1,ms),js=1,ipsol(ich)),ich=1,nch)
 
-! ... tranform overlap matrix:      
+! ... tranform overlap matrix:
 
       Call CPU_time(t1);  icase=0;  Call transform_matrix
 
 ! ... check big overlaps:
 
-      k = 0; Call Check_mat(k) 
+      k = 0; Call Check_mat(k)
       if(k.gt.0) &
       write(*,'(a,a,i3)') 'Checking overlap matrix:','  k =',k
       write(pri,'(/a,f6.3,a,i3)') &
@@ -194,19 +194,19 @@
 
 ! ... recalculate the overlap non-diagonal blocks:    ???
 
-      hch = 0.d0 
+      hch = 0.d0
       if(npert.gt.0) then; hcp = 0.d0; hp = 0.d0; end if
       Do it=1,ntarg; Do jt=1,it
         if(it.eq.jt) Cycle; k=it*(it-1)/2+jt; otarg(k)=0.d0
       End do; End do
 
-      icase=0; Call Alloc_c_data(ntype_O,0,mk,mblock,nblock,kblock,eps_c) 
+      icase=0; Call Alloc_c_data(ntype_O,0,mk,mblock,nblock,kblock,eps_c)
       Call State_res
 
 ! ... core-energy shift:
 
-      hch = hch  * Ecore      
-      if(npert.gt.0) then; hcp = hcp * Ecore; hp = hp * Ecore; end if   
+      hch = hch  * Ecore
+      if(npert.gt.0) then; hcp = hcp * Ecore; hp = hp * Ecore; end if
 
       Call CPU_time(t2)
       write(pri,'(/a,T40,f10.2,a)') 'None-diag. O-integrals:',(t2-t1)/60,' min'
@@ -215,8 +215,8 @@
 
       Call CPU_time(t1)
 
-      icase=1; Call Alloc_c_data(ntype_L,0,0,mblock,nblock,kblock,eps_c) 
-      Call State_res   
+      icase=1; Call Alloc_c_data(ntype_L,0,0,mblock,nblock,kblock,eps_c)
+      Call State_res
 
       Call CPU_time(t2)
       write(pri,'(/a,T40,f10.2,a)') 'None-diag. L-integrals:',(t2-t1)/60,' min'
@@ -225,8 +225,8 @@
 
       Call CPU_time(t1)
 
-      icase=2; Call Alloc_c_data(ntype_R,0,mk,mblock,nblock,kblock,eps_c) 
-      Call State_res  
+      icase=2; Call Alloc_c_data(ntype_R,0,mk,mblock,nblock,kblock,eps_c)
+      Call State_res
 
       Call CPU_time(t2)
       write(pri,'(/a,T40,f10.2,a)') 'None-diag. R-integrals:',(t2-t1)/60,' min'
@@ -235,16 +235,16 @@
 
       if(mbreit.eq.1) then
        Call CPU_time(t1)
-       icase=3; Call Alloc_c_data(ntype_S,0,mk+1,mblock,nblock,kblock,eps_c) 
-       Call State_res  
+       icase=3; Call Alloc_c_data(ntype_S,0,mk+1,mblock,nblock,kblock,eps_c)
+       Call State_res
        Call CPU_time(t2)
        write(pri,'(/a,T40,f10.2,a)') 'None-diag. S-integrals:',(t2-t1)/60,' min'
       end if
 
 ! ... orthogonal conditions:
 
-      Call DBS_ORTH 
-  
+      Call DBS_ORTH
+
 ! ... check the diagonal asymptotic coef.s:
 
       nelc_core=0; Do i=1,nclosed; nelc_core=nelc_core+jbs(i)+1; End do
@@ -263,9 +263,9 @@
       write(pri,'(/a,T40,f10.2,a)') 'non-diagonal blocks:',(t2-t0)/60,' min '
       write(*  ,'( a,T40,f10.2,a)') 'non-diagonal blocks:',(t2-t0)/60,' min '
 !----------------------------------------------------------------------
-! ... record interaction matrix: 
+! ... record interaction matrix:
 
-      Call CPU_time(t1)  
+      Call CPU_time(t1)
 
       Call transform_matrix
       Call Record_matrix
@@ -288,12 +288,12 @@
 
 !      acf = 2 * acf        ????
 
-! ... recording asymptotic coefficients: 
+! ... recording asymptotic coefficients:
 
       write(nui) mk
-      write(nui) (((acf(icc(ich,jch),k),ich=1,nch),jch=1,nch),k=0,mk)  
+      write(nui) (((acf(icc(ich,jch),k),ich=1,nch),jch=1,nch),k=0,mk)
 
-! ... dbug printing asymptotic coefficients: 
+! ... dbug printing asymptotic coefficients:
 
       if(pri_acf.gt.0) then
        write(pri,'(/a)') 'Asymptotic coefficients:'
@@ -320,5 +320,5 @@
        write(pri,*)
       end if
 
-      End Subroutine SUB1 
+      End Subroutine SUB1
 

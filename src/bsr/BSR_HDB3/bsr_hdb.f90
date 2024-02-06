@@ -1,5 +1,5 @@
 !======================================================================
-!    PROGRAM       B S R _ H D 3     (scalapack verson)  
+!    PROGRAM       B S R _ H D 3     (scalapack verson)
 !
 !               C O P Y R I G H T -- 2011
 !
@@ -8,7 +8,7 @@
 !
 !======================================================================
 !    Diagonalize the Hamiltonian in the innere region and
-!    generates H.DAT fail prir scattering or photoionization 
+!    generates H.DAT fail prir scattering or photoionization
 !    calculations in R-matrix approach.
 !    Another option - calculation of bound (or pseudo-) states.
 !======================================================================
@@ -16,15 +16,15 @@
 !    INPUT  ARGUMENTS:
 !
 !     itype - type of calculations
-!   
+!
 !           = -1 - bound-structure calculations
 !           =  0 - scattering calculations
-!           =  1 - additional output of all R-matrix solutions 
+!           =  1 - additional output of all R-matrix solutions
 !                  required prir photoionization calculations
 !
-!     klsp, klsp1,klsp2  - the indexes of partial waves under consideration  
+!     klsp, klsp1,klsp2  - the indexes of partial waves under consideration
 !
-! 
+!
 !    INPUT FILES:
 !
 !     bsr_par        -  input parameters
@@ -34,8 +34,8 @@
 !     bsr_mat.nnn    -  interaction matrix
 !
 !    OUTPUT FILES:
-!   
-!     bsr_hd.log     -  running inprirmation 
+!
+!     bsr_hd.log     -  running inprirmation
 !     h.nnn          -  eigenvalues and suface amplitudes
 !                       required to obtain R-matrix
 !     w.nnn          -  file of channel weights (optional)
@@ -49,7 +49,7 @@
       Use blacs
       Use bsr_hd
       Use spline_param, only: ns,ks
-     
+
       Implicit none
       Integer :: err
       Integer, external :: Icheck_file
@@ -68,18 +68,18 @@
 
 ! ... set up B-splines:
 
-      fail=Icheck_file(AF_knot) 
+      fail=Icheck_file(AF_knot)
       if(fail.eq.0) then
        write(*,'(a)') 'Can not find file knot.dat';  err = err + 1
       else
-       CALL def_BS   
-       Call Conv_au (100.d0,0.d0,au_cm,au_eV,0)       
+       CALL def_BS
+       Call Conv_au (100.d0,0.d0,au_cm,au_eV,0)
        write(*,*) 'au_cm = ',au_cm, '     au_eV = ', au_eV
       end if
 
 ! ... read target information:
 
-      fail=Icheck_file(AF_tar) 
+      fail=Icheck_file(AF_tar)
       if(fail.eq.0) then
        write(*,'(a)') 'Can not find file target'; err = err + 1
       else
@@ -88,12 +88,12 @@
 
 ! ... read arguments:
 
-      fail=Icheck_file(AF_par) 
+      fail=Icheck_file(AF_par)
       if(fail.eq.0) then
        write(*,'(a)') 'Can not find file bsr_par, defaults are used'
        Call Read_arg(0)
       else
-       Open(nup,file=AF_par); Call Read_arg(nup);  Close(nup)    
+       Open(nup,file=AF_par); Call Read_arg(nup);  Close(nup)
       end if
 
       end if ! io_processor
@@ -101,7 +101,7 @@
       Call br_ipar(err)
       if(err.ne.0) then; Call BLACS_EXIT(); Stop ' '; end if
 
-! ... broadcast common parameters: 
+! ... broadcast common parameters:
 
       Call br_arg
 
@@ -109,7 +109,7 @@
 ! ... separate calculations for each partial wave:
 
       if (myrow >= 0 .and. myrow < p .and. mycol >= 0 .and. mycol < q) then
- 
+
        Do klsp = klsp1,klsp2
 
         fail = 0
@@ -120,19 +120,19 @@
 
         Call BLACS_BARRIER (ctxt, 'All')
 
-        if(io_processor) then           
+        if(io_processor) then
          Call CPU_time(tt2)
          write (pri,'(/a,T30,f10.2,a)') 'Partial wave:,', (tt2-tt1)/60, ' min.'
          write (*  ,'(/a,T30,f10.2,a)') 'Partial wave:,', (tt2-tt1)/60, ' min.'
         end if
 
-       End do     
+       End do
 
       end if
 
       Call BLACS_BARRIER (ctxt, 'All')
 
-      Call BLACS_GRIDEXIT (ctxt)    
+      Call BLACS_GRIDEXIT (ctxt)
 
       End  ! program BSR_HDB
 
@@ -143,7 +143,7 @@
 !=====================================================================
       Use blacs
       Use bsr_hd, only: nup,AF_par
-      
+
       Implicit none
       Integer :: imycol, imyrow, ip, iq, par(3)
       Integer, external :: Icheck_file
@@ -159,7 +159,7 @@
 
       io_processor = (imycol == 0)
 
-      if (io_processor) then 
+      if (io_processor) then
 
        write (*,*)
        write (*,'(a,i5)') 'BSR_HDB: number of processors = ', nprocs
@@ -171,7 +171,7 @@
        Call Read_ipar(nup,'p'     ,p     )
        Call Read_ipar(nup,'q'     ,q     )
        Call Read_ipar(nup,'nblock',nblock)
-       Close(nup)    
+       Close(nup)
       end if
       Call Read_iarg('p'     ,p     )
       Call Read_iarg('q'     ,q     )
@@ -190,7 +190,7 @@
       if(io_processor) then
        par(1)=p; par(2)=q; par(3)=nblock
        Call igebs2d (ictxt, 'all', ' ', 1, 3, par, 1)
-      else      
+      else
        Call igebr2d (ictxt, 'all', ' ', 1, 3, par, 1, 0, 0)
        p=par(1); q=par(2); nblock=par(3)
       end if
@@ -203,7 +203,7 @@
 !----------------------------------------------------------------------
 ! ... create p-q BLACS grid:
 
-      Call BLACS_GET (-1,0,ctxt)    
+      Call BLACS_GET (-1,0,ctxt)
       Call BLACS_GRIDINIT (ctxt, 'Row-major', p, q)
       Call BLACS_GRIDINFO (ctxt, ip, iq, myrow, mycol)
 

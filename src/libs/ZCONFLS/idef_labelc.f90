@@ -8,9 +8,9 @@
       Integer, intent(in) :: nu,ii,kset
       Character(64), intent(out) :: LabelC
       Real(8) :: C, CC
-      Integer :: i 
+      Integer :: i
       Character(275) :: A
-      
+
       LabelC = ' '
 
       rewind(nu)
@@ -18,7 +18,7 @@
       i=INDEX(A,':')
       if(i.ne.0) read(A(i+2:),'(a)') LabelC
       if(len_trim(LabelC).ne.0) Return
-	  
+
       C = 0.d0
     1 read(nu,'(a)',end=2) A
       if(A(1:1).eq.'*') go to 2

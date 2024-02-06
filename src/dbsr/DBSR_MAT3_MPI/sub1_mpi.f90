@@ -4,10 +4,10 @@
 !     drives calculations for one partial wave
 !----------------------------------------------------------------------
       Use MPI
-      Use dbsr_mat                      
-      Use c_data           
+      Use dbsr_mat
+      Use c_data
       Use DBS_integrals, only: memory_DBS_integrals
-      Use radial_overlaps 
+      Use radial_overlaps
 
       Implicit none
       Integer :: i,j, ich,jch,  k, is,js, it,jt, met, nelc_core
@@ -25,24 +25,24 @@
         AF_pri(i-2:i)=ALSP;  Open(pri,file=AF_pri)
       else
         if(debug.gt.0.and.myid.le.debug) then
-          write(AF_pri(i-2:i+1),'(i4.4)') myid  
+          write(AF_pri(i-2:i+1),'(i4.4)') myid
           Open(pri,file=AF_pri)
         else
           pri=0
         end if
-      end if 
+      end if
       if(pri.eq.0) pri_coef=0
 
 !-----------------------------------------------------------------------
 ! ... read configuration expansion, one-electron orbitals,
-! ... orthogonal conditions and other related data: 
+! ... orthogonal conditions and other related data:
 
       if(myid.eq.0) Call Read_data
 
       t1 = MPI_WTIME()
 
       Call br_conf_jj
-      Call br_orb_jj     
+      Call br_orb_jj
       Call br_channel_jj
       Call br_DBS_orbitals_pq
       Call br_phys_orb(ntarg)
@@ -90,11 +90,11 @@
        write(pri,'(a,i8,a)') 'nch    = ',nch,  '  - number of channels'
        write(pri,'(a,i8,a)') 'npert  = ',npert,'  - number of perturbers'
        write(pri,'(a,i8,a)') 'ncp    = ',ncp,  '  - number of perturber config.s'
-       write(pri,'(a,i8,a)') 'ms     = ',ms,   '  - number of splines' 
+       write(pri,'(a,i8,a)') 'ms     = ',ms,   '  - number of splines'
        mhm = nch*ms+npert
-       write(pri,'(a,i8,a)') 'mhm    = ',mhm,  '  - matrix dimension' 
+       write(pri,'(a,i8,a)') 'mhm    = ',mhm,  '  - matrix dimension'
        if(myid.gt.0) &
-       write(pri,'(a,i8,a)') 'iicc   = ',iicc, '  - number of blocks'    
+       write(pri,'(a,i8,a)') 'iicc   = ',iicc, '  - number of blocks'
 
        write(pri,'(/a/)') 'Main memory consumings:'
        write(pri,'(a,T40,f8.1,a)') &
@@ -111,7 +111,7 @@
         'memory of OBS_integrals:', 16.d0*mobs/(1024*1024),' Mb'
 
        C = 7.0*mblock*nblock + 4.0*nblock + (mk+1.0)*(2+nblock)*ntype_R
-       mem_cdata = C * 4.0 / (1024 * 1024) 
+       mem_cdata = C * 4.0 / (1024 * 1024)
        write(pri,'(a,T40,f8.1,a)') 'memory of cdata module:', mem_cdata,' Mb'
 
        write(pri,'(a,T40,f8.1,a)') 'memory of bufer:', mem_buffer,' Mb'
@@ -133,7 +133,7 @@
 
       idiag = 0
 
-      icase=0; Call Alloc_c_data(ntype_O,0,0,mblock,nblock,kblock,eps_c) 
+      icase=0; Call Alloc_c_data(ntype_O,0,0,mblock,nblock,kblock,eps_c)
       Call State_res
 
 ! ... B-spline overlaps:
@@ -144,7 +144,7 @@
 
 ! ... save overlaps diagonal blocks:
 
-      Do ich = 1,nch; i = icc(ich,ich); if(i.le.0) Cycle 
+      Do ich = 1,nch; i = icc(ich,ich); if(i.le.0) Cycle
        diag(:,:,ich) = hch(:,:,i)
       End do
 
@@ -162,14 +162,14 @@
 
       t1 = MPI_WTIME()
 
-      Do ich = 1,nch; i = icc(ich,ich); if(i.le.0) Cycle 
-       hch(:,:,i) = hch(:,:,i) * Ecore      
+      Do ich = 1,nch; i = icc(ich,ich); if(i.le.0) Cycle
+       hch(:,:,i) = hch(:,:,i) * Ecore
       End do
 
 ! ... L-integrals:
 
-      icase=1; Call Alloc_c_data(ntype_L,0,0,mblock,nblock,kblock,eps_c) 
-      Call State_res   
+      icase=1; Call Alloc_c_data(ntype_L,0,0,mblock,nblock,kblock,eps_c)
+      Call State_res
 
       Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
       t2 = MPI_WTIME()
@@ -180,8 +180,8 @@
 
       t1 = MPI_WTIME()
 
-      icase=2; Call Alloc_c_data(ntype_R,0,mk,mblock,nblock,kblock,eps_c) 
-      Call State_res  
+      icase=2; Call Alloc_c_data(ntype_R,0,mk,mblock,nblock,kblock,eps_c)
+      Call State_res
 
       Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
       t2 = MPI_WTIME()
@@ -191,8 +191,8 @@
 ! ... S-integrals:
 
       if(mbreit.eq.1) then
-       icase=3; Call Alloc_c_data(ntype_S,0,mk+1,mblock,nblock,kblock,eps_c) 
-       Call State_res  
+       icase=3; Call Alloc_c_data(ntype_S,0,mk+1,mblock,nblock,kblock,eps_c)
+       Call State_res
       end if
 
 ! ... target energy part:
@@ -224,14 +224,14 @@
       if(myid.eq.0) diag = biag
       if(myid.eq.0) deallocate(biag)
       Call MPI_BCAST(diag,ms*ms*nch,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
-      
+
       if(allocated(jpsol)) Deallocate(jpsol); Allocate(jpsol(0:nch))
       Call MPI_REDUCE(ipsol,jpsol,nch+1,MPI_INTEGER,MPI_MAX, &
                       0,MPI_COMM_WORLD,ierr)
       if(myid.eq.0) ipsol=jpsol
       Call MPI_BCAST(ipsol,nch+1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
 
-! ... record diagonal solutions:  
+! ... record diagonal solutions:
 
       nsol = SUM(ipsol)
       if(pri.gt.0) &
@@ -241,13 +241,13 @@
       if(allocated(eval)) Deallocate(eval); Allocate(eval(nsol))
       k = 0
       Do ich = 1,nch; Do is = 1,ipsol(ich)
-       k=k+1; eval(k) = diag(is,ms,ich) 
+       k=k+1; eval(k) = diag(is,ms,ich)
       End do; End do
 
       jpsol = ipsol;    Do i=1,nch; jpsol(i)=jpsol(i-1)+jpsol(i); End do
 
       rewind(nui)
-      write(nui) ns,nch,npert,nsp,nsq    
+      write(nui) ns,nch,npert,nsp,nsq
       write(nui) nsol
       write(nui) jpsol
       write(nui) eval
@@ -259,7 +259,7 @@
       if(pri.ne.0) &
        write(pri,'(/a,T30,f9.2,a)') 'Diag_channels:',(t2-t1)/60,' min'
 
-! ... transform overlap matrix:      
+! ... transform overlap matrix:
 
       t1 = MPI_WTIME()
 
@@ -293,7 +293,7 @@
 
       if(pri.gt.0.and.met.gt.0) write(pri,'(/a,i6,a)') &
          'met  =',met,'  -  number of new orth. conditions'
-                 
+
       if(met.gt.0) then
        Call MPI_BCAST(nv_ch,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
        if(nv_ch.gt.0) then
@@ -306,8 +306,8 @@
        end if
        go to 1
       end if  ! met > 0
-      
-! ... record overlap matric:      
+
+! ... record overlap matric:
 
     2 Continue
 
@@ -329,11 +329,11 @@
 
       idiag = -1
 
-      if(iicc.gt.0) hch = 0.d0 
+      if(iicc.gt.0) hch = 0.d0
       if(iicb.gt.0) hcp = 0.d0
       if(iibb.gt.0) hp  = 0.d0
 
-! ... recalculate the overlap non-diagonal blocks:   
+! ... recalculate the overlap non-diagonal blocks:
 
       if(CO.gt.0.d0) then
 
@@ -341,12 +341,12 @@
         if(it.eq.jt) Cycle; k=it*(it-1)/2+jt; otarg(k)=0.d0
        End do; End do
 
-       icase=0; Call Alloc_c_data(ntype_O,0,0,mblock,nblock,kblock,eps_c) 
+       icase=0; Call Alloc_c_data(ntype_O,0,0,mblock,nblock,kblock,eps_c)
        Call State_res
 
        ! ... core-energy shift:
 
-       if(iicc.gt.0) hch = hch * Ecore 
+       if(iicc.gt.0) hch = hch * Ecore
        if(iicb.gt.0) hcp = hcp * Ecore
        if(iibb.gt.0) hp  = hp  * Ecore
 
@@ -356,8 +356,8 @@
 
 ! ... L-integrals:
 
-      icase=1; Call Alloc_c_data(ntype_L,0,0,mblock,nblock,kblock,eps_c) 
-      Call State_res   
+      icase=1; Call Alloc_c_data(ntype_L,0,0,mblock,nblock,kblock,eps_c)
+      Call State_res
 
       Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
       t2 = MPI_WTIME()
@@ -368,8 +368,8 @@
 
       t2 = MPI_WTIME()
 
-      icase=2; Call Alloc_c_data(ntype_R,0,mk,mblock,nblock,kblock,eps_c) 
-      Call State_res  
+      icase=2; Call Alloc_c_data(ntype_R,0,mk,mblock,nblock,kblock,eps_c)
+      Call State_res
 
       Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
       t2 = MPI_WTIME()
@@ -379,15 +379,15 @@
 ! ... S-integrals:
 
       if(mbreit.eq.1) then
-       icase=3; Call Alloc_c_data(ntype_S,0,mk+1,mblock,nblock,kblock,eps_c) 
-       Call State_res  
+       icase=3; Call Alloc_c_data(ntype_S,0,mk+1,mblock,nblock,kblock,eps_c)
+       Call State_res
       end if
 
 ! ... orthogonal conditions:
 
-      Call DBS_ORTH 
+      Call DBS_ORTH
 
-      if(myid.eq.0) Call Pri_orth  
+      if(myid.eq.0) Call Pri_orth
 
       Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
       t2 = MPI_WTIME()
@@ -395,9 +395,9 @@
       if(pri.gt.0) &
       write(pri,'(/a,T20,f10.2,a)') 'non-diagonal blocks:',(t2-t0)/60,' min '
 
-! ... record interaction matrix: 
+! ... record interaction matrix:
 
-      t1 = MPI_WTIME() 
+      t1 = MPI_WTIME()
        Call transform_matrix
        Call Record_matrix
        Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
@@ -467,12 +467,12 @@
        write(pri,'(i5,2F15.6)') i,bcf(i,i,0)-2*nelc
       End do
 
-! ... recording asymptotic coefficients: 
+! ... recording asymptotic coefficients:
 
       write(nui) mk
-      write(nui) (((bcf(ich,jch,k),ich=1,nch),jch=1,nch),k=0,mk)  
+      write(nui) (((bcf(ich,jch,k),ich=1,nch),jch=1,nch),k=0,mk)
 
-! ... debug printing asymptotic coefficients: 
+! ... debug printing asymptotic coefficients:
 
       if(pri_acf.gt.0) then
        write(pri,'(/a)') 'Asymptotic coefficients:'
@@ -508,5 +508,5 @@
        write(pri,*)
       end if
 
-      End Subroutine SUB1 
+      End Subroutine SUB1
 

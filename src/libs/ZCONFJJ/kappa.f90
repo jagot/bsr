@@ -10,15 +10,15 @@
 !=======================================================================
       Integer Function l_kappa(kappa)
 !=======================================================================
-!     kappa ->  l  
+!     kappa ->  l
 !-----------------------------------------------------------------------
       Integer :: kappa
       if(kappa.eq.0) Stop 'l_kappa: kappa=0'
       if(kappa.gt.0) then
-       l_kappa =  kappa 
+       l_kappa =  kappa
       else
        l_kappa = -kappa-1
-      end if 
+      end if
       End Function l_kappa
 
 !=======================================================================
@@ -32,6 +32,6 @@
        j_kappa =  kappa+kappa-1
       else
        j_kappa = -kappa-kappa-1
-      end if 
+      end if
       End Function j_kappa
 

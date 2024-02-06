@@ -14,9 +14,9 @@
 ! ... input/output files and units:
 
       Integer, parameter :: ma = 80    ! limit for file-name length
-      Character(ma) :: AF     
+      Character(ma) :: AF
 
-      Integer :: prj =  3;  Character(ma) :: AF_prj = 'dbsr_mat.log'                            
+      Integer :: prj =  3;  Character(ma) :: AF_prj = 'dbsr_mat.log'
       Integer :: pri = 66;  Character(ma) :: AF_pri = 'mat_log.nnn'
 
       Integer :: nut = 10;  Character(ma) :: AF_tar = 'target_jj'
@@ -31,19 +31,19 @@
       Integer :: nue = 19;  Character(ma) :: AF_exp = 'thresholds'
       Integer :: nun = 20;  Character(ma) :: AF_new = 'target_new'
 
-! ... core parameters: 
+! ... core parameters:
 
-      Integer :: nclosed = 0 
+      Integer :: nclosed = 0
       Real(8) :: Ecore = 0.d0, EC = 0.d0
 
 ! ... range of partial waves:
 
-      Integer :: klsp, klsp1=1, klsp2=1      
+      Integer :: klsp, klsp1=1, klsp2=1
       Character(3) :: ALSP
 
 ! ... Breit corrections:
 
-      Integer :: mbreit  =   0      
+      Integer :: mbreit  =   0
 
 ! ... tolerence parameters:
 
@@ -69,11 +69,11 @@
 
 ! ... target-orthogonality flag:
 
-      Integer :: iitar  =  0      
+      Integer :: iitar  =  0
 
 ! ... skip the target checking:
 
-      Integer :: check_target =  1      
+      Integer :: check_target =  1
 
 ! ... restrictions on the channel energies:
 
@@ -90,7 +90,7 @@
 
 ! ... structure of data:
 
-      Integer :: icase =  0               ! current case    
+      Integer :: icase =  0               ! current case
       Integer, parameter :: ncase =  3    ! number of different integrals
       Character aint(0:ncase)/'O','L','R','S'/
 
@@ -99,37 +99,37 @@
       Integer, parameter :: ntype_R = 4
       Integer, parameter :: ntype_S = 20
 
-      Integer :: atype =  0               ! current rel. integral    
+      Integer :: atype =  0               ! current rel. integral
       Integer, parameter :: ibtype = 10
 
 ! ... dimension limits:
 
       Integer :: mk    =      7           ! max. multipole index
-      Integer :: nblock  = 2000           ! number of blocks in c_data       
+      Integer :: nblock  = 2000           ! number of blocks in c_data
       Integer :: mblock  = 3000           ! size of blocks
       Integer :: kblock  =  500           ! max.nb for given case
 
 ! ... debug printing and timing:
 
       Real(8) :: t_rdata=0.d0, t_sdata=0.d0, t_ldata=0.d0
-      Integer :: debug    = 0      
+      Integer :: debug    = 0
       Integer :: pri_acf  = 0
       Integer :: pri_coef = 0
 
 ! ... MPI
 
-      Integer :: nprocs=1, myid=0, ierr=0  
+      Integer :: nprocs=1, myid=0, ierr=0
 
 !----------------------------------------------------------------------
 !     basic matrixes:
-!     hch,hcp,hp  -  interaction (or overlap) channel matrixes 
+!     hch,hcp,hp  -  interaction (or overlap) channel matrixes
 !     acf         -  array of asymptotic coefficients
 !     htarg       -  interaction matrix for target states
 !     otarg       -  overlap matrix for target states
 !----------------------------------------------------------------------
 
-      Integer :: nhm    ! number of solutions 
-      Integer :: mhm    ! matrix dimension 
+      Integer :: nhm    ! number of solutions
+      Integer :: mhm    ! matrix dimension
 
       Real(8), allocatable :: hch(:,:,:), hcp(:,:), hp(:)
       Real(8), allocatable :: acf(:,:), bcf(:,:,:)
@@ -139,7 +139,7 @@
       Real(8), allocatable :: x(:,:),xx(:,:)   !  ms * ms
       Real(8), allocatable :: y(:,:),yy(:,:)   !  ns * ns
 
-      Integer :: idiag     ! =-1,0,1 (none-diagonal, all, diagonal blocks) 
+      Integer :: idiag     ! =-1,0,1 (none-diagonal, all, diagonal blocks)
       Integer :: nsol      ! number of solutions from diagonal blocks
 
       Real(8), allocatable :: diag(:,:,:), eval(:)

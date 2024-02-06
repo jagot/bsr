@@ -20,26 +20,26 @@
 
 ! ... exhaust the 1-st configuration:
 
-      Do i = 1,ne 
+      Do i = 1,ne
 
        if(ksym1(i).eq.0) Cycle
        Nsym = Nsym + 1
        Lsym(Nsym)=Lsym1(i); Msym(Nsym)=Msym1(i); Jsym(Nsym)=Jsym1(i)
        k1=k1+1; IPsym1(Nsym)=k1; Isym1(k1)=i; ksym1(i)=0
 
-! ... check for the same orbitals rest the 1-st configuration:      
- 
+! ... check for the same orbitals rest the 1-st configuration:
+
        Do j = i+1,ne
         if(ksym1(j).eq.0) Cycle
         if(Lsym(Nsym).ne.Lsym1(j)) Cycle
         if(Msym(Nsym).ne.Msym1(j)) Cycle
         if(Jsym(Nsym).ne.Jsym1(j)) Cycle
         k1=k1+1; IPsym1(Nsym)=k1; Isym1(k1)=j; ksym1(j)=0
-       End do        
+       End do
 
 !       Jdet=Isym1(1:ne);  kz1 = Isort(ne,Jdet) ???
 
-! ... check for the same orbitals the 2-nd configuration:      
+! ... check for the same orbitals the 2-nd configuration:
 
        IPsym2(Nsym)=k2
        Do j = 1,ne
@@ -48,7 +48,7 @@
         if(Msym(Nsym).ne.Msym2(j)) Cycle
         if(Jsym(Nsym).ne.Jsym2(j)) Cycle
         k2=k2+1; IPsym2(Nsym)=k2; Isym2(k2)=j; ksym2(j)=0
-       End do        
+       End do
 
       End do
 
@@ -56,28 +56,28 @@
 
 ! ... exhaust the 2-st configuration:
 
-      Do i = 1,ne 
+      Do i = 1,ne
        if(ksym2(i).eq.0) Cycle
        Nsym = Nsym + 1
        Lsym(Nsym)=Lsym2(i); Msym(Nsym)=Msym2(i); Jsym(Nsym)=Jsym2(i)
        k2=k2+1; IPsym2(Nsym)=k2; Isym2(k2)=i; ksym2(i)=0
        IPsym1(Nsym)=k1
 
-! ... check for the same orbitals rest of 2-st configuration:      
-       
+! ... check for the same orbitals rest of 2-st configuration:
+
        Do j = i+1,ne
         if(ksym2(j).eq.0) Cycle
         if(Lsym(Nsym).ne.Lsym2(j)) Cycle
         if(Msym(Nsym).ne.Msym2(j)) Cycle
         if(Jsym(Nsym).ne.Jsym2(j)) Cycle
         k2=k2+1; IPsym2(Nsym)=k2; Isym2(k2)=j; ksym2(j)=0
-       End do        
+       End do
 
       End do
 
       if(k2.ne.ne) Stop 'Det_breit: k2 <> ne '
 
-      Jdet=Isym1(1:ne);  kz1 = Isort(ne,Jdet) 
+      Jdet=Isym1(1:ne);  kz1 = Isort(ne,Jdet)
       Jdet=Isym2(1:ne);  kz2 = Isort(ne,Jdet)
 
 !----------------------------------------------------------------------
@@ -135,7 +135,7 @@
       Use dbsr_mult; Use nljm_orbitals
 
       Implicit none
-      Real(8) :: CA,CB	  
+      Real(8) :: CA,CB
       Integer, intent(in) :: is,js
       Integer :: i,j,i1,i2,j1,j2,k1,k2,idf,int,kz
       Integer, external :: Idet_fact, Incode_mult
@@ -157,7 +157,7 @@
          int = Incode_mult(1,k1,k2);  Call Iadd_zoef(CA*kz,int,idf)
         Case('M')
          int = Incode_mult(2,k1,k2);  Call Iadd_zoef(CA*kz,int,idf)
-       End Select     
+       End Select
 
       End do; End do
 
@@ -172,7 +172,7 @@
       Use dbsr_mult; Use nljm_orbitals
 
       Implicit none
-      Real(8) :: CA,CB	  
+      Real(8) :: CA,CB
       Integer :: i,j,i1,i2,k,k1,k2,is,idf,int,kz
       Integer, external :: Idet_fact, Incode_mult
 
@@ -194,7 +194,7 @@
          int = Incode_mult(1,k1,k2);  Call Iadd_zoef(CA*kz,int,idf)
         Case('M')
          int = Incode_mult(2,k1,k2);  Call Iadd_zoef(CA*kz,int,idf)
-       End Select     
+       End Select
 
        End do; End do
 

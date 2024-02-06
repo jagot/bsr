@@ -3,7 +3,7 @@
 !====================================================================
 !
 !   Factorizes bs matrix which is a transpose of overlap matrix sb,
-!   <B_i,B_j>,  with the correct boundary condition at r=0 
+!   <B_i,B_j>,  with the correct boundary condition at r=0
 !
 !   SUBROUTINES called:  dpbfa (from LINPACK)
 !
@@ -27,7 +27,7 @@
     end do
     bs(ks,1) = 1.d0
 
-!    CALL dpbfa(bs,ks,ns,ks-1,ierr)       
+!    CALL dpbfa(bs,ks,ns,ks-1,ierr)
 !    if (ierr /= 0 ) STOP 'facsb: dpbfa (LINPACK) failed'
 
     Call DPBTRF('U',ns,ks-1,bs,ks,ierr)

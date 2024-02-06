@@ -12,13 +12,13 @@
 !     where .  denotes bound orbital, i,j - channels.
 !
 !     < i | j > elements are ignored because we assume that target
-!     states are orthogonal. These elements are used to check this 
+!     states are orthogonal. These elements are used to check this
 !     orthogonality (see array 'to' in bsr_matrix).
 !
 !----------------------------------------------------------------------
 
       USE bsr_mat
-      USE cmdata  
+      USE cmdata
       USE spline_param; USE spline_orbitals; USE spline_galerkin
 
       Implicit none
@@ -28,7 +28,7 @@
 
 !----------------------------------------------------------------------
 
-       if(itype.ne.1) Stop ' O-data: itype <> 1 '                                  
+       if(itype.ne.1) Stop ' O-data: itype <> 1 '
 
         Do j=1,ncdata;  i=IPT(j)
 
@@ -43,7 +43,7 @@
          elseif(ic.lt.0.and.jc.gt.0) then            !   <i|.> ic
 
           io = -ic;  i1=io/ibo; i2=mod(io,ibo)
-          Call GET_V(i1,i2,v)  
+          Call GET_V(i1,i2,v)
           ich=iech(i1); ic = jc
           Call UPDATE_HV(ich,ic,ns,v,C)
 
@@ -55,9 +55,9 @@
           Call GET_V(j1,j2,w)
           ich = iech(i1); jch = iech(j1)
           v = v * C
-          Call UPDATE_HW(ich,jch,ns,v,w)         
+          Call UPDATE_HW(ich,jch,ns,v,w)
 
-         elseif(ic.lt.0.and.jc.eq.0) then           !    <i|j>         
+         elseif(ic.lt.0.and.jc.eq.0) then           !    <i|j>
 
           io = -ic;  i1=io/ibo; i2=mod(io,ibo)
 

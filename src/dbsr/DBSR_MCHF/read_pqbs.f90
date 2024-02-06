@@ -10,11 +10,11 @@
       Integer, intent(in) :: nu
       Integer :: i,j,k,ikp,ikq,ka,l,n,m,itype,nsw,ksw,mw,kp,kq
       Character(5) :: elw
-      Integer, external :: Ifind_orb_df 
+      Integer, external :: Ifind_orb_df
       Real(8), allocatable :: tw(:),pw(:),qw(:)
       Real(8) :: ee
 
-! ... read the written B-spline grid and check if it matches 
+! ... read the written B-spline grid and check if it matches
 
       rewind(nu)
       read(nu) itype,nsw,ksw
@@ -30,21 +30,21 @@
       if(ksq.ne.kq) k=0
       Do i=1,ns+ks; if(k.eq.0) Exit
        if(abs(t(i)-tw(i)).lt.1.d-12) Cycle; k=0; Exit
-      End do    
+      End do
 
-! ... read radial functions and converte them if necessary 
+! ... read radial functions and converte them if necessary
 
     1 read(nu,end=2) elw,mw,ee
       pw=0.d0; read(nu) pw(1:mw)
       qw=0.d0; read(nu) qw(1:mw)
       Call EL_NLJK(elw,n,ka,l,j,i)
       m = Ifind_orb_df(n,ka,i)
-      if(m.eq.0) go to 1    ! skip that orbital 
+      if(m.eq.0) go to 1    ! skip that orbital
 
       if(k.eq.1) then
        mbs(m)=mw
-       p(:,1,m) = pw 
-       p(:,2,m) = qw 
+       p(:,1,m) = pw
+       p(:,2,m) = qw
        e(m)=ee
        write(log,'(a,a,a)') ebs(m),' - read from file ', trim(AF_inp)
       else

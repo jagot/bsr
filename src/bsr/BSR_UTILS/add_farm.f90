@@ -20,14 +20,14 @@
 !     utility 'h_targb'
 !
 !     Call:   add_farm       (without arguments)
-!  
+!
 !---------------------------------------------------------------------
 
       Use target; Use channels
 
       Implicit real(8) (a-h,o-z)
 
-      Character(80) :: AS 
+      Character(80) :: AS
 
       Real(8), allocatable :: E(:)
       Real(8), allocatable :: OM(:,:)
@@ -51,7 +51,7 @@
       if(.not.EX) then
        Stop  ' No target file: run H_targb first '
       else
-       nut=1; Open(nut,file='target'); 
+       nut=1; Open(nut,file='target');
        Call R_target(nut)
        Call R_channels(nut)
        close(nut)
@@ -138,7 +138,7 @@
       Close(iout); Close(inp,status='delete')
       Deallocate(ichl,lchl,matr,mati)
       end if
- 
+
 !----------------------------------------------------------------------
 ! ... K-matrices     ( itype = 1)
 
@@ -154,10 +154,10 @@
       Open(inp,file=fname(itype),FORM='UNFORMATTED')
       Open(iout,file=zname(itype),POSITION='APPEND')
 
-      
+
    1  read (inp,end=11) IS,IL,IP,ne,nchan,(ichl(i),lchl(i),i=1,nchan)
       IP = (-1)**IP
-     
+
 ! ... find partial wave:
 
       ii=0
@@ -194,7 +194,7 @@
       Open(iout,file=zname(itype),POSITION='APPEND')
 
    2  read(inp,'(a)',end=22) AS
-      if(AS(21:21).ne.'.') go to 2 
+      if(AS(21:21).ne.'.') go to 2
       read (AS,*) IS,IL,IP,ee,phase
       IP = (-1)**IP
 
@@ -247,10 +247,10 @@
 !======================================================================
 !     provide screen information about add_farm utility
 !----------------------------------------------------------------------
-       
+
       Character :: A
 
-      Call get_command_argument(1,A)  
+      Call get_command_argument(1,A)
 
       if(A.ne.'?'.and.A.ne.'!') Return
 
@@ -275,12 +275,11 @@
 '                                                                ',&
 '     Call as:   add_farm    [klsp=..]                           ',&
 '                                                                ',&
-'     klsp - index of partial wave, if calculations for one partial wave only,',& 
-'            in this case output is recorded in zarm.om_par file ',& 
+'     klsp - index of partial wave, if calculations for one partial wave only,',&
+'            in this case output is recorded in zarm.om_par file ',&
 '                                                                ',&
 '                                                                '
       Stop ' '
 
       End Subroutine inf_add_farm
 
-                                                                 

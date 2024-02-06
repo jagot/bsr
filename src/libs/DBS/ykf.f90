@@ -25,15 +25,15 @@
 ! ... create the numerical values of the orbitals on the grid
 
 
-      Call BVALUE_grid(ksp,p(1,1,j1),yp1,pbsp) 
-      Call BVALUE_grid(ksq,p(1,2,j1),yq1,qbsp) 
-      Call BVALUE_grid(ksp,p(1,1,j2),yp2,pbsp) 
-      Call BVALUE_grid(ksq,p(1,2,j2),yq2,qbsp) 
+      Call BVALUE_grid(ksp,p(1,1,j1),yp1,pbsp)
+      Call BVALUE_grid(ksq,p(1,2,j1),yq1,qbsp)
+      Call BVALUE_grid(ksp,p(1,1,j2),yp2,pbsp)
+      Call BVALUE_grid(ksq,p(1,2,j2),yq2,qbsp)
 
 ! ... set up the array of yk(i) = INTEGRAL [(1/r)fc1(r)fc2(r)*B_i(r)]
 
       yr = grw*grm*(yp1*yp2+yq1*yq2)
- 
+
       Call Vinty_pq(ks,yr,yk,bsp)
 
       c = - (2*k+1);   yk = c*yk
@@ -46,7 +46,7 @@
 
       Call ZINTYm (nv,ks,ks,ks,bsp,bsp,yr,ns,a2)
 
-      c = -k*(k+1);  a = a1 + c*a2     
+      c = -k*(k+1);  a = a1 + c*a2
 
 ! ... boundary conditions:   ???
 
@@ -57,7 +57,7 @@
 
       Do i=1,ns
        yk(i) = yk(i) - C * a(i,ns)
-      End do 
+      End do
 
       a1(1:ns-2,1:ns-2) = a(2:ns-1,2:ns-1)
 

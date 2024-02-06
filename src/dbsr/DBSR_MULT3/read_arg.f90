@@ -1,13 +1,13 @@
 !======================================================================
-      Subroutine Read_arg 
+      Subroutine Read_arg
 !======================================================================
 !     read arguments from command line and check default settings
 !----------------------------------------------------------------------
-      Use dbsr_mult 
+      Use dbsr_mult
 
       Implicit none
-      Integer :: iarg, kpol_old 
-      Character(1) :: ktype_old 
+      Integer :: iarg, kpol_old
+      Character(1) :: ktype_old
       Logical :: EX
 
 ! ... open log-file:
@@ -30,7 +30,7 @@
       Open(nu1,file=AF1)
       Call get_command_argument(2,AF2);  Call Check_file(AF2)
       Open(nu2,file=AF2)
-      
+
 ! ... define the type of calculations:
 
       Call get_command_argument(3,AF)
@@ -41,7 +41,7 @@
 
 ! ... New - ?
 
-      AF_bnk(10:11) = AF(1:2) 
+      AF_bnk(10:11) = AF(1:2)
 
       if(iarg.ge.4)  Call get_command_argument(4,AF_bnk)
       Inquire (file=AF_bnk, exist=EX)
@@ -62,7 +62,7 @@
       Open(nua,form='UNFORMATTED',status='SCRATCH')
       Open(nud,form='UNFORMATTED',status='SCRATCH')
       Open(nur,file=AF_res,form='UNFORMATTED')
- 
+
       End Subroutine Read_arg
 
 

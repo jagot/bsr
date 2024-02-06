@@ -3,11 +3,11 @@
 !======================================================================
 !     processing of Rk(Sk)-integrals from the module 'c_data'
 !     for given multipole index "k" and "itype",
-!     e.i. requires only one rkb array in module DBS_integrals 
+!     e.i. requires only one rkb array in module DBS_integrals
 !----------------------------------------------------------------------
       Use c_data;         Use DBS_grid
       Use dbsr_ci;        Use DBS_orbitals_pq
-     
+
       Implicit none
       Integer, intent(in) :: k,itype
       Integer :: i,j, i1,i2, j1,j2, ic,jc
@@ -29,7 +29,7 @@
         Case(4);             S = rk_qpqp(i1,j1,i2,j2,k)
         Case(5);             S = sk_ppqq_pq(i1,j1,i2,j2,k)
         Case(6);             S = sk_pqqp_pq(i1,j1,i2,j2,k)
-        Case default;  Stop 'Rk_data: unknown type of intgrals'      
+        Case default;  Stop 'Rk_data: unknown type of intgrals'
        End select
 
        SS = Cdata(i)*S

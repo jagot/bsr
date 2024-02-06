@@ -1,15 +1,15 @@
 !======================================================================
       Subroutine Write_target_jj_example(nut)
 !======================================================================
-!     write target information to file 'nut'  
+!     write target information to file 'nut'
 !----------------------------------------------------------------------
       Implicit none
       Integer, intent(in) :: nut
 
       rewind(nut)
-      write(nut,'(a)') 'title:' 
+      write(nut,'(a)') 'title:'
       write(nut,'(80(''-''))')
-      write(nut,'(a)') 'nz    = ...       !   nuclear charge' 
+      write(nut,'(a)') 'nz    = ...       !   nuclear charge'
       write(nut,'(a)') 'nelc  = ...       !   number of electrons'
       write(nut,'(80(''-''))')
       write(nut,'(a)') 'ntarg = ...       !   number of target states'

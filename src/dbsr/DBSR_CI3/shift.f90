@@ -4,16 +4,16 @@
 !     fine-turning of interaction matrix by shifting the configuration
 !     energies. List of shifting configurations are given in input file
 !     (name.inp_ci) as:
-!     
+!
 !     shift:
 !     met  S  unit  jot1  jot2
-!     
+!
 !     At the moment, one option: shifting all atomic configuration
 !     states (ACS) with the same "pure" configuration.
 !----------------------------------------------------------------------
       Use dbsr_ci
       Use conf_jj
-        
+
       Implicit none
       Integer :: ic,j, jot1,jot2
       Real(8) :: S
@@ -48,7 +48,7 @@
          shift(ic) = shift(ic) + S
         End do
        End do
-      
+
       Case default
        Stop 'Stop in read_shift: unknoun case '
       End Select

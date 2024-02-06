@@ -1,5 +1,5 @@
 !======================================================================
-      Subroutine Read_arg 
+      Subroutine Read_arg
 !======================================================================
 !     read arguments from command line and check default settings
 !----------------------------------------------------------------------
@@ -19,7 +19,7 @@
       Call Read_iarg('jort'  ,jort  )
 
       if(klsp.ne.0) klsp1=klsp
-      if(klsp2.lt.klsp1) klsp2=klsp1 
+      if(klsp2.lt.klsp1) klsp2=klsp1
 
 ! ... define the operators under consideration:
 
@@ -38,8 +38,8 @@
 
       write(pri,'(/a,i3/)') ' Max.multipole index =',mk
 !      if(jort.lt.0) &
-!      write(pri,'(/a)') 'jort=-1  -  full orthogonality'  
+!      write(pri,'(/a)') 'jort=-1  -  full orthogonality'
 !      if(jort.eq.0) &
- !     write(pri,'(/a)') 'jort= 0  -  full non-orthogonality'  
+ !     write(pri,'(/a)') 'jort= 0  -  full non-orthogonality'
 
       End Subroutine Read_arg

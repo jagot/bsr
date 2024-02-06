@@ -16,7 +16,7 @@
 !       ------------------------
 !      /     |     |       |    \
 !   FACDYK  YVAL  VINTY  QUADR  dgbtrs(LAPACK) or dgbsl(LINPACK)
-!     |                         
+!     |
 !   dgbfa(LALINPACK)
 !---------------------------------------------------------------------
       USE spline_param

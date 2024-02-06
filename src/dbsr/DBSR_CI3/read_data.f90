@@ -3,24 +3,24 @@
 !======================================================================
 !     read input parameters for given case
 !----------------------------------------------------------------------
-      Use dbsr_ci;             Use DBS_grid 
-      Use conf_jj;             Use DBS_orbitals_pq   
-      Use orb_jj;              Use DBS_nuclear       
-      Use c_data;              Use DBS_gauss         
-                               
+      Use dbsr_ci;             Use DBS_grid
+      Use conf_jj;             Use DBS_orbitals_pq
+      Use orb_jj;              Use DBS_nuclear
+      Use c_data;              Use DBS_gauss
+
       Implicit none
-      Integer :: i,j,l,k,m,n,i1,i2,iarg 
+      Integer :: i,j,l,k,m,n,i1,i2,iarg
       Real(8) :: S,s1,s2
       Integer, external :: Icheck_file
       Real(8), external :: QUADR_pq, OBS
 
       Call Read_name(name)
       if(name.eq.'?'.or.len_trim(name).eq.0) Call Inf_dbsr_ci
-   
+
 !----------------------------------------------------------------------
 ! ... input data file if any:
 
-      AF_inp = trim(name)//'.inp_ci'  
+      AF_inp = trim(name)//'.inp_ci'
       inp=Icheck_file(AF_inp)
       if(inp.gt.0) open(inp,file=AF_inp)
 
@@ -42,7 +42,7 @@
       Open(nuw,file=AF_bsw,status='OLD',form='UNFORMATTED')
 
 ! ... bnk-file (angular coefficients):
- 
+
       AF_bnk = trim(name)//'.bnk'
       i = Icheck_file(AF_bnk)
       if(i.eq.0)  then; AF_bnk=BF_bnk; i = Icheck_file(BF_bnk); end if
@@ -86,9 +86,9 @@
       Call Read_iarg('kpol2',kpol2)
 
       Call Read_rarg('eps_c',eps_c)
-      
+
 !----------------------------------------------------------------------
-! ... read obitals and configurations along with expansion coeff's: 
+! ... read obitals and configurations along with expansion coeff's:
 
       write(pri,'(/a/)')   'c-file data: '
       Call Read_core_jj(nuc)
@@ -108,10 +108,10 @@
       Call alloc_DBS_gauss
       Call def_Vnucl
 
-!      Call alloc_DBS_integrals(ns,ks,0,mpol,4)   ???  
+!      Call alloc_DBS_integrals(ns,ks,0,mpol,4)   ???
       Call alloc_Rk_integrals(ns,ks,0,mpol,4)
       if(mbreit.gt.0) &
-      Call alloc_Sk_integrals(ns,ks,0,mpol,2)       
+      Call alloc_Sk_integrals(ns,ks,0,mpol,2)
 
       write(pri,'(/a,f5.2)') 'Z        =  ', Z
       write(pri,'(a,a)')     'nuclear  =  ', nuclear
@@ -134,7 +134,7 @@
 
       Call Read_pqbs(nuw)
 
-! ... check the correspondence between c- and bsw-files: 
+! ... check the correspondence between c- and bsw-files:
 
       j = 0
       Do i = 1,nwf
@@ -143,9 +143,9 @@
         j = j + 1
       End do
       if(j.gt.0) Stop 'no correspondence between c- and w- files'
-    
 
-! ... the < p | p > values 
+
+! ... the < p | p > values
 
       Do i=1,nbf;  Do j=1,i
         S=QUADR_pq(i,j,0)
@@ -156,13 +156,13 @@
 
 ! ... one-electron overlaps:
 
-      if(debug.gt.0) then 
+      if(debug.gt.0) then
        write(pri,'(/a,f10.8/)') &
 	       'Non-trivial one-elctron overlaps: > eps_ovl = ',eps_ovl
        Do i=1,nbf
        Do j=i,nbf
         if(kbs(i).ne.kbs(j)) Cycle
-        S = OBS(i,j)  
+        S = OBS(i,j)
         if(i.ne.j.and.abs(S).gt.eps_ovl) &
          write(pri,'(''<'',a5,''|'',a5,''>='',4E15.5)') &
          EBS(i),EBS(j),OBS(i,j)
@@ -173,5 +173,5 @@
       end if
 
       End Subroutine Read_data
-    
+
 

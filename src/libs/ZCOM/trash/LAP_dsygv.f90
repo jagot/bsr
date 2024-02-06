@@ -2,7 +2,7 @@
       Subroutine LAP_DSYGV(job,UPLO,n,m,A,C,eval,info)
 !======================================================================
 !
-!     Call LAPACK procedure DSYEV to obtain the eigenvalues (eval) and 
+!     Call LAPACK procedure DSYEV to obtain the eigenvalues (eval) and
 !     eigenvectors (A) for generalized problem A S = E C S
 !
 !     job = 'N' - compute eigenvalues only

@@ -8,9 +8,9 @@
       Implicit none
       Integer :: ich,jch, i,k,m, mycase
 
-      m = 0  ! memory 
-      if(allocated(hcc)) Deallocate(hcc,ACF,htarg,otarg,x,icc) 
-      if(allocated(hcb)) Deallocate(hcb,hbb,icb,ibb) 
+      m = 0  ! memory
+      if(allocated(hcc)) Deallocate(hcc,ACF,htarg,otarg,x,icc)
+      if(allocated(hcb)) Deallocate(hcb,hbb,icb,ibb)
 
       if(nch.eq.0.or.ns.eq.0) Return
 
@@ -23,7 +23,7 @@
       Do ich=1,nch
       Do jch=1,ich
        if(nprocs.gt.1) then
-        k=k+1; if(k.gt.nprocs-1) k=1  
+        k=k+1; if(k.gt.nprocs-1) k=1
        end if
 !       if(myid.eq.0) then; icc(ich,jch) = k; icc(jch,ich) = k; end if  ???
        if(myid.ne.k) Cycle
@@ -38,7 +38,7 @@
       m = m + 2*(ns*ns*iicc + nch*nch*(mk+1) + 2*ich + ns*ns)
       hcc=0.d0; acf=0.d0; htarg=0.d0; otarg=0.d0
 
-      if(npert.gt.0) then  
+      if(npert.gt.0) then
 
       Allocate(icb(nch,npert));  icb = 0
       m = m + 2 * nch * nch
@@ -49,7 +49,7 @@
         k=k+1; if(k.gt.nprocs-1) k=1
        end if
 !       if(myid.eq.0) then; icb(ich,jch) = k; end if ???
-       if(myid.ne.k) Cycle 
+       if(myid.ne.k) Cycle
        i=i+1; icb(ich,jch) = i
        my_channel(ich) = 1
        my_channel(nch+jch) = 1
@@ -67,7 +67,7 @@
         k=k+1; if(k.gt.nprocs-1) k=1
        end if
 !       if(myid.eq.0) then; ibb(ich,jch) = k; ibb(jch,ich) = k; end if
-       if(myid.ne.k) Cycle 
+       if(myid.ne.k) Cycle
        i=i+1; ibb(ich,jch) = i; ibb(jch,ich) = i
        my_channel(nch+ich) = 1
        my_channel(nch+jch) = 1
@@ -117,17 +117,17 @@
 
 !----------------------------------------------------------------------
 !     next routines updates the matrixes;
-!     we have coefficients only for the half of the matrix,  
+!     we have coefficients only for the half of the matrix,
 !     so then we need   h -->  h + h*   for diagonal blocks
 !----------------------------------------------------------------------
 
 !======================================================================
       Subroutine UPDATE_HX(ich,jch,nsb,ksb,d,sym)
 !======================================================================
-!     update channel block 
+!     update channel block
 !
 !     sym = 's'  -->  symmetric banded upper-column storage mode
-!     sym = 'n'  -->  non-symmetric band matrix  
+!     sym = 'n'  -->  non-symmetric band matrix
 !     sym = 'x'  -->  non-symmetric full matrix
 !----------------------------------------------------------------------
       Use bsr_mat
@@ -173,7 +173,7 @@
       if(ich.ge.jch) then
        hcc(:,:,ij) = hcc(:,:,ij) + x
       else
-       hcc(:,:,ij) = hcc(:,:,ij) + TRANSPOSE(x) 
+       hcc(:,:,ij) = hcc(:,:,ij) + TRANSPOSE(x)
       end if
 
       End Subroutine UPDATE_HX
@@ -182,7 +182,7 @@
 !======================================================================
       Subroutine UPDATE_HL(ich,jch,nsb,ksb,d,c)
 !======================================================================
-!     update symmetric banded matrix in lower-column storage 
+!     update symmetric banded matrix in lower-column storage
 !----------------------------------------------------------------------
       Use bsr_mat
 
@@ -219,7 +219,7 @@
      Integer, intent(in) :: ic,jc
      Real(8), intent(in) :: c
      Integer :: ij
-      
+
       ij = ibb(ic,jc)
       if(ij.le.0) Return
       hbb(ij) = hbb(ij) + c
@@ -262,13 +262,13 @@
      if(nsb.ne.ns) Stop 'UPDATE_HW: nsb /= ns'
 
      ij = imycase(ich,jch);  if(ij.le.0) Return
- 
+
      Do i=1,ns;  Do j=1,ns;  x(i,j)=v(i)*w(j);  End do;  End do
 
      if(ich.ge.jch) then
       hcc(:,:,ij) = hcc(:,:,ij) + x
      else
-      hcc(:,:,ij) = hcc(:,:,ij) + TRANSPOSE(x) 
+      hcc(:,:,ij) = hcc(:,:,ij) + TRANSPOSE(x)
      end if
 
      End Subroutine UPDATE_HW
@@ -300,7 +300,7 @@
 !======================================================================
      Subroutine Target_h(ich,jch,C,CC)
 !=====================================================================
-!    update target interaction and overlap matrixes, by considering 
+!    update target interaction and overlap matrixes, by considering
 !    the terms with structure <kl|k'l> <target|H|target'>
 !
 !    It is not pure target states, but the basis states before |kl>,
@@ -389,7 +389,7 @@
 !======================================================================
       Subroutine Target_new
 !======================================================================
-!     new target energies 
+!     new target energies
 !----------------------------------------------------------------------
       Use bsr_mat,    only: htarg
       Use channel,    only: nch,iptar,ELC
@@ -408,7 +408,7 @@
 
       Allocate(itarget(ntarg,ntarg), htarget(ntarg,ntarg), eval(ntarg))
 
-      k=0; itarget=0; htarget=0.d0 
+      k=0; itarget=0; htarget=0.d0
       Do it=1,ntarg; htarget(it,it)=Etarg(it); End do
 
 ! ... find target matrix:
@@ -452,15 +452,15 @@
       Call LAP_DSYEV('N','L',ntarg,ntarg,htarget,eval,info)
 
       if(info.ne.0) Call Stop_mpi(0,info,'DSYEV failed in Target_new')
-      
+
       ilen=LEN_TRIM(AF_new)+1
       AF=AF_new; write(AF(ilen:),'(a,i3.3)') '.',klsp
 
-      write(pri,'(/a/)') 'new target energies:'      
+      write(pri,'(/a/)') 'new target energies:'
       open(nun,file=AF)
       Do i=1,ntarg
-       write(nun,'(3F20.8)') eval(i),Etarg(i),eval(i)-Etarg(i)       
-       write(pri,'(3F20.8)') eval(i),Etarg(i),eval(i)-Etarg(i)       
+       write(nun,'(3F20.8)') eval(i),Etarg(i),eval(i)-Etarg(i)
+       write(pri,'(3F20.8)') eval(i),Etarg(i),eval(i)-Etarg(i)
       End do
 
       Deallocate(eval,itarget,htarget)

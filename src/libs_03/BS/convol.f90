@@ -3,7 +3,7 @@
 !======================================================================
 !
 !    convolutes the rkb(i,j,i',j') array of spline integrals
-!    with density matrix d(:,:) 
+!    with density matrix d(:,:)
 !
 !    results in array a
 !
@@ -322,8 +322,8 @@
 
 
       else
-       
-        Stop ' CONVOL:  unknown case ' 
+
+        Stop ' CONVOL:  unknown case '
 
       end if
 

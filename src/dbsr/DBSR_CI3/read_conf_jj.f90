@@ -36,11 +36,11 @@
 
       Call Decode_cj;  Call Test_cj
 
-      i = Iadd_cfg_jj('detect') 
+      i = Iadd_cfg_jj('detect')
       if(i.lt.0) Stop 'R_confj: repeated states?'
 
       go to 1
-    2 Continue     
+    2 Continue
 
       if(nsymt.gt.nsymt0.or.nsymc.gt.nsymc0) &
        Stop 'bnk-fail is not complete; run bj first!'
@@ -58,7 +58,7 @@
 
       Do i=1,ncfg
        it=IS_term(IS_order(i))
-       if(IT_state1(it).eq.0) IT_state1(it)=i; IT_state2(it)=i 
+       if(IT_state1(it).eq.0) IT_state1(it)=i; IT_state2(it)=i
       End do
 
 !----------------------------------------------------------------------

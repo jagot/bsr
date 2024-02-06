@@ -1,9 +1,9 @@
 !======================================================================
       Subroutine Collect_ACF
 !======================================================================
-      Use MPI 
-      Use bsr_mat 
-      Use conf_LS, only: nclosd  
+      Use MPI
+      Use bsr_mat
+      Use conf_LS, only: nclosd
 
       Implicit none
       Integer :: status(MPI_STATUS_SIZE)
@@ -32,7 +32,7 @@
        End do
       End do
 
-      if(myid.ne.0) Return  
+      if(myid.ne.0) Return
 
 ! ... Symmetrize the ACF - matrix:
 
@@ -51,7 +51,7 @@
        j=0; Do i=1,nclosd; j=j+2*(4*lbs(i)+2); End do
        Do i=1,nch; ACF(i,i,0)=ACF(i,i,0)+j;  End do
 
-! ... Check coefficients for k = 0: 
+! ... Check coefficients for k = 0:
 
        write(pri,'(/a,i3/)') 'Asymptotic coefficients: mk = ',mk
        write(pri,'(a,i3/)') 'For k=0 should be equal to 2*nelc = ', &
@@ -71,9 +71,9 @@
        if(SUM(acf(:,:,k)).eq.0) Cycle
        write(pri,'(a,i2)') 'k = ',k
        ij = 0
-       Do i=1,nch; Do j = 1,i      
+       Do i=1,nch; Do j = 1,i
         if(abs(acf(i,j,k)).lt.eps_acf) Cycle
-        i1=ij*20+1; i2=i1+19 
+        i1=ij*20+1; i2=i1+19
         write(line(i1:i2),'(2i4,E12.3)') j,i,acf(i,j,k)
         ij=ij+1
         if(ij.lt.5) Cycle
@@ -116,7 +116,7 @@
        End do
       End do
 
-      End Subroutine Collect_otarg  
+      End Subroutine Collect_otarg
 
 
 !======================================================================
@@ -147,4 +147,4 @@
        End do
       End do
 
-      End Subroutine Collect_htarg  
+      End Subroutine Collect_htarg

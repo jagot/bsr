@@ -2,7 +2,7 @@
       SUBROUTINE P_derive(i,j)
 !----------------------------------------------------------------------
 !
-!     Define the derivative of the P_i: 
+!     Define the derivative of the P_i:
 !
 !     (d - 1/r) P_i   -->  (r^1/2)(d - 1/2r)) F_i  --> P_j
 !
@@ -11,7 +11,7 @@
       USE RADIAL, L => lro, N => nro, KS => kro, EL => ero, MX => mro
 
       IMPLICIT NONE
-      Integer(4), INTENT(in) :: i,j      
+      Integer(4), INTENT(in) :: i,j
       Integer(4) :: m
       Real(8), Allocatable, Dimension(:) :: A,B,C,D
       Real(8) :: S
@@ -88,19 +88,19 @@
 !     TO EVALUATE THE SPLINE.
 !
 !----------------------------------------------------------------------
-      
+
       IMPLICIT REAL(8) (A-H,O-Z)
-      
+
       DIMENSION X(*),Y(*),B(*),C(*),D(*)
- 
+
       NM1 = N-1
       IF ( N .LT. 2 ) RETURN
       IF ( N .LT. 3 ) GO TO 50
- 
+
 ! ... SET UP TRIDIAGONAL SYSTEM
 
 ! ... B = DIAGONAL, D = OFFDIAGONAL, C = RIGHT HAND SIDE.
- 
+
       D(1) = X(2) - X(1)
       C(2) = (Y(2) - Y(1))/D(1)
       Do I = 2, NM1
@@ -109,10 +109,10 @@
          C(I+1) = (Y(I+1) - Y(I))/D(I)
          C(I) = C(I+1) - C(I)
       End do
- 
+
 ! ... END CONDITIONS. THIRD DERIVATIVES AT  X(1)  AND  X(N)
 ! ... OBTAINED FROM DIVIDED DIFFERENCES
- 
+
       B(1) = -D(1)
       B(N) = -D(N-1)
       C(1) = 0.
@@ -122,27 +122,27 @@
       C(N) = C(N-1)/(X(N)-X(N-2)) - C(N-2)/(X(N-1)-X(N-3))
       C(1) = C(1)*D(1)**2/(X(4)-X(1))
       C(N) = -C(N)*D(N-1)**2/(X(N)-X(N-3))
- 
+
 !     FORWARD ELIMINATION
- 
+
    15 Do I = 2, N
          T = D(I-1)/B(I-1)
          B(I) = B(I) - T*D(I-1)
          C(I) = C(I) - T*C(I-1)
       End do
- 
+
 ! ... BACK SUBSTITUTION
- 
+
       C(N) = C(N)/B(N)
       Do IB = 1, NM1
          I = N-IB
          C(I) = (C(I) - D(I)*C(I+1))/B(I)
       End do
- 
+
 ! ... C(I) IS NOW THE SIGMA(I) OF THE TEXT
- 
+
 ! ... COMPUTE POLYNOMIAL COEFFICIENTS
- 
+
       B(N) = (Y(N) - Y(NM1))/D(NM1) + D(NM1)*(C(NM1) + 2.*C(N))
       Do I = 1, NM1
          B(I) = (Y(I+1) - Y(I))/D(I) - D(I)*(C(I+1) + 2.*C(I))

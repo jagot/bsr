@@ -1,7 +1,7 @@
 !=======================================================================
       MODULE spline_orbitals
 !=======================================================================
-!     contains description of atomic orbitals 
+!     contains description of atomic orbitals
 !     and their B-spline representation
 !-----------------------------------------------------------------------
       Implicit none
@@ -11,27 +11,27 @@
       Integer :: mbf = 0               ! max. number of orbitals
       Integer :: nbf = 0               ! current number of orbitals
       Integer :: ibf = 512             ! initial prediction of mbf
-      Integer :: jbf = 124             ! incriment for mbf  
-    
+      Integer :: jbf = 124             ! incriment for mbf
+
       Integer, allocatable :: nbs(:)   !  n-values
       Integer, allocatable :: lbs(:)   !  l-values
       Integer, allocatable :: kbs(:)   !  set numbers
       Integer, allocatable :: mbs(:)   !  number of splines
       Integer, allocatable :: iech(:)  !  additional pointer
-    
+
       CHARACTER(4), allocatable :: ebs(:) ! spectroscopic notation
 
 ! ... B-spline expansion coefficients:
 
-      Real(8), allocatable :: PBS(:,:) 
+      Real(8), allocatable :: PBS(:,:)
 
-! ... convolution with B-overlaps: 
+! ... convolution with B-overlaps:
 
-      Real(8), allocatable :: QBS(:,:) 
+      Real(8), allocatable :: QBS(:,:)
 
 ! ... orbital orthogonality and AFTER conditions
 
-      Integer :: JBORT = 1        
+      Integer :: JBORT = 1
       Integer, allocatable :: IBORT(:,:)
 
 ! ... one-electron overlaps:
@@ -49,7 +49,7 @@
       Integer :: nv_ch = 0
       Real(8), allocatable :: V_ch(:,:)
       Integer, allocatable :: i_ch(:),j_ch(:)
-      Integer, parameter   :: ib = 2**15  
+      Integer, parameter   :: ib = 2**15
       Real(8) :: eps_v = 1.d-10
 
       END MODULE spline_orbitals
@@ -71,16 +71,16 @@
       CHARACTER(4), allocatable :: abs(:)
 
       if(m.le.0) then
-      
+
        if(Allocated(NBS)) &
          Deallocate (NBS,LBS,KBS,MBS,iech,EBS,IBORT,PBS,QBS,OBS)
          nbf = 0;  mbf = 0
-      
+
       elseif(m.gt.mbf.and.nbf.eq.0) then
 
-       if(Allocated(nbs)) & 
+       if(Allocated(nbs)) &
           Deallocate (nbs,lbs,kbs,mbs,iech,ebs,IBORT,PBS,QBS,OBS)
-       
+
        mbf = m
        Allocate(nbs(mbf),lbs(mbf),kbs(mbf),ebs(mbf),mbs(1:mbf), &
                 iech(1:mbf),IBORT(1:mbf,1:mbf),PBS(1:ns,1:mbf), &
@@ -133,21 +133,21 @@
       end if
 
       m_borb = 6*mbf + mbf*mbf + 2 * (2*ns*mbf + mbf*mbf) + 6
-       
+
       END SUBROUTINE allocate_bsorb
 
 
 !=======================================================================
       Integer function Ifind_bsorb(n,l,k)
 !=======================================================================
-! ... find the orbital nlk in the list, returns 0 if no such orbitals      
+! ... find the orbital nlk in the list, returns 0 if no such orbitals
 !-----------------------------------------------------------------------
       USE spline_orbitals
 
       Implicit none
       Integer, intent(in) :: n,l,k
       Integer :: i
-      
+
       Ifind_bsorb=0
 
       Do i=1,nbf
@@ -163,8 +163,8 @@
 !=======================================================================
       Integer function Jfind_bsorb(n,l,k)
 !=======================================================================
-! ... find the orbital nlk in the list, stops if no such orbitals      
-!-----------------------------------------------------------------------     
+! ... find the orbital nlk in the list, stops if no such orbitals
+!-----------------------------------------------------------------------
       USE spline_orbitals
 
       Implicit none

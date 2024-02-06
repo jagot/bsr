@@ -46,7 +46,7 @@
 
       Integer :: mhm               ! size of interaction matrix
       Integer :: khm               ! number of solutions in new basis (nsol)
-      Integer :: nsol              ! number of solutions in channel basis 
+      Integer :: nsol              ! number of solutions in channel basis
       Integer :: ksol              ! number of channel eigenvalues
       Integer :: diag_ovl          ! flag for nonzero ovl.blocks
 

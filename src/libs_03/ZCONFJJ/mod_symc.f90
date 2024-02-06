@@ -8,15 +8,15 @@
       Integer :: nsymc = 0       ! number of symmmetries
       Integer :: msymc = 0       ! current dimension of the list
       Integer :: isymc = 10000   ! initial dimension
-      Integer :: jsymc = 10      ! average size of one symc. 
-      Integer :: ksymc = 0       ! max.dimension of all symc.s 
-      Integer :: lsymc = 0       ! last element 
-      
-      Integer(1), allocatable :: JT_conf(:)   
-      Integer(1), allocatable :: no_conf(:)   
-      Integer,    allocatable :: ip_conf(:)   
-      Integer(1), allocatable :: iq_conf(:)   
-      Integer(1), allocatable :: kn_conf(:)   
+      Integer :: jsymc = 10      ! average size of one symc.
+      Integer :: ksymc = 0       ! max.dimension of all symc.s
+      Integer :: lsymc = 0       ! last element
+
+      Integer(1), allocatable :: JT_conf(:)
+      Integer(1), allocatable :: no_conf(:)
+      Integer,    allocatable :: ip_conf(:)
+      Integer(1), allocatable :: iq_conf(:)
+      Integer(1), allocatable :: kn_conf(:)
 
 ! ... IC_term(ic) - gives for given configuration 'ic' the range of corr.
 !                   terms it1,it2 - first and final position in the
@@ -92,7 +92,7 @@
 !----------------------------------------------------------------------
       Use symc_list
 
-      Implicit none 
+      Implicit none
       Integer :: no, JT, i,j,ip
       Integer :: iq(*),kn(*)
 
@@ -134,15 +134,15 @@
 !======================================================================
       Subroutine Get_symc(ic,JT,no,nn,kn,ln,jn,iq,in)
 !======================================================================
-!     extract configuration 'ic' from symc_list                   
+!     extract configuration 'ic' from symc_list
 !----------------------------------------------------------------------
       Use symc_list
 
-      Implicit none 
+      Implicit none
       Integer :: ic,JT,no,i,ip
       Integer, Dimension(*) :: nn,kn,ln,jn,iq,in
       Integer, External :: l_kappa, j_kappa
-      
+
       if(ic.le.0.or.ic.gt.nsymc) Stop 'Get_symc: <ic> is out of range'
 
       JT = JT_conf(ic)
@@ -156,7 +156,7 @@
        nn(i) = i
        if(iq_conf(ip).lt.0) nn(i)=i-1
        in(i) = 0
-      End do 
+      End do
 
       End Subroutine Get_symc
 
@@ -164,10 +164,10 @@
 !======================================================================
       Integer Function Get_no(iconf)
 !======================================================================
-!     number of shells in configuration 'iconf'                   
+!     number of shells in configuration 'iconf'
 !----------------------------------------------------------------------
       Use symc_list
-      Implicit none 
+      Implicit none
       Integer :: iconf
       Get_no = no_conf(iconf)
       End Function Get_no
@@ -176,10 +176,10 @@
 !======================================================================
       Integer Function Get_jot(iconf)
 !======================================================================
-!     number of shells in configuration 'iconf'                   
+!     number of shells in configuration 'iconf'
 !----------------------------------------------------------------------
       Use symc_list
-      Implicit none 
+      Implicit none
       Integer :: iconf
       Get_jot = JT_conf(iconf)
       End Function Get_jot
@@ -190,7 +190,7 @@
 !======================================================================
 !     read symc_list from unit "nu"
 !----------------------------------------------------------------------
-      Use symc_list 
+      Use symc_list
 
       Implicit none
       Integer :: nu,i
@@ -200,11 +200,11 @@
                                          iq_conf,kn_conf)
       Allocate(JT_conf(nsymc),no_conf(nsymc),ip_conf(nsymc), &
                iq_conf(lsymc),kn_conf(lsymc))
-      read(nu) (JT_conf(i),i=1,nsymc) 
-      read(nu) (no_conf(i),i=1,nsymc) 
-      read(nu) (ip_conf(i),i=1,nsymc) 
-      read(nu) (iq_conf(i),i=1,lsymc) 
-      read(nu) (kn_conf(i),i=1,lsymc) 
+      read(nu) (JT_conf(i),i=1,nsymc)
+      read(nu) (no_conf(i),i=1,nsymc)
+      read(nu) (ip_conf(i),i=1,nsymc)
+      read(nu) (iq_conf(i),i=1,lsymc)
+      read(nu) (kn_conf(i),i=1,lsymc)
       msymc = nsymc; jsymc = lsymc/nsymc + 1; ksymc = lsymc
 
       End Subroutine read_symc
@@ -215,18 +215,18 @@
 !======================================================================
 !     dummy read symc_list from unit "nu"
 !----------------------------------------------------------------------
-      Use symc_list 
+      Use symc_list
 
       Implicit none
       Integer :: nu,i,j,n,l
       Integer(1) :: k
 
       read(nu) n,l
-      read(nu) (k,i=1,n) 
-      read(nu) (k,i=1,n) 
-      read(nu) (j,i=1,n) 
-      read(nu) (k,i=1,l) 
-      read(nu) (k,i=1,l) 
+      read(nu) (k,i=1,n)
+      read(nu) (k,i=1,n)
+      read(nu) (j,i=1,n)
+      read(nu) (k,i=1,l)
+      read(nu) (k,i=1,l)
 
       End Subroutine dummy_symc
 
@@ -236,17 +236,17 @@
 !======================================================================
 !     write symc_list to unit "nu"
 !----------------------------------------------------------------------
-      Use symc_list 
+      Use symc_list
 
       Implicit none
       Integer :: nu,i
 
       write(nu) nsymc,lsymc
-      write(nu) (JT_conf(i),i=1,nsymc) 
-      write(nu) (no_conf(i),i=1,nsymc) 
-      write(nu) (ip_conf(i),i=1,nsymc) 
-      write(nu) (iq_conf(i),i=1,lsymc) 
-      write(nu) (kn_conf(i),i=1,lsymc) 
+      write(nu) (JT_conf(i),i=1,nsymc)
+      write(nu) (no_conf(i),i=1,nsymc)
+      write(nu) (ip_conf(i),i=1,nsymc)
+      write(nu) (iq_conf(i),i=1,lsymc)
+      write(nu) (kn_conf(i),i=1,lsymc)
       Deallocate (JT_conf,no_conf,ip_conf,iq_conf,kn_conf)
       msymc = 0; jsymc = lsymc/nsymc + 1; ksymc = 0; lsymc=0
 

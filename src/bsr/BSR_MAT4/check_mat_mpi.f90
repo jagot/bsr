@@ -21,19 +21,19 @@
       if(pri.gt.0) write(pri,'(/a,f6.3)') &
          'Check overlap matrix for big overlaps > s_ovl =',s_ovl
       line = ' '
-!----------------------------------------------------------------------      
+!----------------------------------------------------------------------
 ! ... analize the overlap matrix:
 
-      Do ich=1,nch; it = iptar(ich) 
+      Do ich=1,nch; it = iptar(ich)
        i1=1; if(it.gt.1) i1=ip_tar(it-1)+1; i2=ip_tar(it)
-      Do jch=1,ich; jt = iptar(jch) 
+      Do jch=1,ich; jt = iptar(jch)
        j1=1; if(jt.gt.1) j1=ip_tar(jt-1)+1; j2=ip_tar(jt)
 
        if(ich.eq.jch) Cycle
 
        ij=imycase(ich,jch); if(ij.eq.0) Cycle
 
-       Do ii=i1,i2; i=ip_phy(ii); is=ip_sub(ii)  
+       Do ii=i1,i2; i=ip_phy(ii); is=ip_sub(ii)
        Do jj=j1,j2; j=ip_phy(jj); js=ip_sub(jj)
 
         if(lch(ich).ne.lbs(j)) Cycle
@@ -42,7 +42,7 @@
         v(1:ns) = matmul (hcc(1:ns,1:ns,ij),pbs(1:ns,i))
         S = SUM(v(:)*pbs(:,j)); S = abs(S)
 
-        i = ipch(ich)                                          
+        i = ipch(ich)
         if(S.gt.S_ovl.and.IBORT(i,js).ne.0) then
          met = met + 1
 
@@ -65,10 +65,10 @@
        if(ncp.eq.0) Cycle
 
        Do kp=1,npert
-       
+
         i = imycase(ich,kp); if(i.eq.0) Cycle; v(1:ns)=hcb(1:ns,i)
-        
-        Do ii=1,nphys_sub; is=jp_sub(ii)  
+
+        Do ii=1,nphys_sub; is=jp_sub(ii)
          if(lch(ich).ne.lbs(is)) Cycle
          S = SUM(v(:)*pbs(:,is)); S = abs(S)
          if(S.gt.S_ovl.and.pri.gt.0) &
@@ -87,7 +87,7 @@
          go to 1
 
         End do ! over phys.orb
-       End do ! over perturbers               	
+       End do ! over perturbers
 
       End do ! over ich
 
@@ -101,11 +101,11 @@
           if(pri.gt.0) &
            write(pri,'(f10.5,2i5,a)') &
              S, i,j , ' - suspicious perturber overlap '
-          is = ippert(i)-ippert(i-1)          
-          js = ippert(j)-ippert(j-1)          
+          is = ippert(i)-ippert(i-1)
+          js = ippert(j)-ippert(j-1)
           ii=is; if(js.lt.is) ii=js
           i1=ippert(ii-1)+1+ipconf(nch)
-          i2=ippert(ii)+ipconf(nch)         
+          i2=ippert(ii)+ipconf(nch)
           WC(i1:i2) = 0.d0
           if(pri.gt.0) &
           write(pri,'(a,i5,a)') 'pertuber',ii,'  was removed !!!'
@@ -128,7 +128,7 @@
 
       Call MPI_BCAST(net,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
 
-      if(net.eq.0) Return 
+      if(net.eq.0) Return
 
       if(myid.eq.0) met=net
       Do i = 1,met

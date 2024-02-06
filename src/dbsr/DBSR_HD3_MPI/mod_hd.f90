@@ -1,7 +1,7 @@
 !=====================================================================
-      Module dbsr_hd      
+      Module dbsr_hd
 !=====================================================================
-!     Contains common variable and arrays 
+!     Contains common variable and arrays
 !---------------------------------------------------------------------
       Use blacs
 
@@ -45,29 +45,29 @@
       Integer :: mhm               ! size of interaction matrix
       Integer :: nhm               ! size of interaction matrix
       Integer :: khm               ! number of solutions
-      Integer :: nsol              ! # channel eigenvalues 
-      Integer :: ksol              ! # channel eigenvalues 
+      Integer :: nsol              ! # channel eigenvalues
+      Integer :: ksol              ! # channel eigenvalues
       Integer :: diag_ovl          ! flag for nonzero ovl.blocks
 
 ! ... main global arrays:
 
       Real(8), allocatable :: a(:,:)      ! interaction matrix
-      Integer              :: desca(dlen_) 
+      Integer              :: desca(dlen_)
       Real(8), allocatable :: b(:,:)      ! overlap matrices
-      Integer              :: descb(dlen_) 
-      Real(8), allocatable :: z(:,:)      ! solutions        
-      Integer              :: descz(dlen_) 
+      Integer              :: descb(dlen_)
+      Real(8), allocatable :: z(:,:)      ! solutions
+      Integer              :: descz(dlen_)
       Real(8), allocatable :: v(:)        ! solution vector
-      Integer              :: descv(dlen_) 
+      Integer              :: descv(dlen_)
 
       Real(8), allocatable :: eval(:)     ! eigenvalues
 
       Real(8), allocatable :: bb(:,:)     ! new basis
       Real(8), allocatable :: bval(:)     ! basis eigenvalues
-      Integer, allocatable :: ipsol(:)    ! pointer on channel blocks 
-                                          ! in new basis 
+      Integer, allocatable :: ipsol(:)    ! pointer on channel blocks
+                                          ! in new basis
       Integer, allocatable :: isol(:)     ! pointer on main configuration
-    
+
       Real(8), allocatable :: WMAT(:,:)   ! surface amplitudes
 
 ! ... Bloch operator:
@@ -78,16 +78,16 @@
 ! ... working arrays
 
       Real(8), allocatable :: add(:,:)
-      Integer              :: descadd(dlen_) 
+      Integer              :: descadd(dlen_)
       Real(8), allocatable :: adp(:,:)
-      Integer              :: descadp(dlen_) 
+      Integer              :: descadp(dlen_)
 
       Real(8), allocatable :: cc(:,:),w(:)
       Integer              :: parms(5)
       Real(8)              :: rparms(5)
 
-! ... exp.energies: 
-    
+! ... exp.energies:
+
       Integer :: iexp = 0, iiexp = 0
       Real(8), allocatable :: E_exp(:)
       Integer, allocatable :: ip_exp(:)
@@ -97,7 +97,7 @@
       Integer, parameter :: nlab = 64
       Character(nlab) ::  Lab
 
-! ... additonal output: 
+! ... additonal output:
 
       Integer :: iwt   = -1       ! print channel weights
       Real(8) :: cwt   = -0.01d0  ! cut of for weights' printing

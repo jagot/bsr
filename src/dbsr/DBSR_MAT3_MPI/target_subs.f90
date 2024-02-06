@@ -1,7 +1,7 @@
 !======================================================================
       Subroutine Target_h(ich,jch,C,CC)
 !======================================================================
-!     update target interaction and overlap matrixes, by considering 
+!     update target interaction and overlap matrixes, by considering
 !     the terms wjp structure <kl|k'l> <target|H|target'>
 !
 !     It is not pure target states, but the basis states before |kl>,
@@ -79,7 +79,7 @@
 !======================================================================
       Subroutine Target_norm
 !======================================================================
-!     normalized target energies 
+!     normalized target energies
 !----------------------------------------------------------------------
       Use dbsr_mat
 
@@ -110,7 +110,7 @@
 !======================================================================
       Subroutine Target_new1
 !======================================================================
-!     new target energies 
+!     new target energies
 !----------------------------------------------------------------------
       Use dbsr_mat
 
@@ -121,7 +121,7 @@
 
       Allocate(htarget(ntarg,ntarg), evalt(ntarg))
 
-      htarget=0.d0 
+      htarget=0.d0
       Do it=1,ntarg; htarget(it,it)=Etarg(it); End do
 
 ! ... target matrix:
@@ -150,11 +150,11 @@
       i=LEN_TRIM(AF_new)+1
       AF=AF_new; write(AF(i:),'(a,i3.3)') '.',klsp
 
-      write(pri,'(/a/)') 'new target energies:'      
+      write(pri,'(/a/)') 'new target energies:'
       open(nun,file=AF)
       Do i=1,ntarg
-       write(nun,'(3F20.8,5x,a)') evalt(i),Etarg(i),evalt(i)-Etarg(i),trim(BFT(i))       
-       write(pri,'(3F20.8,5x,a)') evalt(i),Etarg(i),evalt(i)-Etarg(i),trim(BFT(i))       
+       write(nun,'(3F20.8,5x,a)') evalt(i),Etarg(i),evalt(i)-Etarg(i),trim(BFT(i))
+       write(pri,'(3F20.8,5x,a)') evalt(i),Etarg(i),evalt(i)-Etarg(i),trim(BFT(i))
       End do
 
       Deallocate(evalt,htarget)
@@ -165,7 +165,7 @@
 !======================================================================
       Subroutine Target_new2
 !======================================================================
-!     new target energies 
+!     new target energies
 !----------------------------------------------------------------------
       Use dbsr_mat
 
@@ -179,7 +179,7 @@
 
       Allocate(htarget(ntarg,ntarg), otarget(ntarg,ntarg), evalt(ntarg))
 
-      htarget=0.d0; otarget=0.d0  
+      htarget=0.d0; otarget=0.d0
       Do it=1,ntarg; htarget(it,it)=Etarg(it); otarget(it,it)=1.d0; End do
 
 ! ... target matrix:
@@ -213,15 +213,15 @@
 
       Call LAP_DSYGV('V','L',ntarg,ntarg,htarget,otarget,evalt,info)
       if(info.ne.0) Stop 'DSYGV failed in Target_new2'
-      
+
       i=LEN_TRIM(AF_new)+1
       AF=AF_new; write(AF(i:),'(a,i3.3)') '.',klsp
 
-      write(pri,'(/a/)') 'new target energies:'      
+      write(pri,'(/a/)') 'new target energies:'
       open(nun,file=AF)
       Do i=1,ntarg
-       write(nun,'(3F20.8,5x,a)') evalt(i),Etarg(i),evalt(i)-Etarg(i),BFT(i)       
-       write(pri,'(3F20.8,5x,a)') evalt(i),Etarg(i),evalt(i)-Etarg(i),BFT(i)       
+       write(nun,'(3F20.8,5x,a)') evalt(i),Etarg(i),evalt(i)-Etarg(i),BFT(i)
+       write(pri,'(3F20.8,5x,a)') evalt(i),Etarg(i),evalt(i)-Etarg(i),BFT(i)
       End do
 
       Deallocate(evalt,htarget,otarget)

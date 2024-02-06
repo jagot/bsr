@@ -3,10 +3,10 @@
 !======================================================================
 !     incode the integral
 !----------------------------------------------------------------------
- 
+
       Implicit none
       Integer :: ib4=2**4, ib5=2**5, ib6=2**6
-      Integer, intent(in) :: met,k,I1,I2,I3,I4       
+      Integer, intent(in) :: met,k,I1,I2,I3,I4
       if(max(i1,i2,i3,i4).ge.ib5) Stop 'Incode_INT: i >= 2**5'
       if(met.gt.ib4) Stop 'Incode_INT: met >= 2**4'
       if(k.gt.ib6) Stop 'Incode_INT: met >= 2**6'
@@ -20,7 +20,7 @@
 !======================================================================
 !     decode the integral
 !----------------------------------------------------------------------
- 
+
       Implicit none
       Integer :: ib4=2**4, ib5=2**5
       Integer, Intent(in)  :: int
@@ -41,12 +41,12 @@
 !======================================================================
 !     decode the integral
 !----------------------------------------------------------------------
- 
+
       Implicit none
       Integer :: ib4=2**4, ib20=2**20
       Integer, Intent(in)  :: int
       Integer, Intent(out) :: met
 
-      met = int/ib20; met = mod(met,ib4) 
+      met = int/ib20; met = mod(met,ib4)
 
       End Subroutine Decode_met

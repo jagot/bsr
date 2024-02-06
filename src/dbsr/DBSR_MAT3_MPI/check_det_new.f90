@@ -1,7 +1,7 @@
 !======================================================================
       Subroutine Check_det_new(kd,N1,N2,iext,ipbs)
 !======================================================================
-!     evaluate or expend the total overlap determinant [n1,n2]^iext 
+!     evaluate or expend the total overlap determinant [n1,n2]^iext
 !     so that to extract one-electron overlaps with continuum orbitals;
 !     ipbs - pointer to the continuum orbtal
 !----------------------------------------------------------------------
@@ -26,13 +26,13 @@
 
       if(j1.eq.0.and.j2.eq.0) then               ! no cont.orb
 
-       S = VDET(kd,N1,N2)**iext;  Call Iadd_ndets(0,0,S)  
+       S = VDET(kd,N1,N2)**iext;  Call Iadd_ndets(0,0,S)
 
       elseif(kd.eq.1) then                      ! <kl|nl>
 
        if(iext.gt.1) Stop ' Check_det: iext > 1'
-          
-       io=IBORT(N1(1),N2(1));  
+
+       io=IBORT(N1(1),N2(1));
        if(io.ne.0) Call Iadd_ndets(io,0,1.d0)
 
       elseif(j1.gt.0.and.j2.eq.0) then           ! <kl ...|...>
@@ -42,7 +42,7 @@
         Do j=1,kd
          io=IBORT(N1(j1),N2(j)); if(io.eq.0) Cycle
          Call Shift(kd,j1,N1,N3)                     !   move out do loop?
-         Call Shift(kd,j ,N2,N4)               
+         Call Shift(kd,j ,N2,N4)
          S = VDET(kd-1,N3,N4)*(-1)**(j1+j)
          Call Iadd_ndets(io,0,S)
         End do
@@ -62,14 +62,14 @@
       elseif(j1.gt.0.and.j2.gt.0) then          !  < kl ... | ... kl>
 
        if(iext.gt.1) Stop 'Check_det: iext > 1 for continuum orbitals'
-       
+
         kd1=kd-1
         Do j=1,kd
-       
+
          Call Shift(kd,j1,N1,N3)   !   move out do loop?
          Call Shift(kd, j,N2,N4)
          io=IBORT(N1(j1),N2(j))
-       
+
          if(j.eq.j2) then
           if(io.eq.0) Stop 'Check_det: <k1|k2>=0 - ?'
           S=VDET(kd1,N3,N4)*(-1)**(j1+j2)
@@ -85,7 +85,7 @@
            Call Iadd_ndets(io,jo,S)
           End do
          end if
-       
+
         End do
 
       end if

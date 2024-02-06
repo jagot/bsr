@@ -8,12 +8,12 @@
 !     nub, nui - file units for old and new results, respectively
 !----------------------------------------------------------------------
 
-      Use param_br 
+      Use param_br
 
       Use symc_list_LS
       Use symt_list_LS, ij8 => ij
       USE conf_LS
- 
+
       Implicit none
 
       Integer, intent(in) :: nuc,nub,pri
@@ -35,13 +35,13 @@
 ! ... define new symmetries from c-file:
 
       rewind(nuc); parity=0
-      Do 
+      Do
        read(nuc,'(a)') CONFIG
        if(CONFIG(1:1).eq.'*') Exit
        if(CONFIG(5:5).ne.'(') Cycle
        read(nuc,'(a)') COUPLE
-       Call Decode_c;  Call TEST_C; i=Iadd_cfg_LS() 
-      End do  
+       Call Decode_c;  Call TEST_C; i=Iadd_cfg_LS()
+      End do
 
       write(pri,'(/a/)')  ' c-fail (cfg.inp) contains: '
       write(pri,'(a,i5)') ' number of atomic states   = ',NCFG
@@ -50,7 +50,7 @@
 
 !----------------------------------------------------------------------
 ! ... IT_stat defines if input contains given term:
- 
+
       if(Allocated(IT_stat)) Deallocate(IT_stat)
                              Allocate(IT_stat(nsymt))
       IT_stat=0; Do i=1,ncfg; IT_stat(IC_term(i))=1; End do
@@ -84,13 +84,13 @@
 
       Do i=1,ii; read(nub) IT_oper(:,i); End do
 
-! ... define strong orthogonality (repeated at every call?):      
+! ... define strong orthogonality (repeated at every call?):
 
        Do ic = 1,nsymc
-        Call Get_symc_LS(ic,Ltotal1,Stotal1,no1,nn1,ln1,iq1,kn1) 
+        Call Get_symc_LS(ic,Ltotal1,Stotal1,no1,nn1,ln1,iq1,kn1)
        Do jc = 1,ic
-        Call Get_symc_LS(jc,Ltotal2,Stotal2,no2,nn2,ln2,iq2,kn2) 
-       
+        Call Get_symc_LS(jc,Ltotal2,Stotal2,no2,nn2,ln2,iq2,kn2)
+
         Call Jort_conf(joper)
 
         Do ik=IC_term1(ic),IC_term2(ic);  it=IT_sort(ik)
@@ -102,7 +102,7 @@
 
        End do
        End do
-			 
-      
+
+
        End Subroutine RR_conf
 

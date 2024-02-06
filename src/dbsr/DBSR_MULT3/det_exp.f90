@@ -1,21 +1,21 @@
 !======================================================================
-      Subroutine Pre_det_exp 
+      Subroutine Pre_det_exp
 !======================================================================
 !     defines the determinant expansions and write the information
-!     in scratch files 'nud' 
+!     in scratch files 'nud'
 !-----------------------------------------------------------------------
       Use dbsr_mult
       Use conf_jj;  Use symc_list; Use symt_list
       Use nljm_orbitals;  Use term_exp
 
-      Implicit none 
+      Implicit none
       Integer :: i,j, k,kt,kdt,ktm, it,it1,it2, JW,JQ
       Real(8) :: S
       Integer, allocatable :: IP_kt(:)
       Integer, allocatable :: IP_det(:,:), JTs(:,:),JTi(:,:),IPs(:,:)
       Real(8), allocatable :: C_det(:)
       Real(8), allocatable :: CC_det(:,:)
-      Integer, external :: Ndets_jq, Jterm, mj_value 
+      Integer, external :: Ndets_jq, Jterm, mj_value
 
       Call Alloc_nljm(ne,msh)
 
@@ -44,7 +44,7 @@
        if(Allocated(JTs)) Deallocate(JTs); Allocate(JTs(no,ktm))
        if(Allocated(JTi)) Deallocate(JTi); Allocate(JTi(no,ktm))
        if(Allocated(IPs)) Deallocate(IPs); Allocate(IPs(no,ktm))
-       kt = 0       
+       kt = 0
        Do k =it1,it2
         it=JP_term(k); if(IT_need(it).eq.0) Cycle
         kt = kt + 1; IP_kt(kt) = it
@@ -67,10 +67,10 @@
        Call Det_expn_jj;  if(kdt.eq.0) Stop 'Pre_detexp: kdt = 0'
 
 ! ... record results (from 'nua' to 'nud'):
- 
-       write(nud) ic,kt,kdt             
+
+       write(nud) ic,kt,kdt
        write(nud) IP_kt(1:kt)
-       rewind(nua)      
+       rewind(nua)
        Allocate(CC_det(kt,kdt),IP_det(ne,kdt))
        Do i = 1,kdt;  read(nua) IP_det(:,i),CC_det(:,i); End do
        write(nud) IP_det
@@ -90,12 +90,12 @@
       if(allocated(mj_orb)) Deallocate(mj_orb)
       Allocate(mj_orb(mj_max+1))
       Do i=1,mj_max+1;  mj_orb(i) = mj_value(i);  End do
-      
+
 
 CONTAINS
 
 !======================================================================
-      Subroutine Det_expn_jj  
+      Subroutine Det_expn_jj
 !======================================================================
 !     procedure of exaustion of all possible determinants for given
 !     configurations. The determinants and their coefficients
@@ -108,7 +108,7 @@ CONTAINS
       Real(8) :: C
       Real(8), external :: DETC_jq, Clebsh2
 
-      kdt=0; i=1; nd(i)=1              
+      kdt=0; i=1; nd(i)=1
     1 Call DET_sh_jq(jn(i),iq(i),nd(i),MJs(i),Idet(ipn(i)))
 
       if(i.eq.1) then
@@ -159,4 +159,4 @@ CONTAINS
 
       End Subroutine Det_expn_jj
 
-      End Subroutine Pre_det_exp 
+      End Subroutine Pre_det_exp

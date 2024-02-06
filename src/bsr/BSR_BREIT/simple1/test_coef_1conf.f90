@@ -1,5 +1,5 @@
 !=====================================================================
-!     PROGRAM   test_coef_ee_1conf                      
+!     PROGRAM   test_coef_ee_1conf
 !
 !               C O P Y R I G H T -- 2013
 !
@@ -7,23 +7,23 @@
 !                   email: oleg_zoi@yahoo.com
 !======================================================================
 !
-!    it is a debug program to check subroutine     "coef_1conf" 
-!    to generate angular coefficient for Breit_Pauli calculations 
-!    for one-configuration in case of orthogonal one-electron 
+!    it is a debug program to check subroutine     "coef_1conf"
+!    to generate angular coefficient for Breit_Pauli calculations
+!    for one-configuration in case of orthogonal one-electron
 !    radial functions
 !
 !----------------------------------------------------------------------
 !
-!    INPUT ARGUMENTS:  name  or   cfg=...  tab=...  
-!    
+!    INPUT ARGUMENTS:  name  or   cfg=...  tab=...
+!
 !----------------------------------------------------------------------
 !
-!    INPUT FILE:     AF_cfg    (default  - cfg.inp) 
+!    INPUT FILE:     AF_cfg    (default  - cfg.inp)
 !    OUTPUT FILES:   AF_tab    (default  - coef.tab)
-!    
-!---------------------------------------------------------------------     
+!
+!---------------------------------------------------------------------
 
-      Implicit none 
+      Implicit none
 
       Integer :: nuc=1; Character(40) :: AF_cfg = 'cfg.inp'
       Integer :: out=2; Character(40) :: AF_tab = 'coef.tab'
@@ -35,7 +35,7 @@
       Character(8*msh) :: CONFIG, COUPLE
       Real(8) :: C, eps_C = 1.d-7
       Integer :: i,j, ki,kj, k, ic, ncfg
-      Integer, external :: Idef_ncfg 
+      Integer, external :: Idef_ncfg
 
 ! ... result coefficients:
 
@@ -60,7 +60,7 @@
       rewind(nuc)
       Do ic = 1,ncfg
 
-      Do 
+      Do
        read(nuc,'(a)') CONFIG
        if(CONFIG(5:5).ne.'(') Cycle
        read(nuc,'(a)') COUPLE
@@ -75,7 +75,7 @@
 
       Call coef_ee_1conf(no,ln,iq,LS,kmax,coefs)
 
-      write(out,'(a)') trim(CONFIG) 
+      write(out,'(a)') trim(CONFIG)
       write(out,'(a)') trim(COUPLE)
       write(out,*)
 
@@ -84,13 +84,13 @@
         Do k=0,kmax
 		       C = coefs(i,j,k); if(abs(C).lt.eps_c) Cycle
          write(out,'(a,i2,a,a,a,a,a,f10.5)') &
-		            'F',k,'(',CONFIG(ki:ki+2),',',CONFIG(kj:kj+2),')=',C        
+		            'F',k,'(',CONFIG(ki:ki+2),',',CONFIG(kj:kj+2),')=',C
         End do
         if(i.eq.j) Cycle
         Do k=0,kmax
 		       C = coefs(j,i,k); if(abs(C).lt.eps_c) Cycle
          write(out,'(a,i2,a,a,a,a,a,f10.5)') &
-		            'G',k,'(',CONFIG(ki:ki+2),',',CONFIG(kj:kj+2),')=',C        
+		            'G',k,'(',CONFIG(ki:ki+2),',',CONFIG(kj:kj+2),')=',C
         End do
        End do; End do
        write(out,*)
@@ -107,7 +107,7 @@
        Implicit none
        Character(*), intent(in) :: CONFIG,COUPLE
        Integer :: no,nn(*),ln(*),iq(*),kn(*),LS(5,*)
-       Integer :: ii, k,i,j 
+       Integer :: ii, k,i,j
        Integer, external :: LA
 
        no=0; ii=LEN_TRIM(CONFIG); ii=ii/8;  k=1; j=2
@@ -161,7 +161,7 @@
 !====================================================================
 !     gives the value of L from spetroscopic symbol "a"
 !--------------------------------------------------------------------
-      Implicit none  
+      Implicit none
       Character, Intent(in) :: a
       Character(21) :: AS, AB
       Integer :: i
@@ -188,8 +188,8 @@
 !--------------------------------------------------------------------
       Implicit none
       Character(4), intent(in) :: EL
-      Integer, intent(out) :: n,l,k    
-      Integer :: i,j,ic, k1,k2  
+      Integer, intent(out) :: n,l,k
+      Integer :: i,j,ic, k1,k2
       Integer, external :: LA
 
       Character(61) :: ASET = &
@@ -233,7 +233,7 @@
       i=i+1
       if(i.le.4.and.j.le.3) go to 1
       if(n.ge.100.or.l.lt.0) then
-       write(*,*) 'EL4_nlk is fail to decode: ',EL 
+       write(*,*) 'EL4_nlk is fail to decode: ',EL
        Stop ' '
       end if
 
@@ -253,7 +253,7 @@
       Character(80) :: AS
       Integer, External :: IARGC
 
-      iarg = IARGC(); if(iarg.eq.0) Return 
+      iarg = IARGC(); if(iarg.eq.0) Return
       Do i=1,iarg
        Call GET_COMMAND_ARGUMENT(i,AS)
        if(INDEX(AS,'=').ne.0) Cycle
@@ -275,7 +275,7 @@
       Character(80) :: AS
       Integer, External :: IARGC
 
-      iarg = IARGC(); if(iarg.eq.0) Return 
+      iarg = IARGC(); if(iarg.eq.0) Return
       iname=LEN_TRIM(name)
       Do i=1,iarg
        Call GETARG(i,AS)

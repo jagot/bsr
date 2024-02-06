@@ -10,7 +10,7 @@
       write(nu,'(/70(''=''))')
       write(nu,'(12x,''< state'',i2,'' || (H-E) || state'',i2,''>'')') &
             ic1,ic2
-      write(nu,'(70(''=''))') 
+      write(nu,'(70(''=''))')
       Call Pri_conf (nu,ic1,0.d0);  write(nu,'(70(''-''))')
       Call Pri_conf (nu,ic2,0.d0);  write(nu,'(70(''-''))')
 
@@ -18,7 +18,7 @@
 
 !----------------------------------------------------------------------
 !                                                             Overlaps:
-      if(mo.eq.0) then 
+      if(mo.eq.0) then
        write(nu,'(/a/)') 'Overlaps:  no calculations!'
       elseif(mo.gt.0) then
        write(nu,'(/12x,'' Overlaps''/)')
@@ -26,7 +26,7 @@
       end if
 !---------------------------------------------------------------------
 !                                                 Coulomb interaction:
-      if(mi+mee.eq.0) then 
+      if(mi+mee.eq.0) then
        write(nu,'(/a/)') 'Coulomb interactions:  no calculations!'
       elseif(mi+mee.gt.0) then
        write(nu,'(/12x,'' Coulomb interaction''/)')
@@ -35,7 +35,7 @@
       end if
 !----------------------------------------------------------------------
 !                                              Orbit-orbit interaction:
-      if(moo.eq.0) then 
+      if(moo.eq.0) then
        write(nu,'(/a/)') ' Orbit-orbit:          no calculations!'
       elseif(moo.gt.0) then
        write(nu,'(/12x,''  Orbit-orbit interaction ''/)')
@@ -44,7 +44,7 @@
       end if
 !----------------------------------------------------------------------
 !                                               Spin-orbit interaction:
-      if(mso.eq.0) then 
+      if(mso.eq.0) then
        write(nu,'(/a/)') ' Spin-orbit:           no calculations!'
       elseif(mso.gt.0) then
        write(nu,'(/12x,''  Spin-orbit interaction ''/)')
@@ -52,7 +52,7 @@
       end if
 !----------------------------------------------------------------------
 !                                         Spin-other-orbit interaction:
-      if(msoo.eq.0) then 
+      if(msoo.eq.0) then
        write(nu,'(/a/)') ' Spin-other-orbit:     no calculations!'
       elseif(msoo.gt.0) then
        write(nu,'(/12x,''  Spin-other-orbit interaction ''/)')
@@ -61,7 +61,7 @@
       end if
 !---------------------------------------------------------------------
 !                                               Spin-spin interaction:
-      if(mso.eq.0) then 
+      if(mso.eq.0) then
        write(nu,'(/a/)') ' Spin-spin:            no calculations!'
       elseif(mso.gt.0) then
        write(nu,'(/12x,''  Spin-spin interaction ''/)')
@@ -71,7 +71,7 @@
       write(nu,'(70(''-'')/)')
 
       End SUBROUTINE PRI_COEF
- 
+
 
 !======================================================================
       SUBROUTINE PRI_COEF1 (nu,icoef,met,ic1,ic2)
@@ -125,7 +125,7 @@
       Write(A(1:23),'(a1,i2,a2,4(a3,a1))') &
         AI(int),k,' (',EL1,',',EL2,';',EL3,',',EL4,')'
       ia=23
- 
+
       Case default
         write(*,*) ' int=',int
         Stop ' Pri_coef: unknown case'
@@ -137,7 +137,7 @@
       if(idf.gt.0) then
        kd=KPF(idf);  ip=IPF(idf)
        Do i=1,kd
-        ns=mod(NPF(ip+i),ibf); ii=NPF(ip+i)/ibf; 
+        ns=mod(NPF(ip+i),ibf); ii=NPF(ip+i)/ibf;
         nd=KPD(ii); jp=IPD(ii)
         ia=ia+1; A(ia:ia)='<'
        Do j=1,nd
@@ -189,7 +189,7 @@
       Integer, intent(in) :: i_max
       Integer, intent(out) :: k1,k2
 
-      Integer :: i_min, i1,i2, m1,m2 
+      Integer :: i_min, i1,i2, m1,m2
       Real(8) :: zz, s,ss, s1,s2
 
       k1=0
@@ -308,4 +308,4 @@
 
 
 
- 
+

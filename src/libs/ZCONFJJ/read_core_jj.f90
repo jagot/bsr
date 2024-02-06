@@ -4,7 +4,7 @@
 !     reads the common closed shells list from GRASP c-file (unit nu)
 !--------------------------------------------------------------------
       Use conf_jj
-      
+
       Implicit none
       Integer, intent(in) :: nu
       Character(5) :: EL

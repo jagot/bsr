@@ -1,13 +1,13 @@
 !=======================================================================
       Subroutine br_dets
 !=======================================================================
-!     read the overlap determinants from INT_BNK (unit nub)  
+!     read the overlap determinants from INT_BNK (unit nub)
 !-----------------------------------------------------------------------
       Use mpi
-      Use det_list; Use def_list   
+      Use det_list; Use def_list
 
       Integer :: myid,ierr
-      
+
       Call MPI_COMM_RANK(MPI_COMM_WORLD, myid, ierr)
 
       Call MPI_BCAST(ndet,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
@@ -19,7 +19,7 @@
       Call MPI_BCAST(jmdef,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
 
       Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
-      if(ndet.eq.0) Return 
+      if(ndet.eq.0) Return
 
       if(myid.ne.0) then
        if(Allocated(KPD)) Deallocate(KPD,IPD,NPD,JPD)

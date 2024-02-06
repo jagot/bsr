@@ -6,7 +6,7 @@
 !     new entries (i,j,S) are just added to the list
 !----------------------------------------------------------------------
       Implicit none
-   
+
       Integer :: mndet = 0      !  max.number of new overlaps
       Integer :: nndet = 0      !  curent number of new overlaps
       Integer :: indet = 2**10  !  initial suggestion for mndet
@@ -37,18 +37,18 @@
       Integer, allocatable :: iarray(:)
 
       if(m.lt.0) then
-       if(Allocated(ADET)) Deallocate(ADET,IZOD,JZOD) 
+       if(Allocated(ADET)) Deallocate(ADET,IZOD,JZOD)
        mndet = indet; nndet = 0
        Allocate(ADET(mndet),IZOD(mndet),JZOD(mndet))
       elseif(m.eq.0) then
-       if(Allocated(ADET)) Deallocate(ADET,IZOD,JZOD) 
+       if(Allocated(ADET)) Deallocate(ADET,IZOD,JZOD)
        mndet = 0; nndet = 0
       elseif(m.gt.mndet) then
        if(nndet.le.0) then
-        if(Allocated(ADET)) Deallocate(ADET,IZOD,JZOD) 
+        if(Allocated(ADET)) Deallocate(ADET,IZOD,JZOD)
         mndet = m; nndet = 0
         Allocate(ADET(mndet),IZOD(mndet),JZOD(mndet))
-       else 
+       else
         Allocate(rarray(nndet)); rarray(1:nndet)=ADET(1:nndet)
         Deallocate(ADET); Allocate(ADET(m))
         ADET(1:nndet)=rarray(1:nndet); Deallocate(rarray)
@@ -76,7 +76,7 @@
       Real(8), intent(in) :: S
 
       if(abs(S).lt.eps_det) Return
-      
+
       if(nndet+1.gt.mndet) Call Allocate_ndets(mndet+indet)
 
       nndet = nndet + 1

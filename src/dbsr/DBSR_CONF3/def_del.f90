@@ -54,8 +54,8 @@
       End do
 
       Close(nud)
-      
-      End Subroutine def_del 
+
+      End Subroutine def_del
 
 
 !======================================================================

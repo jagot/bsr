@@ -6,7 +6,7 @@
       Implicit none
       Integer :: nu=6
       Character ::  name = ' '
-      
+
       Call Read_name(name)
       if(name.ne.'?') Return
       write(*,'(a)') &
@@ -29,6 +29,6 @@
 'max_ST  [-1]    - restiction on total S as (2S+1)                         ', &
 'kort    [-1]    - if > 0, the orthogonal conditions from cfg-files        ', &
 '                  are also in play                                        '
-      Stop 
-                                                                             
-      End Subroutine bsr_conf_inf                                             
+      Stop
+
+      End Subroutine bsr_conf_inf

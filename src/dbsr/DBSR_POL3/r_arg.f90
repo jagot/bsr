@@ -4,7 +4,7 @@
 !     read arguments, first from file unit 'nu, then from comand line
 !----------------------------------------------------------------------
       Use dbsr_pol
-          
+
       Implicit None
       Integer, intent(in) :: nu
       integer :: n

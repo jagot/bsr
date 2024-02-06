@@ -12,7 +12,7 @@
       Integer, external :: ITRA, l_kappa
       Real(8) :: b,c,bp,cp
 
-      SMU = 0.d0; S = 0.d0; if(L.lt.0) Return;  if(v.lt.0) Return 
+      SMU = 0.d0; S = 0.d0; if(L.lt.0) Return;  if(v.lt.0) Return
 
       la=l_kappa(ka); lc=l_kappa(kc)
       if(mod(la+lc+v,2).eq.0) Return
@@ -52,6 +52,6 @@
 
       end if
 
-      End Function smu 
+      End Function smu
 
 

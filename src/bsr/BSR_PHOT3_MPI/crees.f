@@ -1681,8 +1681,8 @@ C
         IF (DBLE(NHR).LE.EROR*2.5D6) GOTO 300
         WRITE (IOUT,3060) NHR,J
 CZOI
-        info = -1 
-        Return 
+        info = -1
+        Return
 
   300   CONTINUE
         IF (NOP.EQ.NCNL) GOTO 310
@@ -1694,8 +1694,8 @@ C
         IF (RF.GT.A1) WRITE (IOUT,3070) RF,J
 CZOI
         if(RF.gt.1000) then
-         info = -1 
-         Return 
+         info = -1
+         Return
         end if
 
   310   CONTINUE

@@ -1,7 +1,7 @@
 !======================================================================
       Subroutine Coul_wf(l,z,e,r,fc,gc,fcp,gcp,fcq,gcq, iout,ifail)
 !======================================================================
-!     Coulomb wavefunctions for different range of energies 
+!     Coulomb wavefunctions for different range of energies
 !
 !     l - orbital momentum
 !     z - effective charge
@@ -21,7 +21,7 @@
       Real(8), intent(out) :: fc,gc,fcp,gcp,fcq,gcq
 
       Real(8), parameter :: zero = 0.d0, one = 1.d0, two = 2.d0
-      Integer :: ll 
+      Integer :: ll
       Real(8) :: rho, eta, fl, k, kk, fac
 
 

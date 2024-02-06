@@ -4,7 +4,7 @@
 !   Gives the magnitude and derivative for continuuum Coulomb Function
 !   with k^2 = E, orbital momentum L, and charge Z in point R
 !
-!   Call: ZCOULFG90 
+!   Call: ZCOULFG90
 !---------------------------------------------------------------------
       Implicit none
       Integer, intent(in) :: L
@@ -12,13 +12,13 @@
       Real(8), intent(out) :: F,G,FP,GP
       Integer :: ifail
       Real(8) :: RHO,ETA,fl,K,AN, FC,FCP,GC,GCP
- 
+
       k = SQRT(E)
       fl = DBLE(l)
       eta = -z/k
       rho = k*r
       Call ZCOULFG90 (rho,eta,fl, f,g,fp,gp, 0,ifail)
- 
+
       AN=DSQRT(1.0/K)
 
       F = F  !*AN
@@ -61,7 +61,7 @@
 !   PRECISION:  RESULTS TO WITHIN 2-3 DECIMALS OF "MACHINE ACCURACY"
 !   IN OSCILLATING REGION X .GE. [ETA + SQRT{ETA**2 + XLM*(XLM+1)}]
 !   I.E. THE TARGET ACCURACY ACCUR SHOULD BE 100 * ACC WHERE ACC IS
-!   THE SMALLEST NUMBER WITH 1.+ACC.NE.1. 
+!   THE SMALLEST NUMBER WITH 1.+ACC.NE.1.
 !   if X IS SMALLER THAN [ ] ABOVE THE ACCURACY BECOMES STEADILY WORSE
 !  --------------------------------------------------------------------
 !   ERROR RETURNS                THE USER SHOULD TEST ifAIL ON EXIT
@@ -71,7 +71,7 @@
 !                   =  1 : F'/F DID NOT CONVERGE AFTER LIMIT ITERATIONS
 !                   =  2 : CF2 DID NOT CONVERGE AFTER LIMIT ITERATIONS
 !                   = -1 : X < SQRT(ACCUR)
-!                   = -2 : INCONSISTENCY IN ORDER VALUES (L-VALUES) 
+!                   = -2 : INCONSISTENCY IN ORDER VALUES (L-VALUES)
 !  --------------------------------------------------------------------
 !  MACHINE-DEPENDENT PARAMETERS:    ACCUR - SEE ABOVE
 !           SMALL - OFFSET FOR RECURSION = APPROX SQRT(MIN REAL NO.)
@@ -81,7 +81,7 @@
 !                 +  RCWFF       IN    CPC 11 (1976) 141-142
 !  FULL DESCRIPTION OF ALGORITHM IN    CPC 21 (1981) 297-314
 !  REVISED STANDARD  COULFG      IN    CPC 27 (1982) 147-166
-!  BACKGROUND MATERIAL IN J. COMP. PHYSICS 46 (1982) 171-188         
+!  BACKGROUND MATERIAL IN J. COMP. PHYSICS 46 (1982) 171-188
 !  CURRENT PROGRAM   COUL90  (FORTRAN77) SUPERCEDES THESE EARLIER ONES
 !  (WHICH WERE WRITTEN IN FORTRAN 4) AND ALSO BY INCORPORATING THE NEW
 !  LENTZ-THOMPSON ALGORITHM FOR EVALUATING THE FIRST CONTINUED FRACTION
@@ -102,7 +102,7 @@
       Real(8), intent(out) :: FC, GC, FCP, GCP
       Real(8) :: ACCUR, ACCH, SMALL,XLM, F,DCF, FCL,GCL,FJWKB,GJWKB, &
                  XI,ETAL,ETAK,RN,TK,DEN,PK,QK, P,Q,                  &
-                 WI, A,B,C,D, AR,AI,BR,BI,DR,DI,DP,DQ,               & 
+                 WI, A,B,C,D, AR,AI,BR,BI,DR,DI,DP,DQ,               &
                  ALPHA,BETA,GAMMA,OMEGA
       Integer :: IEXP, I
       Logical :: XLTURN
@@ -123,8 +123,8 @@
       if(KFN .NE. 0 .and. ETA .NE. ZERO) then
         WRITE (6,'(/a/)') ' COUL90: ETA <> 0  for kfn > 0'
         ifail = -3
-        RETURN    
-      end if  
+        RETURN
+      end if
 
 ! ... TEST RANGE OF X, EXIT if.LE.DSQRT(ACCUR) OR if NEGATIVE
 
@@ -138,13 +138,13 @@
 
 ! ... Check input data: XL
 
-      XLM = XL    
-      if( KFN.EQ.2 ) XLM = XL - HALF                                  
+      XLM = XL
+      if( KFN.EQ.2 ) XLM = XL - HALF
       if( XLM.LE.-ONE) then
-        ifAIL = -2                                                        
+        ifAIL = -2
         WRITE (6,'(/a/)') ' COUL90: PROBLEM WITH INPUT L VALUE'
         WRITE (6,'(a,I10,2D15.6)')' XLM = ', XLM
-        RETURN    
+        RETURN
       end if
 
 ! ... EVALUATE   F'(L,ETA,X) / F(L,ETA,X)  --> F
@@ -156,15 +156,15 @@
       XI   = ONE / X
       DEN  = ONE                            ! unnormalised F(XL,ETA,X)
       PK   = XLM + ONE
-      F    = ETA / PK  +  PK * XI                                             
+      F    = ETA / PK  +  PK * XI
       if(DABS(F).LT.SMALL)  F = SMALL
       RN   = ONE
       D    = ZERO
       C    = F
 
-! ... BEGIN LENTZ-THOMPSON PROCEDURE FOR F'/F: 
+! ... BEGIN LENTZ-THOMPSON PROCEDURE FOR F'/F:
 
-      Do I = 1,LIMIT             
+      Do I = 1,LIMIT
         QK = PK + ONE
         if( ETA .NE. ZERO  ) then
           ETAK = ETA / PK
@@ -173,7 +173,7 @@
         else
           TK   = (PK + QK) * XI
         end if
-        D   =  TK - RN * D          ! direct  ratio of B convergents    
+        D   =  TK - RN * D          ! direct  ratio of B convergents
         C   =  TK - RN / C          ! inverse ratio of A convergents
         if( DABS(C).LT.SMALL ) C = SMALL
         if( DABS(D).LT.SMALL ) D = SMALL
@@ -185,13 +185,13 @@
         if( DABS(DCF-ONE).LT.ACCUR )  EXIT
       End Do
 
-      if( DABS(DCF-ONE).ge.ACCUR ) then                                           
-       ifAIL =  1                                                        
+      if( DABS(DCF-ONE).ge.ACCUR ) then
+       ifAIL =  1
        WRITE(6,'(/a,I10,a/)') ' COUL90: F''/F HAS FAILED TO CONVERGE AFTER',&
                                 LIMIT,'  ITERATIONS '
        WRITE(6,'(a,4D12.3/)') ' F,DCF,PK,ACCUR =  ', &
-                                F,DCF,PK,ACCUR 
-       RETURN                                       
+                                F,DCF,PK,ACCUR
+       RETURN
       end if
 
 ! ...  EVALUATE P + I.Q  USING STEED'S ALGORITHM (NO ZEROS)
@@ -203,7 +203,7 @@
           GAMMA = GJWKB * OMEGA
           P     = F
           Q     = ONE
-      else                                       
+      else
           XLTURN = .FALSE.
           PK =  ZERO
           WI =  ETA + ETA
@@ -223,43 +223,43 @@
              Q  = Q  + DQ
              PK = PK + TWO
              AR = AR + PK
-             AI = AI + WI                                                   
-             BI = BI + TWO                                                  
-             D  = AR * DR - AI * DI + BR                                        
-             DI = AI * DR + AR * DI + BI                                        
-             C  = ONE / (D * D + DI * DI)                  
-             DR =  C * D                                                      
-             DI = -C * DI                                                     
-             A  = BR * DR - BI * DI - ONE                                       
-             B  = BI * DR + BR * DI                                             
+             AI = AI + WI
+             BI = BI + TWO
+             D  = AR * DR - AI * DI + BR
+             DI = AI * DR + AR * DI + BI
+             C  = ONE / (D * D + DI * DI)
+             DR =  C * D
+             DI = -C * DI
+             A  = BR * DR - BI * DI - ONE
+             B  = BI * DR + BR * DI
              C  = DP * A  - DQ * B
-             DQ = DP * B  + DQ * A                                              
+             DQ = DP * B  + DQ * A
              DP = C
              if( DABS(DP)+DABS(DQ).LT.(DABS(P)+DABS(Q)) * ACCUR ) EXIT
           End Do
-                                              
+
        if( DABS(DP)+DABS(DQ).GE.(DABS(P)+DABS(Q)) * ACCUR ) then
-        ifAIL =  2                                                        
+        ifAIL =  2
         WRITE(6,'(/a,i7,a/)') ' COUL90: CF2 HAS FAILED TO CONVERGE AFTER ',&
                                 LIMIT,' ITERATIONS'
         WRITE(6,'(a,1P4D17.7,D12.3/)')' P,Q,DP,DQ,ACCUR =  ', &
                                         P,Q,DP,DQ,ACCUR
-        RETURN                                              
+        RETURN
        end if
 
 
 ! ... SOLVE FOR FCL = F AT LAMBDA = XLM AND NORMALISING FACTOR OMEGA
 
       GAMMA   = (F - P) / Q
-      if( DABS(GAMMA) .LE. ONE )  then 
+      if( DABS(GAMMA) .LE. ONE )  then
          OMEGA  = DSQRT( ONE  +  GAMMA * GAMMA )
       else
          OMEGA  = DSQRT( ONE  +  ONE/(GAMMA*GAMMA)) * DABS(GAMMA)
-      end if 
+      end if
 
       OMEGA  = ONE / ( OMEGA * DSQRT(Q) )
 
-     end if   
+     end if
 
 ! ... RENORMALISE if SPHERICAL OR CYLINDRICAL BESSEL FUNCTIONS
 
@@ -269,7 +269,7 @@
       else if( KFN.EQ.2 ) then          ! cylindrical Bessel functions
         ALPHA = HALF * XI
         BETA  = DSQRT( XI / ASIN(one))! sqrt(2/pi)
-      else                              
+      else
         ALPHA = ZERO                    ! kfn = 0,   Coulomb functions
         BETA  = ONE
       end if
@@ -286,13 +286,13 @@
 
       FC  = FCL
       GC  = GCL
-      GCP = GCL * (P - Q/GAMMA - ALPHA) 
+      GCP = GCL * (P - Q/GAMMA - ALPHA)
       FCP = FCL * (F - ALPHA)
 
-      END SUBROUTINE ZCOULFG90                                                              
+      END SUBROUTINE ZCOULFG90
 
 !======================================================================
-      SUBROUTINE  JWKB90 (X,ETA,XL, FJWKB,GJWKB, IEXP)            
+      SUBROUTINE  JWKB90 (X,ETA,XL, FJWKB,GJWKB, IEXP)
 !======================================================================
 !   COMPUTES JWKB APPROXIMATIONS TO COULOMB FUNCTIONS  FOR XL .GE. 0.
 !   AS MODifIED BY BIEDENHARN ET AL. PHYS REV 97 (1955) 542-554
@@ -302,40 +302,40 @@
 !  --------------------------------------------------------------------
       Implicit none
       Real(8), intent(in)  :: X,ETA,XL
-      Real(8), intent(out) :: FJWKB,GJWKB 
+      Real(8), intent(out) :: FJWKB,GJWKB
       Integer, intent(out) :: IEXP
       Real(8) :: GHH,XLL,HLL,HL,SL,RL,GH,PHI,PHI10
       Real(8), parameter :: ZERO = 0.d0, HALF = 0.5d0, RL35 = 35.d0, &
-                            ONE = 1.d0, SIX = 6.d0, TEN = 10.d0 
+                            ONE = 1.d0, SIX = 6.d0, TEN = 10.d0
 
-      GHH   =  X * (ETA + ETA - X)                                         
-      XLL   = DMAX1( XL * XL + XL, ZERO )                                   
+      GHH   =  X * (ETA + ETA - X)
+      XLL   = DMAX1( XL * XL + XL, ZERO )
 
       if( GHH + XLL .LE. ZERO )  RETURN
 
-      HLL  = XLL + SIX / RL35                                           
-      HL   = DSQRT(HLL)                                                 
-      SL   = ETA / HL + HL / X                                             
-      RL   = ONE + ETA * ETA / HLL                                         
-      GH   = DSQRT(GHH + HLL) / X                                         
+      HLL  = XLL + SIX / RL35
+      HL   = DSQRT(HLL)
+      SL   = ETA / HL + HL / X
+      RL   = ONE + ETA * ETA / HLL
+      GH   = DSQRT(GHH + HLL) / X
 
-      PHI  = X*GH - HALF*( HL*DLOG((GH + SL)**2 / RL) - DLOG(GH) )      
+      PHI  = X*GH - HALF*( HL*DLOG((GH + SL)**2 / RL) - DLOG(GH) )
 
-      if ( ETA.NE.ZERO ) PHI = PHI - ETA * DATAN2(X*GH, X-ETA)         
+      if ( ETA.NE.ZERO ) PHI = PHI - ETA * DATAN2(X*GH, X-ETA)
 
-      PHI10 = - PHI * DLOG(EXP(ONE))                                                
-      IEXP  =  IDINT(PHI10)                                               
-  
+      PHI10 = - PHI * DLOG(EXP(ONE))
+      IEXP  =  IDINT(PHI10)
+
       if ( IEXP.GT.MAXEXPONENT(one)) then
-           GJWKB = TEN**(PHI10 - DFLOAT(IEXP))               
+           GJWKB = TEN**(PHI10 - DFLOAT(IEXP))
       else
-           GJWKB = DEXP(-PHI)                                
-           IEXP  = 0                                        
+           GJWKB = DEXP(-PHI)
+           IEXP  = 0
       end if
 
-      FJWKB = HALF / (GH * GJWKB)                                           
+      FJWKB = HALF / (GH * GJWKB)
 
-      END SUBROUTINE JWKB90                                                              
+      END SUBROUTINE JWKB90
 
 
 

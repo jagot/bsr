@@ -2,7 +2,7 @@
 !     UTILITY  tmb_omb
 !======================================================================
 !
-!     T-matrix  --> omega, omega_par 
+!     T-matrix  --> omega, omega_par
 !
 !     zarm.tmb  --> zarm.omb,  zarm.omb_par   (default names)
 !
@@ -39,7 +39,7 @@
 
 !----------------------------------------------------------------------
 
-      Call get_command_argument(1,AF)  
+      Call get_command_argument(1,AF)
 
       if(AF.eq.'?'.or. AF.eq.'!') then
 
@@ -56,10 +56,10 @@
 ! ... target information:
 
       Call Check_file(param)
-      Open(nup,file=param); 
+      Open(nup,file=param);
       Call R_target(nup)
       Call R_channels(nup)
-      np=ntarg; Call Read_ipar(nup,'np',np); Call Read_iarg('np',np)  
+      np=ntarg; Call Read_ipar(nup,'np',np); Call Read_iarg('np',np)
       ni=ntarg; Call Read_ipar(nup,'ni',ni); Call Read_iarg('ni',ni)
       Close(nup)
       ion = nz-nelc; zion=1.d0; if(ion.gt.1) zion=ion*ion
@@ -89,8 +89,8 @@
       read(nut,*) ((S1,S2,j=1,i),i=1,kopen)
       if(nopen.gt.kopen.and.nj.gt.0) read(nut,*) &
                   ((S1,S2,j=1,nj),i=kopen+1,nopen)
-      if(np.eq.0) np = i1       
-      if(ni.eq.0) ni = i2       
+      if(np.eq.0) np = i1
+      if(ni.eq.0) ni = i2
       if(np.ne.i1) Stop 'diferent np'
       if(ni.ne.i2) Stop 'diferent ni'
 
@@ -103,7 +103,7 @@
        rewind(nua); write(nua) (e(i),i=1,ne)
        Deallocate(e); me=me+ke; Allocate(e(me))
        rewind(nua); read(nua) (e(i),i=1,ne)
-      end if       
+      end if
 
       go to 1
     2 write(*,*) ' ne =',ne
@@ -112,7 +112,7 @@
 
 ! ... define dimensions (iop,jop):
 
-      Allocate(iop(ne),jop(ne),npl(ne)); iop=0; jop=0; npl=0 
+      Allocate(iop(ne),jop(ne),npl(ne)); iop=0; jop=0; npl=0
       mom=0
       Do ie=1,ne
        i = Iopen(ntarg,e(ie),ETARG)
@@ -142,7 +142,7 @@
       if(kopen.gt.nopen)     Stop ' kopen > nopen'
       if(ilsp.gt.nlsp)       Stop ' ilsp  > nlsp'
       if(ilsp.lt.0)          Stop ' ilsp < 0'
-      if(nopen.gt.nch(ilsp)) then 
+      if(nopen.gt.nch(ilsp)) then
          write(*,*) ' nopen > nch(ilsp)', nopen,nch(ilsp), ilsp,ee
          go to 3
       end if
@@ -154,9 +154,9 @@
       if(ie.eq.0) Stop 'unknown energy'
 
       ipl(ilsp,ie) = ipl(ilsp,ie) + 1
-      if(ipl(ilsp,ie).gt.1) go to 3       !  ???  
+      if(ipl(ilsp,ie).gt.1) go to 3       !  ???
 
-      if(nud.gt.0) then 
+      if(nud.gt.0) then
        write(nud,'(F10.6,6i6,a)') ee,nopen,kopen,ilsp,i1,i2,nj, &
                               '   ee,nopen,kp,ilsp,np,ni,nj'
        write(nud,'(6d16.8)') (tmar(i),tmai(i),i=1,ntr)
@@ -173,7 +173,7 @@
 
       g = (2*lpar(ilsp)+1) * iabs(ispar(ilsp)) / 2.d0
       if(ispar(ilsp).eq.0) g = (lpar(ilsp)+1)/2.d0
-      
+
       om=0.d0
       Do i=1,kopen;    itr1=iptar(ilsp,i)
        Do j=1,i;       itr2=iptar(ilsp,j)
@@ -199,9 +199,9 @@
        End do
       End do
 
-      end if  
+      end if
 
-      nom = nom + ni * (jop(ie)-iop(ie)) 
+      nom = nom + ni * (jop(ie)-iop(ie))
 
       if(nom.gt.npl(ie)) then
        write(*,*) 'ilsp,nom,npl(ie)',ilsp,nom,npl(ie)

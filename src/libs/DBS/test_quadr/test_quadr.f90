@@ -9,8 +9,8 @@
 
       Implicit real(8) (A-H,O-Z)
 
-      z = 1.d0;  Call Read_rarg('z',z) 
-  
+      z = 1.d0;  Call Read_rarg('z',z)
+
 ! ... define B-splines:
 
       Call def_grid(' ',' ',z,1.d0)
@@ -19,11 +19,11 @@
       ipri=1; Open(ipri,file='test_quadr.log')
 
 ! ... defines the set of hydrogenic orbitals for given Z and all n <= nn
-     
-      nn = 5;    Call Read_iarg('nn',nn) 
+
+      nn = 5;    Call Read_iarg('nn',nn)
 
       Call define_orbitals(nn)
-    
+
       Call test_quadr(z)
 
       END PROGRAM test_quadrd

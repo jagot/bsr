@@ -7,7 +7,7 @@
 
       iarg = IARGC()
       if(iarg.eq.0) Return
-      Call GETARG(1,A)      
+      Call GETARG(1,A)
       if(A.ne.'?') Return
 
       write(*,'(a)') &
@@ -42,12 +42,12 @@
 '                                                                            ',&
 'Example:      bsr_pol  klsp=4  nortb=2 iortb=2,3                            ',&
 '                                                                            '
-      Stop ' '                                                              
-                                                                            
-      End Subroutine inf_bsr_pol                                          
-                                                                            
-                                                                            
-                                                                            
+      Stop ' '
+
+      End Subroutine inf_bsr_pol
+
+
+
 
 
 

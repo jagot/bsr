@@ -10,7 +10,7 @@
       Integer :: mdata = 0       ! current dimentsion of list
       Integer :: idata = 2**10   ! supposed max. dimentsion
 
-      Integer, allocatable :: jjpar(:),ip(:),l1(:),l2(:),jk1(:),jk2(:), &   
+      Integer, allocatable :: jjpar(:),ip(:),l1(:),l2(:),jk1(:),jk2(:), &
                               io(:)
       Real(8), allocatable :: EK(:),TR(:),TI(:)
 
@@ -76,7 +76,7 @@
 !=======================================================================
       Subroutine Add_tm_list(e,ar,ai,jj,ii,m1,m2,k1,k2)
 !=======================================================================
-!     add (sum to) data to the list 
+!     add (sum to) data to the list
 !     we may need summation due to transition to other coupling
 !-----------------------------------------------------------------------
       Use tm_list
@@ -96,7 +96,7 @@
        if(m2.ne.l2(i)) Cycle
        if(k1.ne.jk1(i)) Cycle
        if(k2.ne.jk2(i)) Cycle
-       if(e.ne.EK(i)) Cycle             
+       if(e.ne.EK(i)) Cycle
        TR(i)=TR(i)+ar
        TI(i)=TI(i)+ai
        Return
@@ -106,7 +106,7 @@
 
       if(ndata.eq.mdata) Call Alloc_tm_list(mdata+idata)
 
-      ndata = ndata+1 
+      ndata = ndata+1
       jjpar(ndata) = jj
       ip(ndata) = ii
       l1(ndata) = m1
@@ -122,9 +122,9 @@
 
 !======================================================================
       Subroutine Sort_tm_list
-!====================================================================== 
-!     sortin data in tm_list 
-!---------------------------------------------------------------------- 
+!======================================================================
+!     sortin data in tm_list
+!----------------------------------------------------------------------
       Use tm_list
 
       Implicit none
@@ -163,7 +163,7 @@
 
 !=======================================================================
       Subroutine Change_ij_tm(i,j)
-!======================================================================= 
+!=======================================================================
 !     exchange two records "i" and "j" in tmat_lis
 !------------------------------------------------------------------------
       Use tm_list

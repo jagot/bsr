@@ -2,7 +2,7 @@
       Subroutine f_values
 !======================================================================
 !     define the f-values between target states based on the
-!     given asimptotic coefficients ACF for k=1 
+!     given asimptotic coefficients ACF for k=1
 !----------------------------------------------------------------------
 
       Use bsr_mat
@@ -12,23 +12,23 @@
 
       Implicit none
 
-      Real(8) :: AK(ntarg,ntarg)      
-      Integer :: IP(ntarg,ntarg)      
+      Real(8) :: AK(ntarg,ntarg)
+      Integer :: IP(ntarg,ntarg)
       Real(8), External :: CLEBCH, Z_6jj, Reduce_factor
 
       Real(8) :: S,SS, g1,g2, de, a,f
-      Integer :: i,j, i1,i2,nt 
+      Integer :: i,j, i1,i2,nt
 
 !???      if(coupling.eq.'LS'.and.jpar.ne.0) Return
 
       AK=0.d0; IP=0
 
       Do i=1,nch-1; Do j=i+1,nch; if(i.eq.j) Cycle
-     
-       S=ACF(i,j,1)/2.d0; 
+
+       S=ACF(i,j,1)/2.d0;
        i1=iptar(i); i2=iptar(j)
        if(abs(S).lt.eps_acf) Cycle
-        
+
        SS = Reduce_factor(i,j,1)
 
        if(abs(SS).lt.eps_acf) Cycle
@@ -41,7 +41,7 @@
         g1 = (2*ltarg(i1)+1) * istarg(i1)
         g2 = (2*ltarg(i2)+1) * istarg(i2)
        else
-        S = S*S        
+        S = S*S
         g1 = jtarg(i1)
         g2 = jtarg(i2)
        end if
@@ -50,7 +50,7 @@
        a = 4.d0/3.d0*de**3*S/c_au**3/time_au /g2
 
        AK(i1,i2) = AK(i1,i2) + f
-       AK(i2,i1) = AK(i2,i1) + a 
+       AK(i2,i1) = AK(i2,i1) + a
        IP(i1,i2) = IP(i1,i2) + 1
 
       End do; End do
@@ -64,8 +64,8 @@
       End do; End do
 
 ! ... total decay probabilities:
-  
-      Do i=2,ntarg;  AK(i,i) = SUM(AK(i,1:i-1)); End do  
+
+      Do i=2,ntarg;  AK(i,i) = SUM(AK(i,1:i-1)); End do
 
 ! ... print results:
 
@@ -86,7 +86,7 @@
       a = 0.d0
       Do i = 2,ntarg
        de = Etarg(i)-Etarg(1)
-       a = a + AK(1,i)/(de*de) 
+       a = a + AK(1,i)/(de*de)
       End do
 
       if(a.ne.0.d0) &
@@ -110,32 +110,32 @@
       Integer :: ll1,ll2,jj1,jj2,it,jt,L1,L2,S1,S2,J1,J2,LT,JJ, kz
       Real(8) :: S,SS, zero = 0.d0
       Real(8), external :: ZCLKL, Z_6jj, Z_6j
-       
+
       Reduce_factor = zero
 
-      ll1 = lch(ich);  ll2 = lch(jch) 
+      ll1 = lch(ich);  ll2 = lch(jch)
       S = ZCLKL(ll1,k,ll2)
       if(S.eq.zero) Return
-      jj1 = jkch(ich); jj2 = jkch(jch) 
+      jj1 = jkch(ich); jj2 = jkch(jch)
 
       it = iptar(ich); jt = iptar(jch)
       L1 = ltarg(it);  L2 = ltarg(jt)
       S1 = istarg(it); S2 = istarg(jt)
-      J1 = jtarg(it);  J2 = jtarg(jt) 
+      J1 = jtarg(it);  J2 = jtarg(jt)
 
       LT = lpar; JJ =jpar
 
       if(coupling.eq.'LS') then
 
        if(S1.ne.S2) Return
-       S = S * Z_6jj(L1,ll1,LT,ll2,L2,k) 
+       S = S * Z_6jj(L1,ll1,LT,ll2,L2,k)
        kz = L2+ll1+LT
        S = S * (-1) ** kz
 
       elseif(coupling.eq.'JK') then
 
-       if(jj1.ne.jj2) Return       
-       S = S * Z_6j(ll2+ll2+1,ll1+ll1+1,k+k+1,J1,J2,jj1) 
+       if(jj1.ne.jj2) Return
+       S = S * Z_6j(ll2+ll2+1,ll1+ll1+1,k+k+1,J1,J2,jj1)
        kz = J2+JJ+JJ-ll1-ll1-jj1+1; kz=kz/2
        S = S * (-1) ** kz
 

@@ -1,11 +1,11 @@
 !=====================================================================
       Subroutine Add_it_oper(is,js)
 !=====================================================================
-! ... record what has been done for given case: (is,js) 
+! ... record what has been done for given case: (is,js)
 !---------------------------------------------------------------------
 
       USE bsr_breit,    only: JD_oper, noper
-      Use symt_list_LS, only: IT_oper 
+      Use symt_list_LS, only: IT_oper
       USE term_exp,     only: jt1,jt2, JP_kt1,JP_kt2
 
       Implicit none

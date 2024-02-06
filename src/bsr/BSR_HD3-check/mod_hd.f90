@@ -1,5 +1,5 @@
 !=====================================================================
-      Module bsr_hd      
+      Module bsr_hd
 !=====================================================================
 !     Contains common variable and arrays for program bsr_hd
 !---------------------------------------------------------------------
@@ -30,7 +30,7 @@
       Integer :: ksol = 0
       Real(8) :: Emax = 0.d0       ! max energy
       Real(8) :: Edmax = 0.d0      ! max. energy for diagonalization
-      Real(8) :: Egap = 0.001      ! 
+      Real(8) :: Egap = 0.001      !
       Integer :: ilzero = 1        ! more restrictions
       Integer :: ibzero = 1        ! more restrictions
 
@@ -54,9 +54,9 @@
       Real(8), allocatable :: v(:)    ! solution vector
       Real(8), allocatable :: bb(:,:) ! new basis
 
-      Integer, allocatable :: ipsol(:) ! pointer on new basis 
+      Integer, allocatable :: ipsol(:) ! pointer on new basis
       Integer, allocatable :: isol(:)  ! pointer on main configuration
-    
+
       Real(8), allocatable :: WMAT(:,:)  ! surface amplitudes
 
       Real(8), allocatable :: CF(:,:,:)  ! asymptotic coefficients
@@ -68,21 +68,21 @@
 
       Real(8) :: RA  ! R-matrix radius
 
-! ... exp.energies: 
-    
-      Logical :: EXP 
+! ... exp.energies:
+
+      Logical :: EXP
       Integer :: iexp = 0, iiexp = 0
       Real(8), allocatable :: E_exp(:)
       Integer, allocatable :: ip_exp(:)
       Real(8) :: au_eV, au_cm
       Character(2) :: unit = 'au'
 
-! ... pointer on the inclusion of mass-velocity term 
+! ... pointer on the inclusion of mass-velocity term
 ! ... in first order
 
       Integer :: jmvc = 0
 
-! ... additonal output: 
+! ... additonal output:
 
       Integer :: iwt  =  0     ! print channel weights
       Real(8) :: cwt  =  0.0   ! cut of for weights' printing
@@ -100,8 +100,8 @@
 
       Integer :: nx = 17
       Real(8) :: hx = 0.08
-      Integer :: itrm = -1   
-      Integer :: ihout = 0   
+      Integer :: itrm = -1
+      Integer :: ihout = 0
 
       End Module bsr_hd
 

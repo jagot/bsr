@@ -7,7 +7,7 @@
 !----------------------------------------------------------------------
       Use dbsr_mchf
       Use df_orbitals
-      
+
       Implicit none
       Real(8) :: s,snl(nbf)
       Real(8), external :: quadr, Ecore_df
@@ -31,8 +31,8 @@
       Do i = 1, nbf
        if(mbs(i).ne.0) Cycle  ! We already have an initial estimate
        Call Screen_nl(i,snl(i),nnl(i))
-      End do 
-      
+      End do
+
       Do i=1,nbf; if(mbs(i).ne.0) Cycle
                   if(snl(i).eq.0.d0) Cycle
        Do j=i+1,nbf; if(mbs(j).ne.0) Cycle
@@ -44,7 +44,7 @@
        End do
       End do
 
-      Do i = 1, nbf;   if(mbs(i).ne.0) Cycle  
+      Do i = 1, nbf;   if(mbs(i).ne.0) Cycle
 
        Call bdcwf_pq(nnl(i),kbs(i),z-snl(i),p(1,1,i),p(1,2,i))
 
@@ -65,9 +65,9 @@
 
       Call Check_tails(0)
 
-      Call Gen_hd_core (ncore,mbreit,0)    
+      Call Gen_hd_core (ncore,mbreit,0)
 
-      Ecore = Ecore_df (ncore,mbreit) 
+      Ecore = Ecore_df (ncore,mbreit)
 
       End Subroutine get_estimates
 
@@ -93,7 +93,7 @@
        Do i = 1, io-1
         S = S + qsum(i)
        End do
-       S = S + qsum(io)/2      
+       S = S + qsum(io)/2
        nnn = nbs(io)
        Return
       end if
@@ -102,11 +102,11 @@
 
       S = 0.d0
       Do ic = 1,ncfg; C = WC(ic)*WC(ic); if(C.le.S) Cycle
-       Call Get_cfg_jj(ic)     
+       Call Get_cfg_jj(ic)
        ip = ip_state(ic)
        Do i=1,no; ip=ip+1
         if(IP_orb(ip).ne.io) Cycle
-        ip = -1; Exit  
+        ip = -1; Exit
        End do
        if(ip.gt.0) Cycle;  S = C; jc = ic
       End do
@@ -115,13 +115,13 @@
 
       S = 0.d0
       if(ncore.gt.0) S = SUM(qsum(1:ncore))
-      Call Get_cfg_jj (jc)     
+      Call Get_cfg_jj (jc)
       ip = ip_state(jc)
       Do i=1,no; ip=ip+1
        if(IP_orb(ip).ne.io) then
         S = S + iq(i)
        else
-        S = S + iq(i)/2 
+        S = S + iq(i)/2
         Exit
        end if
       End do
@@ -130,7 +130,7 @@
 
       nnn = nbs(io)
       if(abs(WC(jc)).lt.eps_corr) nnn = n_corr
-      if(nnn.le.lbs(io)) nnn=lbs(io)+1      
+      if(nnn.le.lbs(io)) nnn=lbs(io)+1
 
       End Subroutine Screen_nl
 

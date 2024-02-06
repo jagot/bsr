@@ -5,7 +5,7 @@
 !
 !     Written by:   Oleg Zatsarinny,   email: oleg_zoi@yahoo.com
 !======================================================================
-!     for selected states, print (to file mult_jj.tab)  the integral 
+!     for selected states, print (to file mult_jj.tab)  the integral
 !     coefficients according to "mult_bnk" file
 !
 !     Call as:
@@ -37,22 +37,22 @@
 ! ... c-file:
       Integer :: nu1=10;  Character(ma) :: AF_c1 = 'cfg.inp'
       Integer :: nu2=20;  Character(ma) :: AF_c2 = 'cfg.out'
-                         
+
 ! ... data bank:
       Integer :: nub=30;  Character(ma) :: AF_bnk = 'mult_bnk_E1'
 
 ! ... output:
       Integer :: nur=40;  Character(ma) :: AF_tab = 'mult_jj.tab'
-                         
+
 ! ... scratch file for intermediate results:
-      Integer :: nui=11  
+      Integer :: nui=11
 
 ! ... other variables:
 
       Character(1) :: ktype       ! type of trabsition
-      Integer :: kpol             ! multipole index 
+      Integer :: kpol             ! multipole index
 
-      Real(8) :: eps_c = 1.d-7    ! tolerence for coefficients:    
+      Real(8) :: eps_c = 1.d-7    ! tolerence for coefficients:
 
       Integer :: parity1, parity2
 
@@ -113,7 +113,7 @@
 ! ... done pointer:
       if(allocated(IT_done)) Deallocate(IT_done)
                              Allocate(IT_done(nsymt*(nsymt+1)/2))
-      IT_done=0    
+      IT_done=0
       Call Read_done(nub)
 
 ! ... determinants:
@@ -147,7 +147,7 @@
       if(JORT.eq. 1)  write(nur,'(/a/)') &
        'Orthogonality mode: partial orthogonality (jort = 1)'
 
-      Call prepare_iort_jj(0) 
+      Call prepare_iort_jj(0)
 
 !----------------------------------------------------------------------
 !                                      input required matrix elements:
@@ -159,12 +159,12 @@
        if(ic.ne.0.and.ic1.ne.ic) Cycle
       Do ic2 = ncfg1+1,ncfg
        if(jc.ne.0.and.ic2.ne.jc_ncfg1) Cycle
-       
+
        Call SUB1
 
       End do; End do
 
-Contains 
+Contains
 
 !======================================================================
       Subroutine SUB1
@@ -209,10 +209,10 @@ write(*,*) icase,i1,i2
        j1=IP_orb(i1+ip1);   j2=IP_orb(i2+ip2)
        m=j1; j1=j2; j2=m                               !  ???  sign
 
-      end if	 
+      end if
 
 
-      int = Iadd_int(icase,kpol,j1,j2,0,0) 
+      int = Iadd_int(icase,kpol,j1,j2,0,0)
 
 !----------------------------------------------------------------------
 ! ... find determinant overlaps for specific orbitals
@@ -231,14 +231,14 @@ write(*,*) icase,i1,i2
        mm = IDET_SIMP(kz,nd,NP1,NP2)
 
        if(mm.eq.1) Cycle; if(mm.eq.0) go to 10
-       MP(1:nd) = NP1(1:nd)*ibd+NP2(1:nd) 
+       MP(1:nd) = NP1(1:nd)*ibd+NP2(1:nd)
        jd = Iadd_ndet(nd,MP)
        md = md + 1; MP1(md) = jd; MP2(md) = iext
 
-      End do 
-    
+      End do
+
        idf = 0
-       if(md.gt.0) then 
+       if(md.gt.0) then
         MP(1:md) = MP1(1:md)*ibf + MP2(1:md)
         idf = Iadd_ndef(md,MP)
        end if
@@ -255,11 +255,11 @@ write(*,*) icase,i1,i2
       write(nur,'(/70(''=''))')
       write(nur,'(12x,''< state'',i3,'' || D || state'',i3,''>'')') &
             ic1,ic2-ncfg1
-      write(nur,'(70(''=''))') 
+      write(nur,'(70(''=''))')
       Call Print_conf_jj (nur,ic1,0.d0);  write(nur,'(70(''-''))')
       Call Print_conf_jj (nur,ic2,0.d0);  write(nur,'(70(''-''))')
 
-      Do i=1,nzoef 
+      Do i=1,nzoef
        if(abs(Zoef(i)).lt.eps_c) Cycle
        Call Pri_coef1(nur,i)
       End do
@@ -268,7 +268,7 @@ write(*,*) icase,i1,i2
       End Subroutine SUB1
 
       End ! program MULT_JJ
- 
+
 
 
 !======================================================================
@@ -322,7 +322,7 @@ write(*,*) icase,i1,i2
       if(idf.gt.0) then
        kd=KPF(idf);  ip=IPF(idf)
        Do i=1,kd
-        ns=mod(NPF(ip+i),ibf); ni=NPF(ip+i)/ibf; 
+        ns=mod(NPF(ip+i),ibf); ni=NPF(ip+i)/ibf;
         nd=KPD(ni); np=IPD(ni)
         ia=ia+1; A(ia:ia)='<'
        Do j=1,nd

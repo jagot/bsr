@@ -13,7 +13,7 @@
       if(ncj.ne.ncfg_jj) then
        iovl=0
        write(pri,*) 'ncj <> ncfg_jj for overlap matrix'
-       write(pri,*) 'we ignore the overlap matrix' 
+       write(pri,*) 'we ignore the overlap matrix'
        Return
       end if
 
@@ -26,11 +26,11 @@
       Allocate(C_ovl(ncfg_LS,ncfg_LS))
       if(allocated(CJ)) Deallocate(CJ); Allocate(CJ(ncfg_jj))
       if(allocated(CI)) Deallocate(CI); Allocate(CI(ncfg_jj))
-      
+
       Do i=1,ncfg_LS; CI(:)=C_trans(:,i)
        Do k=1,ncfg_jj; CJ(k)=SUM(CI(:)*S_ovl(:,k)); End do
        Do j=1,i
-        C_ovl(i,j)=SUM(CJ(:)*C_trans(:,j)) 
+        C_ovl(i,j)=SUM(CJ(:)*C_trans(:,j))
         C_ovl(j,i)=C_ovl(i,j)
        End do
       End do

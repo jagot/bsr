@@ -5,7 +5,7 @@
 !     B-spline integrals (see module DBS_integrals).
 !----------------------------------------------------------------------
       Use DBS_grid,          only: ns,ks
-  
+
       Implicit none
       Integer, intent(in) :: k
       Real(8), intent(in) :: f1(ns,2),f2(ns,2),f3(ns,2),f4(ns,2)
@@ -29,7 +29,7 @@
 !     B-spline integrals (see module DBS_integrals).
 !----------------------------------------------------------------------
       Use DBS_grid,          only: ns,ks
-  
+
       Implicit none
       Integer, intent(in) :: k
       Real(8), intent(in) :: f1(ns,2),f2(ns,2),f3(ns,2),f4(ns,2)

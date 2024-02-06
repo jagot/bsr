@@ -3,7 +3,7 @@
 !----------------------------------------------------------------------
 !     Read H.DAT file (unit nu) and find the information for partial
 !     wave IS,IL,IP
-!----------------------------------------------------------------------      
+!----------------------------------------------------------------------
       Use bsr_phot
 
       Implicit real(8) (A-H,O-Z)
@@ -11,20 +11,20 @@
 
       Read(nu) nelc,nz,lm,km,ntarg,RA,RB
       ion = nz - nelc
- 
+
       Allocate(Etarg(ntarg),Ltarg(ntarg),IStarg(ntarg),IPtarg(ntarg))
 
       Read (nu) Etarg
       Read (nu) Ltarg
       Read (nu) IStarg  !,IPtarg
- 
+
       E1  = Etarg(1)
       Do i = 1,ntarg
        Etarg(i)  = 2.d0 * (Etarg(i)-E1)
       End do
-     
-      if(ipri.gt.0) then 
-       write (ipri,'(/a/)')   'H.DAT file information:' 
+
+      if(ipri.gt.0) then
+       write (ipri,'(/a/)')   'H.DAT file information:'
        write (ipri,'(a,i4)')  'nuclear charge             =',NZ
        write (ipri,'(a,i4)')  'number of target electrons =',NELC
        write (ipri,'(a,i4)')  'number of target states    =',NTARG
@@ -35,9 +35,9 @@
       end if
 
 ! ... skip BUTTLE CORRECTION    ( don't use here! )
- 
+
       read (nu) ((C,i=1,3),j=1,LM)
- 
+
 ! ... look for the required partial wave
 
       iend = 0
@@ -46,7 +46,7 @@
       if(IL2.eq.IL.and.IS2.eq.IS.and.IP2.eq.IP) iend=1
 
       if(iend.eq.0) then           ! skip information
-                                                   
+
         read (nu) (j,i=1,ntarg)
         read (nu) (j,i=1,NCH)
         read (nu) (((C,i=1,NCH),j=1,NCH),k=1,KM)
@@ -58,9 +58,9 @@
          Stop
         end if
         go to 1
- 
+
       else                        ! Read information
-                       
+
        Allocate(NCONAT(ntarg),LCH(nch),CF(nch,nch,km),VALUE(nhm), &
                 WMAT(nch,nhm))
 
@@ -73,9 +73,9 @@
        Do i = 1,NHM
          VALUE(i) = 2.0D0* (VALUE(i)-E1)
        End do
-  
+
       end if
- 
+
       if(ipri.gt.0) then
        write(ipri,'(/a,3i5)') 'LSP =',IL2,IS2,IP2
        write(ipri,'(/a,i5 )') 'Number of channels =',nch

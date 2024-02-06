@@ -1,15 +1,15 @@
 !======================================================================
       Real(8) Function VDET(kd,N1,N2)
 !======================================================================
-!     calculate the value of overlap determinant 
+!     calculate the value of overlap determinant
 !----------------------------------------------------------------------
       Use spline_orbitals, only: obs
       Use conf_LS,         only: ne
-      
+
       Implicit none
       Integer, intent(in) :: kd, N1(kd), N2(kd)
       Integer :: i,j
-      Real(8) :: ADET(ne*ne)      
+      Real(8) :: ADET(ne*ne)
       Real(8), external :: DET
 
       if(kd.gt.ne) Stop 'problem with kd in VDET'

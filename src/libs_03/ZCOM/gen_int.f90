@@ -7,7 +7,7 @@
       Integer(2) :: N
       Integer(1) :: IA(11)
       Real(8) :: C,P(11)
-      Data P/2.d0,3.d0,5.d0,7.d0,11.d0,13.d0,17.d0,19.d0,23.d0,29.d0,31.d0/ 
+      Data P/2.d0,3.d0,5.d0,7.d0,11.d0,13.d0,17.d0,19.d0,23.d0,29.d0,31.d0/
       Integer :: i,j,m
 
       C=0.d0

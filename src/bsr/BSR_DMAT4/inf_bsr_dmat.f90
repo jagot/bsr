@@ -57,7 +57,7 @@
 '              polarized psedo-state calculation, see program BSR_POL) ',&
 'ctype = d  -  cfg.nnn and cfg.mmm are expected for both 1st and       ',&
 '              2nd set but no expansion coefficients are required      ',&
-'              (used in the strong-field calculations)                 ',& 
+'              (used in the strong-field calculations)                 ',&
 '                                                                      '
       write(nu,'(a)') &
 'INPUT FILES:                                                          ',&
@@ -137,12 +137,12 @@
 '          zf_cc_bsr   and   zf_bb_bsr                                  ',&
 '                                                                       '
 
-      Stop                                                               
-                                                                            
-      End Subroutine inf_bsr_dmat                                          
-                                                                            
-                                                                            
-                                                                            
+      Stop
+
+      End Subroutine inf_bsr_dmat
+
+
+
 
 
 

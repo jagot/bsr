@@ -1,29 +1,29 @@
 !=======================================================================
   Subroutine Det_f4 (id,ML,MS,Idet)
 !=======================================================================
-! determinamt id and corresponding ML,MS for subshell f4 
+! determinamt id and corresponding ML,MS for subshell f4
 !-----------------------------------------------------------------------
- 
+
   Implicit none
- 
+
   Integer, intent(in)  :: id
   Integer, intent(out) :: ML,MS,Idet(*)
- 
+
   Integer, parameter :: iq_f4 =   4
   Integer, parameter :: kd_f4 =1001
- 
+
   Integer :: Idet_f4 (iq_f4,kd_f4)
- 
+
   Integer :: ML_f4 (kd_f4)
   Integer :: MS_f4 (kd_f4)
- 
+
   if(id.le.0.or.id.gt.kd_f4) Stop "Det_f4: index id is out of range"
- 
+
   ML = ML_f4 (id)
   MS = MS_f4 (id)
- 
+
   Idet (1:iq_f4)= Idet_f4 (:,id)
- 
+
 
   Data Idet_f4 ( 1,:)/ &
    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, &
@@ -196,5 +196,5 @@
   3,  1,  3,  1, -1,  1, -1,  1,  1,  3,  1,  3,  1, -1,  1,  1,  3,  1, -1,  1, -1,  1, -1, -3, -1, -1,  1, -1,  1, -1,  1,  1, &
   3,  1, -1,  1, -1,  1,  1,  3,  1,  3,  1, -1,  1,  1,  3,  1,  3,  1,  3,  3,  5,  3,  1,  3,  1,  3,  1, -1,  1,  1,  3,  1, &
  -1,  1, -1,  1,  1,  3,  1,  3,  1/
- 
-  End Subroutine Det_f4 
+
+  End Subroutine Det_f4

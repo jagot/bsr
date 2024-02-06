@@ -1,7 +1,7 @@
 !=====================================================================
       Subroutine Scf_mchf
 !=====================================================================
-!     Solve the DF equations in turns 
+!     Solve the DF equations in turns
 !---------------------------------------------------------------------
       Use dbsr_mchf
       Use df_orbitals
@@ -31,14 +31,14 @@
         Do j=i+1,nbf
          if(rotate.eq.0) Cycle; if(it <= 1) Cycle;  Call Rotate_ij(i,j)
         End do
-   
+
         Call mchf_matrix (i,hfm,rhs,hx)
 
         ! .. diagonalize the hf matrix
 
         Call CPU_time(t1)
         if(it <= 1 .or. newton == 0  .or. dpm(i) > 0.1 ) then
-         Call solve_eiv (i,hfm,v,rhs) 
+         Call solve_eiv (i,hfm,v,rhs)
         else
          Call solve_nr  (i,hfm,v,rhs,hx)
         end if
@@ -47,7 +47,7 @@
 
         dpm(i)=maxval(abs(p(1:ns,1,i)-v(1:ns)))/maxval(abs(p(:,1,i)))
         p(1:ns,1,i) = v(1:ns)
-        p(1:ns,2,i) = v(ns+1:ms)       
+        p(1:ns,2,i) = v(ns+1:ms)
 
         ! .. remove tail zero
 
@@ -56,12 +56,12 @@
         write(log,'(1x,a5,3e15.5,i7)') &
                    ebs(i),  e(i), qsum(i),dpm(i), mbs(i)
 
-       End do ! over functions 
+       End do ! over functions
 
 
-       Do i = 1,nbf 
-        Do j = 1,nbf 
-         if(i.eq.j) Cycle 
+       Do i = 1,nbf
+        Do j = 1,nbf
+         if(i.eq.j) Cycle
          if(kbs(i).ne.kbs(j)) Cycle
          if(debug.gt.0) write(log,'(7x,a,a,a,a,a,E12.3)') &
          '<',ebs(i),'|',ebs(j),'> ',quadr(p(1,1,i),p(1,1,j),0)
@@ -83,11 +83,11 @@
 
        write(scr,'(a,i5,f22.15,1P4d12.2)') 'it,etotal,scf_diff,orb_diff:', &
                                             it,etotal,scf_diff,orb_diff
-        
+
        et = etotal
 
        if ( orb_diff < orb_tol .and. scf_diff  < scf_tol) Exit
-    
+
        icore = 0;  if(ncore.gt.0) icore = sum(iord(:))
 
       End do ! over itterations

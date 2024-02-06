@@ -38,7 +38,7 @@
       if(AS(1:1).eq.'*') go to 2
       if(AS(5:5).ne.'(') go to 1
       ncfg=ncfg+1
-      kcfg=kcfg+INDEX(AS,')',BACK=.TRUE.)/8      
+      kcfg=kcfg+INDEX(AS,')',BACK=.TRUE.)/8
       read(nu,'(a)') AS
       go to 1
     2 rewind(nu)

@@ -39,7 +39,7 @@
 
 ! ... non-diagonal blocks:
 
-      Do ich = 2,kch; Do jch = 1,ich-1;  i=icc(ich,jch) 
+      Do ich = 2,kch; Do jch = 1,ich-1;  i=icc(ich,jch)
 
        if(i.ne.0) then
         Call MPI_SEND(hcc(:,:,i),nn, MPI_DOUBLE_PRECISION, &
@@ -67,7 +67,7 @@
 
 ! ... channel-perturber rows:
 
-       Do ich = 1,kch; Do ip = 1,kcp; i = icb(ich,ip) 
+       Do ich = 1,kch; Do ip = 1,kcp; i = icb(ich,ip)
 
        if(i.ne.0) then
         Call MPI_SEND(hcb(:,i),kns, MPI_DOUBLE_PRECISION, &

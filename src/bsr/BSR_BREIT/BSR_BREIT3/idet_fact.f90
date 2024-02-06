@@ -3,7 +3,7 @@
 !======================================================================
 !     determines the overlap factor and its position in NDEF list
 !     for matrix element between two determinant wave functions
-!     located in module 'spin_orbitals' 
+!     located in module 'spin_orbitals'
 !
 !     j1,j2,j3,j4 - interacting electrons
 !
@@ -18,7 +18,7 @@
       Implicit none
       Integer, intent(in) :: j1,j2,j3,j4
       Integer :: i,i1,i2, k,k1,k2, is,id,kd
-      Integer :: np(2*ne),n1(2*ne),n2(2*ne),n3(2*ne),n4(2*ne)     
+      Integer :: np(2*ne),n1(2*ne),n2(2*ne),n3(2*ne),n4(2*ne)
       Integer, external :: Iadd_ndet, Iadd_ndef, ISORT
 
       kd = 0
@@ -48,7 +48,7 @@
          if(N1(i).eq.N2(i)) Cycle
          kd = -1
          Exit
-        End do 
+        End do
         if(kd.eq.-1) Exit
         Cycle
        end if

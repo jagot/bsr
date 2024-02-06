@@ -1,9 +1,9 @@
 !======================================================================
       Subroutine gauleg(x1,x2,x,w,n)
 !======================================================================
-!     Given the lower and upper limits of integration x1 and x2, 
-!     and given n, this routine returns arrays x(1:n) and w(1:n) 
-!     of length n, containing the abscissas and weights of the 
+!     Given the lower and upper limits of integration x1 and x2,
+!     and given n, this routine returns arrays x(1:n) and w(1:n)
+!     of length n, containing the abscissas and weights of the
 !     Gauss-Legendre n-point quadrature formula.
 !     (from numerical recipe,  www.nr.com)
 !-----------------------------------------------------------------------
@@ -15,7 +15,7 @@
 
       !  High precision is a good idea for this routine.
 
-      m=(n+1)/2              !  The roots are symmetric in the interval, 
+      m=(n+1)/2              !  The roots are symmetric in the interval,
       xm=0.5d0*(x2+x1)       !  so we only have to find half of them.
       xl=0.5d0*(x2-x1)
 
@@ -23,7 +23,7 @@
 
          z=cos(3.141592654d0*(i-.25d0)/(n+.5d0))
 
-      !  Starting with the above approximation to the ith root, 
+      !  Starting with the above approximation to the ith root,
       !  we enter the main loop of refinement by Newton's method.
 
     1 Continue
@@ -33,8 +33,8 @@
          p3=p2               !  endre polynomial evaluated at z.
          p2=p1
          p1=((2.d0*j-1.d0)*z*p2-(j-1.d0)*p3)/j
-        End do 
-        !  p1 is now the desired Legendre polynomial. 
+        End do
+        !  p1 is now the desired Legendre polynomial.
         !  We next compute pp, its derivative, by a standard relation involving
         !  also p2, the polynomial of one lower order.
         pp=n*(z*p1-p2)/(z*z-1.d0)
@@ -46,7 +46,7 @@
         x(n+1-i)=xm+xl*z     !  and put in its symmetric counterpart.
         w(i)=2.d0*xl/((1.d0-z*z)*pp*pp)  !  Compute the weight
         w(n+1-i)=w(i)                    !  and its symmetric counterpart.
-      End do 
+      End do
 
       End Subroutine gauleg
 
@@ -56,17 +56,17 @@
 !=========================================================================
 !     Looks up the values of gaussian coordinates and guassian weights
 !     for k-point gaussian quadrature over the interval [0, 1].
-!   
+!
 !     on entry:  k     the number of points in the quadrature
 !     -------
-!   
+!
 !     on exit:  x(i)   Gaussian coordinates of the points
 !     -------   w(i)   Gaussian weight to point x(i)
-!   
-!     Restriction:     1<= k <= 15   
+!
+!     Restriction:     1<= k <= 15
 !     -----------
-!   
-!     This is an old version, see also gauleg.f90 for the general case. 
+!
+!     This is an old version, see also gauleg.f90 for the general case.
 !-------------------------------------------------------------------------
       Implicit none
       Integer, intent(IN) :: k
@@ -74,7 +74,7 @@
 
       IF (k < 1 .OR. k > 15)   &
          Stop 'Error in GAUSS: number of points is out of range '
-  
+
       SELECT CASE ( k )
       CASE (1)
         x(1) = .5d0
@@ -333,4 +333,3 @@
         w(15)= .0153766209980586d0
      END SELECT
      End Subroutine gauss
-  

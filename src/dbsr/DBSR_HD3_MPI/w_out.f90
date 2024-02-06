@@ -33,7 +33,7 @@
       Real(8), Allocatable :: WT(:),cval(:)
       Integer, Allocatable :: ipt(:)
 
-      if(io_processor) then      
+      if(io_processor) then
 
 ! ... local allocations:
 
@@ -41,7 +41,7 @@
       Allocate(wt(mwt),cval(khm),ipt(mwt))
       if(allocated(isol)) deallocate(isol); allocate(isol(khm))
 
-! ... open w.nnn if needed: 
+! ... open w.nnn if needed:
 
       if(iwt.gt.0) then
        i = INDEX(AF_w,'.'); AF = AF_w(1:i)//ALSP
@@ -49,7 +49,7 @@
        write(nuw) nch,npert,khm
       end if
 
-! ... open cfg.nnn if needed: 
+! ... open cfg.nnn if needed:
 
       if(itype.lt.0.or.cwt.gt.0.d0) then
        i=INDEX(AF_cfg,'.');  AF=AF_cfg(1:i)//ALSP
@@ -67,7 +67,7 @@
 ! ... define and record weights:
 
       Do is = 1,khm
-       
+
        call pdgeadd ('notrans', khm, 1, one, z, 1,is,descz, &
                                        zero, v, 1,1, descv)
 
@@ -139,7 +139,7 @@
        Do jch=1,mwt; ich=ipt(jch); if(WT(ich).lt.cwt) Exit
 
         Call Find_channel_label_jj(ich,jch,is,eval(is),Lab)
-        
+
         if(ich.gt.nch) then
          AA = 'perturber:'
          write(pri,'(a,i6,f9.5,5x,a)') AA(1:12),ich-nch,WT(ich),TRIM(Lab)
@@ -148,7 +148,7 @@
          it = iptar(ich)
          if(Etarg(it).gt.eval(is))  AA = 'closed ch:'
          write(pri,'(a,i6,f9.5,5x,a)') AA(1:12),ich,WT(ich),TRIM(Lab)
-        end if 
+        end if
 
        End do
 

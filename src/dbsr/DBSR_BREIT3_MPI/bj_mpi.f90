@@ -1,5 +1,5 @@
 !=====================================================================
-!     PROGRAM   b j _ m p i                    
+!     PROGRAM   b j _ m p i
 !
 !               C O P Y R I G H T -- 2009
 !
@@ -7,43 +7,43 @@
 !                   email: oleg_zoi@yahoo.com
 !======================================================================
 !
-!    generates angular coefficient for Dirak_Fock calculations 
+!    generates angular coefficient for Dirak_Fock calculations
 !    in case of non-orthogonal one-electron radial functions
 !
 !----------------------------------------------------------------------
 !
 !    INPUT ARGUMENTS:
-!    
+!
 !    klsp1,klsp2  - range of partial wave in BSR calculations,
 !                   then cfg.001, cfg.002, ..., are input files
 !                   (default -> 0, then input file is rcsl.inp)
-!   
+!
 !    mk    - max.multipole index (default -> 9, see module param_br)
 !
 !    RX    - =0, all integrals, =1, only R-integrals
 !----------------------------------------------------------------------
 !
-!    example:    1.  bjj 
-!                2.  bjj klsp1=1 klsp2=5 
+!    example:    1.  bjj
+!                2.  bjj klsp1=1 klsp2=5
 !                3.  bjj km=5
-!            
+!
 !----------------------------------------------------------------------
 !
 !    INPUT FILES:
-!    
+!
 !    cfg.nnn     -  configuration list for partial wave nnn (= klsp)
 !                   (cfg.inp in case klsp = 0)
-!                  
+!
 !    jnt_bnk.nnn -  input data bank for angular coefficients
 !                   (optional; jnt_bnk in case klsp = 0)
-!                   
-!    
+!
+!
 !    OUTPUT FILES:
-!    
+!
 !    jnt_bnk.nnn  - output data bank for angular coefficients
 !                   (jnt_bnk in case klsp = 0)
-!                   
-!---------------------------------------------------------------------     
+!
+!---------------------------------------------------------------------
       USE MPI
 
       USE param_jj
@@ -54,11 +54,11 @@
       USE symt_list
       USE nljm_orbitals, only: mj_max,mj_orb
 
-      Implicit none 
+      Implicit none
 
       Integer :: i,j, ii, iarg, fail
       Real(8) :: time, t1,t2,tt
- 
+
       Character :: CLINE*80
 
       Integer, External :: IARGC, mj_value
@@ -104,14 +104,14 @@
       Do klsp = klsp1,klsp2
 
        if(myid.eq.0) then
-        write(pri,'(80(''-''))') 
+        write(pri,'(80(''-''))')
         write(pri,'(/a,i5/)') ' Partial wave: ',klsp
         write(*,'(/a,i5/)') ' Partial wave: ',klsp
        end if
 
        t1 = MPI_WTIME()
 
-! ... open relevant files: 
+! ... open relevant files:
 
        if(myid.eq.0) then
         fail = 0
@@ -132,7 +132,7 @@
 
 ! ...  read the configuration list:
 
-       if(myid.eq.0) Call Read_conf_jj; 
+       if(myid.eq.0) Call Read_conf_jj;
 
        Call br_conf_jj
 
@@ -142,7 +142,7 @@
        if(.not.icalc) then
         if(myid.eq.0) Close(nur,STATUS='DELETE')
         Cycle
-       end if        
+       end if
 
 ! ...  extract old results:
 
@@ -169,7 +169,7 @@
        if(myid.eq.0) then
         Call open_jj(nua,fail)
         Call open_jj(nud,fail)
-        Call Pre_det_exp 
+        Call Pre_det_exp
        end if
 
        if(Allocated(mj_orb)) Deallocate(mj_orb)
@@ -184,7 +184,7 @@
 
       if(myid.eq.0) then
 
-       Call Conf_loop 
+       Call Conf_loop
 
       else
 
@@ -211,7 +211,7 @@
        Call Write_symc(nur)
        Call Write_symt(nur)
 
-       Call Write_done(nur,fail) 
+       Call Write_done(nur,fail)
        if(fail.ne.0) Cycle
 
        Call Record_det(nur)
@@ -229,8 +229,8 @@
 
        Call System(CLINE)
 
-! ...  rename new results as new data bank (int_res -> int_bnk): 
- 
+! ...  rename new results as new data bank (int_res -> int_bnk):
+
 
        CLINE = 'mv ';   i = 3               !  UNIX
 
@@ -276,12 +276,12 @@
 
 
 !======================================================================
-      Subroutine Read_arg 
+      Subroutine Read_arg
 !======================================================================
 !     read arguments from command line and check default settings
 !----------------------------------------------------------------------
 
-      Use param_jj 
+      Use param_jj
 
       Implicit none
 
@@ -297,18 +297,18 @@
        klsp1=klsp
        klsp2=klsp
       end if
-      if(klsp2.lt.klsp1) klsp2=klsp1 
-     
+      if(klsp2.lt.klsp1) klsp2=klsp1
+
       End Subroutine Read_arg
 
 !======================================================================
-      Subroutine br_arg 
+      Subroutine br_arg
 !======================================================================
 !     brodcast main arguments
 !----------------------------------------------------------------------
 
       Use mpi
-      Use param_jj 
+      Use param_jj
 
       Implicit none
 

@@ -27,7 +27,7 @@
 
        ! ... orbital
 
-       ii=in(i); if(iset.eq.0) ii=0      
+       ii=in(i); if(iset.eq.0) ii=0
        EL=ELi(nn(i),kn(i),ii)
        Do j = 1,5
         if(EL(j:j).eq.' ') Cycle
@@ -44,7 +44,7 @@
        Lab(k:k)='.'; k=k+1
 
        ! ... shell term
-      
+
        if(Jterm (jn(i),iq(i),-1,JT,JV,JW,JQ).gt.1) then
 
         k=k-1;  Lab(k:k)='_'; k=k+1
@@ -74,7 +74,7 @@
        ! ... intermediate term
 
        if(i.eq.1.and.no.gt.1) Cycle
-       kk = 0 
+       kk = 0
        if(i.gt.1) then
         if(iabs(Jshell(i)-Jintra(i-1)).lt.Jshell(i)+Jintra(i-1)) kk=1
        end if
@@ -115,7 +115,7 @@
       Subroutine R_label_jj(nuc,kset)
 !======================================================================
 !     generates configuration LABEL list from c-file (unit nuc)
-!     LABEL list is located in the module conf_jj   
+!     LABEL list is located in the module conf_jj
 !     kset=0 -> nulify all set numbers
 !----------------------------------------------------------------------
       Use conf_jj

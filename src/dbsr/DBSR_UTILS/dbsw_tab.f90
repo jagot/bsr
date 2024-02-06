@@ -11,11 +11,11 @@
 !----------------------------------------------------------------------
 !
 !     INPUT FILE:    name.bsw
-!                    
+!
 !     OUTPUT FILES:  name.bsw.nl  for each nl
 !
 !----------------------------------------------------------------------
-!     ARGUMENTS:     name.bsw  
+!     ARGUMENTS:     name.bsw
 !----------------------------------------------------------------------
       Use DBS_grid
       Use DBS_gauss
@@ -28,8 +28,8 @@
       Character(40) :: AF,BF
       Real(8), allocatable ::  R(:),P(:),Q(:)
 
-! ... input data: 
-         
+! ... input data:
+
       iarg = IARGC()
       if(iarg.gt.0) Call GETARG(1,AF)
 
@@ -45,7 +45,7 @@
       end if
 
 ! ... set up B-splines:
- 
+
       Call Check_file('knot.dat')
       Call def_grid
       Call alloc_DBS_gauss
@@ -59,7 +59,7 @@
       Close(nuw)
       iaf = LEN_TRIM(AF)
 
-! ... sets up grid points and initializes the values of the spline: 
+! ... sets up grid points and initializes the values of the spline:
 
       NR = nv*ks+2; Allocate(R(NR),P(NR),Q(NR))
       ii=1; R(1)=0.d0
@@ -93,9 +93,9 @@
 
       End do
 
-      
+
       END   !  program dbsr_tab
-          
+
 
 
 
@@ -106,7 +106,7 @@
 !
 !     read B-spline w.f. from bsw-file (unit nu) only those orbitals
 !     which labels are already in the list
-!     
+!
 !----------------------------------------------------------------------
 
       USE DBS_grid
@@ -118,7 +118,7 @@
       Integer, intent(in) :: nu
       Integer :: i,j,k,l,n,m,itype,nsw,ksw,mw,kp,kq
       Character(5) :: elw
-      Integer, External :: Ifind_bsorb,Iadd_bsorb 
+      Integer, External :: Ifind_bsorb,Iadd_bsorb
       Real(8) :: tt(ns+ks)
 
       rewind(nu)
@@ -134,8 +134,8 @@
 
     1 read(nu,end=2) elw,mw
       Call EL_NLJK(elw,n,k,l,j,i)
-      m = Ifind_bsorb(n,k,i,2) 
-      mbs(m)=mw 
+      m = Ifind_bsorb(n,k,i,2)
+      mbs(m)=mw
       i=m+m-1; pbs(1:ns,i)=0.d0; read(nu) pbs(1:mw,i)
       i=m+m;   pbs(1:ns,i)=0.d0; read(nu) pbs(1:mw,i)
       go to 1

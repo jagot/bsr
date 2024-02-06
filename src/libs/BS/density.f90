@@ -15,9 +15,9 @@
       CHARACTER(1) :: type
       INTEGER :: i,j,imin,imax
 
-      
+
       if(type.eq.'s') then                    !     o***
-      
+
         d(1:ns,1:ks) = 0.d0
                                               !     o***
         do i =1,ns                            !     o***
@@ -46,7 +46,7 @@
       else
 
         d(1:ns,1:ns) = 0.d0
-        
+
         do i = 1,ns
           do j = 1,ns
             d(i,j) =  p1(i)*p2(j)

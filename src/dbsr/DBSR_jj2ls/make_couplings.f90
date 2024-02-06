@@ -3,17 +3,17 @@
 !======================================================================
 !
 !     Moments: Li, Si, Ji, LLi, SSi, JJi
-!     
+!
 !     JJ - coupling
 !
-!     L1 S1 J1   J1  J2  JJ2         
+!     L1 S1 J1   J1  J2  JJ2
 !     L2 S2 J2   JJ2 J3  JJ3
 !     ........   ..............
 !     Ln Sn Jn   JJ(n-1) Jn JJn
 !
 !     LS - coupling
 !
-!     L1  L2 LL2       S1  S2  SS2       Ln Sn Jn  
+!     L1  L2 LL2       S1  S2  SS2       Ln Sn Jn
 !     LL2 L3 LL3       SS2 S3  SS3
 !     ..............   ..............
 !     LL(n-1) Ln LLn   SS(n-1) Sn SSn
@@ -31,11 +31,11 @@
        JJ_coupling(3,i) = k
       End do
 
-      Do i=1,n-1; ii=i+n; jj=i+5*n; j=i+2*n+1;  
+      Do i=1,n-1; ii=i+n; jj=i+5*n; j=i+2*n+1;
        JJ_coupling(1,ii) = jj
        JJ_coupling(2,ii) = j
        JJ_coupling(3,ii) = jj+1
-      End do       
+      End do
       JJ_coupling(1,n+1) = 2*n+1
 
 ! ... LS-coupling:
@@ -58,7 +58,7 @@
       LS_coupling(1,i) = 4*n
       LS_coupling(2,i) = 5*n
       LS_coupling(3,i) = 6*n
-       
+
       ncup = 2*n-1
       nmom = 6*n
 

@@ -10,8 +10,8 @@
       Use term_exp
 
       Implicit none
-      
-      Integer :: id,ic,jc 
+
+      Integer :: id,ic,jc
 
       Call MPI_SEND(ic  ,1,MPI_INTEGER,id,0,MPI_COMM_WORLD,ierr)
       if(ic.le.0) Return

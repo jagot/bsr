@@ -7,7 +7,7 @@
 
       Implicit none
 
-! ... main files: 
+! ... main files:
 
 !     AF  -  standard (default) names
 !     BF  -  names with indication of partial wave number
@@ -30,12 +30,12 @@
 ! ... main parameters:
 !----------------------------------------------------------------------
 
-      Real(8) :: eps_c = 1.d-8          ! tolerence for coefficients   
-      Real(8) :: eps_soo = 0.d0         ! tolerence for coefficients   
+      Real(8) :: eps_c = 1.d-8          ! tolerence for coefficients
+      Real(8) :: eps_soo = 0.d0         ! tolerence for coefficients
 
       Integer :: mk = 7                 ! maximum multipole index
 
-      Integer :: new        ! pointer on the previous calculation  
+      Integer :: new        ! pointer on the previous calculation
       Integer :: icalc      ! pointer to the need of calculations
 
 ! ... range of partial waves:
@@ -55,7 +55,7 @@
       Integer :: mbuf=1000000, nbuf
       Integer, allocatable :: ibuf1(:),ibuf2(:),ibuf3(:),ibuf4(:)
       Real(8), allocatable :: Cbuf(:)
-      
+
 ! ... MPI insert:
 
       Integer :: nprocs, myid, ierr

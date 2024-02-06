@@ -1,7 +1,7 @@
 !----------------------------------------------------------------------
-!  interface routines to call some frequently-used LAPACK routines 
+!  interface routines to call some frequently-used LAPACK routines
 !
-!  LAP_DGESV     -    A x = B,      A,B - real   
+!  LAP_DGESV     -    A x = B,      A,B - real
 !  LAP_ZGESV     -    A x = B,      A,B - complex
 !  LAP_DSYEV     -    A x = E x,    A - real symmetric
 !  LAP_DSYEVX    -    A x = E x,    for some eigenvalues only
@@ -9,13 +9,13 @@
 !  LAP_DSYGV     -    A x = E C x,  A,C - real symmetric
 !  LAP_DSYGVX    -    A x = E C x,  for some eigenvalues only
 !  LAP_INV       -    A^-1,         A - real
-!  LAP_INVS      -    A^-1,         A - real symmetric   
+!  LAP_INVS      -    A^-1,         A - real symmetric
 !----------------------------------------------------------------------
 
 !======================================================================
       Subroutine LAP_DGESV(m,n,k,A,B,info)
 !======================================================================
-!     Call LAPACK procedure DGESV to solve the system of algebraic 
+!     Call LAPACK procedure DGESV to solve the system of algebraic
 !     equations A x = B, results in B.
 !----------------------------------------------------------------------
       Implicit none
@@ -24,8 +24,8 @@
       Integer, intent(out), optional :: info
       Integer :: IPIV(m)
 
-      Call DGESV( n,k, A, m, IPIV, B, m, INFO )    
- 
+      Call DGESV( n,k, A, m, IPIV, B, m, INFO )
+
       if(info.ne.0) write(*,*) ' DGESV(lapack) give INFO =',INFO
 
       End Subroutine LAP_DGESV
@@ -43,17 +43,17 @@
       Integer, intent(out), optional :: info
       Integer :: IPIV(m)
 
-      Call ZGESV( m,n, A, m, IPIV, B, m, INFO )    
- 
+      Call ZGESV( m,n, A, m, IPIV, B, m, INFO )
+
       if(info.ne.0) write(*,*) ' ZGESV(lapack) give INFO =',INFO
- 
+
       End Subroutine LAP_ZGESV
 
 
 !======================================================================
       Subroutine LAP_DSYEV(job,UPLO,n,m,A,eval,info)
 !======================================================================
-!     Call LAPACK procedure DSYEV to obtain the eigenvalues (eval) and 
+!     Call LAPACK procedure DSYEV to obtain the eigenvalues (eval) and
 !     eigenvectors (A) for Real symmetric matrix A(n,n)
 !     job = 'V' or 'N' - compute or not the eigenvectors
 !     UPLO='U'  or 'L' -  used upper or lower triangle matrix
@@ -79,7 +79,7 @@
 !======================================================================
       Subroutine LAP_DSYEVX(job,UPLO,n,m,A,eval,k,info)
 !======================================================================
-!     Call LAPACK procedure DSYEVX to obtain the selected eigenvalues 
+!     Call LAPACK procedure DSYEVX to obtain the selected eigenvalues
 !     (eval) and eigenvectors (A) for problem A S = E S
 !     UPLO='U'  or 'L' -  used upper or lower triangle matrix
 !---------------------------------------------------------------------
@@ -102,7 +102,7 @@
 
       Call DSYEVX(job,'I',UPLO,n,A,m,VL,VU,1,k,ABSTOL,kk,eval, &
                   Z,n, WORK, LWORK, IWORK, IFAIL, INFO)
-      
+
       if(kk.ne.k) then
        write(*,*) ' DSYEVX(lapack) provides',kk,' eigenvectors'
        write(*,*) ' when we ordered', k,'  ones'
@@ -121,7 +121,7 @@
 !======================================================================
       Subroutine LAP_DSYGV(job,UPLO,n,m,A,C,eval,info)
 !======================================================================
-!     Call LAPACK procedure DSYEV to obtain the eigenvalues (eval) and 
+!     Call LAPACK procedure DSYEV to obtain the eigenvalues (eval) and
 !     eigenvectors (A) for generalized problem A S = E C S
 !     job = 'N' - compute eigenvalues only
 !           'V' - compute eigenvalues and eigenvectors
@@ -150,7 +150,7 @@
 !======================================================================
       Subroutine LAP_DSYGVX(job,UPLO,n,m,A,C,eval,k,info)
 !======================================================================
-!     Call LAPACK procedure DSYGVX to obtain first k eigenvalues 
+!     Call LAPACK procedure DSYGVX to obtain first k eigenvalues
 !     (eval) and eigenvectors (A) for generalized problem  A S = E C S
 !
 !     job = 'N' - compute eigenvalues only
@@ -179,7 +179,7 @@
 
       Call DSYGVX(1,job,'I',UPLO,n,A,m,C,m,VL,VU,1,k,ABSTOL,kk,eval, &
                   Z,n, WORK, LWORK, IWORK, IFAIL, INFO)
-      
+
       if(kk.ne.k) then
        write(*,*) ' DSYGVX(lapack) provides',kk,' eigenvectors'
        write(*,*) ' when we ordered', k
@@ -222,7 +222,7 @@
       Subroutine LAP_INVS(UPLO,n,m,A,info)
 !======================================================================
 !     Call LAPACK procedures DGETRF and DGETRI to obtain the inverse
-!     matrix A^-1 for symmetric matrix 
+!     matrix A^-1 for symmetric matrix
 !     UPLO = 'U' - used upper triangle matrix
 !            'L' - used lower triangle matrix
 !---------------------------------------------------------------------
@@ -251,7 +251,7 @@
 !======================================================================
       Subroutine LAP_ZHEEV(job,UPLO,n,m,A,eval,info)
 !======================================================================
-!     Call LAPACK procedure ZHEEV to obtain the eigenvalues (eval) and 
+!     Call LAPACK procedure ZHEEV to obtain the eigenvalues (eval) and
 !     eigenvectors (A) for complex Hermitian matrix A(n,n)
 !     job = 'V' or 'N' - compute or not the eigenvectors
 !     UPLO = 'U' - used upper triangle matrix

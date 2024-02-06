@@ -9,19 +9,19 @@
 !
 !     The program evaluates MULTIPOLE operators in LS-coupling
 !     including the case of non-orthogonal orbitals
-!     
-!     The used technique is described in: 
+!
+!     The used technique is described in:
 !
 !     Comp.Phys.Commun. 98 (1996) 235-254
 !
 !======================================================================
 !
 !    INPUT ARGUMENTS:
-!    
+!
 !     AF1  -  c-file for initial state
 !     AF2  -  c-file for final state
 !     AA   -  type of calculation:  E1,M1,E2,M2,...
-! 
+!
 !     INPUT FILES:
 !
 !     AF1  -  c-file for initial state
@@ -80,16 +80,16 @@
 !=====================================================================
       Subroutine  MULT_cc
 !======================================================================
-!     cc mode (default):   calculations between two given states            
+!     cc mode (default):   calculations between two given states
 !
-!     Call as:   mult  name1  name2  [ AA   AF_bnk ]                        
+!     Call as:   mult  name1  name2  [ AA   AF_bnk ]
 !
 !  INPUT ARGUMENTS:
-!    
+!
 !     AF1  -  c-file for initial state
 !     AF2  -  c-file for final state
 !     AA   -  type of calculation, E1,E2,M1,M2...
-! 
+!
 !     if aggument is absent, it has been asked from terminal
 !
 !  INPUT FILES:
@@ -97,14 +97,14 @@
 !     AF1  -  c-file for initial state
 !     AF2  -  c-file for final state
 !     mult_bnk  - data-bank for angular coefficients (optional)
-!     
+!
 !  OUTPUT FILES:
 !
 !     mult_bnk  -  new data bank for angular coefficients
 !     mult.log  -  running information
 !
 !-----------------------------------------------------------------------
-      Use mult_par  
+      Use mult_par
 
       Character(2) :: AA
 
@@ -117,7 +117,7 @@
 
       Call GETARG(1,AF1)
       Call GETARG(2,AF2)
-      
+
 ! ... define the type of calculations:
 
       AA = 'E1'
@@ -125,7 +125,7 @@
       read(AA,'(a1,i1)') ktype,kpol
       write(pri,'(/a,a1,i1)') 'transition -> ',ktype,kpol
       if(ktype.eq.'M'.and.kpol.eq.0) Stop ' kpol=0 for M-type ? '
-      
+
 ! ... mult_bnk - if indicated
 
       if(iarg.ge.4)  Call GETARG(4,AF_b)
@@ -139,14 +139,14 @@
       Subroutine  MULT_ccc
 !======================================================================
 !
-!     ccc mode:  calculations between set of c-files                        
-!     --------                                                              
-!     Call as:   mult  ccc  list_c=... AA=..  AF_bnk=..                     
-!                                                                        
-!     list_c   - file  with  list of involved c-files  (one for line)       
+!     ccc mode:  calculations between set of c-files
+!     --------
+!     Call as:   mult  ccc  list_c=... AA=..  AF_bnk=..
+!
+!     list_c   - file  with  list of involved c-files  (one for line)
 !
 !-----------------------------------------------------------------------
-      USE mult_par 
+      USE mult_par
 
       Character(80) :: list_c,AF
       Character(80), allocatable :: AF_list(:)
@@ -157,7 +157,7 @@
       nul = 20; open(nul,file=list_c)
 
       nfile=0
-      Do 
+      Do
        read(nul,'(a)',end=1) AF
        if(AF(1:1).eq.'*') Exit
        nfile=nfile+1
@@ -165,7 +165,7 @@
     1 if(nfile.eq.0) Stop ' nfile = '
 
       Allocate(AF_list(nfile))
-      rewind(nul)     
+      rewind(nul)
       Do i=1,nfile; read(nul,'(a)') AF_list(i); End do
 
 ! ... define the type of calculations:
@@ -212,16 +212,16 @@
       Subroutine  MULT_bsr
 !======================================================================
 !
-!     bsr mode:  calculations between set of BSR cfg.nnn files              
-!     --------                                                              
-!     Call as:   mult  bsr  klsp1=.. klsp2=..  AA=..  AF_bnk=..             
-!                                                                      
-!     EXAMPLE: FOR CALLING:                                                 
+!     bsr mode:  calculations between set of BSR cfg.nnn files
+!     --------
+!     Call as:   mult  bsr  klsp1=.. klsp2=..  AA=..  AF_bnk=..
 !
-!     mult bsr klsp1=1 klsp2=5  AF_b=mult_bnk_E1                               
-!     
+!     EXAMPLE: FOR CALLING:
+!
+!     mult bsr klsp1=1 klsp2=5  AF_b=mult_bnk_E1
+!
 !-----------------------------------------------------------------------
-      USE mult_par  
+      USE mult_par
 
       Character(3) :: ALSP1,ALSP2, tpar
       Character(2) :: AA
@@ -249,7 +249,7 @@
       Allocate(lpar(nlsp),ispar(nlsp),ipar(nlsp),jpar(nlsp))
 
       Do i = 1,nlsp
-       read(nut,*) tpar,lpar(i),ispar(i),ipar(i) 
+       read(nut,*) tpar,lpar(i),ispar(i),ipar(i)
        jpar(i) = 0; if(ispar(i).eq.0) jpar(i) = lpar(i) + 1
       End do
 
@@ -258,10 +258,10 @@
 
       ii = LEN_TRIM(AF_b)
 
-      Do ilsp = 1,nlsp-1;    if(klsp1.ne.0.and.ilsp.ne.klsp1) Cycle 
+      Do ilsp = 1,nlsp-1;    if(klsp1.ne.0.and.ilsp.ne.klsp1) Cycle
       Do jlsp = ilsp+1,nlsp; if(klsp2.ne.0.and.jlsp.ne.klsp2) Cycle
 
-! ... check the dipole transitions rules: 
+! ... check the dipole transitions rules:
 
        if(ipar(ilsp).eq.ipar(jlsp)) Cycle
        if(ispar(ilsp).ne.ispar(jlsp)) Cycle
@@ -289,10 +289,10 @@
 !======================================================================
 !
 !  INPUT ARGUMENTS:
-!    
+!
 !     klsp1  -  initial partial wave
 !     klsp2  -  final partial wave
-! 
+!
 !     if klsp = 0 -> all partial waves
 !
 !  INPUT FILES:
@@ -301,7 +301,7 @@
 !     AF1  -  c-file for initial state, cfg.nnn
 !     AF2  -  c-file for final state, cfg.mmm
 !     mult_bnk.nnn_mmm  - data-bank for angular coefficients (optional)
-!     
+!
 !  OUTPUT FILES:
 !
 !     mult_bnk.nnn_mmm  -  new(revised) data bank for angular coefficients
@@ -309,7 +309,7 @@
 !
 !-----------------------------------------------------------------------
 
-      USE mult_par  
+      USE mult_par
 
       Integer :: nut=21; Character(80) :: AF_t = 'target_dc'
 
@@ -332,15 +332,15 @@
       nlsp = 0
       Call Read_ipar(nut,'nlsp',nlsp); read(nut,*)
       Do i = 1,nlsp
-       read(nut,*) tpar,lpar(i),ispar(i),ipar(i) 
+       read(nut,*) tpar,lpar(i),ispar(i),ipar(i)
       End do
 
       ii = LEN_TRIM(AF_b)
 
-      Do ilsp = 1,nlsp-1;    if(klsp1.ne.0.and.ilsp.ne.klsp1) Cycle 
+      Do ilsp = 1,nlsp-1;    if(klsp1.ne.0.and.ilsp.ne.klsp1) Cycle
       Do jlsp = ilsp+1,nlsp; if(klsp2.ne.0.and.jlsp.ne.klsp2) Cycle
 
-! ... check the dipole transitions rules: 
+! ... check the dipole transitions rules:
 
        if(ipar(ilsp).eq.ipar(jlsp)) Cycle
        if(ispar(ilsp).ne.ispar(jlsp)) Cycle
@@ -348,7 +348,7 @@
        if(i.eq.0) Cycle
 
        write(ALSP1,'(i3.3)') ilsp; AF1='cfg.'//ALSP1
-       write(ALSP2,'(i3.3)') jlsp; AF2='cfg.'//ALSP2 
+       write(ALSP2,'(i3.3)') jlsp; AF2='cfg.'//ALSP2
 
        AF_b = AF_b(1:ii)//'.'//ALSP1//'_'//ALSP2
 
@@ -364,12 +364,12 @@
 !======================================================================
 !     calculations for given mult_bnk and c-files:
 !-----------------------------------------------------------------------
-      Use mult_par  
+      Use mult_par
       Use conf_LS,  only: ne
       Use det_list, only: ndet,ldet,jdet
       Use def_list, only: ndef,ldef,jdef
 
-      Implicit none 
+      Implicit none
       Character AS*80, kt*1
       Integer :: nc, k
       Real(8) :: t1,t2
@@ -386,7 +386,7 @@
        rewind(nub)
        read(nub) kt,k
        if(kt.ne.ktype.or.k.ne.kpol) new=1
-       if(new.eq.1) close(nub) 
+       if(new.eq.1) close(nub)
       end if
       if(new.eq.1) &
        write(pri,'(/a,a)')  'new calculation for ',AF_b
@@ -411,21 +411,21 @@
       end if
 
 ! ... define possible mls orbitals:
-      
+
       Call Alloc_spin_orbitals(ne)
 
 ! ... prepare det.expantions for input configutarions:
 
       Open(nua,form='UNFORMATTED',status='SCRATCH')
       Open(nud,form='UNFORMATTED',status='SCRATCH')
- 
-      Call Pre_det_exp 
+
+      Call Pre_det_exp
 
 ! ... calculations for new angular symmetries:
 
       Open(nui,form='UNFORMATTED',status='SCRATCH')
 
-      Call Conf_loop 
+      Call Conf_loop
 
 !-----------------------------------------------------------------------
 ! ... record results:
@@ -445,27 +445,27 @@
       rewind(nui); Call RW(nui,nur,nc)
       close(nur); close(nub)
 
-! ... move new results to data bank (inr_res -> int_bnk): 
- 
-      write(AS,'(a,1x,a,1x,a)') move,trim(AF_r),trim(AF_b)  
+! ... move new results to data bank (inr_res -> int_bnk):
+
+      write(AS,'(a,1x,a,1x,a)') move,trim(AF_r),trim(AF_b)
 
       Call System(trim(AS))
 
       Close(in1); Close(in2); Close(nub)
       Close(nui,status='DELETE')
-      Close(nur,status='DELETE') 
-      Close(nua,status='DELETE') 
-      Close(nud,status='DELETE') 
+      Close(nur,status='DELETE')
+      Close(nua,status='DELETE')
+      Close(nud,status='DELETE')
 
 ! ... time for one partial wave:
 
       write(pri,'(/a/)') &
           'Results for new angular symmetry calculations:'
 
-      if(ndet.gt.0) jdet=ldet/ndet+1 
+      if(ndet.gt.0) jdet=ldet/ndet+1
       write(pri,'(a,2i10)') 'number of overlap determinants =', ndet,jdet
-      if(ndef.gt.0) jdef=ldef/ndef+1 
-      write(pri,'(a,2i10)') 'number of overlap factors      =', ndef,jdef 
+      if(ndef.gt.0) jdef=ldef/ndef+1
+      write(pri,'(a,2i10)') 'number of overlap factors      =', ndef,jdef
       write(pri,'(a,i10 )') 'number of angular integrals    =', nc
 
       Call CPU_time(t2)

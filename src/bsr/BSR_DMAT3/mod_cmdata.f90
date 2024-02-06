@@ -5,47 +5,47 @@
 !  and order pointer (ipt). The data are devided on different types
 !  (ntype, itype) and saved in memory in blocks (nblocks, mblocks).
 !--------------------------------------------------------------------
-      Implicit none 
-    
+      Implicit none
+
 ! ... coefficients:
 
       Real(8), allocatable :: CLDATA(:), CVDATA(:)
-    
+
 ! ... their attributes:
 
       Integer, allocatable :: K1(:),K2(:),K3(:),IPT(:)
 
-! ... number of different structures and current structure 
+! ... number of different structures and current structure
 
-      Integer, parameter :: ntype =  10   
-      Integer :: itype =  0                
+      Integer, parameter :: ntype =  10
+      Integer :: itype =  0
 
 ! ... the data are divided on blocks, with number and size:
 
-      Integer, parameter :: nblocks =  50     
-      Integer, parameter :: mblocks =  20000  
+      Integer, parameter :: nblocks =  50
+      Integer, parameter :: mblocks =  20000
 
 ! ... current block for given type:
 
-      Integer, allocatable :: iblk(:)    
+      Integer, allocatable :: iblk(:)
 
-! ... pointer on first(last) element in given block 
+! ... pointer on first(last) element in given block
 
-      Integer, allocatable :: ipblk(:), ipi(:)   
-      Integer, allocatable :: jpblk(:), ipj(:)  
+      Integer, allocatable :: ipblk(:), ipi(:)
+      Integer, allocatable :: jpblk(:), ipj(:)
 
-! ... number of blocks for given type: 
+! ... number of blocks for given type:
 
       Integer, allocatable :: nblk(:)
-    
-! ... blocks chain pointer for given type:       
 
-      Integer, allocatable :: kblk(:,:)  
+! ... blocks chain pointer for given type:
+
+      Integer, allocatable :: kblk(:,:)
 
 ! ... total number of ordererd coefficients:
 
-      Integer :: ncdata = 0  
-    
+      Integer :: ncdata = 0
+
       End Module cmdata
 
 
@@ -55,7 +55,7 @@
 !     allocate arrays in module "cmdata"
 !----------------------------------------------------------------------
       Use cmdata
-   
+
       Implicit none
       Integer, intent(in) :: k
       Integer :: i,n,m

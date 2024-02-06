@@ -1,21 +1,21 @@
 !======================================================================
       Module c_data
 !======================================================================
-! ... contains a set of coefficients with four identifiers 
+! ... contains a set of coefficients with four identifiers
 ! ... (k1,k2,k3,k4) and one pointer (ipt), devided in blocks;
-! ... each block contain data for given multipole (kpol) and type (itype)   
+! ... each block contain data for given multipole (kpol) and type (itype)
 !
 ! ... internal procedures: Alloc_c_data (nt)
 !                          Add_coef     (kpol,itype,C,j1,j2,j3,j4)
 !                          Add_cdata    (ip,jp,C,j1,j2,j3,j4)
 !                          Add_matrix   (jtype,jpol)
 !                          Merge_cdata  (nn, ip, jp, nc)
-! ... external calls:      Gen_matrix   (itype, kpol) 
+! ... external calls:      Gen_matrix   (itype, kpol)
 !----------------------------------------------------------------------
-      Implicit none 
+      Implicit none
 
       Integer :: ncdata = 0             ! number of coefficients
-      Real(8), allocatable :: CDATA(:)  ! coefficient values    
+      Real(8), allocatable :: CDATA(:)  ! coefficient values
 
 ! ... their attributes:
 
@@ -23,34 +23,34 @@
 
 ! ... default dimension limits:
 
-      Integer :: nb    =   1000         ! number of blocks in c_data       
+      Integer :: nb    =   1000         ! number of blocks in c_data
       Integer :: mb    =   2000         ! size of blocks
       Integer :: kb    =    100         ! max.nb for given case
 
       Integer :: ntype =  4             ! number of integral types
-      Integer :: kpol1 =  0             ! min multipole index                   
-      Integer :: kpol2 =  7             ! max multipole index                   
+      Integer :: kpol1 =  0             ! min multipole index
+      Integer :: kpol2 =  7             ! max multipole index
 
       Real(8) :: mem_cdata  = 0.d0
 
 ! ... tolerence parameters:
 
-      Real(8) :: eps_cdata  = 1.d-12    ! tolerance for coefficients	                               
+      Real(8) :: eps_cdata  = 1.d-12    ! tolerance for coefficients
 
-! ... pointer on first(last) element in given block 
+! ... pointer on first(last) element in given block
 
-      Integer, allocatable :: ipblk(:), ipi(:)   
-      Integer, allocatable :: jpblk(:), ipj(:)  
+      Integer, allocatable :: ipblk(:), ipi(:)
+      Integer, allocatable :: jpblk(:), ipj(:)
 
 ! ... current block for given kpol and itype:
 
-      Integer, allocatable :: iblk(:,:)    
+      Integer, allocatable :: iblk(:,:)
 
-! ... number of blocks for given kpol and itype: 
+! ... number of blocks for given kpol and itype:
 
       Integer, allocatable :: nblk(:,:)
-    
-! ... chain ponter for given kpol and itype:       
+
+! ... chain ponter for given kpol and itype:
 
       Integer, allocatable :: kblk(:,:,:)
 
@@ -60,10 +60,10 @@
 !======================================================================
       Subroutine alloc_c_data(nt,kp1,kp2,mblock,nblock,kblock,eps_c)
 !======================================================================
-!     allocate (deallocate) arrays in module c_data 
+!     allocate (deallocate) arrays in module c_data
 !----------------------------------------------------------------------
       Use c_data
-   
+
       Implicit none
       Integer, intent(in) :: nt,kp1,kp2,mblock,nblock,kblock
       Real(8), intent(in) :: eps_c
@@ -71,7 +71,7 @@
 
       if(allocated(CDATA)) Deallocate(CDATA,K1,K2,K3,K4,IPT, &
                            ipblk,jpblk,ipi,ipj,iblk,nblk,kblk)
-      mem_cdata = 0.0 
+      mem_cdata = 0.0
 
       if(nt.eq.0) Return
 
@@ -89,7 +89,7 @@
                kblk(kpol1:kpol2,ntype,nb) )
 
       m = 7*m + 4*nb + (kpol2-kpol1+1)*(2+nb)*ntype
-      mem_cdata = m * 4.0 / (1024 * 1024) 
+      mem_cdata = m * 4.0 / (1024 * 1024)
 
 ! ... initilize all blocks:
 
@@ -121,11 +121,11 @@
       Real(8), intent(in) :: C
       Integer, intent(in) :: kpol,j1,j2,j3,j4,itype
       Integer :: i,k,m,n,ip,jp,jtype,jpol
- 
+
 ! ... add coefficient to list:
 
-      i = iblk(kpol,itype); ip = ipblk(i); jp = jpblk(i) 
-      Call Add_cdata(ip,jp,C,j1,j2,j3,j4)                    
+      i = iblk(kpol,itype); ip = ipblk(i); jp = jpblk(i)
+      Call Add_cdata(ip,jp,C,j1,j2,j3,j4)
       jpblk(i) = jp
 
 ! ... check if the block full:
@@ -145,7 +145,7 @@
        End do
        if(m.ne.0) Return
       end if
-     
+
 ! ... everything is full - it is time to generate matrix;
 ! ... we do it for type with biggest occupation
 
@@ -168,8 +168,8 @@
        m = 1; Exit
       End do
       if(m.eq.0) Stop ' Add_coef: problems with new block '
-      
-      End Subroutine Add_coef 
+
+      End Subroutine Add_coef
 
 
 !======================================================================
@@ -187,13 +187,13 @@
 
       if(jp.lt.ip) then
        cdata(ip)=C; k1(ip)=j1; k2(ip)=j2; k3(ip)=j3; k4(ip)=j4
-       jp=ip; Return 
-      end if       
+       jp=ip; Return
+      end if
 
 ! ... search position (k) for new integral
 
       k=ip; l=jp;
-    1 if(k.gt.l) go to 2              
+    1 if(k.gt.l) go to 2
       m=(k+l)/2
       if(m.lt.ip.or.m.gt.jp) Stop 'Promlems with m in Add_cdata'
       if    (j1.lt.K1(m)) then;       l = m - 1
@@ -214,7 +214,7 @@
        end if
       end if
       go to 1
-    2 Continue 
+    2 Continue
 
 ! ... shift the rest of data up:
 
@@ -245,7 +245,7 @@
 !     nc    - number of result coeff's
 !     EPS_c - all coefficients < EPS_c are ignored
 !----------------------------------------------------------------------
-      Use c_data 
+      Use c_data
 
       Implicit none
       Integer :: nn,nc
@@ -263,12 +263,12 @@
 ! ...  main loop ...
 
     1 Continue
-                             
+
 ! ...  compare integrals in different blocks and merge the coefficients
 ! ...  in case of equal integrals (nn > 1)
 
-       Do ii=1,nn-1;  if(JP(ii).le.0) Cycle; i=IP(ii) 
-        Do jj=ii+1,nn; if(JP(jj).le.0) Cycle; j=IP(jj) 
+       Do ii=1,nn-1;  if(JP(ii).le.0) Cycle; i=IP(ii)
+        Do jj=ii+1,nn; if(JP(jj).le.0) Cycle; j=IP(jj)
          if(K1(i).ne.K1(j)) Cycle
          if(K2(i).ne.K2(j)) Cycle
          if(K3(i).ne.K3(j)) Cycle
@@ -278,7 +278,7 @@
         End do
        End do
 
-! ...  choose the minimum K1, then K2, then K3, then K4 
+! ...  choose the minimum K1, then K2, then K3, then K4
 
        j=IP(mm)
        Do m=1,nn; if(JP(m).eq.0) Cycle; i=IP(m)
@@ -296,7 +296,7 @@
         end if
        End do
 
-! ...  mark the chosen coefficient 
+! ...  mark the chosen coefficient
 
        if(abs(CDATA(j)).gt.eps_cdata) then; nc=nc+1; IPT(nc)=IP(mm); end if
 
@@ -318,7 +318,7 @@
 !======================================================================
 !     merge data and generate the interaction matrix for given type
 !     "itype" and mutipole index "kpol"
-!     External call: O_data, L_data, I_data 
+!     External call: O_data, L_data, I_data
 !----------------------------------------------------------------------
       Use c_data, nc => ncdata
 
@@ -327,29 +327,29 @@
       Integer :: i,j,k,n
 
 ! ... prepare the data:
-       
-      n = nblk(kpol,itype)               ! number of blocks  
+
+      n = nblk(kpol,itype)               ! number of blocks
       i = kblk(kpol,itype,1)             ! first block
-      if(n.eq.1.and.jpblk(i).le.0) n=0   
+      if(n.eq.1.and.jpblk(i).le.0) n=0
 
       if(n.le.0) then                   ! nothing to do
-       nc=0; Return  
+       nc=0; Return
 
       elseif(n.eq.1) then                ! simple case - one block
        nc = jpblk(i)-ipblk(i) + 1
        j = ipblk(i)-1
        Do i = 1,nc;  IPT(i)=j+i;  End do
 
-      else                               ! need merging data from 
+      else                               ! need merging data from
                                          ! different blocks
-       Do i = 1,n               
+       Do i = 1,n
         j = kblk(kpol,itype,i)
-        ipi(i) = ipblk(j)  
+        ipi(i) = ipblk(j)
         ipj(i) = jpblk(j)
        End do
        Call Merge_cdata(n, ipi, ipj, nc)
 
-       ! .. release the blocks:       
+       ! .. release the blocks:
 
        Do i=1,n; jpblk(kblk(kpol,itype,i))=-1;  End do
 

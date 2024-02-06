@@ -4,14 +4,14 @@
 !
 !   Defines moments for Wk-integrals in the B-spline cells
 !
-!   Calling sequence:          wk_moments             
-!                              ----------             
-!                               /    \\           
-!                           moments wk_pdiag      
-!                                     ||          
-!                                   wk_triang     
-!                                    /   \        
-!                                 gauss  qbsplvb  
+!   Calling sequence:          wk_moments
+!                              ----------
+!                               /    \\
+!                           moments wk_pdiag
+!                                     ||
+!                                   wk_triang
+!                                    /   \
+!                                 gauss  qbsplvb
 !
 !-------------------------------------------------------------------------
 !
@@ -42,16 +42,16 @@
     ! .. compute the moments in the spline basis
 
     if(mtype == 'aaa') Call allocate_moments
-    
-    CALL moments(  k   , rkd3, 'n','d')     
-    CALL moments(  k-1 , rkd2, 'n','b')     
-    rkd3 = 2 * rkd3 + (k+2)*rkd2
-    CALL moments(-(k+2), rkd2, 's','b')     
 
-    CALL moments(-(k+3), rkd4, 'n','d')     
-    CALL moments(-(k+4), rkd1, 'n','b')     
+    CALL moments(  k   , rkd3, 'n','d')
+    CALL moments(  k-1 , rkd2, 'n','b')
+    rkd3 = 2 * rkd3 + (k+2)*rkd2
+    CALL moments(-(k+2), rkd2, 's','b')
+
+    CALL moments(-(k+3), rkd4, 'n','d')
+    CALL moments(-(k+4), rkd1, 'n','b')
     rkd4 = 2 * rkd4 - (k+1)*rkd1
-    CALL moments(  k+1 , rkd1, 's','b')     
+    CALL moments(  k+1 , rkd1, 's','b')
 
     CALL wk_pdiag
 
@@ -144,7 +144,7 @@
     REAL(KIND=8), DIMENSION(ks) :: x,w,gx,gw,gv, bi
     REAL(KIND=8), DIMENSION(ks,ks) :: bspTmp,bspdTmp
     REAL(KIND=8), DIMENSION(ks,ks,ks) ::Int1,Int2
-    REAL(KIND=8), DIMENSION(nv,ks,ks) :: dbiatx	          
+    REAL(KIND=8), DIMENSION(nv,ks,ks) :: dbiatx
 
     left = iv+ks-1
     xbase = t(left)
@@ -161,14 +161,14 @@
 
 ! .. the bspline values at the new gaussian points
 
-      DO i=1,ks               
+      DO i=1,ks
        Call vbsplvd(t,left,1,gx(i),2,dbiatx)
        bspTmp (i,1:ks) = dbiatx(1,1:ks,1)
        bspdTmp(i,1:ks) = 2*dbiatx(1,1:ks,2) + k*bspTmp(i,1:ks)/gx(i)
       END DO
 
 ! .. and the corresponding gaussian weights
-      
+
       gw(:) = (gr(iv,m)-xbase)*w(:) * gx(:)**k
 
 
@@ -176,7 +176,7 @@
 ! .. Int1  =  |      bsp(iv,:,i) bsp(iv,:,ip) r  dr
 !             / r_iv
 
- 
+
       c = grm(iv,m)**(k+2) * grw(iv,m)
       DO i=1,ks
        bi(:) = gw(:)*bspTmp(:,i)
@@ -230,7 +230,7 @@
         DO j=1,ks
          DO jp=j,ks
           jj = jj + 1
-          rkd(ii,jj,iv) = rkd(ii,jj,iv) + SUM( gx(:)*Int2(j,jp,:)) 
+          rkd(ii,jj,iv) = rkd(ii,jj,iv) + SUM( gx(:)*Int2(j,jp,:))
          END DO
         END DO
        END DO

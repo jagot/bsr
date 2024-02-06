@@ -8,7 +8,7 @@
       Use  symt_list_LS
 
       Implicit none
-      Integer :: it, ic 
+      Integer :: it, ic
 
       if(allocated(IT_sort )) Deallocate(IT_sort)
                               Allocate(IT_sort(nsymt))

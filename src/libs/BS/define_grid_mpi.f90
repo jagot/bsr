@@ -1,8 +1,8 @@
 !=========================================================================
       SUBROUTINE define_grid_mpi(z)
 !=========================================================================
-!     gets input data for the grid and sets up the spline knots 
-!     Requires file  'knot.dat' with grid parameters 
+!     gets input data for the grid and sets up the spline knots
+!     Requires file  'knot.dat' with grid parameters
 ! -------------------------------------------------------------------------
       Use MPI
 
@@ -25,17 +25,17 @@
       call MPI_COMM_RANK(MPI_COMM_WORLD, myid, ierr)
 
       Open(nug,file=AF_grid)
-      Call Read_ipar_mpi(nug,'grid_type',grid_type)      
-      Call Read_ipar_mpi(nug,'ns',ns)      
-      Call Read_ipar_mpi(nug,'ks',ks)      
-      Call Read_rpar_mpi(nug,'z',z)      
-      Call Read_rpar_mpi(nug,'h',h)      
-      Call Read_rpar_mpi(nug,'hmax',hmax)      
-      Call Read_rpar_mpi(nug,'rmax',rmax)      
+      Call Read_ipar_mpi(nug,'grid_type',grid_type)
+      Call Read_ipar_mpi(nug,'ns',ns)
+      Call Read_ipar_mpi(nug,'ks',ks)
+      Call Read_rpar_mpi(nug,'z',z)
+      Call Read_rpar_mpi(nug,'h',h)
+      Call Read_rpar_mpi(nug,'hmax',hmax)
+      Call Read_rpar_mpi(nug,'rmax',rmax)
 
       Select case(grid_type)
-       Case(0);  Call mkgrid (z) 
-       Case(1);  Call mkgrid1(z) 
+       Case(0);  Call mkgrid (z)
+       Case(1);  Call mkgrid1(z)
        Case default
        Call Stop_mpi(0,0,'Unknown grid_type ')
       End Select
@@ -158,7 +158,7 @@
 
       IMPLICIT NONE
       INTEGER(4):: i,nt
-      Real(8) :: z 
+      Real(8) :: z
 
       rmax = rmax * z
       hmax = hmax * z
@@ -167,31 +167,31 @@
       ALLOCATE (t(nt))
       t = 0.d0
       ns = ks
-	  
+
 ! ... determine ml, the number of intervals from 0 to 1
 ! ... first make sure that h = 1/n as recomended
 
       ml = 1.d0/h + 0.5;  h = 1.d0/ml
-      Do i=1,ml 
+      Do i=1,ml
        ns = ns + 1; t(ns) = t(ns-1) + h
       End do
 
 ! ... determine me, the number of intervals in "exponential" grid
 
       if(hmax.lt.h) hmax = h
-      me = 0 
-      Do 
+      me = 0
+      Do
        t(ns+1) = t(ns)*(1.d0+h)
        if(t(ns+1)-t(ns).gt.hmax) Exit
        ns = ns + 1
        if(t(ns).gt.rmax) Exit
        me = me + 1
       End do
-        
+
 ! ... rest of interval with step = hmax
 
       if(t(ns).lt.rmax) then
-       Do 
+       Do
         t(ns+1) = t(ns) + hmax
         ns = ns + 1
         if(t(ns).ge.rmax) Exit

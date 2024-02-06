@@ -26,14 +26,14 @@
          iarg = IARGC()
          if(iarg.gt.0) then
           Call GETARG(1,BF); i=INDEX(BF,'=')
-          if(i.eq.0) then 
+          if(i.eq.0) then
            i=INDEX(BF,'.')-1; if(i.lt.0) i=LEN_TRIM(BF)
            AF=BF(1:i)//'.c'; AF_b = BF(1:i)//'.bnk'
           end if
          end if
-        end if  
+        end if
 
-        if(Icheck_file(AF).eq.0) then; fail=1; Return; end if         
+        if(Icheck_file(AF).eq.0) then; fail=1; Return; end if
         Open(nu,file=AF,status='OLD')
 
        Case(2)               ! bnk-file
@@ -41,21 +41,21 @@
         AF = AF_b
         if(klsp.gt.0) then
          i=Index(BF_b,'.'); AF=BF_b(1:i)//ALSP; BF_b=AF
-        end if  
+        end if
         Inquire (FILE=AF, exist=EX)
 
         new=.TRUE.
         if(EX) then
          new = .FALSE.
          Open(nub,file=AF,form='UNFORMATTED',STATUS='OLD')
-        end if   
+        end if
 
         Case(3)
 
          AF = AF_r
          if(klsp.gt.0) then
           i=Index(BF_r,'.'); AF=BF_r(1:i)//ALSP; BF_r=AF
-         end if  
+         end if
          Open(nur,file=AF,form='UNFORMATTED')
 
         Case(7)
@@ -71,7 +71,7 @@
          Open(nu,form='UNFORMATTED',status='SCRATCH')
 
         Case default
-        
+
          Stop ' open_adcf: unit value <nu> is out of list '
 
        End select

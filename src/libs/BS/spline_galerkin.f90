@@ -1,8 +1,8 @@
 !====================================================================
     Module spline_galerkin
 !====================================================================
-!   contains common arrays used in the application of splines and 
-!   the Galerkin method 
+!   contains common arrays used in the application of splines and
+!   the Galerkin method
 !--------------------------------------------------------------------
     Implicit none
     Real(8), ALLOCATABLE, DIMENSION(:,:):: r1, rm1, rm2, rm3

@@ -121,7 +121,7 @@
 
       READ(nuw,1,end=10) Atom,Term,EL,m,ZZ,EI,ZETA,AZZ
       nrf = nrf + 1
-      if(nrf.gt.mrf-2) Call Alloc_radial(mrf+jrf) 
+      if(nrf.gt.mrf-2) Call Alloc_radial(mrf+jrf)
 
       ero(nrf) = EL
       mro(nrf) = m;   m = nrf

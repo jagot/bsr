@@ -3,7 +3,7 @@
 !----------------------------------------------------------------------
 !     main parameters for the BSR_MAT program
 !----------------------------------------------------------------------
-      Use zconst, only: c_au, time_au  
+      Use zconst, only: c_au, time_au
       Use target
       Use channel
 
@@ -18,9 +18,9 @@
 ! ... input/output files and units:
 
       Integer, parameter :: ma=40    ! limit for file-name length
-      Character(ma) :: AF, BF     
+      Character(ma) :: AF, BF
 
-      Integer :: prj =  3; Character(ma) :: AF_prj = 'bsr_mat.log'                            
+      Integer :: prj =  3; Character(ma) :: AF_prj = 'bsr_mat.log'
       Integer :: pri = 66; Character(ma) :: AF_pri = 'mat_log.nnn'
 
       Integer :: nut = 10; Character(ma) :: AF_tar = 'target'
@@ -31,7 +31,7 @@
       Integer :: nuc = 13; Character(ma) :: AF_cfg = 'cfg.nnn'
       Integer :: nuw = 14; Character(ma) :: AF_bsw = 'target.bsw'
       Integer :: nui = 15; Character(ma) :: AF_mat = 'bsr_mat.nnn'
-      Integer :: nuj = 16; 
+      Integer :: nuj = 16;
       Integer :: nud = 17; Character(ma) :: AF_deb = 'int_mat.nnn'
       Integer :: nuo = 18; Character(ma) :: AF_orb = 'target_orb'
       Integer :: nun = 19; Character(ma) :: AF_new = 'target_new'
@@ -39,16 +39,16 @@
 
 ! ... range of partial waves:
 
-      Integer :: klsp=0, klsp1=1, klsp2=1      
+      Integer :: klsp=0, klsp1=1, klsp2=1
       Character(3) :: ALSP
 
-! ... treat the target states as othonormalized w.f.: 
+! ... treat the target states as othonormalized w.f.:
 
-      Integer :: iitar  =  0      
+      Integer :: iitar  =  0
 
 ! ... relativistic corrections:
 
-      Integer :: mrel  =   0      
+      Integer :: mrel  =   0
       Integer :: mso   =   0
       Integer :: msoo  =   0
       Integer :: mss   =   0
@@ -70,17 +70,17 @@
 ! ... dimension limits:
 
       Integer :: mk       =      7   ! max. multipole index
-      Integer :: nblock   =   2000   ! number of blocks in c_data       
+      Integer :: nblock   =   2000   ! number of blocks in c_data
       Integer :: mblock   =   2000   ! size of blocks
       Integer :: kblock   =   100    ! max.nb for the given type of integrals
-	                               
+
 ! ... tolerence parameters:
 
       Real(8) :: eps_c    = 1.0D-10  !  tolerance for coefficients
       Real(8) :: eps_det  = 1.0D-10  !  tolerance for determinants
       Real(8) :: eps_ovl  = 1.0D-8   !  tolerance for overlaps
 
-      Real(8) :: S_ovl    = 0.75     !  channel overlap limit 
+      Real(8) :: S_ovl    = 0.75     !  channel overlap limit
       Real(8) :: S_pert   = 0.5      !  perturber overlap limit
 
       Real(8) :: Eps_acf  = 1.0D-5   !  tolerance for asympt. coeff.s
@@ -125,7 +125,7 @@
       Integer, parameter :: ncase = 11 ! number of different cases
       Integer, parameter :: mtype =  9 ! number of different structures
 
-      Integer :: icase =  0     !  current case    
+      Integer :: icase =  0     !  current case
 
 ! ... IJCASE  -  correspondence between icase and itype
 
@@ -151,7 +151,7 @@
 
       Integer :: mode = 0
 
-      Real(8) :: time0, time_delay = -1 
+      Real(8) :: time0, time_delay = -1
       Integer :: interrupt = 0, intercase = 0, max_nbuf = 0
 
       End Module bsr_mat

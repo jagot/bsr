@@ -1,8 +1,8 @@
 !====================================================================
     Module DBS_moments
 !====================================================================
-!   contains moments defining as   <B_i|r^k|B_j>   over an interval. 
-!   These moments are used for calculation of two-electron integrals 
+!   contains moments defining as   <B_i|r^k|B_j>   over an interval.
+!   These moments are used for calculation of two-electron integrals
 !   according to the cell algorithm.
 !--------------------------------------------------------------------
     Implicit none
@@ -22,7 +22,7 @@
 !-------------------------------------------------------------------
     Use DBS_grid, only: nv,ks
     Use DBS_moments
-   
+
     if(allocated(rkd)) Deallocate(rkd,rkd1,rkd2,rkd3,rkd4)
     kk = ks*ks
     Allocate(rkd(kk,kk,nv), rkd1(kk,nv),rkd2(kk,nv), &
@@ -57,13 +57,13 @@
 !   --------
 !      k      the power of moments
 !      sym    's' or 'n' - symmetrical or non-symetrical case
-!      div    'b' or 'd' - B_j or B'_j 
+!      div    'b' or 'd' - B_j or B'_j
 !   on exit
 !   -------
 !      rkm    array of moments over all intervals.
 !---------------------------------------------------------------------
       Use DBS_grid
-  
+
       Implicit none
       Integer, intent(in) :: k
       Real(8), intent(out) :: rkm(ks*ks,nv)
@@ -72,14 +72,14 @@
       Integer :: iv, jk
       Real(8) :: hp
       Real(8) :: rv(ks*ks)
-  
+
       jk = ks*(ks+1)/2; if(sym.eq.'n') jk = ks*ks
-  
+
       if(me.eq.0) then     ! .. there is no exponential grid
 
        Do iv = 1,nv
         Call moment(iv,k,rv,sym,dir);  rkm(1:jk,iv) = rv(1:jk)
-       End do 
+       End do
 
       else                 ! .. case of exponential grid
 
@@ -113,7 +113,7 @@
 !   --------
 !      k      the power of moments
 !      sym    's' or 'n' - symmetrical or non-symetrical case
-!      div    'b' or 'd' - B_j or B'_j 
+!      div    'b' or 'd' - B_j or B'_j
 !      iv     index of interval
 !   on exit
 !   -------
@@ -121,7 +121,7 @@
 !---------------------------------------------------------------------
       Use DBS_grid
       Use DBS_gauss
-      
+
       Implicit none
       Integer, intent(in) :: k,iv
       Real(8), intent(out) :: rv(ks*ks)
@@ -137,7 +137,7 @@
       bi(:,:) = bsp(iv,:,:)
       if(dir.eq.'b') then
        Do j = 1,ks;  bj(:,j) = bsp(iv,:,j)*gw(:); End do
-      else           
+      else
        Do j = 1,ks;  bj(:,j) = bsq(iv,:,j)*gw(:); End do
       End if
 
@@ -161,10 +161,10 @@
       Integer, intent(in) :: k,kk,nv
       Real(8), intent(out) :: rkm(kk,nv)
       Integer :: iv
- 
+
       rkm = 0.d0
-      Do iv = 1,nv; Call moment_pp(iv,k,rkm(1,iv)); End do 
-  
+      Do iv = 1,nv; Call moment_pp(iv,k,rkm(1,iv)); End do
+
       End Subroutine moments_pp
 
 
@@ -175,7 +175,7 @@
 !----------------------------------------------------------------------
       Use DBS_grid
       Use DBS_gauss
-      
+
       Implicit none
       Integer, intent(in) :: iv,k
       Real(8), intent(out) :: rv(*)
@@ -207,10 +207,10 @@
       Integer, intent(in) :: k,kk,nv
       Real(8), intent(out) :: rkm(kk,nv)
       Integer :: iv
-  
+
       rkm = 0.d0
-      Do iv = 1,nv; Call moment_qq(iv,k,rkm(1,iv)); End do 
-  
+      Do iv = 1,nv; Call moment_qq(iv,k,rkm(1,iv)); End do
+
       End Subroutine moments_qq
 
 
@@ -221,7 +221,7 @@
 !----------------------------------------------------------------------
       Use DBS_grid
       Use DBS_gauss
-     
+
       Implicit none
       Integer, intent(in) :: iv,k
       Real(8), intent(out) :: rv(*)
@@ -253,10 +253,10 @@
       Integer, intent(in) :: k,kk,nv
       Real(8), intent(out) :: rkm(kk,nv)
       Integer :: iv
-  
+
       rkm = 0.d0
-      Do iv = 1,nv; Call moment_pq(iv,k,rkm(1,iv)); End do 
-  
+      Do iv = 1,nv; Call moment_pq(iv,k,rkm(1,iv)); End do
+
       End Subroutine moments_pq
 
 
@@ -267,7 +267,7 @@
 !----------------------------------------------------------------------
       Use DBS_grid
       Use DBS_gauss
-      
+
       Implicit none
       Integer, intent(in) :: iv,k
       Real(8), intent(out) :: rv(*)
@@ -299,10 +299,10 @@
       Integer, intent(in) :: k,kk,nv
       Real(8), intent(out) :: rkm(kk,nv)
       Integer :: iv
-  
+
       rkm = 0.d0
-      Do iv = 1,nv; Call moment_qp(iv,k,rkm(1,iv)); End do 
-  
+      Do iv = 1,nv; Call moment_qp(iv,k,rkm(1,iv)); End do
+
       End Subroutine moments_qp
 
 
@@ -313,7 +313,7 @@
 !----------------------------------------------------------------------
       Use DBS_grid
       Use DBS_gauss
-      
+
       Implicit none
       Integer, intent(in) :: iv,k
       Real(8), intent(out) :: rv(*)

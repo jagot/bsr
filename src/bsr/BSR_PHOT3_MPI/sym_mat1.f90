@@ -31,7 +31,7 @@
        dmn = LOG10(dmn/2.d0)
        dav = LOG10(dav/n/(n-1))
       else
-       dmx=-15; dmn=-15; dav=-15 
+       dmx=-15; dmn=-15; dav=-15
       end if
 
       Do i = 1,n-1

@@ -2,26 +2,26 @@
       Module coef_list
 !====================================================================
 !     contains a set of coefficients ordering according to
-!     "nnk" identifiers 
+!     "nnk" identifiers
 !     coefficients less than eps_C are ignored
 !--------------------------------------------------------------------
-      Implicit none 
+      Implicit none
 
       Integer :: nrk = 0       ! current number of coefficients
       Integer :: mrk = 0       ! maximum dimension
       Integer :: irk = 2**10   ! initial dimension
-      Integer :: nnk = 0       ! number of identifiers          
+      Integer :: nnk = 0       ! number of identifiers
 
 ! ... coefficients:
 
-      Real(8), allocatable :: crk(:)   
-    
+      Real(8), allocatable :: crk(:)
+
 ! ... their attributes:
 
       Integer, allocatable :: krk(:,:)
 
-      Real(8) :: eps_C = 1.d-12        
-	  
+      Real(8) :: eps_C = 1.d-12
+
       End MODULE coef_list
 
 
@@ -40,7 +40,7 @@
 
       if(m.le.0.or.k.le.0) then
        if(allocated(crk)) Deallocate (crk,krk)
-       nrk = 0; mrk = 0; nnk = 0 
+       nrk = 0; mrk = 0; nnk = 0
       elseif(.not.allocated(crk)) then
        mrk = m; nrk = 0; nnk = k
        Allocate(crk(mrk),krk(k,m))
@@ -71,7 +71,7 @@
 !======================================================================
       Subroutine Add_coef_list(n,in,C)
 !======================================================================
-!     add new data to the list 
+!     add new data to the list
 !----------------------------------------------------------------------
       Use coef_list
 
@@ -87,9 +87,9 @@
 ! ... search position (k) for new integral
 
       k=1; l=nrk
-    1 if(k.gt.l) go to 2              
+    1 if(k.gt.l) go to 2
       m=(k+l)/2
-      
+
       j = 0
       Do i=1,n
        if(in(i).lt.krk(i,m)) then; l=m-1; Exit; end if
@@ -97,13 +97,13 @@
        j = i
       End do
 
-      if(j.eq.n) then    ! the same integral 
+      if(j.eq.n) then    ! the same integral
         crk(m)=crk(m)+C
-        Return 
+        Return
       end if
 
       go to 1
-    2 Continue 
+    2 Continue
 
 ! ... shift the rest data up:
 
@@ -114,7 +114,7 @@
 ! ... add new integral:
 
       crk(k)=C; krk(:,k)=in(:); nrk=nrk+1
-      if(nrk.eq.mrk) Call alloc_coef_list(mrk+irk,nnk,0.d0) 
+      if(nrk.eq.mrk) Call alloc_coef_list(mrk+irk,nnk,0.d0)
 
       End Subroutine Add_coef_list
 

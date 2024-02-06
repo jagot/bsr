@@ -4,7 +4,7 @@
 !     incode the integral
 !----------------------------------------------------------------------
       Implicit none
-      Integer, intent(in) :: itype,i1,i2       
+      Integer, intent(in) :: itype,i1,i2
       Integer, parameter :: jb = 2**10
 
       if(max(i1,i2).ge.jb) then
@@ -15,7 +15,7 @@
       if(itype.gt.3) then
        write(*,'(a,i5,a)')  &
                ' Incode_mult: itype =',itype,'  is out of range (3)'
-       Stop 
+       Stop
       end if
 
       Incode_mult = (itype*jb+i1)*jb+i2
@@ -31,7 +31,7 @@
       Implicit none
       Integer, parameter :: jb = 2**10
       Integer, intent(in) :: int
-      Integer, intent(out) :: itype,i1,i2 
+      Integer, intent(out) :: itype,i1,i2
       Integer :: k
 
       k  = int

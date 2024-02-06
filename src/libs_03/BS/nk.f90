@@ -13,19 +13,19 @@
       USE spline_param
       USE spline_orbitals
       USE spline_integrals
-  
+
       IMPLICIT NONE
       INTEGER(4), INTENT(in) :: i1,j1,i2,j2,k
       CHARACTER(1), INTENT(in), OPTIONAL :: meth
-  
+
       ! .. local variables
-  
+
       INTEGER(4) :: i,ip, j,jp
       REAL(8), DIMENSION(ns,ks) :: a,b
       REAL(8) :: nkj
-  
+
       ! .. check the B-spline integrals in module spline-integrals
-  
+
       if(k.ne.krk.or.itype.ne.'nk ') then
        if(meth.eq.'d') then
          Call MNK_diff(k)
@@ -33,12 +33,12 @@
          Call MNK_cell(k)
        end if
       end if
-  
+
       ! .. form cross-products
-  
+
       Call density (ns,ks,a,pbs(1,i1),pbs(1,i2),'s')
       Call density (ns,ks,b,pbs(1,j1),pbs(1,j2),'s')
-  
+
       ! .. assembling the B-spline integrals
 
       nk = 0.d0
@@ -53,6 +53,5 @@
           nk = nk + a(i,ip)*nkj
         end do
       end do
-  
+
       END FUNCTION nk
-  

@@ -1,7 +1,7 @@
 !======================================================================
       Subroutine Collect_ACF
 !======================================================================
-      Use MPI 
+      Use MPI
       Use bsr_recoup
 
       Implicit none
@@ -13,14 +13,14 @@
 
       Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
 
-       if(allocated(bcf)) deallocate(bcf)      
+       if(allocated(bcf)) deallocate(bcf)
        if(myid.eq.0) then
          Allocate(bcf(nch,nch,0:mk)); bcf = 0.d0
        end if
 
        Call MPI_REDUCE(ACF,BCF,nch*nch*(mk+1),MPI_DOUBLE_PRECISION,MPI_SUM,0,MPI_COMM_WORLD,ierr)
 
-      if(myid.ne.0) Return  
+      if(myid.ne.0) Return
 
 ! ... Symmetrize the ACF - matrix:
 
@@ -58,9 +58,9 @@
        if(SUM(acf(:,:,k)).eq.0) Cycle
        write(pri,'(a,i2)') 'k = ',k
        ij = 0
-       Do i=1,nch; Do j = 1,i      
+       Do i=1,nch; Do j = 1,i
         if(abs(acf(i,j,k)).lt.eps_acf) Cycle
-        i1=ij*20+1; i2=i1+19 
+        i1=ij*20+1; i2=i1+19
         write(line(i1:i2),'(2i4,E12.3)') j,i,acf(i,j,k)
         ij=ij+1
         if(ij.lt.5) Cycle

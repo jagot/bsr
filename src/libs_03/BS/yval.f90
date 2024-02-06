@@ -20,17 +20,17 @@
 !-----------------------------------------------------------------------
       Use spline_param
       Use spline_grid
-  
+
       Implicit none
       Integer, intent(in) :: id,iw,mm
       Real(8), intent(in) :: yv(ns)
       Real(8), intent(out) :: ygr(nv,ks)
-  
+
       ! .. local variables
-  
+
       Integer :: m, i, ith
       Real(8) :: gw(nv,ks)
-  
+
       if(mm.eq. 0) then
          gw = 1.d0
       elseif(mm.eq. 1) then
@@ -42,13 +42,13 @@
       elseif(mm.lt.-1) then
          gw = grm**(-mm)
       end if
-  
+
       if(iw.ne.0) gw = gw * grw
-  
+
       ygr = 0.d0
-  
+
       if(id.eq.0) then
-  
+
       do m = 1,ks
         do i = 1,nv
           do ith = 1,ks
@@ -56,9 +56,9 @@
          end do
         end do
        end do
-  
+
       elseif(id.eq.1.or.id.eq.2) then
-  
+
        do m = 1,ks
         do i = 1,nv
          do ith = 1,ks
@@ -66,8 +66,7 @@
          end do
         end do
        end do
-  
+
       end if
-  
+
       End Subroutine YVAL
-  

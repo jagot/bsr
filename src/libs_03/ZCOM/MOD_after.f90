@@ -1,10 +1,10 @@
 !======================================================================
       Module after_conditions
 !======================================================================
-!     contains the desription of one-electron radial overlaps 
+!     contains the desription of one-electron radial overlaps
 !----------------------------------------------------------------------
       Implicit none
-   
+
       Integer :: mafter = 0      !  max.number of  overlaps
       Integer :: nafter = 0      !  curent number of overlaps
       Integer :: kafter = 2**10  !  initial suggestion for mafter
@@ -15,7 +15,7 @@
 
       End Module after_conditions
 
- 
+
 !======================================================================
       Subroutine Alloc_after_conditions(m)
 !======================================================================
@@ -28,18 +28,18 @@
       Integer, allocatable :: iarray(:)
 
       if(m.lt.0) then
-       if(allocated(iafter)) Deallocate(iafter,jafter) 
+       if(allocated(iafter)) Deallocate(iafter,jafter)
        mafter = kafter; nafter = 0
        Allocate(iafter(mafter),jafter(mafter))
       elseif(m.eq.0) then
-       if(allocated(iafter)) Deallocate(iafter,jafter) 
+       if(allocated(iafter)) Deallocate(iafter,jafter)
        mafter = 0; nafter = 0
       elseif(m.gt.mafter) then
        if(nafter.le.0) then
-        if(Allocated(iafter)) Deallocate(iafter,jafter) 
+        if(Allocated(iafter)) Deallocate(iafter,jafter)
         mafter = m; nafter = 0
         Allocate(iafter(mafter),jafter(mafter))
-       else 
+       else
         Allocate(iarray(nafter))
         iarray(1:nafter)=iafter(1:nafter);  Deallocate(iafter)
         Allocate(iafter(m)); iafter(1:nafter)=iarray(1:nafter)
@@ -73,7 +73,7 @@
       i = io; j = jo
 
       k=1; l=nafter
-    1 if(k.gt.l) go to 2              
+    1 if(k.gt.l) go to 2
       m=(k+l)/2
       if    (i.lt.iafter(m)) then;     l = m - 1
       elseif(i.gt.iafter(m)) then;     k = m + 1
@@ -81,18 +81,18 @@
        if    (j.lt.jafter(m)) then;    l = m - 1
        elseif(j.gt.jafter(m)) then;    k = m + 1
        else
-        after=1;  Return 
+        after=1;  Return
        end if
       end if
       go to 1
-    2 kk=k 
-      
+    2 kk=k
+
 ! ... search record for opposite position:
 
       i = jo; j = io
 
       k=1; l=nafter
-    3 if(k.gt.l) go to 4              
+    3 if(k.gt.l) go to 4
       m=(k+l)/2
       if    (i.lt.iafter(m)) then;     l = m - 1
       elseif(i.gt.iafter(m)) then;     k = m + 1
@@ -100,11 +100,11 @@
        if    (j.lt.jafter(m)) then;    l = m - 1
        elseif(j.gt.jafter(m)) then;    k = m + 1
        else
-        after=-1;  Return 
+        after=-1;  Return
        end if
       end if
       go to 3
-    4 k=kk 
+    4 k=kk
 
 ! ... shift the rest data up:
 
@@ -115,7 +115,7 @@
 ! ... add new overlap:
 
       iafter(k)=io; jafter(k)=jo; nafter=nafter+1
-      if(nafter.eq.mafter) Call alloc_after_conditions(mafter+kafter) 
+      if(nafter.eq.mafter) Call alloc_after_conditions(mafter+kafter)
 
       after = 1
 

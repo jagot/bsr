@@ -49,7 +49,7 @@
 
       Do i=1,ncfg
        it=IC_term(IP_stat(i))
-       if(IT_state1(it).eq.0) IT_state1(it)=i; IT_state2(it)=i 
+       if(IT_state1(it).eq.0) IT_state1(it)=i; IT_state2(it)=i
       End do
 
 !----------------------------------------------------------------------
@@ -70,7 +70,7 @@
          if(k.eq.1) Exit
        End do
        if(k.eq.1.and.mode.eq.0) &
-        Call Stop_mpi(0,0,'angular-bank-file is not complete')  
+        Call Stop_mpi(0,0,'angular-bank-file is not complete')
 
       end if
 
@@ -87,7 +87,7 @@
       Use symc_list_LS
       Use symt_list_LS
       Use conf_LS
-      Use orb_LS  
+      Use orb_LS
 
       Implicit none
       Integer, intent(in) :: nuc

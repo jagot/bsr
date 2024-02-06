@@ -10,7 +10,7 @@
       Integer :: mdata = 0       ! current dimentsion of list
       Integer :: idata = 2**10   ! supposed max. dimentsion
 
-      Integer, allocatable :: jjpar(:),ip(:),l1(:),l2(:),jk1(:),jk2(:)   
+      Integer, allocatable :: jjpar(:),ip(:),l1(:),l2(:),jk1(:),jk2(:)
       Real(8), allocatable :: EK(:),TR(:),TI(:)
 
       Integer :: kcase, jj_max
@@ -72,7 +72,7 @@
 !=======================================================================
       Subroutine Add_tmat_list(e,ar,ai,jj,ii,m1,m2,k1,k2)
 !=======================================================================
-!     add (sum to) data to the list 
+!     add (sum to) data to the list
 !     we may need summation due to transition to other coupling
 !-----------------------------------------------------------------------
       Use tmat_list
@@ -92,7 +92,7 @@
        if(m2.ne.l2(i)) Cycle
        if(k1.ne.jk1(i)) Cycle
        if(k2.ne.jk2(i)) Cycle
-       if(e.ne.EK(i)) Cycle             
+       if(e.ne.EK(i)) Cycle
        TR(i)=TR(i)+ar
        TI(i)=TI(i)+ai
        Return
@@ -102,7 +102,7 @@
 
       if(ndata.eq.mdata) Call Alloc_tmat_list(mdata+idata)
 
-      ndata = ndata+1 
+      ndata = ndata+1
       jjpar(ndata) = jj
       ip(ndata) = ii
       l1(ndata) = m1
@@ -118,9 +118,9 @@
 
 !======================================================================
       Subroutine Sort_tmat_list(mode)
-!====================================================================== 
-!     sortin data in tmat_list 
-!---------------------------------------------------------------------- 
+!======================================================================
+!     sortin data in tmat_list
+!----------------------------------------------------------------------
       Use tmat_list
 
       Implicit none
@@ -164,7 +164,7 @@
 
 !=======================================================================
       Subroutine Change_ij(i,j)
-!======================================================================= 
+!=======================================================================
 !     exchange two records "i" and "j" in tmat_lis
 !------------------------------------------------------------------------
       Use tmat_list
@@ -190,7 +190,7 @@
 
 !=======================================================================
       Subroutine Def_patten
-!======================================================================= 
+!=======================================================================
 !     define different subsets in T-matrix list
 !------------------------------------------------------------------------
       Use tmat_list
@@ -199,9 +199,9 @@
       Integer :: i,j,k
 
 ! ... define number of symmetris for maxinum J:
-                                                              
+
       jj_max = maxval(jjpar(1:ndata))
-      kcase=0                                                     
+      kcase=0
       Do i=1,ndata;  if(jjpar(i).ne.jj_max)  Cycle; kcase=kcase+1;  End do
 
 ! ... define case pattens:
@@ -260,8 +260,8 @@
       if(kcase.eq.0) Stop 'kcase = 0 in tmat.done_inp'
       Allocate(SS(2,kcase),ST(2,kcase),ko(5,kcase),jp_max(kcase))
 
-      Do k=1,kcase      
-       read(nus,*) e, jp_max(k), i,i1,i2,i3,i4, ST(:,i), SS(:,i), ko(:,i) 
+      Do k=1,kcase
+       read(nus,*) e, jp_max(k), i,i1,i2,i3,i4, ST(:,i), SS(:,i), ko(:,i)
       End do
 
 ! ... read saved T-marix elements:
@@ -286,7 +286,7 @@
        k1 = jj + ko(4,k)
        k2 = jj + ko(5,k)
        m1 = (jj + ko(2,k))/2
-       m2 = (jj + ko(3,k))/2                                 
+       m2 = (jj + ko(3,k))/2
        Call Add_tmat_list(e,ST(1,k),ST(2,k),jj,k,m1,m2,k1,k2)
       End do; End do
 
@@ -308,8 +308,8 @@
       Do i=1,ndata; if(ip(i).ne.k) Cycle
        a=0.d0; aa=0.d0
        if(jjpar(i).gt.10) then; if(TR(i-1).ne.0.d0.and.TI(i-1).ne.0) then
-         a=TR(i)/TR(i-1);  if(a.lt.0.001.or.a.gt.0.999) a=0.d0  
-         aa=TI(i)/TI(i-1); if(a.lt.0.001.or.a.gt.0.999) a=0.d0  
+         a=TR(i)/TR(i-1);  if(a.lt.0.001.or.a.gt.0.999) a=0.d0
+         aa=TI(i)/TI(i-1); if(a.lt.0.001.or.a.gt.0.999) a=0.d0
        end if; end if
        write(nut,'(D15.7,6I5,2D15.7,2f10.5)')  &
          e,jjpar(i),ip(i),l1(i),jk1(i),l2(i),jk2(i),TR(i),TI(i),a,aa

@@ -6,7 +6,7 @@
       Use dbsr_prep
 
       Implicit none
-      Integer :: i,k, ii,jj, ic,jc, ip 
+      Integer :: i,k, ii,jj, ic,jc, ip
       Real(8) :: S, SS, SM, s_ovl
       Real(8), allocatable :: S_orb(:)
 

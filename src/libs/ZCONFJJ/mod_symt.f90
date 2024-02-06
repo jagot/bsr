@@ -8,15 +8,15 @@
       Integer :: nsymt = 0       ! number of symmetries
       Integer :: msymt = 0       ! current dimension of the list
       Integer :: isymt = 10000   ! initial dimension
-      Integer :: jsymt = 10      ! average size of one symmetry 
-      Integer :: ksymt = 0       ! dimension of all symt.s 
-      Integer :: lsymt = 0       ! last element 
-      
-      Integer,    allocatable :: IT_conf(:)   
-      Integer,    allocatable :: ip_term(:)   
-      Integer(2), allocatable :: JS_term(:)  
-      Integer(1), allocatable :: VS_term(:)  
-      Integer(2), allocatable :: JI_term(:)  
+      Integer :: jsymt = 10      ! average size of one symmetry
+      Integer :: ksymt = 0       ! dimension of all symt.s
+      Integer :: lsymt = 0       ! last element
+
+      Integer,    allocatable :: IT_conf(:)
+      Integer,    allocatable :: ip_term(:)
+      Integer(2), allocatable :: JS_term(:)
+      Integer(1), allocatable :: VS_term(:)
+      Integer(2), allocatable :: JI_term(:)
 
 ! ... IT_stat     - indicate existence the term in given case
 
@@ -93,7 +93,7 @@
 !----------------------------------------------------------------------
       Use symt_list
 
-      Implicit none 
+      Implicit none
       Integer :: no,iconf, i,j,ip
       Integer, Dimension(*) :: Jshell,Vshell,Jintra
 
@@ -134,17 +134,17 @@
 !======================================================================
       Subroutine Get_symt(iterm,iconf,no,Jshell,Vshell,Jintra)
 !======================================================================
-!     extracts angular symmetry 'iterm'                  
+!     extracts angular symmetry 'iterm'
 !----------------------------------------------------------------------
       Use symt_list
 
-      Implicit none 
+      Implicit none
       Integer, Intent(in) :: iterm
       Integer, Intent(out) :: iconf,no
       Integer :: i,ip
       Integer, Dimension(*) :: Jshell,Vshell,Jintra
       Integer, External :: Get_no
-      
+
       if(iterm.le.0.or.iterm.gt.nsymt)  then
         write(*,*) 'Get_symt: it =',iterm, &
                    ' is out of range, nsymt=',nsymt
@@ -158,7 +158,7 @@
        Jintra(i) = JI_term(ip)
        Jshell(i) = JS_term(ip)
        Vshell(i) = VS_term(ip)
-      End do 
+      End do
 
       End Subroutine Get_symt
 
@@ -168,7 +168,7 @@
 !======================================================================
 !     reads the list of angular symmetries from unit 'nu'
 !----------------------------------------------------------------------
-      Use symt_list 
+      Use symt_list
 
       Implicit none
       Integer :: nu,i
@@ -211,7 +211,7 @@
 !======================================================================
 !     records the list of angular symmetries to unit 'nu'
 !----------------------------------------------------------------------
-      Use symt_list 
+      Use symt_list
 
       Implicit none
       Integer :: nu,i
@@ -233,8 +233,8 @@
       Subroutine Write_done(nu)
 !======================================================================
 !     record the IT_done array to unit "nu"
-!---------------------------------------------------------------------- 
-      Use symt_list 
+!----------------------------------------------------------------------
+      Use symt_list
 
       Implicit none
       Integer :: nu,i,i1,i2,n
@@ -247,12 +247,12 @@
 
       write(nu) n
       i1=1; i2=mrecl; if(i2.gt.n) i2=n
-      Do 
+      Do
        write(nu) (IT_done(i),i=i1,i2)
        i1=i1+mrecl; if(i1.gt.n) Exit
        i2=i2+mrecl; if(i2.gt.n) i2=n
-      End do 
- 
+      End do
+
       End Subroutine Write_done
 
 
@@ -260,20 +260,20 @@
       Subroutine Read_done(nu)
 !======================================================================
 !     reads the IT_done array from unit "nu"
-!---------------------------------------------------------------------- 
-      Use symt_list 
+!----------------------------------------------------------------------
+      Use symt_list
 
       Implicit none
       Integer :: nu,i,i1,i2,n
 
-      read(nu) n 
+      read(nu) n
       i1=1; i2=mrecl; if(i2.gt.n) i2=n
-      Do 
+      Do
        read(nu) (IT_done(i),i=i1,i2)
        i1=i1+mrecl; if(i1.gt.n) Exit
        i2=i2+mrecl; if(i2.gt.n) i2=n
-      End do 
- 
+      End do
+
       End Subroutine Read_done
 
 
@@ -281,29 +281,29 @@
       Subroutine Dummy_done(nu)
 !======================================================================
 !     skips  the IT_done array in unit "nu"
-!---------------------------------------------------------------------- 
-      Use symt_list 
+!----------------------------------------------------------------------
+      Use symt_list
 
       Implicit none
       Integer :: nu,i,i1,i2,n
       Integer(1) :: j
 
-      read(nu) n 
+      read(nu) n
       i1 = 1; i2 = mrecl; if(i2.gt.n) i2=n
-      Do 
+      Do
        read(nu) (j,i=i1,i2)
        i1=i1+mrecl; if(i1.gt.n) Exit
        i2=i2+mrecl; if(i2.gt.n) i2=n
-      End do 
- 
+      End do
+
       End Subroutine Dummy_done
 
 !======================================================================
       Integer Function Get_iconf(iterm)
 !======================================================================
 !     provides "iconf" pointer for given "iterm" (for external calls)
-!---------------------------------------------------------------------- 
-      Use symt_list 
+!----------------------------------------------------------------------
+      Use symt_list
       Implicit none
       Integer, intent(in) :: iterm
       Get_iconf=it_conf(iterm)

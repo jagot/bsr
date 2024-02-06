@@ -12,7 +12,7 @@
       Character(3) :: ALSP
       Integer, external :: Icheck_file
 
-      write(ALSP,'(i3.3)') klsp 
+      write(ALSP,'(i3.3)') klsp
 
       Select case(nu)
 
@@ -25,12 +25,12 @@
          iarg = command_argument_count()
          if(iarg.gt.0) then
           Call GETARG(1,BF); i=INDEX(BF,'=')
-          if(i.eq.0) then 
+          if(i.eq.0) then
            i=INDEX(BF,'.',BACK=.TRUE.)-1; if(i.lt.0) i=LEN_TRIM(BF)
            AF=BF(1:i)//'.c'; AF_b = BF(1:i)//'.bnk'
           end if
          end if
-        end if  
+        end if
 
         Call Check_file(AF)
         Open(nu,file=AF,status='OLD')
@@ -40,7 +40,7 @@
         AF = AF_b
         if(klsp.gt.0) then
          i=Index(BF_b,'.'); AF=BF_b(1:i)//ALSP; BF_b=AF
-        end if  
+        end if
 
         new=1
         if(Icheck_file(AF).eq.1) then
@@ -51,14 +51,14 @@
           new = 0
           Open(nub,file=CF_b,form='UNFORMATTED',STATUS='OLD')
          end if
-        end if   
+        end if
 
         Case(3)
 
          AF = AF_r
          if(klsp.gt.0) then
           i=Index(BF_r,'.'); AF=BF_r(1:i)//ALSP; BF_r=AF
-         end if  
+         end if
          Open(nur,file=AF,form='UNFORMATTED')
 
         Case(66)
@@ -70,7 +70,7 @@
          Open(nu,form='UNFORMATTED',status='SCRATCH')
 
         Case default
-        
+
          write(*,*) 'nu,klsp =', nu,klsp
          Stop ' open_br: nu is out of list '
 

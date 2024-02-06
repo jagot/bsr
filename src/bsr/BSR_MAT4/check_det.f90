@@ -1,10 +1,10 @@
 !======================================================================
       Subroutine Check_det(kdn,N1,N2,iext)
 !======================================================================
-!     expend the total overlap determinant so that to extract 
+!     expend the total overlap determinant so that to extract
 !     one-electron overlaps with continuum orbitals
 !----------------------------------------------------------------------
-      Use spline_orbitals, only: iech 
+      Use spline_orbitals, only: iech
 
       Implicit none
       Integer, intent(in) :: kdn, iext, N1(kdn),N2(kdn)
@@ -26,7 +26,7 @@
       if(j1.eq.0.and.j2.eq.0) then               ! no cont.orb
 
        S = VDET(kdn,N1,N2)**iext
-       Call Iadd_ndets(0,0,S)  
+       Call Iadd_ndets(0,0,S)
 
       elseif(kdn.eq.1) then                      ! <kl|nl>
 
@@ -39,7 +39,7 @@
        if(iext.gt.1) Call Stop_mpi(0,0,' Check_det: iext > 1')
 
        Do j=1,kdn
-        io=IBORT(N1(j1),N2(j))        
+        io=IBORT(N1(j1),N2(j))
         if(io.eq.0) Cycle
         Call Shift(kdn,j1,N1,N3)
         Call Shift(kdn,j ,N2,N4)
@@ -53,7 +53,7 @@
        if(iext.gt.1) Call Stop_mpi(0,0,' Check_det: iext > 1')
 
        Do j=1,kdn
-        io=IBORT(N1(j),N2(j2))        
+        io=IBORT(N1(j),N2(j2))
         if(io.eq.0) Cycle
         Call Shift(kdn,j ,N1,N3)
         Call Shift(kdn,j2,N2,N4)

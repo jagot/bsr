@@ -55,7 +55,7 @@
       WTch(nopen+1:nwt) = WTch(nopen+1:nwt) / CC
 
 ! CE = SUM(AK(1:nopen,1:nopen))
- 
+
      END SUBROUTINE AK_COEF
 
 

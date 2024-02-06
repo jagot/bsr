@@ -10,45 +10,45 @@
       Implicit none
       Integer :: i,j,ic,ip,ib,ic1,ic2
       Real(8) :: S
-  
+
       Call alloc_df_orbitals(nwf)
-  
+
       Do i=1,nbf
        nbs(i)=nef(i);  kbs(i)=kef(i);  lbs(i)=lef(i)
        jbs(i)=jef(i);  ebs(i)=ELF(i);  ibs(i)=0
        e(i)=0
       End do
-  
+
       Call Def_nit
-  
+
       Call alloc_df_radial(ns)
-  
+
 ! ... find physical orbitals:
 
       Call Def_physical
 
-! ... define qsum:            ?  just initial estimation                     
+! ... define qsum:            ?  just initial estimation
 
       WC = 1.d0
       Do i=1,nlevels; ib = block(i)
        ic1=JTc1(ib); ic2=JTc2(ib)
        WC(ic1:ic2) = WC(ic1:ic2) + weight(i)        !  * ???
-      End do 
+      End do
       S = sqrt(SUM(WC(1:ncfg)*WC(1:ncfg)))
       WC(1:ncfg)=WC(1:ncfg)/S
 
-      Do ic = 1,ncfg; S = WC(ic)*WC(ic) 
-       Call Get_cfg_jj(ic)     
+      Do ic = 1,ncfg; S = WC(ic)*WC(ic)
+       Call Get_cfg_jj(ic)
        ip = ip_state(ic)
        Do i=1,no; ip=ip+1; j=IP_orb(ip)
-        qsum(j) = qsum(j) + S*iq(i)  
+        qsum(j) = qsum(j) + S*iq(i)
        End do
       End do
 
       Do i=1,ncore
        qsum(i) = jbs(i)+1;  clsd(i) = .TRUE.
       End do
-   
+
 ! ... define closed shells:   ???
 
       Do i=ncore+1,nbf
@@ -56,7 +56,7 @@
        if(abs(qsum(i)-S).lt.0.1) clsd(i) = .TRUE.
       End do
 
-      Call Boundary_conditions 
+      Call Boundary_conditions
 
 ! ... define if core is fixed:
 
@@ -71,14 +71,14 @@
        if(ivaried(i3_int(i)).ne.0) Cycle
        if(ivaried(i4_int(i)).ne.0) Cycle
        if_int(i) = 1
-      End do   
+      End do
 
       Allocate(if_Lint(Lint)); if_Lint = 0
       Do i = 1,Lint
        if(ivaried(i1_Lint(i)).ne.0) Cycle
        if(ivaried(i2_Lint(i)).ne.0) Cycle
        if_Lint(i) = 1
-      End do   
+      End do
 
       End Subroutine Def_orbitals
 
@@ -101,32 +101,32 @@
       Call Clean_a(string)
       iord = 0
       if(string(1:3)=='ALL' .or. string(1:3)=='all' .or. &        ! all
-       LEN_TRIM(string) == 0 ) then                              
-       nit = nbf 
+       LEN_TRIM(string) == 0 ) then
+       nit = nbf
        Do i=1,nbf; iord(i)=i; End do
       elseif(string(1:4)=='NONE' .or. string(1:4)=='none') then   ! none
-       nit = 0 
+       nit = 0
       elseif (INDEX(string,'n=') /= 0) then                       ! n=
-       i = INDEX(string,'=') 
-       read(string(i+1:),*) n 
+       i = INDEX(string,'=')
+       read(string(i+1:),*) n
        nit = 0
        Do i=1,nbf
         if(nbs(i).ne.n) Cycle
         nit = nit + 1
         iord(nit) = i
-       End do                                                     
+       End do
       elseif (INDEX(string,'n>') /= 0) then                       ! n>
-       i = INDEX(string,'>') 
-       read(string(i+1:),*) n 
+       i = INDEX(string,'>')
+       read(string(i+1:),*) n
        nit = 0
        Do i=1,nbf
         if(nbs(i).le.n) Cycle
         nit = nit + 1
         iord(nit) = i
-       End do                                                   
+       End do
       elseif (INDEX(string,'=') /= 0) then                        ! =last
-       i = INDEX(string,'=') 
-       read(string(i+1:),*) nit 
+       i = INDEX(string,'=')
+       read(string(i+1:),*) nit
        k=0; Do i=nbf-nit+1,nbf; k=k+1; iord(k)=i; End do
       else
        Do nit=1,nbf                                               ! list
@@ -149,7 +149,7 @@
       End do
 
       if(debug.gt.0) then
-       write(log,'(a,100i3)') 'iord:  ',iord 
+       write(log,'(a,100i3)') 'iord:  ',iord
        write(log,'(a,100i3)') 'varied:',ivaried
       end if
 
@@ -167,7 +167,7 @@
       Use df_orbitals
 
       Implicit none
-      Character(5) :: EL 
+      Character(5) :: EL
       Integer :: i,j,start,ip,ib,ic, n,l,k,iset
       Integer, external :: Ifind_orb_df
 
@@ -175,14 +175,14 @@
       if(ncore.gt.0) iphys(1:ncore)=1
 
       physical = ' '
-      Call Read_string(inp,'physical',physical)    
+      Call Read_string(inp,'physical',physical)
       Call Read_aarg('physical',physical)
 
 ! ... if given - just read:
 
       if(len_trim(physical).gt.0) then
        start = 1; ip = 0
-       Do  
+       Do
         i = index(physical(start:),',')
         if (i /= 0 .or. LEN_TRIM(physical(start:)) /= 0) then
          read(physical(start:),*) EL
@@ -190,20 +190,20 @@
          j = Ifind_orb_df(n,k,iset)
          if(j.gt.0) iphys(j) = 1
         end if
-        start = start + i 
+        start = start + i
         if(i == 0 .or.  LEN_TRIM(physical(start:)) == 0) Exit
        End do
        Call Clean_a(physical)
        Return
 
-      end if 
+      end if
 
 ! ... if not given - try to anticipate:
 ! ... we suupose that the main configurations are in the right place ...
 
       Do i = 1,nlevels; ib = block(i)
-       ic = JTc1(ib) -1 + level(i) 
-       Call Get_cfg_jj(ic)     
+       ic = JTc1(ib) -1 + level(i)
+       Call Get_cfg_jj(ic)
        ip = ip_state(ic)
        Do j=1,no; ip=ip+1; iphys(IP_orb(ip))=1; End do
       End do

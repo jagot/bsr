@@ -10,7 +10,7 @@
       Character(5) :: elw
       Character(5), external :: ELi
 
-      Integer :: i,j,k,l,m,n, ii, kappa, nsw,ksw,mbw, kp,kq, igrid 
+      Integer :: i,j,k,l,m,n, ii, kappa, nsw,ksw,mbw, kp,kq, igrid
       Integer, external :: Ifind_jjorb
 
       Real(8) :: S, S1, S2, pbw(ns),qbw(ns),tw(ns+ks)
@@ -44,7 +44,7 @@
       ii=Ifind_jjorb(n,kappa,k,0)
 
       if(ii.eq.0.and.kshift.gt.0) then
-        k=0; ii=Ifind_jjorb(n,kappa,0,0) 
+        k=0; ii=Ifind_jjorb(n,kappa,0,0)
       end if
 
       if(ii.gt.0) then
@@ -61,7 +61,7 @@
 ! ... define overlaps with existing orbitals:
 
       Do i = 1,m
-       if(kbs(i).ne.kbs(m)) Cycle 
+       if(kbs(i).ne.kbs(m)) Cycle
        S = QUADR_00(m,i,0)
        if(abs(S).lt.eps_ovl) Cycle
        if(i.le.ncore.and.abs(S).lt.eps_core) Cycle
@@ -81,7 +81,7 @@
        S  = abs(OBS(i,m)-OBS(m,m)) +  abs(OBS(i,m)-OBS(i,i))
        S1 = abs(OBS1(i)-OBS1(m))
        S2 = abs(OBS2(i)-OBS2(m))
- 
+
        if(S.lt.eps_ovl.and.S1.lt.eps_ovl.and.S2.lt.eps_ovl) then
         ipef(ii) = i
         if(ii.gt.ncore) &
@@ -90,7 +90,7 @@
        end if
 
 ! ... core orbitals should be the same:
- 
+
       if(ii.le.ncore) then
        write(pri,'(a,a,3E12.1)') elw,ebs(i),S,S1,S2
        write(pri,'(a,a,a)') 'file ',trim(AFW),'  has another core orbital'

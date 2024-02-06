@@ -4,16 +4,16 @@
 
       Implicit none
 
-! ... subshell  f5 
+! ... subshell  f5
 
       Integer, parameter :: kd_f5  =2002
       Integer, parameter :: nt_f5  = 73
- 
+
       Integer :: Idet_f5 ( 5, 2002)
- 
+
       Integer :: ML_f5 ( 2002)
       Integer :: MS_f5 ( 2002)
- 
+
       Integer :: ID_f5 ( 2002, 73)
       Integer :: JD_f5 ( 2002, 73)
 

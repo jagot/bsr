@@ -7,24 +7,24 @@
 !     long wavefunction case:
 !--------------------------------------------------------------------
 !
-!     dipL_pp => Int[ {P} * r^k     * {P},  dr] 
-!     dipL_QQ => Int[ {Q} * r^k     * {Q},  dr] 
-!     dipV_PQ => Int[ {P} * r^(k-1) * {Q},  dr] 
+!     dipL_pp => Int[ {P} * r^k     * {P},  dr]
+!     dipL_QQ => Int[ {Q} * r^k     * {Q},  dr]
+!     dipV_PQ => Int[ {P} * r^(k-1) * {Q},  dr]
 !
 !--------------------------------------------------------------------
 !     relativistic case:
 !--------------------------------------------------------------------
 !
-!     dipk_pp  =>  Int[ P * j_k (omega*r/c) * P,  dr] 
-!     dipk_qq  =>  Int[ Q * j_k (omega*r/c) * Q,  dr] 
-!   
-!     dipkm_pq =>  Int[ P * j_(k-1)(omega*r/c) * Q,  dr] 
-!     dipkp_pq =>  Int[ P * j_(k+1)(omega*r/c) * Q,  dr] 
-!     
+!     dipk_pp  =>  Int[ P * j_k (omega*r/c) * P,  dr]
+!     dipk_qq  =>  Int[ Q * j_k (omega*r/c) * Q,  dr]
+!
+!     dipkm_pq =>  Int[ P * j_(k-1)(omega*r/c) * Q,  dr]
+!     dipkp_pq =>  Int[ P * j_(k+1)(omega*r/c) * Q,  dr]
+!
 !--------------------------------------------------------------------
       Implicit none
 
-      Integer :: kmult = -1    ! multipole index for current save      
+      Integer :: kmult = -1    ! multipole index for current save
       Real(8) :: wmult = 0.d0  ! omega factor
 
       Real(8), allocatable :: dipL_pp(:,:),dipL_qq(:,:),dipV_pq(:,:)
@@ -32,9 +32,9 @@
 ! ... relativistic case (wmult <> 0):
 
       Real(8), allocatable :: dipk_pp(:,:),dipk_qq(:,:)
-                             
+
       Real(8), allocatable :: dipkm_pq(:,:),dipkp_pq(:,:)
-   
+
       End Module DBS_mult
 
 
@@ -65,7 +65,7 @@
 
        Call ZINTYk (kpol,  ksp,ksp,pbsp,pbsp,ns,dipL_pp)
        Call ZINTYk (kpol,  ksq,ksq,qbsp,qbsp,ns,dipL_qq)
-       Call ZINTYk (kpol-1,ksp,ksq,pbsp,qbsp,ns,dipV_pq) 
+       Call ZINTYk (kpol-1,ksp,ksq,pbsp,qbsp,ns,dipV_pq)
 
       else
 
@@ -92,7 +92,7 @@
       end if
 
       wmult=wfact; kmult=kpol
-       
+
       End Subroutine dip_mat_pq
 
 
@@ -112,8 +112,8 @@
 
       Call dip_mat_pq(wfact,kpol)
 
-      JKDIP_pq = vav (nsp,ksp,nsp,ksp,ns,dipk_pp,pq(1,1,i),pq(1,1,j),'x') +  &  
-                 vav (nsq,ksq,nsq,ksq,ns,dipk_qq,pq(1,2,i),pq(1,2,j),'x')    
+      JKDIP_pq = vav (nsp,ksp,nsp,ksp,ns,dipk_pp,pq(1,1,i),pq(1,1,j),'x') +  &
+                 vav (nsq,ksq,nsq,ksq,ns,dipk_qq,pq(1,2,i),pq(1,2,j),'x')
 
       End Function JKDIP_pq
 
@@ -138,7 +138,7 @@
 
       Select case(met)
        Case(-1)
-               
+
         S1 = vav (nsp,ksp,nsq,ksq,ns,dipkm_pq,pq(1,1,i),pq(1,2,j),'x')
         S2 = vav (nsp,ksp,nsq,ksq,ns,dipkm_pq,pq(1,1,j),pq(1,2,i),'x')
 
@@ -206,8 +206,8 @@
       Integer, external :: ITRA
       Real(8), external :: vav
 
-      DQUADRM_pq = 0.d0 
-      if(k.lt.1) Stop 'DQUADRM: kpol < 1'      
+      DQUADRM_pq = 0.d0
+      if(k.lt.1) Stop 'DQUADRM: kpol < 1'
 
       if(ITRA(jbs(i),k+k,jbs(j)).eq.0) Return
       if(mod(lbs(i)+k+lbs(j),2).ne.1) Return
@@ -217,17 +217,17 @@
 
       DQUADRM_pq = (spq + sqp)*(kbs(i)+kbs(j))/(k+1)
 
-      End function DQUADRM_pq 
+      End function DQUADRM_pq
 
 
 !======================================================================
       Subroutine dipE_pq(i,j,kpol,wfact,CL,CV)
 !======================================================================
-!     Define:  kk = kappa_i-kappa_j 
-!              II+ = kk * I+_(k+1) + (k+1) * I-_(k+1) 
-!              II- = kk * I+_(k-1) -  k    * I-_(k-1) 
+!     Define:  kk = kappa_i-kappa_j
+!              II+ = kk * I+_(k+1) + (k+1) * I-_(k+1)
+!              II- = kk * I+_(k-1) -  k    * I-_(k-1)
 !
-! Coulomb (length) gauge:  D = 1/sqrt(k)/sqrt(k+1) [k*II+  -  (k+1)*II-]  
+! Coulomb (length) gauge:  D = 1/sqrt(k)/sqrt(k+1) [k*II+  -  (k+1)*II-]
 ! Babushkin (velocity)  :  D = (2k+1)/sqrt(k)/sqrt(k+1) [II+  +- Jk]
 !-----------------------------------------------------------------------
       Use DBS_orbitals_pq, only: kbs,lbs,jbs
@@ -277,8 +277,8 @@
       Integer, external :: l_kappa,j_kappa,ITRA
       Real(8), external :: QUADR_pq
 
-      DQUADRL_pq = 0.d0 
-      if(k.lt.1) Stop 'DQUADRL_pq: kpol < 1'      
+      DQUADRL_pq = 0.d0
+      if(k.lt.1) Stop 'DQUADRL_pq: kpol < 1'
 
       if(ITRA(jbs(i),k+k,jbs(j)).eq.0) Return
       if(mod(lbs(i)+k+lbs(j),2).ne.0) Return
@@ -303,10 +303,10 @@
       Integer, intent(in) :: i,j,k
       Real(8) :: spq, sqp
       Integer, external :: ITRA
-      Real(8), external :: quadrm 
+      Real(8), external :: quadrm
 
-      DQUADRV_pq = 0.d0 
-      if(k.lt.1) Stop 'DQUADRV_pq: kpol < 1'      
+      DQUADRV_pq = 0.d0
+      if(k.lt.1) Stop 'DQUADRV_pq: kpol < 1'
 
       if(ITRA(jbs(i),k+k,jbs(j)).eq.0) Return
       if(mod(lbs(i)+k+lbs(j),2).ne.0) Return
@@ -315,7 +315,7 @@
       sqp =  quadrm(nv,ks,ksq,ksp,k-1,qbsp,pbsp,pq(1,2,i),pq(1,1,j))
 
       DQUADRV_pq = (kbs(i)-kbs(j)-k)*spq  +  (kbs(i)-kbs(j)+k)*sqp
-      
+
       End function DQUADRV_pq
 
 

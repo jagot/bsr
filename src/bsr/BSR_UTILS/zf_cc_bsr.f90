@@ -29,24 +29,24 @@
       Character(4) :: gf = 'f'
       Character(80) :: AS,AI,AJ, AF, param
       Character(5) ::  AC='a.c', AW ='a.bsw'
-      Character(80), Allocatable :: files(:) 
+      Character(80), Allocatable :: files(:)
       Integer, allocatable :: ILT(:),IST(:),parity(:)
 
       iarg = COMMAND_ARGUMENT_COUNT()
-      if(iarg.gt.0) Call GET_COMMAND_ARGUMENT(1,AF) 
-     
+      if(iarg.gt.0) Call GET_COMMAND_ARGUMENT(1,AF)
+
       if(AF.eq.'?') then
         write(*,'(/a)') 'zf_cc_bsr  calculates f-values between set of (c+bsw)-files'
         write(*,'(/a)') 'Call as:   zf_cc_bsr  inp=name, default: zf_cc_bsr.inp'
         write(*,'(/a)') 'input file contains:'
-        write(*,'(/a)') 'atype = E1 |E2,M1,... - multipole index' 
+        write(*,'(/a)') 'atype = E1 |E2,M1,... - multipole index'
         write(*,'(/a)') 'gf    = f  |g         - output f- or gf-values'
         write(*,'(/a)') 'param =               - additional parameters for bsr_dmat3'
         write(*,'(/a)') 'nfiles= ...           - number of c-files'
         write(*,'(/a)') 'followed by list of c-files'
         write(*,'(/a)') 'Results are appended to zf_res'
         write(*,'(/a)') 'Program makes SYSTEM CALLS to MULT3 and BSR_DMAT3'
-        Stop 
+        Stop
       end if
 
       Call Read_aarg('inp',AF_inp)
@@ -57,7 +57,7 @@
       Call Read_aarg('atype',atype)
       Read(atype,'(1x,i1)') kpol
 
-      Call Read_apar(inp,'gf',gf)                                     
+      Call Read_apar(inp,'gf',gf)
       Call Read_aarg('gf',gf)
 
       param = ' '
@@ -73,22 +73,22 @@
        read(inp,*) files(i)
        Call Check_file(files(i))
        open(nuc,file=files(i))
-       Call Def_term(nuc,ILT(I),IST(i),parity(i)) 
+       Call Def_term(nuc,ILT(I),IST(i),parity(i))
        close(nuc)
       End do
 !----------------------------------------------------------------------
 
-      Do i=1,nfiles-1; AI=files(i); ii=LEN_TRIM(AI) 
+      Do i=1,nfiles-1; AI=files(i); ii=LEN_TRIM(AI)
       Do j=i+1,nfiles; AJ=files(j); jj=LEN_TRIM(AJ)
 
        if(AI.eq.AJ) then
-        AS = 'copy '//AJ(1:jj)//blank//AC 
+        AS = 'copy '//AJ(1:jj)//blank//AC
         Call System(AS)
         AF = AJ(1:jj-1)//'bsw'
-        AS = 'copy '//AF(1:jj+2)//blank//AW 
+        AS = 'copy '//AF(1:jj+2)//blank//AW
         Call System(AS)
         AJ=AC; jj=LEN_TRIM(AJ)
-       end if 
+       end if
 
        if(atype(1:1).eq.'E'.and.mod(kpol,2).eq.1.and. &
           parity(i).eq.parity(j)) Cycle
@@ -103,7 +103,7 @@
 
        kk=kpol+kpol+1; if(IST(I).eq.0) kk=kpol+kpol
        if(ITRA(ILT(i),kk,ILT(j)).eq.0) Cycle
-      
+
        AS = 'mult3 '//AI(1:ii)//blank//AJ(1:jj)//blank//atype//' >> zf_cc_bsr.out'
        Call System(AS)
 
@@ -112,7 +112,7 @@
        Call System(AS)
 
       End do
-      End do 
-       
+      End do
+
       End ! program zf_cc_bsr
 

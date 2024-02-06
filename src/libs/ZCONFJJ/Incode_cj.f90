@@ -1,5 +1,5 @@
 !======================================================================
-      Subroutine Incode_cj 
+      Subroutine Incode_cj
 !======================================================================
 !     encodes the configuration from INTEGER format to the GRASP
 !     c-file format (see module conf_jj for variables)
@@ -19,7 +19,7 @@
        SHELLJ(m+1:m+9) = '        '
        INTRAJ(m+1:m+9) = '        '
        if(iq(i).eq.jn(i)+1) Cycle
- 
+
        k = mod(Jshell(i),2)
        if(k.eq.0) then
         write(SHELLJ(m+1:m+9),'(i9)') Jshell(i)/2
@@ -71,17 +71,17 @@
 
 
 !======================================================================
-      Subroutine Decode_cj 
+      Subroutine Decode_cj
 !======================================================================
 !     decode the configuration from c-file format to INTEGER format
 !----------------------------------------------------------------------
       Use conf_jj
       Implicit none
-      Integer :: i,j,k,m 
-      Character(9) :: bl = '        ' 
+      Integer :: i,j,k,m
+      Character(9) :: bl = '        '
 
       ia=INDEX(CONFIG,')',BACK=.TRUE.); no=ia/9
- 
+
       Vshell=0; Jshell=0; Jintra=0
       m=-9
       Do i=1,no
@@ -89,7 +89,7 @@
 
        Call EL_nljk(CONFIG(m+1:m+5),nn(i),kn(i),ln(i),jn(i),in(i))
        read(CONFIG(m+7:m+8),'(i2)') iq(i)
- 
+
        if(SHELLJ(m+5:m+5).eq.';') then
         read(SHELLJ(m+4:m+4),'(i1)') Vshell(i)
         read(SHELLJ(m+9:m+9),'(i1)') J; Jshell(i) = 2*J
@@ -97,7 +97,7 @@
         read(SHELLJ(m+1:m+7),'(i7)') Jshell(i)
        elseif(SHELLJ(m+9:m+9).ne.' ') then
         read(SHELLJ(m+1:m+9),'(i9)') J; Jshell(i) = 2*J
-       end if       
+       end if
 
        k = INDEX(INTRAJ(m+1:m+9),'/')
        if(i.eq.1) then
@@ -109,9 +109,9 @@
        elseif(INTRAJ(m+1:m+9).ne.bl) then
         read(INTRAJ(m+1:m+9),*) J; Jintra(i) = 2*J
        else
-       if(Jshell(i).eq.0) Jintra(i) = Jintra(i-1)              
+       if(Jshell(i).eq.0) Jintra(i) = Jintra(i-1)
        if(Jintra(i-1).eq.0) Jintra(i) = Jshell(i)
-       end if       
+       end if
 
       End do
 
@@ -136,18 +136,18 @@
       End do
 
       Jtotal = Jintra(no)
- 
+
       End Subroutine Decode_cj
 
 
 !======================================================================
-      Subroutine Decode_confj 
+      Subroutine Decode_confj
 !======================================================================
-!     decodes configuration from c-file format to INTEGER format 
+!     decodes configuration from c-file format to INTEGER format
 !----------------------------------------------------------------------
       Use conf_jj
       Implicit none
-      Integer :: i,k,m 
+      Integer :: i,k,m
 
       no = INDEX(CONFIG,')',BACK=.TRUE.) / 9
       m=0
@@ -155,14 +155,14 @@
        Call EL_nljk(CONFIG(m+1:m+5),nn(i),kn(i),ln(i),jn(i),in(i))
        read(CONFIG(m+7:m+8),'(i2)') iq(i)
        k = (2*ln(i)-jn(i))*(jn(i)+1)/2
-       np_symc(i) = k*1000 + iq(i) 
+       np_symc(i) = k*1000 + iq(i)
        m = m + 9
       End do
 
       End Subroutine Decode_confj
 
 !======================================================================
-      Subroutine Incode_confj 
+      Subroutine Incode_confj
 !======================================================================
 !     incodes the configuration from INTEGER format to c-file format
 !----------------------------------------------------------------------
@@ -185,7 +185,7 @@
 
 
 !======================================================================
-      Subroutine Incode_confj1 
+      Subroutine Incode_confj1
 !======================================================================
 !     incodes the configuration (with index 1 in module conf_jj)
 !     from INTEGER format to c-file format
@@ -215,15 +215,15 @@
 !     decode the configuration from c-file format to INTEGER format
 !     Call: EL_nljk
 !----------------------------------------------------------------------
- 
+
       Implicit none
       Character(*), Intent(in) :: CONFIG,SHELLJ,INTRAJ
       Integer, Intent(out) :: no,nn(*),kn(*),ln(*),jn(*),iq(*),in(*),&
                               Jshell(*),Vshell(*),Jintra(*)
-      Integer :: i,j,k,m 
+      Integer :: i,j,k,m
 
       m=INDEX(CONFIG,')',BACK=.TRUE.); no=m/9
- 
+
       Vshell(1:no)=0; Jshell(1:no)=0; Jintra(1:no)=0
       m=-9
       Do i=1,no
@@ -231,7 +231,7 @@
 
        Call EL_nljk(CONFIG(m+1:m+5),nn(i),kn(i),ln(i),jn(i),in(i))
        read(CONFIG(m+7:m+8),'(i2)') iq(i)
- 
+
        if(SHELLJ(m+5:m+5).eq.';') then
         read(SHELLJ(m+4:m+4),'(i1)') Vshell(i)
         read(SHELLJ(m+9:m+9),'(i1)') J; Jshell(i) = 2*J
@@ -239,7 +239,7 @@
         read(SHELLJ(m+1:m+7),'(i7)') Jshell(i)
        elseif(SHELLJ(m+9:m+9).ne.' ') then
         read(SHELLJ(m+1:m+9),'(i9)') J; Jshell(i) = 2*J
-       end if       
+       end if
 
        k = INDEX(INTRAJ(m+1:m+9),'/')
        if(i.eq.1) then
@@ -251,9 +251,9 @@
        elseif(LEN_TRIM(INTRAJ(m+1:m+9)).ne.0) then
         read(INTRAJ(m+1:m+9),*) J; Jintra(i) = 2*J
        else
-       if(Jshell(i).eq.0) Jintra(i) = Jintra(i-1)              
+       if(Jshell(i).eq.0) Jintra(i) = Jintra(i-1)
        if(Jintra(i-1).eq.0) Jintra(i) = Jshell(i)
-       end if       
+       end if
 
       End do
 
@@ -281,13 +281,13 @@
 
 
 !======================================================================
-      Subroutine Decode_configuration(conf) 
+      Subroutine Decode_configuration(conf)
 !======================================================================
-!     decodes configuration from the string 
+!     decodes configuration from the string
 !----------------------------------------------------------------------
       Use conf_jj
       Implicit none
-      Integer :: i,i1,i2,start 
+      Integer :: i,i1,i2,start
       Character(*) :: conf
       Character(5) :: EL, ELi
 
@@ -311,19 +311,19 @@
        read(conf(i1+1:i2-1),*) iq(i)
        Call EL_NLJK(EL,nn(i),kn(i),ln(i),jn(i),in(i))
        start = i2+1
-      End do                 
+      End do
 
       End Subroutine Decode_configuration
 
 
 !======================================================================
-      Subroutine Decode_core(string) 
+      Subroutine Decode_core(string)
 !======================================================================
 !     decodes core subshells  from the string
 !----------------------------------------------------------------------
       Use conf_jj
       Implicit none
-      Integer :: i,ii 
+      Integer :: i,ii
       Character(*) :: string
       Character(5), external :: ELi
 
@@ -337,7 +337,7 @@
        e_core(i) = adjustl(e_core(i))
        Call EL_NLJK(e_core(i),nn_core(i),k_core(i),l_core(i),j_core(i),ii)
        e_core(i) = ELi(nn_core(i),k_core(i),0)
-      End do 
+      End do
 
       End Subroutine Decode_core
 
@@ -360,7 +360,7 @@
       n=0
       Do i=1,no; l=l1(i)
 
-       if(l.eq.0) then 
+       if(l.eq.0) then
         j=l+l+1; k=(l+l-j)*(j+1)/2
         n = n + 1
         nn(n) = n1(i); kn(n)=k; ln(n)=l; jn(n)=j; iq(n)=0; in(n)=i1(i)

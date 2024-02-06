@@ -11,11 +11,11 @@
       ALEGF=zero; MA=IABS(M); if(L.lt.MA) Return
 
       ALEGF=one
-      FACT=one 
+      FACT=one
 
       if(M.ne.0) then
        Do I=L-MA+1,L+MA; FACT=FACT*I; End do; FACT=one/FACT
-      end if     
+      end if
 
       if(M.lt.0) ALEGF=FACT
       if(norm.eq.1.and.m.ge.0) ALEGF = ALEGF * sqrt(FACT*(L+L+1)/2)
@@ -30,7 +30,7 @@
 
 
       FACT=one; Do I=1,L+L-1,2; FACT=FACT*I; End do
-      
+
       if(MA.eq.L) then
        ALEGF=ALEGF*FACT*(one-x*x)**(0.5d0*MA)
        Return
@@ -41,9 +41,9 @@
       end if
 
 ! ... for m <= 1, use the recurrence relations in respect to l:
-! ... P(l+1) = [(2l+1)P(l)-(l+m)p(l-1)] / (l-m+1) 
+! ... P(l+1) = [(2l+1)P(l)-(l+m)p(l-1)] / (l-m+1)
 
-      if(MA.le.1) then    
+      if(MA.le.1) then
        if(MA.eq.0) then
         P0=one;  P1=x
        else
@@ -56,7 +56,7 @@
       end if
 
 ! ... use the recurrence relations in respect to m:
-! ... P(m+2) = 2(m+1)x/sqrt(1-x^2)P(m+1)-(l-m)(l+m+1)P(m) 
+! ... P(m+2) = 2(m+1)x/sqrt(1-x^2)P(m+1)-(l-m)(l+m+1)P(m)
 
       z = x/sqrt(one-x*x)
       P2 = FACT*(one-x*x)**(0.5d0*L)
@@ -64,7 +64,7 @@
       Do MM = L-2,MA,-1
        PM=((MM+1)*z*P1-P2)/((L-MM)*(L+MM+1)); P2=P1; P1=PM
       End do
- 
+
       ALEGF=PM*ALEGF; Return
 
       End Function ALEGF
@@ -77,7 +77,7 @@
 !     sign correction for origional function ALEGF
 !---------------------------------------------------------------------
       Implicit real(8) (A-H,O-Z)
-      ALEGFM = ALEGF (L,M,X,norm) 
-      if(m.gt.0) ALEGFM = ALEGFM * (-1)**M 
+      ALEGFM = ALEGF (L,M,X,norm)
+      if(m.gt.0) ALEGFM = ALEGFM * (-1)**M
       End Function ALEGFM
 

@@ -17,7 +17,7 @@
 ! ... input/output files and units:
 
       Integer, parameter :: ma=40    ! limit for file-name length
-      Character(ma) :: AF,BF     
+      Character(ma) :: AF,BF
 
       Integer :: nut = 10; Character(ma) :: AF_tar = 'target'
       Integer :: nup = 11; Character(ma) :: AF_par = 'bsr_par'
@@ -31,14 +31,14 @@
                                      !  relativistic integrals
 ! ... dimension limits:
 
-      Integer :: nb   =   2000   ! number of blocks in c_data       
+      Integer :: nb   =   2000   ! number of blocks in c_data
       Integer :: mb   =   2000   ! size of blocks
       Integer :: kb   =    100   ! max.nb for the given type of integrals
 
       Integer,parameter :: mtypes = 1000
       Integer :: ntypes = 0
-      Integer :: ktypes (mtypes)   
-	                               
+      Integer :: ktypes (mtypes)
+
 ! ... tolerence parameters:
 
       Real(8) :: eps_det  = 1.0D-10   !  tolerance for determinants
@@ -65,11 +65,11 @@
       Integer Function Ifind_type(icase,kpol,itype)
 !======================================================================
       Use bsr_mat
-      
+
       Integer :: icase,kpol,itype, k
 
       k = 100 * (100*(kpol+1) + icase) + itype
-      
+
       m = 0
       Do i = 1,ntypes
        if(k.ne.ktypes(i)) Cycle
@@ -100,13 +100,12 @@
       icase = k /100
       itype = k - icase*100
 
-      End  Subroutine Decode_type      
+      End  Subroutine Decode_type
 
 
-   
- 
-
-      
 
 
-     
+
+
+
+

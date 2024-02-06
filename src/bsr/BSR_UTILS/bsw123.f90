@@ -1,13 +1,13 @@
 !=======================================================================
-!     merging the set of bsw-files with choice of orbitals and 
+!     merging the set of bsw-files with choice of orbitals and
 !     with optional changing the spectroscopic notation
-! 
-!        1.bsw + 2.bsww + 3.bsw + ... --> res.bsw 
+!
+!        1.bsw + 2.bsww + 3.bsw + ... --> res.bsw
 !
 !=======================================================================
       Use spline_param; Use spline_atomic; Use spline_grid
       Use spline_orbitals
-     
+
       Implicit double precision (A-H,O-Z)
       Character(4) :: elw,eln
       Character(4), external :: ELF4
@@ -21,23 +21,23 @@
       if(AF.eq.'?') then
         write(*,'(/a)') 'bsw123 merges the set of bsw-files with optional choice of orbitals'
         write(*,'(/a)') '     1.bsw + 2.bsw + 3.bsw + ... --> res.bsw'
-        write(*,'(/a)') 'program has interactive input/output' 
+        write(*,'(/a)') 'program has interactive input/output'
         write(*,'(/a)') 'Call as:  bsw123  or  bsw123  name.bsw'
-        write(*,'(/a)') 
-        Stop 
-      end if        
+        write(*,'(/a)')
+        Stop
+      end if
 
       if(iarg.lt.1) then
        write(*,*) 'Enter file-name for bsw-file: '
        read(*,'(a)') AF
-      end if      
+      end if
 
       Call OpenF(nu,AF,'UNFORMATTED','OLD')
       read(nu) elw,z,h,hmax,rmax,ks,ns
       rewind(nu)
 
-! ... sets up grid points and initializes the values of the spline: 
-    
+! ... sets up grid points and initializes the values of the spline:
+
       CALL define_grid(zz);  CALL define_spline
 
       nbf=0;  CALL Allocate_bsorb(ibf)
@@ -63,14 +63,14 @@
       end if
 
       write(*,'(a6)') ebs(i);  write(*,'(a)') ' new EL ?  (d|EL,a4): '
-      read(*,'(a)') ELN 
+      read(*,'(a)') ELN
 
       if(ELN(1:1).eq.'d') go to 1
       ii=LEN_TRIM(ELN)
       if(ii.gt.1) then
        Call EL4_nlk(ELN,n1,l1,k1); ebs(i)=ELF4(n1,l1,k1)
       end if
- 
+
       Do j=1,i-1
        if(ebs(j).eq.ebs(i)) then; i=i-1; Exit; end if
       End do

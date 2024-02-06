@@ -6,7 +6,7 @@
 !     coefficients between possible combinations of symmetries
 !
 !     Isym - new disribution (perutatiom) of orbitals
-!     IPsym - pointer on last same orbutal in new list 
+!     IPsym - pointer on last same orbutal in new list
 !----------------------------------------------------------------------
 
       USE spin_orbitals
@@ -23,21 +23,21 @@
 
       ksym1=1; k1=0
 
-      Do i = 1,ne 
+      Do i = 1,ne
        if(ksym1(i).eq.0) Cycle
        Nsym = Nsym + 1
        Lsym(Nsym)=Lsym1(i); Msym(Nsym)=Msym1(i); Ssym(Nsym)=Ssym1(i)
        k1=k1+1; IPsym1(Nsym)=k1; Isym1(k1)=i; ksym1(i)=0
 
-! ... check for the same orbitals rest the 1-st configuration:      
- 
+! ... check for the same orbitals rest the 1-st configuration:
+
        Do j = i+1,ne
         if(ksym1(j).eq.0) Cycle
         if(Lsym(Nsym).ne.Lsym1(j)) Cycle
         if(Msym(Nsym).ne.Msym1(j)) Cycle
         if(Ssym(Nsym).ne.Ssym1(j)) Cycle
         k1=k1+1; IPsym1(Nsym)=k1; Isym1(k1)=j; ksym1(j)=0
-       End do        
+       End do
 
       End do
 
@@ -56,7 +56,7 @@
 !     coefficients between possible combinations of symmetries
 !
 !     Isym - new disribution (perutatiom) of orbitals
-!     IPsym - pointer on last same orbutal in new list 
+!     IPsym - pointer on last same orbutal in new list
 !----------------------------------------------------------------------
 
       USE mult_par
@@ -69,7 +69,7 @@
 
       NSYM = nsym1
 !----------------------------------------------------------------------
-! ... check for the same orbitals in the 2-nd configuration:      
+! ... check for the same orbitals in the 2-nd configuration:
 
       ksym2 = 1;  k2 = 0; IPsym2=0
 
@@ -80,26 +80,26 @@
         if(Msym(i).ne.Msym2(j)) Cycle
         if(Ssym(i).ne.Ssym2(j)) Cycle
         k2=k2+1; IPsym2(i)=k2; Isym2(k2)=j; ksym2(j)=0
-       End do        
+       End do
       End do
 
 ! ... exzaust the 2-st configuration:
 
-      Do i = 1,ne 
+      Do i = 1,ne
        if(ksym2(i).eq.0) Cycle
        Nsym = Nsym + 1
        Lsym(Nsym)=Lsym2(i); Msym(Nsym)=Msym2(i); Ssym(Nsym)=Ssym2(i)
        k2=k2+1; IPsym2(Nsym)=k2; Isym2(k2)=i; ksym2(i)=0
 
-! ... check for the same orbitals rest of 2-st configuration:      
-       
+! ... check for the same orbitals rest of 2-st configuration:
+
        Do j = i+1,ne
         if(ksym2(j).eq.0) Cycle
         if(Lsym(Nsym).ne.Lsym2(j)) Cycle
         if(Msym(Nsym).ne.Msym2(j)) Cycle
         if(Ssym(Nsym).ne.Ssym2(j)) Cycle
         k2=k2+1; IPsym2(Nsym)=k2; Isym2(k2)=j; ksym2(j)=0
-       End do        
+       End do
       End do
 
       if(k2.ne.ne) Stop 'Det_breit: k2 <> ne '
@@ -108,7 +108,7 @@
       if(Nsym.gt.Nsym1) IPsym1(nsym1+1:nsym)=IPsym1(nsym1)
       Do i=2,nsym
        if(IPsym2(i).eq.0) IPsym2(i)=IPsym2(i-1)
-      End do 
+      End do
 !----------------------------------------------------------------------
 !                              define the number of different orbitals:
       Ksym1(1)=ipsym1(1)
@@ -161,7 +161,7 @@
 !    angular part of electric multipole operator between two det.w.f
 !--------------------------------------------------------------------
 
-      USE mult_par  
+      USE mult_par
       Use spin_orbitals
 
       Implicit none
@@ -189,7 +189,7 @@
         Case('M')
          int = Incode_mult(2,k1,k2);  Call Iadd_zoef(CA*kz,int,idf)
          int = Incode_mult(3,k1,k2);  Call Iadd_zoef(CB*kz,int,idf)
-       End Select     
+       End Select
 
       End do; End do
 
@@ -229,7 +229,7 @@
         Case('M')
          int = Incode_mult(2,k1,k2);  Call Iadd_zoef(CA*kz,int,idf)
          int = Incode_mult(3,k1,k2);  Call Iadd_zoef(CB*kz,int,idf)
-       End Select     
+       End Select
 
        End do; End do
 
@@ -264,13 +264,13 @@
 !====================================================================
       Subroutine Radi_matr(l1,m1,s1,l2,m2,s2)
 !====================================================================
-!     angular part of electric or magnetic transition operator 
+!     angular part of electric or magnetic transition operator
 !     between 'nlms' orbitals:
 !
 !            <n1,l1,m1,s1| T(kq) | n2,l2,m2,s2>
 !--------------------------------------------------------------------
 
-      Use mult_par 
+      Use mult_par
 
       Implicit none
 
@@ -283,12 +283,12 @@
 
       Case('E')
 
-       CA = (-1)**(l1-m1) * Z_3jj(l1,-m1,kpol,qpol,l2,m2) 
+       CA = (-1)**(l1-m1) * Z_3jj(l1,-m1,kpol,qpol,l2,m2)
        if(mltpol.eq.0) CA = CA * ZCLKL(l1,kpol,l2)
 
       Case('M')
 
-       CA = (-1)**(l1-m1) * Z_3jj(l1,-m1,kpol,qpol,l2,m2) 
+       CA = (-1)**(l1-m1) * Z_3jj(l1,-m1,kpol,qpol,l2,m2)
        if(mltpol.eq.0) CA = CA &
           * ZCLKL(l1,kpol-1,l2) * sqrt(1.d0*l2*(l2+1)*(l2+l2+1)) &
           * sqrt(kpol+kpol+1.d0) * (-1)**(l1+kpol+l2) &

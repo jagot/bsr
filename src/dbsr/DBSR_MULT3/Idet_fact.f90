@@ -3,10 +3,10 @@
 !======================================================================
 !     determines the overlap factor and its position in NDEF list
 !     for matrix element between two determinant wave functions
-!     located in module 'nljm_orbitals' 
+!     located in module 'nljm_orbitals'
 !
-!     (j1,j2) and (j3,j4) - active electrons in the first and second 
-!                           determinants 
+!     (j1,j2) and (j3,j4) - active electrons in the first and second
+!                           determinants
 !
 !     Calls:  Nadd_det, Nadd_def, ISORT
 !----------------------------------------------------------------------

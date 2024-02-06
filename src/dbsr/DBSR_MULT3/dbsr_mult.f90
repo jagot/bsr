@@ -1,5 +1,5 @@
 !=====================================================================
-!     PROGRAM       D B S R _ M U L T              
+!     PROGRAM       D B S R _ M U L T
 !
 !               C O P Y R I G H T -- 2007
 !
@@ -8,7 +8,7 @@
 !======================================================================
 !     This program evaluates the MULTIPOLE operators in jj-coupling
 !     including the case of non-orthogonal orbitals
-!     
+!
 !     The technique is close to LS-case described in:
 !
 !     Comp.Phys.Commun.  98 (1996) 235-254
@@ -16,11 +16,11 @@
 !======================================================================
 !
 !    INPUT ARGUMENTS:
-!    
+!
 !     AF1  -  c-file for initial state
 !     AF2  -  c-file for final state
 !     AA   -  type of calculation, E1,E2,M1,M2,...
-! 
+!
 !    INPUT FILES:
 !
 !     AF1  -  c-file for initial state
@@ -38,11 +38,11 @@
 
       Use dbsr_mult;  Use det_list;  Use def_list
 
-      Implicit none 
+      Implicit none
       Integer :: i,ii,nct
-      Real(8) :: t1,t2,tt 
+      Real(8) :: t1,t2,tt
       Real(8), external :: RRTC
- 
+
 ! ... read arguments from command line:
 
       Call Read_arg
@@ -72,11 +72,11 @@
 
 ! ... prepare det. expantions:
 
-      Call Pre_det_exp 
+      Call Pre_det_exp
 
 ! ... calculations for new angular symmetries:
 
-      Call Conf_loop 
+      Call Conf_loop
 
 ! ... record results:
 
@@ -92,14 +92,14 @@
        write(nur) ktype,kpol
        Call Write_symc(nur)
        Call Write_symt(nur)
-       Call Write_done(nur) 
+       Call Write_done(nur)
        Call Record_det(nur)
        Call Record_def(nur)
        rewind(nui); Call RW(nui,nur,nct)
        close(nui); close(nur); close(nub)
 
-! ...  rename new results as new data bank (int_res -> jnt_bnk): 
- 
+! ...  rename new results as new data bank (int_res -> jnt_bnk):
+
        AF = 'move '; i = 5               !  Windows
 !       AF = 'mv ';   i = 3               !  UNIX
 

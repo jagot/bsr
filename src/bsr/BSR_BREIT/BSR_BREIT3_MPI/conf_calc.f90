@@ -1,7 +1,7 @@
 !=======================================================================
       Subroutine Conf_calc
 !=======================================================================
-!     calculations for given <ic|H|jc> and waiting to other case if any 
+!     calculations for given <ic|H|jc> and waiting to other case if any
 !-----------------------------------------------------------------------
       USE bsr_breit
 
@@ -11,9 +11,9 @@
       USE zoef_list, only: nzoef
       USE coef_list, only: ntrm, ctrm
 
-      Implicit none 
+      Implicit none
       Integer :: i,m,k,k1,k2,it,jt,ic,jc
-      Real(8) :: t1,t2, C_ee,C_so,C_ss, zero=0.d0, one=1.d0  
+      Real(8) :: t1,t2, C_ee,C_so,C_ss, zero=0.d0, one=1.d0
       Real(8), External :: Z_3j, RRTC
 
       Call Alloc_boef(-1)
@@ -21,11 +21,11 @@
 
 ! ... get the job:
 
-    1 Call Get_det_exp(ic,jc)  
+    1 Call Get_det_exp(ic,jc)
 
       if(ic.le.0) Return
 
-! ...  initial allocations:        
+! ...  initial allocations:
 
        t1=RRTC()
 
@@ -68,19 +68,19 @@
 ! ...  calculations:
 
        Do kd1 = 1,kdt1
- 
+
         Msym1(1:ne)=IM_det1(1:ne,kd1)
         Ssym1(1:ne)=IS_det1(1:ne,kd1)
 
         Call Det_breit1
 
        Do kd2 = 1,kdt2
- 
+
         Msym2(1:ne)=IM_det2(1:ne,kd2)
         Ssym2(1:ne)=IS_det2(1:ne,kd2)
 
         nzoef = 0;      Call Det_breit2
-        if(nzoef.gt.0)  Call Term_loop(ic,jc) 
+        if(nzoef.gt.0)  Call Term_loop(ic,jc)
 
        End do;  End do
 

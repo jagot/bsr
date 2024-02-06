@@ -4,7 +4,7 @@
 !     read arguments, first from file unit 'nu, then from comand line
 !----------------------------------------------------------------------
       Use bsr_pol
-    
+
       Implicit none
       Integer, external :: Icheck_file
 

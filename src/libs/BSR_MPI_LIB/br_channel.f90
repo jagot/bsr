@@ -1,13 +1,13 @@
-!====================================================================== 
-      Subroutine br_channel 
-!====================================================================== 
-      Use MPI 
-      Use channel 
+!======================================================================
+      Subroutine br_channel
+!======================================================================
+      Use MPI
+      Use channel
 
-      Implicit none 
-      Integer :: myid,ierr,i 
+      Implicit none
+      Integer :: myid,ierr,i
 
-      Call MPI_COMM_RANK(MPI_COMM_WORLD, myid, ierr) 
+      Call MPI_COMM_RANK(MPI_COMM_WORLD, myid, ierr)
 
       Call MPI_BCAST(lpar, 1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
       Call MPI_BCAST(ipar, 1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)

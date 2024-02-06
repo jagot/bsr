@@ -22,26 +22,26 @@
 
 ! ... exzaust the 1-st configuration:
 
-      Do i = 1,ne 
+      Do i = 1,ne
 
        if(ksym1(i).eq.0) Cycle
        Nsym = Nsym + 1
        Lsym(Nsym)=Lsym1(i); Msym(Nsym)=Msym1(i); Jsym(Nsym)=Jsym1(i)
        k1=k1+1; IPsym1(Nsym)=k1; Isym1(k1)=i; ksym1(i)=0
 
-! ... check for the same orbitals rest the 1-st configuration:      
- 
+! ... check for the same orbitals rest the 1-st configuration:
+
        Do j = i+1,ne
         if(ksym1(j).eq.0) Cycle
         if(Lsym(Nsym).ne.Lsym1(j)) Cycle
         if(Msym(Nsym).ne.Msym1(j)) Cycle
         if(Jsym(Nsym).ne.Jsym1(j)) Cycle
         k1=k1+1; IPsym1(Nsym)=k1; Isym1(k1)=j; ksym1(j)=0
-       End do        
+       End do
 
 !       Jdet=Isym1(1:ne);  kz1 = Isort(ne,Jdet) ???
 
-! ... check for the same orbitals the 2-nd configuration:      
+! ... check for the same orbitals the 2-nd configuration:
 
        IPsym2(Nsym)=k2
        Do j = 1,ne
@@ -50,7 +50,7 @@
         if(Msym(Nsym).ne.Msym2(j)) Cycle
         if(Jsym(Nsym).ne.Jsym2(j)) Cycle
         k2=k2+1; IPsym2(Nsym)=k2; Isym2(k2)=j; ksym2(j)=0
-       End do        
+       End do
 
       End do
 
@@ -58,28 +58,28 @@
 
 ! ... exzaust the 2-st configuration:
 
-      Do i = 1,ne 
+      Do i = 1,ne
        if(ksym2(i).eq.0) Cycle
        Nsym = Nsym + 1
        Lsym(Nsym)=Lsym2(i); Msym(Nsym)=Msym2(i); Jsym(Nsym)=Jsym2(i)
        k2=k2+1; IPsym2(Nsym)=k2; Isym2(k2)=i; ksym2(i)=0
        IPsym1(Nsym)=k1
 
-! ... check for the same orbitals rest of 2-st configuration:      
-       
+! ... check for the same orbitals rest of 2-st configuration:
+
        Do j = i+1,ne
         if(ksym2(j).eq.0) Cycle
         if(Lsym(Nsym).ne.Lsym2(j)) Cycle
         if(Msym(Nsym).ne.Msym2(j)) Cycle
         if(Jsym(Nsym).ne.Jsym2(j)) Cycle
         k2=k2+1; IPsym2(Nsym)=k2; Isym2(k2)=j; ksym2(j)=0
-       End do        
+       End do
 
       End do
 
       if(k2.ne.ne) Stop 'Det_breit: k2 <> ne '
 
-      Jdet=Isym1(1:ne);  kz1 = Isort(ne,Jdet) 
+      Jdet=Isym1(1:ne);  kz1 = Isort(ne,Jdet)
       Jdet=Isym2(1:ne);  kz2 = Isort(ne,Jdet)
 
 
@@ -123,7 +123,7 @@
        End do
 
        Call Zno_2ee(i1,i2,j1,j2)
-  
+
 !---------------------------------------------------------------------
 !                                                         k = 1  case:
       Case(1)
@@ -263,7 +263,7 @@
 
 !----------------------------------------------------------------------
 
-      Call Check_boef(Lsym(i1),Jsym(i1),Msym(i1), & 
+      Call Check_boef(Lsym(i1),Jsym(i1),Msym(i1), &
                       Lsym(i2),Jsym(i2),Msym(i2), &
                       Lsym(j1),Jsym(j1),Msym(j1), &
                       Lsym(j2),Jsym(j2),Msym(j2))
@@ -271,12 +271,12 @@
 !----------------------------------------------------------------------
 !
       Do k1 = IPsym1(i1-1)+1,IPsym1(i1); io1=nnsym1(Isym1(k1))
-      Do k2 = IPsym1(i2-1)+1,IPsym1(i2); io2=nnsym1(Isym1(k2))  
-       if(k2.le.k1) Cycle 
-                       
+      Do k2 = IPsym1(i2-1)+1,IPsym1(i2); io2=nnsym1(Isym1(k2))
+       if(k2.le.k1) Cycle
+
       Do k3 = IPsym2(j1-1)+1,IPsym2(j1); io3=nnsym2(Isym2(k3))
-      Do k4 = IPsym2(j2-1)+1,IPsym2(j2); io4=nnsym2(Isym2(k4))  
-       if(k4.le.k3) Cycle 
+      Do k4 = IPsym2(j2-1)+1,IPsym2(j2); io4=nnsym2(Isym2(k4))
+       if(k4.le.k3) Cycle
 
        idf = Idet_fact(k1,k2,k3,k4)
 
@@ -292,7 +292,7 @@
          k = -int-1
          int = Incode_int(2,k,io1,io2,io4,io3)
          Call Iadd_zoef(Boef(i)*kz,int,idf)
-        end if        
+        end if
        End do
 
       End do;  End do;  End do;  End do
@@ -306,10 +306,10 @@
 !
 !     determines the overlap factor and its position in NDEF list
 !     for matrix element between two determinant wave functions
-!     located in module 'nljm_orbitals' 
+!     located in module 'nljm_orbitals'
 !
-!     (j1,j2) and (j3,j4) - active electrons in the first and second 
-!                           determinants 
+!     (j1,j2) and (j3,j4) - active electrons in the first and second
+!                           determinants
 !
 !     Calls:  Iadd_ndet, Iadd_ndef, ISORT
 !
@@ -369,11 +369,11 @@
 !     incode integral
 !
 !----------------------------------------------------------------------
- 
+
       Use param_jj
 
       Implicit none
-      Integer(4), intent(in) :: met,k,I1,I2,I3,I4       
+      Integer(4), intent(in) :: met,k,I1,I2,I3,I4
 
       if(max(i1,i2,i3,i4).ge.ib5) Stop ' INT_pack: i > pack-base '
 
@@ -389,7 +389,7 @@
 !     decode the integral
 !
 !----------------------------------------------------------------------
- 
+
       Use param_jj
 
       Implicit none

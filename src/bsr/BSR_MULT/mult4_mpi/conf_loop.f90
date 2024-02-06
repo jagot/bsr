@@ -1,7 +1,7 @@
 !=======================================================================
       Subroutine Conf_loop
 !=======================================================================
-!     run loop over configurations 
+!     run loop over configurations
 !-----------------------------------------------------------------------
       Use MPI
 
@@ -21,7 +21,7 @@
       Use coef_list,    only: ntrm,ctrm
       Use zoef_list,    only: nzoef
 
-      Implicit none 
+      Implicit none
 
       Integer :: k1,k2,ic,jc,is,js,iis,jjs, it,jt, m,k, i,j
       Integer(8), external :: DEF_ij8
@@ -79,16 +79,16 @@
        read(nud) NNsym2(1:ne)
        read(nud) Lsym2(1:ne)
 
-       if(JC_need(DEF_ij8(ic,jc)).eq.0) Cycle      
+       if(JC_need(DEF_ij8(ic,jc)).eq.0) Cycle
 
 !----------------------------------------------------------------------
 ! ...  define number of terms:
 
        ntrm = 0
-       Do k1=1,kt1; it=IP_kt1(k1) 
-       Do k2=1,kt2; jt=IP_kt2(k2)  
+       Do k1=1,kt1; it=IP_kt1(k1)
+       Do k2=1,kt2; jt=IP_kt2(k2)
         if(ic.eq.jc.and.it.gt.jt) Cycle;  ntrm = ntrm + 1
-       End do; End do 
+       End do; End do
 
 !----------------------------------------------------------------------
 ! ...  JT_oper:
@@ -97,14 +97,14 @@
        Allocate(JT_oper(ntrm),CT_oper(ntrm))
 
        k = 0; m = 0; JT_oper=0
-       Do k1=1,kt1; it=IP_kt1(k1) 
-       Do k2=1,kt2; jt=IP_kt2(k2)  
+       Do k1=1,kt1; it=IP_kt1(k1)
+       Do k2=1,kt2; jt=IP_kt2(k2)
         if(ic.eq.jc.and.it.gt.jt) Cycle;  k=k+1
-        ij=DEF_ij8(it,jt) 
-        if(IT_done(ij).ne.0) Cycle 
+        ij=DEF_ij8(it,jt)
+        if(IT_done(ij).ne.0) Cycle
         JT_oper(k) = 1
         m = m + 1
-       End do; End do 
+       End do; End do
 
        if(m.eq.0) Cycle
 
@@ -113,23 +113,23 @@
 
        m = 0
        Do i=1,nprocs-1
-        if(ip_proc(i).ne.0) Cycle 
+        if(ip_proc(i).ne.0) Cycle
         Call Send_det_exp(i,iis,jjs)
-        m = i 
+        m = i
         ip_proc(i) = 1
         Exit
        End do
 
        if(m.eq.0) then
-        Call Get_res(i,is,js)        
+        Call Get_res(i,is,js)
         Call Add_res(nui,is,js)
-        Call DEF_ic(is,js)          
+        Call DEF_ic(is,js)
         Call Send_det_exp(i,iis,jjs)
        end if
 
       End do    ! over jc
 
-      t3=MPI_WTIME()                
+      t3=MPI_WTIME()
 
       Call Symc_conf(ic,conf)
       write(*  ,'(a,i6,a,i6,a,i6,a,i6,F10.2,a,3x,a)') &
@@ -140,13 +140,13 @@
 !----------------------------------------------------------------------
 ! ... finish the calculations:
 
-      Do 
-       if(sum(ip_proc).eq.0) Exit 
-       Call Get_res(j,is,js)        
+      Do
+       if(sum(ip_proc).eq.0) Exit
+       Call Get_res(j,is,js)
        Call Add_res(nui,is,js)
-       Call DEF_ic(is,js)          
+       Call DEF_ic(is,js)
        ip_proc(j) = 0
-       t2=MPI_WTIME()                
+       t2=MPI_WTIME()
        write(*,'(a,2i5,f10.2,a)') 'proc', j, sum(ip_proc), &
          (t2-t3)/60, ' min.'
       End do
@@ -157,7 +157,7 @@
         Call Send_det_exp(i,-1,-1)
        End do
 
-       t2=MPI_WTIME()                
+       t2=MPI_WTIME()
 
        write(*,'(a,f10.2,a)') 'conf_loop is done', (t2-t1)/60, ' min.'
 

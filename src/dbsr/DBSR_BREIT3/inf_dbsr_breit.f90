@@ -38,7 +38,7 @@
 '----------------------------------------------------------------------  ',&
 '                                                                        ',&
 '                                                                        '
-      Stop                          
-                                    
-      End Subroutine inf_dbsr_breit       
-                                     
+      Stop
+
+      End Subroutine inf_dbsr_breit
+

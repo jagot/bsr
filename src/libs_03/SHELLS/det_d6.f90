@@ -1,29 +1,29 @@
 !=======================================================================
   Subroutine Det_d6 (id,ML,MS,Idet)
 !=======================================================================
-! determinamt id and corresponding ML,MS for subshell d6 
+! determinamt id and corresponding ML,MS for subshell d6
 !-----------------------------------------------------------------------
- 
+
   Implicit none
- 
+
   Integer, intent(in)  :: id
   Integer, intent(out) :: ML,MS,Idet(*)
- 
+
   Integer, parameter :: iq_d6 =   6
   Integer, parameter :: kd_d6 = 210
- 
+
   Integer :: Idet_d6 (iq_d6,kd_d6)
- 
+
   Integer :: ML_d6 (kd_d6)
   Integer :: MS_d6 (kd_d6)
- 
+
   if(id.le.0.or.id.gt.kd_d6) Stop "Det_d6: index id is out of range"
- 
+
   ML = ML_d6 (id)
   MS = MS_d6 (id)
- 
+
   Idet (1:iq_d6)= Idet_d6 (:,id)
- 
+
 
   Data Idet_d6 ( 1,:)/ &
    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, &
@@ -84,5 +84,5 @@
   1,  3,  1, -1,  1,  1,  3,  1,  3,  1,  3,  3,  5,  3,  1,  3,  1,  3,  1, -1,  1,  1,  3,  1, -1,  1, -1,  1,  1,  3,  1,  3, &
   1,  3,  1,  3,  3,  5,  3,  1,  3,  1,  3,  3,  5,  3,  5,  3,  1,  3,  1,  3,  1,  3,  1, -1,  1,  1,  3,  1, -1,  1, -1,  1, &
   1,  3,  1,  3,  1, -1,  1, -1,  1, -1,  1,  1,  3,  1,  3,  1,  3,  1  /
- 
-  End Subroutine Det_d6 
+
+  End Subroutine Det_d6

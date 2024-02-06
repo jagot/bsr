@@ -6,9 +6,9 @@
 !     Written by:   Oleg Zatsarinny
 !                   free shooter
 !                   email: oleg_zoi@yahoo.com
-!                         
+!
 !======================================================================
-!     print,  to file mult.tab, the angular coefficients for two 
+!     print,  to file mult.tab, the angular coefficients for two
 !     selected states in input c-files according to MULT.BNK file
 !----------------------------------------------------------------------
       Use mult_tab
@@ -24,17 +24,17 @@
 
       Integer, dimension(me) :: IPN1,IPN2, MP,MP1,MP2
 
-      Integer, external :: IDET_SIMP, Iadd_int, Nadd_det, Nadd_def 
+      Integer, external :: IDET_SIMP, Iadd_int, Nadd_det, Nadd_def
 
-      Character(26) ::  AI1, AI2  
-      Character(40) ::  BI1, BI2 
+      Character(26) ::  AI1, AI2
+      Character(40) ::  BI1, BI2
       Character(80) ::  AS
 
 !----------------------------------------------------------------------
 ! ... read arguments from command line:
 
       iarg = IARGC()
-      
+
       if(iarg.lt.2) then
        write(*,*)
        write(*,*) 'mult_tab prints the angular coefficients for '
@@ -54,7 +54,7 @@
        write(*,*) '    +1  - partial orthogonality, default'
        write(*,*)
        write(*,*) 'example: mult_tab 1.c 2.c - all dipole transitions'
-       Stop 
+       Stop
       end if
 
       Call Read_aarg('c1',AF1);      Call Check_file(AF1)
@@ -65,12 +65,12 @@
       Call Read_iarg('jc',jc)
       Call Read_iarg('jort',jort)
 
-      Open(nub,file=AF_bnk,form='UNFORMATTED') 
+      Open(nub,file=AF_bnk,form='UNFORMATTED')
       read(nub) ktype,kpol
 
-      Open(out,file=AF_tab) 
-      Open(in1,file=AF1) 
-      Open(in2,file=AF2) 
+      Open(out,file=AF_tab)
+      Open(in1,file=AF1)
+      Open(in2,file=AF2)
 
 ! ... define configurations:
 
@@ -97,7 +97,7 @@
        Call Prj_conf_LS (out,0.d0)
        Call Save_cfg_LS(1)
        ips = IP_state(is)
-      Do js = ncfg1+1,ncfg2 
+      Do js = ncfg1+1,ncfg2
        if(jc.gt.0.and.jc.ne.js) Cycle
        jt = IC_term(js)
        Call Get_cfg_LS(js)
@@ -160,14 +160,14 @@
        mm = JDET_SIMP(kz,nd,NP1,NP2)
        if(mm.eq.1) Cycle; if(mm.eq.0) go to 10
 
-       MP(1:nd) = NP1(1:nd)*ibd+NP2(1:nd) 
+       MP(1:nd) = NP1(1:nd)*ibd+NP2(1:nd)
        jd = Iadd_ndet(nd,MP)
        md = md + 1; MP1(md) = jd; MP2(md) = iext
 
-      End do 
-    
+      End do
+
       idf = 0
-      if(md.gt.0) then 
+      if(md.gt.0) then
        MP(1:md) = MP1(1:md)*ibf + MP2(1:md)
        idf = Iadd_ndef(md,MP)
       end if
@@ -187,5 +187,5 @@
 
 
       End ! program MULT_TAB
- 
+
 

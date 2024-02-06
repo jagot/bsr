@@ -1,8 +1,8 @@
 !======================================================================
-      Subroutine Read_Ddat 
+      Subroutine Read_Ddat
 !----------------------------------------------------------------------
-! ... read d.nnn file - dipole transition matrix for partial wave 'nnn'  
-!----------------------------------------------------------------------      
+! ... read d.nnn file - dipole transition matrix for partial wave 'nnn'
+!----------------------------------------------------------------------
 
       Use bsr_phot
       Implicit none
@@ -12,16 +12,16 @@
       i=INDEX(AF_d,'.',BACK=.TRUE.)
       write(AF,'(a,i3.3)') AF_d(1:i),klsp
       Call Check_file(AF)
-      Open(nud, file=AF, form='UNFORMATTED', status='OLD')      
+      Open(nud, file=AF, form='UNFORMATTED', status='OLD')
 
       read(nud) IL,IS,IP,E,ndm    !  final state
-            
+
       read(nud) ILI,ISI,IPI,EI    !  initial state
 
       Allocate (DKL(ndm),DKV(ndm))
- 
+
       read(nud) (DKL(i),DKV(i),i=1,ndm)    ! dipole / velocity
-      Close(nud)      
+      Close(nud)
 
       write(pri,'(/a/)') 'D.dat data:'
       write(pri,'(/a,a,i3,a,i3,a,i3,a,E16.8/)')  'Initial state:', &
@@ -32,15 +32,15 @@
 
       End Subroutine Read_Ddat
 
-!====================================================================== 
-      Subroutine br_Ddat 
-!====================================================================== 
+!======================================================================
+      Subroutine br_Ddat
+!======================================================================
 
-      USE MPI 
-      USE bsr_phot 
+      USE MPI
+      USE bsr_phot
 
-      Implicit none 
-      
+      Implicit none
+
       Call MPI_BCAST(IL, 1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
       Call MPI_BCAST(IS, 1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
       Call MPI_BCAST(IP, 1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)

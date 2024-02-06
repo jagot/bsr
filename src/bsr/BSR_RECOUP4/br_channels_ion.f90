@@ -1,13 +1,13 @@
-!====================================================================== 
-      Subroutine br_channels_ion 
-!====================================================================== 
-      Use MPI 
-      Use channels_ion 
+!======================================================================
+      Subroutine br_channels_ion
+!======================================================================
+      Use MPI
+      Use channels_ion
 
-      Implicit none 
-      Integer :: myid,ierr,i 
+      Implicit none
+      Integer :: myid,ierr,i
 
-      Call MPI_COMM_RANK(MPI_COMM_WORLD, myid, ierr) 
+      Call MPI_COMM_RANK(MPI_COMM_WORLD, myid, ierr)
 
       Call MPI_BCAST(nlsp, 1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
       Call MPI_BCAST(mch,  1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)

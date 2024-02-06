@@ -1,5 +1,5 @@
 !=====================================================================
-      Module bsr_pol     
+      Module bsr_pol
 !=====================================================================
 !     common variable and arrays for the program "bsr_pol"
 !---------------------------------------------------------------------
@@ -40,11 +40,11 @@
 
 ! ... initial state:
 
-      Integer :: jot0              ! (2L+1) or (2J+1) 
+      Integer :: jot0              ! (2L+1) or (2J+1)
       Real(8) :: E0
       Integer :: IP0
       Character(64) :: Label0
-      
+
 ! ... tarnsition:
 
       Character(1) :: ktype = 'E'  ! transition type

@@ -5,7 +5,7 @@
 !----------------------------------------------------------------------
       Use bsr_pol
       Use channel, only: nch,ncp
-      
+
       Implicit none
       Integer :: i, i1,i2,i3
 
@@ -38,4 +38,4 @@
       d = zero
       read(nud) (d(i),i=1,nhm)
 
-      End Subroutine Read_dipmat 
+      End Subroutine Read_dipmat

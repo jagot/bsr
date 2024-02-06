@@ -1,8 +1,8 @@
 !===================================================================
   SUBROUTINE DERIVATIV1 (N,H,FI,F1)
 !===================================================================
-! 1st order derivatives with the three-point formulas. 
-! Linear extrapolations are made at the boundaries.  
+! 1st order derivatives with the three-point formulas.
+! Linear extrapolations are made at the boundaries.
 ! FI: input f(x); H: interval; F1: f'
 !===================================================================
 
@@ -31,8 +31,8 @@
 !===================================================================
   SUBROUTINE DERIVATIV2 (N,H,FI,F2)
 !===================================================================
-! 2st order derivatives with the three-point formulas. 
-! Linear extrapolations are made at the boundaries.  
+! 2st order derivatives with the three-point formulas.
+! Linear extrapolations are made at the boundaries.
 ! FI: input f(x); H: interval; F2: f''
 !===================================================================
 
@@ -61,8 +61,8 @@
 !===================================================================
   SUBROUTINE DERIVATIVE1_NONUNIFORM (N,X,F,F1)
 !===================================================================
-! 1st order derivatives with the three-point non-uniform formula. 
-! Linear extrapolations are made at the boundaries.  
+! 1st order derivatives with the three-point non-uniform formula.
+! Linear extrapolations are made at the boundaries.
 ! X: input x; F: input f(x);  F1: f'
 !===================================================================
 

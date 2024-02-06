@@ -16,9 +16,9 @@
       v(1:ns) = cl*rbs(1:ns,i2)
 
       if(ktype.eq.'M') then; w(1:ns)= cv*rbs(1:ns,i2); Return; end if
-       
+
       Call FL_kpol(kpol,lbs(i1),lbs(i2),fl); fl=fl*cv
 
       w(1:ns)=cv*dbsr(1:ns,i2)+fl*tbs(1:ns,i2)
-     
+
       End Subroutine Get_dvr

@@ -37,7 +37,7 @@
 
 ! ... current allocated memory (in Mb)
 
-      Real(8) :: memory_orb_jj = 0.d0  
+      Real(8) :: memory_orb_jj = 0.d0
 
       End Module orb_jj
 

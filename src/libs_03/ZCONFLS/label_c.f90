@@ -50,7 +50,7 @@
         k=k+1
        end if
                                        ! shell term
-       
+
        if(iq(i).ne.1 .and. iq(i).ne.4*ln(i)+2 .and.  &
           iq(i).ne.4*ln(i)+1) then
 
@@ -105,7 +105,7 @@
 
       Do i=i1,no
        if(iq(i).lt.1) Cycle
-       if(i.lt.no.and.iq(i).eq.4*ln(i)+2) Cycle    
+       if(i.lt.no.and.iq(i).eq.4*ln(i)+2) Cycle
                                        ! orbital
        kk=kn(i); if(kset.eq.0) kk=0
        EL=ELF4(nn(i),ln(i),kk)
@@ -125,7 +125,7 @@
         Labelc(k:k)='_';    k=k+1
        end if
                                        ! shell term
-       
+
        if(iq(i).ne.1 .and. iq(i).ne.4*ln(i)+2 .and.  &
           iq(i).ne.4*ln(i)+1) then
 

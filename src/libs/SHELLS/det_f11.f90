@@ -3,27 +3,27 @@
 !=======================================================================
 ! determinamt id and corresponding ML,MS for subshell f11
 !-----------------------------------------------------------------------
- 
+
   Implicit none
- 
+
   Integer, intent(in)  :: id
   Integer, intent(out) :: ML,MS,Idet(*)
- 
+
   Integer, parameter :: iq_f11 =  11
   Integer, parameter :: kd_f11 = 364
- 
+
   Integer :: Idet_f11(iq_f11,kd_f11)
- 
+
   Integer :: ML_f11(kd_f11)
   Integer :: MS_f11(kd_f11)
- 
+
   if(id.le.0.or.id.gt.kd_f11) Stop "Det_f11: index id is out of range"
- 
+
   ML = ML_f11(id)
   MS = MS_f11(id)
- 
+
   Idet (1:iq_f11)= Idet_f11(:,id)
- 
+
 
   Data Idet_f11( 1,:)/ &
    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, &
@@ -173,5 +173,5 @@
   2,  2,  4,  2,  0,  2,  0,  2,  2,  4,  2,  4,  2,  0,  2,  0,  2,  0,  2,  2,  4,  2,  4,  2,  4,  2,  0,  2,  0,  2,  0,  2, &
   0,  2,  2,  4,  2,  4,  2,  4,  2,  4,  2,  0,  2,  0,  2,  0,  2,  0,  2,  0,  2,  2,  4,  2,  4,  2,  4,  2,  4,  2,  4,  2, &
   0,  2,  0,  2,  0,  2,  0,  2,  0,  2,  0,  2  /
- 
+
   End Subroutine Det_f11

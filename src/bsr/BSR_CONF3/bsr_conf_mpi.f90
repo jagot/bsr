@@ -1,11 +1,11 @@
 !======================================================================
-!     PROGRAM       B S R _ C O N F _ M P I       
+!     PROGRAM       B S R _ C O N F _ M P I
 !
 !                   C O P Y R I G H T -- 2016
 !
 !     Written by:   Oleg Zatsarinny
 !                   email: oleg_zoi@yahoo.com
-!                        
+!
 !======================================================================
 !     Generates configuration lists for BSR codes
 !     in case of LS(LSJ), JK or JJ couplings
@@ -15,40 +15,40 @@
 !     INPUT FILES:
 !
 !     bsr_par       -  parameters of calculations
-!     target        -  description of target states and partial waves                        
-!     target_orb    -  physical and substitution orbitals 
+!     target        -  description of target states and partial waves
+!     target_orb    -  physical and substitution orbitals
 !     targ_nnn.c    -  c-files for target states
-!     pert_nnn.c    -  c-files for perturber if any  
+!     pert_nnn.c    -  c-files for perturber if any
 !
 !     OUTPUT FILES:
 !
 !     bsr_conf.log  -  running information
 !     cfg.nnn       -  c-file for given partial wave nnn
-!     cfg.nnn_comp  -  compensation configurations if any    
+!     cfg.nnn_comp  -  compensation configurations if any
 !
 !     INPUT ARGUMENT:  see subroutine read_arg.f90
 !
 !     REMARKS:
 !
-!     LS-coupling is default 
+!     LS-coupling is default
 !     LSJ case is defined by zero value of total multiplicity (2S+1)
-!     for partial waves (in this case L = 2J)  
+!     for partial waves (in this case L = 2J)
 !
-!     ORTHOGONAL CONSTRAINTS: 
+!     ORTHOGONAL CONSTRAINTS:
 !
-!     by default all continuum orbitals are supposed to be 
+!     by default all continuum orbitals are supposed to be
 !     non-orthogonal to all others (bound and continuum);
-!     common for all partial waves orthogonal constraints can be given 
-!     in the bsr_par file as  
+!     common for all partial waves orthogonal constraints can be given
+!     in the bsr_par file as
 !
 !                  < nl1| nl2>=0
 !
-!     orthogonal constraints, specific for given partial wave, 
-!     can be given in cfg.nn file. It is supposed secondary running  
+!     orthogonal constraints, specific for given partial wave,
+!     can be given in cfg.nn file. It is supposed secondary running
 !     the BSR_CONF to get spesific set numbers for kl orbitals.
 !
 !     Program analizes the target expansions to put orthogonal
-!     constraints, such that the weights of compansation configuration 
+!     constraints, such that the weights of compansation configuration
 !
 !                  W < c_comp
 !
@@ -60,7 +60,7 @@
 !     their pointers ->  ip_phys_conf
 !     limit position ->  ncfg_phys
 !
-! 2.  target configurations   
+! 2.  target configurations
 !
 !     their pointers ->  ic_targ  (=ictarg + ncfg_phys)
 !     limit position ->  ncfg_targ
@@ -85,26 +85,26 @@
 ! 4.  define spectroscopic target configurations (target.nnn + target_orb)
 ! 5.  read all target configurations  (files target.nnn)
 ! 6.  read "channel-delete" conditions if any
-! 7.  read information about included partial waves (file target); 
-!     this information should be prepared by hand - not convivient, 
-!     I am sorry, but you may copy these lines from previous calculations) 
+! 7.  read information about included partial waves (file target);
+!     this information should be prepared by hand - not convivient,
+!     I am sorry, but you may copy these lines from previous calculations)
 !----------------------------------------------------------------------
-! ... loop other partial waves:  
+! ... loop other partial waves:
 !----------------------------------------------------------------------
 ! 8.  define and record channel configurations in cfg.nnn
 ! 9.  record pertuber configurations if any
 !10.  record imposed orthogonality constrans
 !11.  record channels information in file target
 !----------------------------------------------------------------------
-! ... check if we need additional orth.conditions:  
+! ... check if we need additional orth.conditions:
 !----------------------------------------------------------------------
 !12.  define scattering channels with phys.target states only
 !13.  add pertuber physical configurations and check double-counting
 !14.  define orthogonal conditions (routine def_orth_cond) and
 !     record all compensation configurations in file "cfg.nnn_comp"
 !15.  record "derived" orth.constraints in cfg.nnn
-!---- end of partial waves loop   
-!...  finish by recording overall information in file target    
+!---- end of partial waves loop
+!...  finish by recording overall information in file target
 !----------------------------------------------------------------------
       Use MPI
       Use bsr_conf
@@ -116,7 +116,7 @@
       Character(124) :: AS
       Integer, external :: Iadd_line
 
-!---------------------------------------------------------------------- 
+!----------------------------------------------------------------------
       Call MPI_INIT(ierr)
       Call MPI_COMM_RANK(MPI_COMM_WORLD, myid, ierr)
       call MPI_COMM_SIZE( MPI_COMM_WORLD, nprocs, ierr )
@@ -125,23 +125,23 @@
 
       if(myid.eq.0) Call bsr_conf_inf
 
-!---------------------------------------------------------------------- 
+!----------------------------------------------------------------------
 ! ... read target information:
 
-      if(myid.eq.0) then   
+      if(myid.eq.0) then
        Call Check_file(AF_tar)
        Open(nut,file=AF_tar)
        Call R_target(nut)
       end if
       Call br_target
 
-!---------------------------------------------------------------------- 
+!----------------------------------------------------------------------
 ! ... read arguments:
 
       if(myid.eq.0) Call Read_arg
       Call br_arg
 
-!---------------------------------------------------------------------- 
+!----------------------------------------------------------------------
 ! ... debug output
 
       if(myid.ne.0) then
@@ -153,7 +153,7 @@
        end if
       end if
 
-!---------------------------------------------------------------------- 
+!----------------------------------------------------------------------
 ! ... target orbitals:
 
       if(myid.eq.0) then
@@ -169,13 +169,13 @@
       if(pri.gt.0) &
       write(pri,'(a,T33,i8)') 'number of target orbital:',nwf,max_ll_targ
 
-!---------------------------------------------------------------------- 
+!----------------------------------------------------------------------
 ! ... find target physical configurations:
 
       if(myid.eq.0) Call Def_phys_targ
 
-      Call br_phys_orb 
- 
+      Call br_phys_orb
+
       Call MPI_BARRIER(MPI_COMM_WORLD,ierr)
 
       if(myid.ne.0)  Allocate(ic_targ(0:ntarg),jc_targ(0:ntarg))
@@ -187,17 +187,17 @@
       Call MPI_BCAST(ncfg_phys,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
       Call MPI_BCAST(lcfg_phys,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
 
-!---------------------------------------------------------------------- 
+!----------------------------------------------------------------------
 ! ... target configurations:
 
       if(myid.eq.0) then
        Do it=1,ntarg
         AF = trim(AFT(it))//'.c'
         Open(nuc,file=AF,status='OLD')
-        if(it.eq.1) Call R_closed(nuc) 
+        if(it.eq.1) Call R_closed(nuc)
         Call Add_conf_LS(nuc,0)
         Close(nuc)
-       End do    
+       End do
        Call Test_a
       end if
 
@@ -217,7 +217,7 @@
 
       ncfg_targ=ncfg; lcfg_targ=lcfg; nwf_targ=nwf
 
-!---------------------------------------------------------------------- 
+!----------------------------------------------------------------------
 ! ... read partial waves:
 
       if(myid.eq.0) then
@@ -244,7 +244,7 @@
 
       Call MPI_BCAST(nlsp,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
       Call MPI_BCAST(kpert,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
- 
+
       if(nlsp.le.0) Call Stop_mpi(pri,0,'bsr_conf: nlsp <= 0 ? ')
 
       if(pri.gt.0) then
@@ -255,7 +255,7 @@
 !-----------------------------------------------------------------------
 ! ... read delete-channels information:
 
-      if(myid.eq.0)  Call Read_del   
+      if(myid.eq.0)  Call Read_del
       Call MPI_BCAST(ndel,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
 
       if(myid.ne.0.and.ndel.gt.0) &
@@ -273,11 +273,11 @@
 !======================================================================
 
       max_ch=0;  max_nc=0;  max_wf=0
- 
+
       klsp = 0
       Do ilsp=1,nlsp
 
-       klsp=klsp+1; if(klsp.gt.nprocs-1) klsp=1; if(myid.ne.klsp) Cycle 
+       klsp=klsp+1; if(klsp.gt.nprocs-1) klsp=1; if(myid.ne.klsp) Cycle
 
       AS=aline(ilsp); ncp = 0; nwp = 0
 
@@ -289,7 +289,7 @@
 
       Jpar=lpar+1; if(coupling.eq.'LS'.and.ispar.gt.0) Jpar=0
 
-      ncfg=ncfg_targ; lcfg=lcfg_targ; nwf=nwf_targ 
+      ncfg=ncfg_targ; lcfg=lcfg_targ; nwf=nwf_targ
 
 ! ... read perturber configurations to get pertuber orbitals if any
 ! ... (to be sure that set indexes are same as in bsr_prep)
@@ -299,7 +299,7 @@
        Open(nuc,file=AF,status='OLD')
        Call Add_conf_LS(nuc,0)
       end if
-      ncfg=ncfg_targ; lcfg=lcfg_targ; nwf_pert=nwf 
+      ncfg=ncfg_targ; lcfg=lcfg_targ; nwf_pert=nwf
 
 ! ... define channels configurations:
 
@@ -332,7 +332,7 @@
       end if
 
       ncfg_pert = ncfg
-   
+
       if(ncfg.gt.ncfg_sct.and.pri.gt.0) write(pri,'(a,T40,i8)') &
         'Total number of configurations:', ncfg-ncfg_targ
 
@@ -341,13 +341,13 @@
       write(AF,'(a,i3.3)') 'cfg.',ilsp
       Open (nuc,file=AF)
 
-      Call Pre_iort(0,0)          !  nup  ???         
+      Call Pre_iort(0,0)          !  nup  ???
 
       if(kort.gt.0) Call Read_orth(nuc)
 
       rewind(nuc)
       write(nuc,'(12x,a3,f16.8)') Tpar,Etarg(1)
-      write(nuc,'(a60)') CLOSED 
+      write(nuc,'(a60)') CLOSED
       Do ic=ncfg_targ+1,ncfg; Call Pri_conf(nuc,ic,WC(ic)); End do
       write(nuc,'(a)') '*'
 
@@ -357,7 +357,7 @@
        write(nuc,'(/a/)') 'Imposed orth. conditions:'
 
       Do ich=1,nch; i=ipch(ich)
-       Do j=nclosd+1,nwf 
+       Do j=nclosd+1,nwf
         if(LEF(i).ne.LEF(j)) Cycle
         if(IORT(max(i,j),min(i,j)).ne.0) Cycle
         write(nuc,'(a1,a4,a1,a4,a2,i1)') '<',ELF(i),'|',ELF(j),'>=',0
@@ -365,8 +365,8 @@
        End do
       End do
 
-! ... maximum dimensions:  
- 
+! ... maximum dimensions:
+
       max_nc = max(max_nc,ncfg_pert-ncfg_targ)
       max_wf = max(max_wf,nwf_pert)
       max_ch = max(max_ch,nch)
@@ -383,18 +383,18 @@
       End do
 
 !======================================================================
-! ... orthogonal conditions:   
+! ... orthogonal conditions:
 !======================================================================
 
-      if(max_ll_targ.lt.min_ll_ch) Cycle     
+      if(max_ll_targ.lt.min_ll_ch) Cycle
 
-      ncfg=ncfg_targ; lcfg=lcfg_targ; nwf=nwf_pert 
+      ncfg=ncfg_targ; lcfg=lcfg_targ; nwf=nwf_pert
 
       ic_targ=jc_targ
 
 ! ... define scattering channels with phys.target states:
 
-      nch_save = nch 
+      nch_save = nch
       nch=0; Call Allocate_channel(imch)
       c_norm = 0.5   !  tollerance for spectroscopic states normalization
       Select Case (COUPLING)
@@ -409,10 +409,10 @@
       Do ic=ncfg_targ+1,ncfg; Call Pri_conf(nuc,ic,WC(ic)); End do
       write(nuc,'(a)') '*'
 
-! ... add pertuber physical configurations: 
+! ... add pertuber physical configurations:
 
       if(ncp.gt.0) Call Check_perturbers
-     
+
       ncfg_pert=ncfg; lcfg_pert=lcfg; nwf_pert=nwf
 
 ! ... define orthogonal conditions
@@ -469,8 +469,8 @@
          write(nut,'(a)') trim(AS)
         end if
        End do
-        
-       if(myid.eq.0) write(nut,'(72(''-''))') 
+
+       if(myid.eq.0) write(nut,'(72(''-''))')
 
        ip = ip + 1 + nch
 
@@ -492,7 +492,7 @@
          'max_wf  = ',m,  '  -  max.number of orbitals'
       if(myid.eq.0) write(nut,'(72(''-''))')
 
-!      if(myid.eq.0) then 
+!      if(myid.eq.0) then
 !       if(debug.eq.0) Call System('rm targ_*')
 !       if(debug.eq.0) Call System('rm pert_comp.*')
 !      end if

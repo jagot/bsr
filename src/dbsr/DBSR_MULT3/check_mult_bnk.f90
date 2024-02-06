@@ -30,7 +30,7 @@
 ! ... define new symmetries from c-file:
 
       Call Read_conf_jj(nu1,0,'detect','check'); ne1=ne; parity1=parity
-      
+
       write(pri,'(/a)') 'first set:'
       write(pri,'(a,i5)') 'number of configurations  = ',nsymc
       write(pri,'(a,i5)') 'number of ang. symmetries = ',nsymt
@@ -86,15 +86,15 @@
       if(allocated(IT_done)) Deallocate(IT_done)
                              Allocate  (IT_done(nsymt*(nsymt+1)/2))
 
-      IT_done=0    
+      IT_done=0
       if(.not.new) Call Read_done(nub)
       icalc=.FALSE.; IC_need=0; JC_need=0; IT_need=0
-      
+
        Do ic = 1,nsymc
-        Call Get_symc(ic,Jtotal1,no1,nn1,kn1,ln1,jn1,iq1,in1) 
+        Call Get_symc(ic,Jtotal1,no1,nn1,kn1,ln1,jn1,iq1,in1)
         parity1 = Jparity(no1,ln1,iq1)
        Do jc = ic,nsymc
-        Call Get_symc(jc,Jtotal2,no2,nn2,kn2,ln2,jn2,iq2,in2)      
+        Call Get_symc(jc,Jtotal2,no2,nn2,kn2,ln2,jn2,iq2,in2)
         parity2 = Jparity(no2,ln2,iq2)
 
          iort_c = Iort_conf_jj(1)
@@ -104,12 +104,12 @@
          if(ktype.eq.'M'.and.mod(kpol,2).eq.0.and. &
           parity1.eq.parity2) iort_c=1
 
-         k = 0 
+         k = 0
          Do ik=IC_term1(ic),IC_term2(ic);  it=JP_term(ik)
          Do jk=IC_term1(jc),IC_term2(jc);  jt=JP_term(jk)
            ij = DEF_ij(it,jt)
            if(IT_done(ij).eq.0) IT_done(ij) = iort_c
-           if(IT_stat(it)*IT_stat(jt).eq.0.and.IT_done(ij).eq.0) &    
+           if(IT_stat(it)*IT_stat(jt).eq.0.and.IT_done(ij).eq.0) &
               IT_done(ij)=-1
            if(IT_done(ij).eq.0) k = 1
          End do
@@ -127,7 +127,7 @@
        Do it = 1,nsymt; k = 0
         Do jt = 1,nsymt
          ij=DEF_ij(it,jt); if(IT_done(ij).ne.0) Cycle; k=1; Exit
-        End do         
+        End do
         IT_need(it) = k
        End do
 

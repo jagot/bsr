@@ -4,16 +4,16 @@
 !     contains a set of coefficients ordering accordint to
 !     four indexes; similar to rk4_data;  used in dbsr_mchf
 !--------------------------------------------------------------------
-      Implicit none 
-    
+      Implicit none
+
       Integer :: nid = 0       ! current number of coefficients
       Integer :: mid = 0       ! maximum dimension
       Integer :: iid = 10000   ! initial dimension
 
 ! ... coefficients:
 
-      Real(8), allocatable :: cid(:)   
-    
+      Real(8), allocatable :: cid(:)
+
 ! ... their attributes:
 
       Integer, allocatable :: id1(:),id2(:),id3(:),id4(:)
@@ -35,7 +35,7 @@
 
       if(m.le.0) then
        if(allocated(cid)) Deallocate (cid,id1,id2,id3,id4)
-       nid = 0; mid = 0 
+       nid = 0; mid = 0
       elseif(.not.allocated(cid)) then
        mid = m; nid = 0
        Allocate(cid(mid),id1(mid),id2(mid),id3(mid),id4(mid))
@@ -64,7 +64,7 @@
 !======================================================================
       Subroutine Add_id4_data(k1,k2,k3,k4,C)
 !======================================================================
-!     add new data to the list 
+!     add new data to the list
 !----------------------------------------------------------------------
       Use id4_data
 
@@ -78,7 +78,7 @@
 ! ... search position (k) for new integral
 
       k=1; l=nid
-    1 if(k.gt.l) go to 2              
+    1 if(k.gt.l) go to 2
       m=(k+l)/2
       if    (k1.lt.id1(m)) then;       l = m - 1
       elseif(k1.gt.id1(m)) then;       k = m + 1
@@ -99,7 +99,7 @@
        end if
       end if
       go to 1
-    2 Continue 
+    2 Continue
 
 ! ... shift the rest data up:
 
@@ -112,7 +112,7 @@
 ! ... add new integral:
 
       cid(k)=C; id1(k)=k1; id2(k)=k2; id3(k)=k3; id4(k)=k4; nid=nid+1
-      if(nid.eq.mid) Call alloc_id4_data(mid+iid) 
+      if(nid.eq.mid) Call alloc_id4_data(mid+iid)
 
       End Subroutine Add_id4_data
 

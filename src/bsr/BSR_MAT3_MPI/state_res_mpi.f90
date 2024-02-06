@@ -13,7 +13,7 @@
       USE target
       USE cmdata
       USE dets; USE new_dets; Use new_defs
-      USE z_core, only: mlz 
+      USE z_core, only: mlz
       USE bsr_matrix, only: imycase
 
       Implicit none
@@ -65,7 +65,7 @@
       end if
 
       nnbuf = 0
-    1 Call Read_buffer_mpi  
+    1 Call Read_buffer_mpi
 
       t2 =  MPI_WTIME()
 
@@ -79,7 +79,7 @@
 
       if(myid.eq.0) Exit
 
-      Call Decode_INT (jcase,k,i1,i2,i3,i4,intb(ibuf)) 
+      Call Decode_INT (jcase,k,i1,i2,i3,i4,intb(ibuf))
 
       if(icase.ne.jcase) Cycle
 
@@ -90,7 +90,7 @@
       End select
       if(kpol.gt.mk) Cycle
 
-! ... determine the range of states for given coeff. 
+! ... determine the range of states for given coeff.
 
       ijt = ijtb(ibuf)
       it  = ijt/ibc;   jt = mod(ijt,ibc)
@@ -101,7 +101,7 @@
       idf = idfb(ibuf)
       C = CBUF(ibuf)
 !----------------------------------------------------------------------
-!                                        loop over all relevant states: 
+!                                        loop over all relevant states:
 
       Do ik=is1,is2; is=IP_stat(ik); ich=IP_channel(is)
       Do jk=js1,js2; js=IP_stat(jk); jch=IP_channel(js)
@@ -114,7 +114,7 @@
 
 ! ... consider only low-half of interaction matrix
 
-       if(it.eq.jt.and.js.gt.is) Cycle                   
+       if(it.eq.jt.and.js.gt.is) Cycle
 
 ! ... restriction of two-electron rel. matrix elements:
 
@@ -123,7 +123,7 @@
 ! Case(7); ! if(iptar(ich).gt.2.or.iptar(jch).gt.2) Cycle  ???
        End Select
 
-! ... Include the expansion coefficients 
+! ... Include the expansion coefficients
 
        C=CBUF(ibuf)
        if(ich.eq.jch.and.is.ne.js) C = C + C
@@ -156,8 +156,8 @@ end if
        if(icase.eq.6.or.icase.eq.7) kpol = LEF(j1)
        if(icase.eq.7.and.kpol.gt.mlz) Cycle
 
-! ... J-dependence for relativistic ccorrections 
-       
+! ... J-dependence for relativistic ccorrections
+
        if(icase.gt.6.and.icase.lt.11) then
         Call Term_ic (is,ILT1,IST1)
         Call Term_ic (js,ILT2,IST2)
@@ -167,8 +167,8 @@ end if
         if(abs(CC).lt.Eps_C) Cycle
        end if
 
-! ... we do not need anymore the configuration index 
-! ... except pertuber (N+1)-electron configurations   
+! ... we do not need anymore the configuration index
+! ... except pertuber (N+1)-electron configurations
 
        i=0; if(ich.gt.nch) i=ich-nch
        j=0; if(jch.gt.nch) j=jch-nch
@@ -179,7 +179,7 @@ end if
 
        Call Jsym_int(icase,j1,j2,j3,j4)
 
-! ... find overlap factors with extracted continuum:  
+! ... find overlap factors with extracted continuum:
 
        Call Det_fact(idf,np1,np2);  if(nndef.eq.0) Cycle
 
@@ -209,7 +209,7 @@ end if
       end if
 
       t3 =  MPI_WTIME()
-      
+
       if(pri.gt.0)  write(pri,'(a,2i5,2f10.2,a)') &
        'jgen, bufer:',jgen,nnbuf, (t2-t1)/60,(t3-t2)/60,'  min'
 
@@ -233,7 +233,7 @@ end if
 
 
 !======================================================================
-      Subroutine Read_buffer_mpi  
+      Subroutine Read_buffer_mpi
 !======================================================================
 
       Use mpi
@@ -241,7 +241,7 @@ end if
       USE cmdata
 
       Implicit none
- 
+
       Integer :: i
       Real(8) :: t1,t2,t3,t4
 
@@ -258,4 +258,4 @@ end if
       Call MPI_BCAST(intb,ncbuf,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
       Call MPI_BCAST(idfb,ncbuf,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
 
-      End Subroutine Read_buffer_mpi  
+      End Subroutine Read_buffer_mpi

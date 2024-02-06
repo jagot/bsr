@@ -1,7 +1,7 @@
 !======================================================================
       Subroutine Conf_loop
 !======================================================================
-!     run loop over configurations 
+!     run loop over configurations
 !-----------------------------------------------------------------------
 
       USE param_jj
@@ -9,11 +9,11 @@
       USE conf_jj,   only: ne
       Use symc_list, only: JC_need
 
-      Implicit none 
+      Implicit none
 
       Integer :: i,j,ij,is,js, met
 
-      Real(8) :: t1,t2,tt   
+      Real(8) :: t1,t2,tt
       Real(8), External :: RRTC
 
       t1=RRTC()
@@ -31,7 +31,7 @@
 
        if(Allocated(IP_det1)) Deallocate(IP_det1)
        Allocate(IP_det1(ne,kdt1)); Read(nud) IP_det1
-             
+
        if(Allocated(C_det1)) Deallocate(C_det1)
        Allocate(C_det1(kt1,kdt1)); Read(nud) C_det1
 
@@ -47,29 +47,29 @@
 
        if(Allocated(IP_det2)) Deallocate(IP_det2)
        Allocate(IP_det2(ne,kdt2)); Read(nud) IP_det2
-              
+
        if(Allocated(C_det2)) Deallocate(C_det2)
        Allocate(C_det2(kt2,kdt2)); Read(nud) C_det2
 
        i = max(ic,jc); j = min(ic,jc); ij = i*(i-1)/2 + j
-       if(JC_need(ij).eq.0) Cycle      
-              
+       if(JC_need(ij).eq.0) Cycle
+
 !----------------------------------------------------------------------
 
        met = 0
        Do i=1,nprocs-1
-        if(ip_proc(i).ne.0) Cycle 
+        if(ip_proc(i).ne.0) Cycle
         Call Send_det_exp(i)
-        met = i 
+        met = i
         ip_proc(i) = 1
         Exit
        End do
 
        if(met.eq.0) then
-        Call Get_res(i)        
+        Call Get_res(i)
         Call Add_res(nui)
         Call Send_det_exp(i)
-        met = i 
+        met = i
        end if
 
 !----------------------------------------------------------------------
@@ -86,9 +86,9 @@
 !----------------------------------------------------------------------
 ! ... final results:
 
-       Do 
-        if(sum(ip_proc).eq.0) Exit 
-        Call Get_res(j)        
+       Do
+        if(sum(ip_proc).eq.0) Exit
+        Call Get_res(j)
         Call Add_res(nui)
         ip_proc(j) = 0
        End do
@@ -114,8 +114,8 @@
       USE term_exp
 
       Implicit none
-      
-      Integer :: ierr, id 
+
+      Integer :: ierr, id
 
       Call MPI_SEND(ic  ,1,MPI_INTEGER,id,0,MPI_COMM_WORLD,ierr)
       if(ic.le.0) Return

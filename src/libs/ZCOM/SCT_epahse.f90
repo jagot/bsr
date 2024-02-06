@@ -4,7 +4,7 @@
 !     n - number of open channels
 !     m - number of channels (max.dimension)
 !     K - symmetrical matrix
-!     uk - eigenvectors of K-matrix 
+!     uk - eigenvectors of K-matrix
 !     ui - eigenphases (on module of PI) ->  tan^-1 (eigenvalue) / PI
 !     us - sum of eigenphases (on module of PI)
 !---------------------------------------------------------------------
@@ -28,5 +28,5 @@
        us = us + ui(i)
       End do
 
-      End Subroutine ephase 
+      End Subroutine ephase
 

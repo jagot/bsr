@@ -15,7 +15,7 @@
 
       nn = ns*ns
 
-      Do 
+      Do
        if(myid.eq.0) read(nui) ic,jc
        Call MPI_BCAST(ic,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
        Call MPI_BCAST(jc,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
@@ -31,9 +31,9 @@
        elseif(ii.ne.0) then
         Call MPI_RECV(S,1,MPI_DOUBLE_PRECISION,0, &
                       MPI_ANY_TAG, MPI_COMM_WORLD, status, ierr)
-        hbb(ii) = hbb(ii) + S 
+        hbb(ii) = hbb(ii) + S
        end if
-        
+
       elseif(ic.gt.nch) then            !  ch-pert
        ic=ic-nch; ii = icb(jc,ic)
        if(myid.eq.0)  then
@@ -56,7 +56,7 @@
         hcc(:,:,ii) = hcc(:,:,ii) + x
        end if
 
-      end if 
+      end if
 
       End do
 
@@ -75,7 +75,7 @@
       Real(8) :: S, w(ns), ww(ns*ns)
       Integer ::  ic,jc
 
-      Do 
+      Do
        read(nui) ic,jc; if(ic.le.0) Exit
        if(ic.gt.nch.and.jc.gt.nch) then  !  pert-pert
         read(nui) S
@@ -83,7 +83,7 @@
         read(nui) w
        else                              !  ch-ch
         read(nui) ww
-       end if 
+       end if
       End do
 
       End Subroutine skip_matrix

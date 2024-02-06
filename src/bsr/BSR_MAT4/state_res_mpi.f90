@@ -6,8 +6,8 @@
       Use mpi
 
       Use bsr_mat
-      Use conf_LS 
-      Use def_list; Use def_list    
+      Use conf_LS
+      Use def_list; Use def_list
       Use new_dets; Use new_defs
       Use c_data, only: ntype,kpol1,kpol2
 
@@ -16,7 +16,7 @@
       Integer :: jcase,kpol,itype,jtype
       Integer :: i1,i2,i3,i4,j1,j2,j3,j4,k1,k2,k3,k4,ic,jc,io,jo,idf
       Integer :: ILT1,ILT2,IST1,IST2
-      Integer :: ibuf, nbuf, nnbuf, nccoef 
+      Integer :: ibuf, nbuf, nnbuf, nccoef
       Real(8) :: C,CC,CCC, t1,t2
       Integer, external :: Idef_itype, no_ic_LS, Check_idef
       Real(8), external :: Z_6j
@@ -41,7 +41,7 @@
       if(myid.eq.0) then; rewind(nub); read(nub) nbuf; end if
 
       nnbuf = 0
-    1 if(myid.eq.0) Call Read_buffer(nbuf)  
+    1 if(myid.eq.0) Call Read_buffer(nbuf)
       nnbuf=nnbuf+1
 
       if(interrupt.gt.0.and.nnbuf.le.interrupt) go to 1
@@ -60,18 +60,18 @@
 
       if(myid.eq.0.and.nprocs.gt.1) Exit
 
-      Call Decode_INT (jcase,k,i1,i2,i3,i4,intb(ibuf)) 
+      Call Decode_INT (jcase,k,i1,i2,i3,i4,intb(ibuf))
 
       if(icase.ne.jcase) Cycle
 
-      kpol = k 
+      kpol = k
       Select case(icase)
        Case(4,8,9,10); kpol=k-1
        Case(6,7,11);   kpol=0
       End select
       if(kpol.gt.mk) Cycle
 
-! ... determine the range of states for given coeff. 
+! ... determine the range of states for given coeff.
 
       it  = itb(ibuf);   jt = jtb(ibuf);
       is1 = IT_state1(it); js1 = IT_state1(jt)
@@ -81,7 +81,7 @@
       idf = idfb(ibuf)
       C = CBUF(ibuf)
 !----------------------------------------------------------------------
-! ... loop over all relevant states: 
+! ... loop over all relevant states:
 
       Do ik=is1,is2; is=IP_stat(ik); ich=IP_channel(is)
       Do jk=js1,js2; js=IP_stat(jk); jch=IP_channel(js)
@@ -92,7 +92,7 @@
 
 ! ... consider only low-half of interaction matrix
 
-       if(it.eq.jt.and.js.gt.is) Cycle                   
+       if(it.eq.jt.and.js.gt.is) Cycle
 
 ! ... restriction of two-electron rel. matrix elements:
 
@@ -100,7 +100,7 @@
         Case(3,4,8,9,10); if(abs(WC(is)*WC(js)).lt.Eps_soo) Cycle
        End Select
 
-! ... include the expansion coefficients 
+! ... include the expansion coefficients
 
        C=CBUF(ibuf)
        if(ich.eq.jch.and.is.ne.js) C = C + C
@@ -128,8 +128,8 @@
        if(icase.eq.6.or.icase.eq.7) kpol = lbs(j1)
        if(icase.eq.7.and.kpol.gt.mlso) Cycle
 
-! ... J-dependence for relativistic ccorrections 
-       
+! ... J-dependence for relativistic ccorrections
+
        if(icase.gt.6.and.icase.lt.11) then
         Call Term_ic (is,ILT1,IST1)
         Call Term_ic (js,ILT2,IST2)
@@ -139,8 +139,8 @@
         if(abs(CC).lt.Eps_C) Cycle
        end if
 
-! ... we do not need anymore the configuration index 
-! ... except pertuber (N+1)-electron configurations   
+! ... we do not need anymore the configuration index
+! ... except pertuber (N+1)-electron configurations
 
        i=0; if(ich.gt.nch) i=ich-nch
        j=0; if(jch.gt.nch) j=jch-nch
@@ -151,7 +151,7 @@
 
        Call Jsym_int(icase,j1,j2,j3,j4)
 
-! ... find overlap factors with extracted continuum:  
+! ... find overlap factors with extracted continuum:
 
        Call Det_fact(idf,np1,np2);  if(nndef.eq.0) Cycle
 
@@ -192,7 +192,7 @@
       if(myid.eq.0.and.pri.gt.0)  write(pri,'(a,i4,T20,f10.1,a)') &
                   'Bufer:',nnbuf,(t2-t1)/60,' min'
 
-      if( time_delay.gt.0.and.(t2-time0)/60 .gt. time_delay) then 
+      if( time_delay.gt.0.and.(t2-time0)/60 .gt. time_delay) then
        interrupt = nnbuf; intercase=icase
        if(pri.gt.0)  write(pri,'(/a,3i10)') &
          'Interrupt, intercase, nnbuf:',interrupt,intercase,nnbuf
@@ -215,12 +215,12 @@
 
 
 !======================================================================
-      Subroutine Read_buffer(nbuf)  
+      Subroutine Read_buffer(nbuf)
 !======================================================================
       Use bsr_mat
 
       Implicit none
- 
+
       Integer :: nbuf,i1,i2
 
       if(nbuf.gt.maxnc) then
@@ -231,7 +231,7 @@
 
       if(nbuf.le.0) Return
       ncbuf =0
-       
+
     1 i1 = ncbuf+1; i2=ncbuf+nbuf
       read(nub) cbuf (i1:i2)
       read(nub) itb  (i1:i2)
@@ -244,12 +244,12 @@
       go to 1
 
     2 nbuf=0
-      
-      End Subroutine Read_buffer  
+
+      End Subroutine Read_buffer
 
 
 !======================================================================
-      Subroutine br_buffer_mpi(nbuf)  
+      Subroutine br_buffer_mpi(nbuf)
 !======================================================================
       Use mpi
       Use bsr_mat
@@ -265,7 +265,7 @@
       Call MPI_BCAST(intb,ncbuf,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
       Call MPI_BCAST(idfb,ncbuf,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
 
-      End Subroutine br_buffer_mpi  
+      End Subroutine br_buffer_mpi
 
 
 
@@ -294,7 +294,7 @@
 
       if(myid.eq.0)  rewind(nub)
 
-  10  Continue   
+  10  Continue
 
       if(myid.eq.0) then
 
@@ -379,7 +379,7 @@
 !-----------------------------------------------------------------------
 
       Use bsr_mat
-      Use conf_LS 
+      Use conf_LS
 
       Implicit none
       Integer, intent(in) :: itype,k1,k2,k3,k4
@@ -400,16 +400,16 @@
         io = -ic;  i1=io/ibo
         jo = -jc;  j1=jo/ibo
         ich = iech(i1); jch = iech(j1)
-       elseif(ic.lt.0.and.jc.eq.0) then            !   <i|j>         
+       elseif(ic.lt.0.and.jc.eq.0) then            !   <i|j>
         io = -ic;  i1=io/ibo; i2=mod(io,ibo)
         ich = iech(i1); jch = iech(i2)
        else
         Call Stop_mpi(0,0,'problems to extract channel for itype=1')
        end if
 
-      Case(2,3,4,5)                               
+      Case(2,3,4,5)
         ich=k3; io=k4
-        if(io.gt.0) then 
+        if(io.gt.0) then
           j1 = io/ibo; jch=iech(j1)
         elseif(io.lt.0) then
           jch=-io+nch
@@ -417,7 +417,7 @@
           Call Stop_mpi(0,0,'problems to extract channel for itype=2,3,4,5')
         end if
 
-      Case(6,7,8,9)                         
+      Case(6,7,8,9)
         ich=k1/ibi; jch=mod(k1,ibi)
 
       Case Default

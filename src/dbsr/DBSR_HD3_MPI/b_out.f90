@@ -1,12 +1,12 @@
 !=======================================================================
-      Subroutine b_out 
+      Subroutine b_out
 !=======================================================================
 !     output the bound solutions
 !-----------------------------------------------------------------------
       Use dbsr_hd
-      
+
       Implicit none
-     
+
       Real(8), Allocatable :: Ebind(:), vb(:)
       Integer :: i,j,i1,i2,j1,j2,ich,is,js,it,nbound
 
@@ -15,7 +15,7 @@
 !----------------------------------------------------------------------
 ! ... define number of bound states for output:
 
-      if(io_processor) then 
+      if(io_processor) then
 
 ! ... output file:
 
@@ -48,7 +48,7 @@
        Call igebs2d (ctxt, 'all', ' ', khm, 1, Ebind, khm)
       else
        Call igebr2d (ctxt, 'all', ' ', khm, 1, Ebind, khm, rsrc, csrc)
-      end if    
+      end if
 
       Call br_ipar(nbound)
 
@@ -71,7 +71,7 @@
          write(nuu) js,LAB
          ich = isol(is)   ! dominant channel
          it=1; if(ich.le.nch) it=iptar(ich)
-         write(nuu) eval(is),Ebind(is),ich,it 
+         write(nuu) eval(is),Ebind(is),ich,it
 
          ! find solution:
 
@@ -79,7 +79,7 @@
          Do ich = 1,nch; i1=(ich-1)*ms+1; i2=ich*ms
           j1 = ipsol(ich-1)+1; j2=ipsol(ich)
           Do j=j1,j2
-           vb(i1:i2) = vb(i1:i2) + v(j)*bb(1:ms,j)     
+           vb(i1:i2) = vb(i1:i2) + v(j)*bb(1:ms,j)
           End do
          End do
          if(npert.gt.0) vb(nch*ms+1:mhm)=v(ksol+1:khm)

@@ -17,7 +17,7 @@
 
       nua=1; open(nua,file='det_exp_jj.out')
       nub=2; open(nub,file='det_exp_jj.tab')
-      nus=3; open(nus,form='UNFORMATTED',status='SCRATCH') 
+      nus=3; open(nus,form='UNFORMATTED',status='SCRATCH')
 
 !----------------------------------------------------------------------
 ! ... cycle over subshells:
@@ -44,7 +44,7 @@
          CD1(i,1) = 1.d0
         End do
        else
-        rewind(nus) 
+        rewind(nus)
         read(nus) kd,nt
         if(kd.ne.kd1) Stop ' kd <> kd1'
         if(nt.ne.nt1) Stop ' nt <> nt1'
@@ -65,7 +65,7 @@
 
    11 ID(i)=ID(i)+1
       if(ID(i).GT.mq-q+1) go to 15          ! end of exhaustion
-   12 i=i+1                              
+   12 i=i+1
       ID(i)=ID(i-1)+1
    13 if(i.lt.q) go to 12
 
@@ -80,13 +80,13 @@
       Do it=1,nt                            ! cycle on terms
        ii  = Jterm(j,q,it,JT,JV,JW,JQ)
        if(IABS(MJ).GT.JT) Cycle
-       CD(k,it) = CDET() 
+       CD(k,it) = CDET()
       End do
 
 ! ... set next determinant
 
-   14 ID(i)=ID(i)+1             
-      if(ID(i).le.mq-q+i) go to 13  
+   14 ID(i)=ID(i)+1
+      if(ID(i).le.mq-q+i) go to 13
       i=i-1
       if(i.EQ.1) go to 11
       go to 14
@@ -109,9 +109,9 @@
        Stop
       End do; End do
 
-! ... record new results 
+! ... record new results
 
-      rewind(nus) 
+      rewind(nus)
       write(nus) kd,nt
       write(nus) Idet,MD,CD
 
@@ -124,7 +124,7 @@
       End do; End do
 
       Do i = 1,kd
-       write(nua,'(i3,a,i4,3x,10i2)') & 
+       write(nua,'(i3,a,i4,3x,10i2)') &
          i,'.  ',MD(i),Idet(:,i)
        write(nua,'(20x,10f12.8)') CD(i,:)
       End do
@@ -152,24 +152,24 @@ CONTAINS
 
 ! ... cycle on parent det.'s
 
-      Do id1=1,kd1                       
+      Do id1=1,kd1
 
 ! ... mmj - 2*M of the additional electron:
 
        mmj=MJ-MD1(id1);    if(IABS(mmj).GT.j) Cycle
 
-! ... its index in the common list: 
+! ... its index in the common list:
 
-       ip = Index_mj(mmj)  
-       
-! ... its index in the given determinant: 
+       ip = Index_mj(mmj)
+
+! ... its index in the given determinant:
 
        ia = Ipointer (q,ID,ip);  if(ia.eq.0) Cycle
 
 ! ... check if the det.id1. is the parent for det.ID
 
        m=0
-       Do iq=1,q             
+       Do iq=1,q
         if(iq.EQ.ia) Cycle
         m=m+1
         if(ID(iq).ne.Idet1(m,id1)) then; m=-1; Exit; end if
@@ -186,13 +186,13 @@ CONTAINS
       Do it1=1,nt1                   ! cycle on parent terms
 
        C = CD1(id1,it1)*kz; if(C.eq.0.d0) Cycle
-                                  
+
        ii = Jterm(j,q-1,it1,JT1,JV1,JW1,JQ1)
 
        C = C * cfp_jj(j,q,JT1,JV1,JT,JV); if(C.eq.0.d0) Cycle
-                                    
+
        C = C * CLEBSH2(JT1,MD1(id1),j,mmj,JT,MJ)
-                                    
+
 
        CDET = CDET + C
 
@@ -239,7 +239,7 @@ CONTAINS
 
   write(nub,'(/6x,a,a,a)') 'Data ',aIdet,'/ &'
   Do ikd = 1,kd
-   write(AS,'(6x,10(i5,a1))') (Idet(i,ikd),',',i=1,q)  
+   write(AS,'(6x,10(i5,a1))') (Idet(i,ikd),',',i=1,q)
    ip=6+q*6
    AS(ip:ip+2)=', &'; if(ikd.eq.kd) AS(ip:ip+2)='  /'
    write(nub,'(a)') AS(1:ip+2)
@@ -248,8 +248,8 @@ CONTAINS
   write(nub,'(/6x,a,a,a)') 'Data ',aMD,'/ &'
 
   i1 = 1; i2 = 10; if(i2.gt.kd) i2=kd
-  Do 
-   write(AS,'(6x,10(i5,a1))') (MD(i),',',i=i1,i2)  
+  Do
+   write(AS,'(6x,10(i5,a1))') (MD(i),',',i=i1,i2)
    ip=6+(i2-i1+1)*6
    AS(ip:ip+2)=', &'; if(i2.eq.kd) AS(ip:ip+2)='  /'
    write(nub,'(a)') AS(1:ip+2)
@@ -259,7 +259,7 @@ CONTAINS
   write(nub,'(/6x,a,a,a)') 'Data ',aID,'/ &'
 
   Do ikd = 1,kd
-   write(AS,'(6x,10(i5,a1))') (ICD1(ikd,i),',',i=1,nt)  
+   write(AS,'(6x,10(i5,a1))') (ICD1(ikd,i),',',i=1,nt)
    ip=6+nt*6
    AS(ip:ip+2)=', &'; if(ikd.eq.kd) AS(ip:ip+2)='  /'
    write(nub,'(a)') AS(1:ip+2)
@@ -268,7 +268,7 @@ CONTAINS
   write(nub,'(/6x,a,a,a)') 'Data ',aJD,'/ &'
 
   Do ikd = 1,kd
-   write(AS,'(6x,10(i5,a1))') (ICD2(ikd,i),',',i=1,nt)  
+   write(AS,'(6x,10(i5,a1))') (ICD2(ikd,i),',',i=1,nt)
    ip=6+nt*6
    AS(ip:ip+2)=', &'; if(ikd.eq.kd) AS(ip:ip+2)='  /'
    write(nub,'(a)') AS(1:ip+2)

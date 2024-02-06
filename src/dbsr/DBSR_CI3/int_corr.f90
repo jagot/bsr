@@ -27,7 +27,7 @@
       if(AS(1:1).eq.'*') go to 4
       if(AS(1:1).eq.'R') then
        i = i + 1
-       icorr(1,i) = 2      
+       icorr(1,i) = 2
        read(AS(2:3),*) icorr(2,i)
        Call EL_NLJK(AS(6:10),n,kappa,l,j,k)
        icorr(3,i) = Ifind_jjorb(n,kappa,k,0)

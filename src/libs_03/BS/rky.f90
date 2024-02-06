@@ -10,7 +10,7 @@
 !                  RKy
 !           ---------------------
 !          /        |            \
-! Allocate_slater  YKF          YVAL   
+! Allocate_slater  YKF          YVAL
 !                   |
 !                 ------------------------
 !                /     |     |       |    \

@@ -1,5 +1,5 @@
 !=====================================================================
-      Subroutine SUB1_HD    
+      Subroutine SUB1_HD
 !=====================================================================
 !     calculations for given partial wave
 !---------------------------------------------------------------------
@@ -9,7 +9,7 @@
       Use target
       Use channel
       Use spline_param, only: ns
-      
+
       Implicit none
 
 ! ... channels information:
@@ -65,7 +65,7 @@
 !----------------------------------------------------------------------
 ! ... output of bound states in bound.nnn:
 
-      if(itype.eq.-1)  Call B_out 
+      if(itype.eq.-1)  Call B_out
 
       End Subroutine SUB1_HD
 

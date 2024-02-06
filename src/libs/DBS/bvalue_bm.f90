@@ -39,7 +39,7 @@
       Subroutine BVALUE_grid(ksm,a,y,BSP)
 !======================================================================
 !     Computes the function y(r) = SUM(i)  a_i * B_i(r)
-!     in all gausian points 
+!     in all gausian points
 !----------------------------------------------------------------------
       Use DBS_grid
 

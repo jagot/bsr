@@ -2,7 +2,7 @@
       Subroutine get_V (kl,nl,v)
 !======================================================================
 !     provides <.|nl>  for <kl|nl>
-!     if additionally <kl|n'l'> = 0  then  nl -> nl - <nl|n'l'> n'l' 
+!     if additionally <kl|n'l'> = 0  then  nl -> nl - <nl|n'l'> n'l'
 !----------------------------------------------------------------------
       Use bsr_mat
 
@@ -11,7 +11,7 @@
       Real(8) :: v(ns), S
       Integer :: i,j, i1,i2, ich
       Real(8), external :: OBS
-      Integer, external :: IBORT   
+      Integer, external :: IBORT
 
       if(IBORT(kl,nl).eq.0) then
        write(*,'(2a6,10i5)') &
@@ -23,7 +23,7 @@
       v = qbs(:,nl)
 
       ich = iech(kl)
-      i1 = ip_orth_chan(ich-1)+1 
+      i1 = ip_orth_chan(ich-1)+1
       i2 = ip_orth_chan(ich)
       if(i1.gt.i2) Return
 

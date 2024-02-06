@@ -11,7 +11,7 @@
       Integer :: i,j, k,n, ip, nbound,nhmb,nchb,ncpb,nsb
       Real(8) :: S, aa(nhm),bb(nhm),cc(nhm)
       Integer, external :: Ipointer
-       
+
       if(nortb.eq.0) Return
 
 ! ... check bound states file:
@@ -30,16 +30,16 @@
 
        Do i=1,nbound
         read(nub,*) j
-        read(nub,*) S  
+        read(nub,*) S
         read(nub,'(5D15.8)') cc
         ip = Ipointer(nortb,iortb,j)
         if(ip.eq.0) Cycle
         Do j = 1,nhm
          aa(1:nhm) = c(1:nhm,j)
          bb(j) = SUM(aa(1:nhm)*cc(1:nhm))
-        End do 
+        End do
         write(nuq) bb
-        iortb(ip) = -iortb(ip) 
+        iortb(ip) = -iortb(ip)
         k=0; Do n=1,nortb; if(iortb(n).lt.0) Cycle; k=1; Exit; End do
         if(k.eq.0) Exit
        End do

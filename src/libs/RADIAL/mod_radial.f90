@@ -38,9 +38,9 @@
 
 ! ... potentials arrays:
 
-      Real(8), Allocatable :: ZK(:), YK(:) 
+      Real(8), Allocatable :: ZK(:), YK(:)
       Integer :: mzk, myk
-      Real(8) :: azk,bzk, ayk,byk 
+      Real(8) :: azk,bzk, ayk,byk
 
 ! ... other parameters:
 
@@ -49,7 +49,7 @@
       Integer :: kclosd = 0     ! number of common closed shells
 
       Logical :: REL  = .FALSE. ! pointer on the rel. corrections
-      
+
       Logical :: OO   = .FALSE. ! pointer on orbit-orbit interaction
 
       Integer :: MASS   = 0     ! pointer to the mass correction
@@ -84,7 +84,7 @@
       if(m.le.0) then
 
        if(allocated(P)) Deallocate(nro,lro,kro,ero,mro, &
-                                   AZ,mexp,aexp,bexp,P,OVERLAPS) 
+                                   AZ,mexp,aexp,bexp,P,OVERLAPS)
        mrf = 0; nrf = 0
        if(m.lt.0) then
        mrf = irf
@@ -93,13 +93,13 @@
                 OVERLAPS(mrf,mrf))
        end if
       elseif(m.lt.mrf) then
-        
+
        Return
 
       elseif(m.gt.mrf.and.nrf.eq.0) then
 
        if(allocated(P)) Deallocate(nro,lro,kro,ero,mro, &
-                                   AZ,mexp,aexp,bexp,P,OVERLAPS) 
+                                   AZ,mexp,aexp,bexp,P,OVERLAPS)
        mrf = m
        Allocate(nro(mrf),lro(mrf),kro(mrf),ero(mrf),mro(mrf),  &
                 AZ(mrf),aexp(mrf),bexp(mrf),mexp(mrf),P(NR,mrf), &
@@ -115,7 +115,7 @@
         write(iscr) P(1:NR,i)
         write(iscr) Overlaps(1:nrf,i)
        End do
-       Deallocate(nro,lro,kro,ero,mro, AZ,mexp,aexp,bexp,P,OVERLAPS) 
+       Deallocate(nro,lro,kro,ero,mro, AZ,mexp,aexp,bexp,P,OVERLAPS)
 
        mrf = m
        Allocate(nro(mrf),lro(mrf),kro(mrf),ero(mrf),mro(mrf),  &
@@ -128,7 +128,7 @@
 		           aexp(i),bexp(i),mexp(i)
         read(iscr) P(1:NR,i)
         read(iscr) Overlaps(1:nrf,i)
-       End do  
+       End do
 
       end if
 
@@ -176,4 +176,4 @@
        End do
       End do
 
-      End Subroutine Get_overlaps      
+      End Subroutine Get_overlaps

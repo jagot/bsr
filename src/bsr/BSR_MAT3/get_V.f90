@@ -2,7 +2,7 @@
       Subroutine get_V (ii,jj,v)
 !======================================================================
 !     provides <.|nl>  for <kl|nl>; ii -> kl; jj -> nl;
-!     if <kl|n'l'> = 0  then  nl -> nl - <nl|n'l'> n'l' 
+!     if <kl|n'l'> = 0  then  nl -> nl - <nl|n'l'> n'l'
 !----------------------------------------------------------------------
       Use bsr_mat
       Use spline_param

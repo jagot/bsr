@@ -7,7 +7,7 @@
       USE bsr_breit, only: myid, ierr, noper,joper,JT_oper, pri
       USE term_exp,  only: kt1,kt2, IP_kt1,IP_kt2
       USE ndet_list, only: ndet,ldet,KPD,IPD,NPD
-      USE ndef_list, only: ndef,ldef,KPF,IPF,NPF 
+      USE ndef_list, only: ndef,ldef,KPF,IPF,NPF
       USE coef_list, only: ntrm,ncoef,idfc,intc,coef
 
       Implicit none

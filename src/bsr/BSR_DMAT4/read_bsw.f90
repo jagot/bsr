@@ -6,7 +6,7 @@
 !     if read orbital is not in the list - drop it!
 !----------------------------------------------------------------------
       USE spline_atomic;  USE spline_param;  USE spline_orbitals
-      
+
       Implicit none
       Integer, intent(in) :: nu,kset
       Character(4) :: el
@@ -31,7 +31,7 @@
       Call EL4_nlk(el,n,l,k); k=k+kset; i = Ifind_bsorb(n,l,k)
       if(i.eq.0) go to 1
 
-      pbs(1:mw,i)=v(1:mw); mbs(i)=mw; if(mw.lt.ns) pbs(mw+1:ns,i)=0.d0 
+      pbs(1:mw,i)=v(1:mw); mbs(i)=mw; if(mw.lt.ns) pbs(mw+1:ns,i)=0.d0
 
       go to 1
     2 Continue

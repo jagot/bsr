@@ -23,11 +23,11 @@
       Case(1);  ZINT = RK(i1,i2,i1,i2,k)       !  FK
 
       Case(2);  ZINT = RK(i1,i2,i2,i1,k)       !  GK
-      
+
       Case(3);  ZINT = TK(I1,I2,I3,I4,K)       !  TK
 
       Case(4);  ZINT = MK(I1,I2,I3,I4,K)       !  MK
-      
+
       Case(5);  ZINT = RK(I1,I2,I3,I4,K)       !  RK
 
       Case(6);  ZINT = HLC(I1,I3)              !  HL
@@ -76,9 +76,9 @@
 !
 !     Evaluate WK integral:
 !
-!     W(I,J,II,JJ,K) =     2 * V(I,J,II,JJ,K)   
-!                     -(k+1) * N(I,J,II,JJ,K+1) 
-!                     +(k+2) * N(J,I,JJ,II,K-1) 
+!     W(I,J,II,JJ,K) =     2 * V(I,J,II,JJ,K)
+!                     -(k+1) * N(I,J,II,JJ,K+1)
+!                     +(k+2) * N(J,I,JJ,II,K-1)
 !--------------------------------------------------------------------
 
       IMPLICIT NONE
@@ -86,7 +86,7 @@
       Integer(4), Intent(in) :: I,II,J,JJ,K
       Real(8), External :: VK,NK
 
-      WK = 2 * VK(I,J,II,JJ,K) -(k+1) * NK(I,J,II,JJ,K+1) & 
-                               +(k+2) * NK(J,I,JJ,II,K-1) 
+      WK = 2 * VK(I,J,II,JJ,K) -(k+1) * NK(I,J,II,JJ,K+1) &
+                               +(k+2) * NK(J,I,JJ,II,K-1)
 
       END FUNCTION WK

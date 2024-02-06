@@ -1,6 +1,6 @@
-!======================================================================      
+!======================================================================
       Subroutine SUB_LS
-!======================================================================  
+!======================================================================
 !     define channels orbitals in LS(J) case
 !----------------------------------------------------------------------
       Use bsr_conf
@@ -14,23 +14,23 @@
       Real(8) :: CT
 
       Do it=1,ntarg
- 
+
 ! ... range of total spin ( = ispar for LS case)
 
-       IST_min = iabs(istarg(it)-2) + 1 
-       IST_max = iabs(istarg(it)+2) - 1 
+       IST_min = iabs(istarg(it)-2) + 1
+       IST_max = iabs(istarg(it)+2) - 1
        Do IST = IST_min,IST_max,2
        if(max_ST.gt.0.and.IST.gt.max_ST) Cycle
 
 ! ... range of total L ( = 2*lpar+1 for LS case)
 
        if(Jpar.gt.0) then
-        ILT_min = iabs(Jpar-IST) + 1 
-        ILT_max = iabs(Jpar+IST) - 1 
+        ILT_min = iabs(Jpar-IST) + 1
+        ILT_max = iabs(Jpar+IST) - 1
        else
-        if(IST.ne.ispar) Cycle  
-        ILT_min = 2*lpar + 1 
-        ILT_max = 2*lpar + 1 
+        if(IST.ne.ispar) Cycle
+        ILT_min = 2*lpar + 1
+        ILT_max = 2*lpar + 1
        end if
 
        Do ILT = ILT_min,ILT_max,2
@@ -93,5 +93,5 @@
        End do    ! over IST (total spin)
       End do     ! over targets
 
-      End Subroutine SUB_LS 
+      End Subroutine SUB_LS
 

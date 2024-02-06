@@ -37,7 +37,7 @@
         write(*,'(a,D15.5,a)') 'SBESJ FAILED: X = ',X
         write(*,'(a)') 'TRY ASYMPTOTIC SOLUTION'
         Stop
-       end if 
+       end if
        if(DABS(DEL).LT.DABS(FP)*ACC) Exit
       End do
       FP   = FP*F
@@ -95,7 +95,7 @@
       XX=X*X
       Do L=L1,LMAX
        AL=2*L; AS=1.d0; FL=1.d0; S=0.d0
-       Do 
+       Do
         S=S+1.d0; AS=-AS*XX/(2*S*(AL+2*S-1)); FL=FL+AS
         if(abs(AS).lt.acc) Exit
        End do
@@ -125,6 +125,6 @@
        F(L)=DFL*DCL; DCL=DCL*DX/(AL+1)
       End do
 
-      End Subroutine SPBES 
+      End Subroutine SPBES
 
 

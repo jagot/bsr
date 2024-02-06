@@ -10,7 +10,7 @@
       Real(8), intent(in)  :: z,acr
       Integer, intent(in)  :: i_max
       Integer, intent(out) :: k1,k2
-      Integer :: i_min, i1,i2, m1,m2 
+      Integer :: i_min, i1,i2, m1,m2
       Real(8) :: zz, s,ss, s1,s2
 
       k1=0;  k2=1; zz=z*z

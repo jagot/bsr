@@ -5,7 +5,7 @@
 !----------------------------------------------------------------------
 !     z - charge
 !     l - orbital momentum
-!     k - linear momemtum 
+!     k - linear momemtum
 !     c - output expansion vector
 !     acc - accuracy
 !     Normalization and estimation of accuracy is given by comparison
@@ -48,23 +48,23 @@
 
 ! ... store the (ns-1,ns) asymmetric value in hl(1,1)
 
-      hl(1,1) = hl(ns,ks-1) + (db2(1,1)-db2(ns,ks-1))      
-      
+      hl(1,1) = hl(ns,ks-1) + (db2(1,1)-db2(ns,ks-1))
+
 ! ... atomic units:
- 
+
       hl = -0.5d0 * hl
 
 ! ... full matrixes:
 
-      h = 0.d0      
+      h = 0.d0
       b = 0.d0
-      Do j = 1,ks;  Do i = ks-j+1,ns; jp=i-ks+j 
+      Do j = 1,ks;  Do i = ks-j+1,ns; jp=i-ks+j
         a(i,jp)=hl(i,j);  a(jp,i)=hl(i,j)
         b(i,jp)=sb(i,j);  b(jp,i)=sb(i,j)
       End do; End do
       a(ns-1,ns)=hl(1,1)
 
-! ... delete first B-splines:       
+! ... delete first B-splines:
 
       ii = l+1; if(ii.ge.ks) ii=1
       n = ns - ii
@@ -73,10 +73,10 @@
 
       aa(1:n,1:n) = a(ii+1:ns,ii+1:ns)
       bb(1:n,1:n) = b(ii+1:ns,ii+1:ns)
-      aa(n-1,n) = aa(n,n-1) 
+      aa(n-1,n) = aa(n,n-1)
       aa = aa - ee*bb
       cc = 0.d0;  cc(n-1) = 1.d0
-      Call DGESV( n,1, aa, ns, IPIV, cc, ns, INFO )    
+      Call DGESV( n,1, aa, ns, IPIV, cc, ns, INFO )
       c1 = 0.d0; c1(ii+1:ns) = cc(1:n)
       acc1 = 1.d0
       if(INFO.eq.0) then
@@ -87,8 +87,8 @@
         cfb(m) = cfb(m) + c1(i)*bsp(nv,m,ith)
         End do
       End do
-      cn = 0.d0       
-      Do m = 1,ks; cfb(m) = cf(m)/cfb(m); cn=cn+cfb(m); End do 
+      cn = 0.d0
+      Do m = 1,ks; cfb(m) = cf(m)/cfb(m); cn=cn+cfb(m); End do
       cn=cn/ks; c1 = cn*c1
       acc1=0.d0
       Do m=1,ks; acc1=acc1 + abs(cn-cfb(m)); End do
@@ -99,10 +99,10 @@
 
       aa(1:n,1:n) = a(ii+1:ns,ii+1:ns)
       bb(1:n,1:n) = b(ii+1:ns,ii+1:ns)
-      aa(n,n-1) = aa(n-1,n) 
+      aa(n,n-1) = aa(n-1,n)
       aa = aa - ee*bb
       cc = 0.d0; cc(n) = 1.d0
-      Call DGESV( n,1, aa, ns, IPIV, cc, ns, INFO )    
+      Call DGESV( n,1, aa, ns, IPIV, cc, ns, INFO )
       c2 = 0.d0; c2(ii+1:ns) = cc(1:n)
       acc2 = 1.d0
       if(INFO.eq.0) then
@@ -113,8 +113,8 @@
         cfb(m) = cfb(m) + c2(i)*bsp(nv,m,ith)
         End do
       End do
-      cn = 0.d0       
-      Do m = 1,ks; cfb(m) = cf(m)/cfb(m); cn=cn+cfb(m); End do 
+      cn = 0.d0
+      Do m = 1,ks; cfb(m) = cf(m)/cfb(m); cn=cn+cfb(m); End do
       cn=cn/ks; c2 = cn*c2
       acc2=0.d0
       Do m=1,ks; acc2=acc2 + abs(cn-cfb(m)); End do

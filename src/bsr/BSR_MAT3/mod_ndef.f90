@@ -5,10 +5,10 @@
 !     obtaned by expansion of total overlap deferminants on rows
 !     and columns containing the continuum orbitals.
 !     The deferminants with known bound orbitals are estimated
-!     in line, so, only there values are recoded 
+!     in line, so, only there values are recoded
 !-----------------------------------------------------------------
       Implicit none
-  
+
       Integer :: mndef = 0      !  max.number of new overlaps
       Integer :: nndef = 0      !  curent number of new overlaps
       Integer :: indef = 1000   !  initial suggestion for mndef
@@ -37,17 +37,17 @@
       Real(8), allocatable :: rarr(:)
 
       if(m.le.0) then
-       if(Allocated(Adef)) Deallocate(Adef,iof,jof) 
+       if(Allocated(Adef)) Deallocate(Adef,iof,jof)
     	  mndef = 0; nndef = 0
        if(m.eq.0) Return
        mndef = indef
        Allocate(Adef(mndef),iof(mndef),jof(mndef))
       elseif(m.gt.mndef) then
        if(nndef.eq.0) then
-        if(Allocated(Adef)) Deallocate(Adef,iof,jof) 
+        if(Allocated(Adef)) Deallocate(Adef,iof,jof)
         mndef = m; nndef = 0
         Allocate(Adef(mndef),iof(mndef),jof(mndef))
-	      else 
+	      else
         Allocate(iarr(nndef))
         iarr(1:nndef)=iof(1:nndef); Deallocate(iof); Allocate(iof(m))
         iof(1:nndef)=iarr(1:nndef)

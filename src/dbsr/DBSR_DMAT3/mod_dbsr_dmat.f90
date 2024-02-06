@@ -23,13 +23,13 @@
       Integer :: nuw  =  8;  Character(ma) :: AF_bsw = 'target.bsw'
                              Character(ma) :: BF_bsw = 'pert_nnn.bsw'
                              Character(ma) :: CF_bsw = 'name.bsw'
-      
+
       Integer :: nuc1 =  1;  Character(ma) :: AF_c   = 'name.c'
       Integer :: nuc2 =  2;  Character(ma) :: BF_c   = 'cfg.nnn'
 
       Integer :: nub1 = 11;  Character(ma) :: AF_b   = 'name.j'
       Integer :: nub2 = 12;  Character(ma) :: BF_b   = 'dbound.nnn'
- 
+
       Integer :: nud  =  4;  Character(ma) :: AF_d   = 'd.nnn'
       Integer :: nuv  =  4;  Character(ma) :: AF_dv  = 'dv.nnn'
       Integer :: nuf  = 15;  Character(ma) :: AF_zf  = 'zf_res'
@@ -64,9 +64,9 @@
       Real(8), allocatable :: C1(:), C2(:)
 
 ! ... tolerences:
-      Real(8), parameter :: eps_c    = 1.d-8      
+      Real(8), parameter :: eps_c    = 1.d-8
       Real(8), parameter :: eps_ndet = 1.d-8
-      Real(8), parameter :: eps_ovl  = 1.d-8      
+      Real(8), parameter :: eps_ovl  = 1.d-8
 
 ! ... packing number for overlaps:
       Integer :: ibo = 2**15

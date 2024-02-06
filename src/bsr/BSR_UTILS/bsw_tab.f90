@@ -22,32 +22,32 @@
       Character(4), allocatable :: EL(:)
       Character(40) :: AF,BF
       Real(8), allocatable :: v(:), w(:,:), R(:)
-      
-      iarg = COMMAND_ARGUMENT_COUNT() 
+
+      iarg = COMMAND_ARGUMENT_COUNT()
       if(iarg.gt.0) Call GET_COMMAND_ARGUMENT(1,AF)
 
       if(iarg.le.0.or.AF.eq.'?') then
         write(*,'(a)') 'bsw_tab converts name.bsw  to name.tab'
         write(*,'(a)') 'bsw - unformatted  BSR file for radial functions'
         write(*,'(a)') 'tab - column representation of orbitals, ready for plotting'
-        write(*,'(a)') 
+        write(*,'(a)')
         write(*,'(a)') 'Call as:  bsw_tab  name.bsw '
-        write(*,'(a)') 
+        write(*,'(a)')
         write(*,'(a)') 'orbitals for output will be asking'
         Stop ' '
-      end if        
+      end if
 
 !----------------------------------------------------------------------
-! ... input data: 
-         
+! ... input data:
+
       inp=1; Open(inp,file=AF,status='OLD',form='UNFORMATTED')
 
-      i=index(AF,'.') 
+      i=index(AF,'.')
       iout=2; BF=AF(1:i)//'tab';  Open(iout,file=BF)
 
 !----------------------------------------------------------------------
-! ... sets up grid points and initializes the values of the spline: 
-    
+! ... sets up grid points and initializes the values of the spline:
+
       CALL define_grid(zz);  CALL define_spline
 
 !----------------------------------------------------------------------
@@ -62,7 +62,7 @@
     2 write(*,*) 'number of orbitals = ',nn
 
 !----------------------------------------------------------------------
-! ... sets up grid points and initializes the values of the spline: 
+! ... sets up grid points and initializes the values of the spline:
 
       NR = nv*ks+2; Allocate(R(NR),w(NR,nn),EL(nn))
       ii=1; R(1)=0.d0
@@ -70,7 +70,7 @@
       ii=ii+1; R(ii) = t(ns+1)
 
 !----------------------------------------------------------------------
-!                                                          
+!
       rewind(inp)
       mm = 0
       Do i=1,nn
@@ -88,7 +88,6 @@
       Do i=1,nr
        write(iout,'(20D13.5)') R(i),(w(i,j),j=1,mm)
       End do
-      
+
       END   !  program bsr_tab
-          
-   
+

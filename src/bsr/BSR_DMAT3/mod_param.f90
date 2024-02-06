@@ -60,8 +60,8 @@
 ! ... tolerences for expansion coefficients, oneelctron overlaps,
 ! ... and tota; determinant factors:
 
-      Real(8), parameter :: Eps_c = 1.d-8      
-      Real(8), parameter :: Eps_ovl = 1.d-7      
+      Real(8), parameter :: Eps_c = 1.d-8
+      Real(8), parameter :: Eps_ovl = 1.d-7
       Real(8), parameter :: Eps_ndet = 1.0D-8
 
 ! ... atomic constants:
@@ -108,6 +108,6 @@
 
       Real(8), allocatable :: dipL(:,:)    !  <p|d_L|q>
       Real(8), allocatable :: dipV(:,:)    !  <p|d_V|q>
-      
+
       End Module  bsr_dmat
 

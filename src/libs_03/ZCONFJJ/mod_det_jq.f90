@@ -1,10 +1,10 @@
 !======================================================================
       Module det_jq
 !======================================================================
-!     contains data for expanding the j^q subshell wave function 
+!     contains data for expanding the j^q subshell wave function
 !     over deterninant w.f.
 !
-!     Idet_jq  - identifier of subshell detetrminant w.f. as list of 
+!     Idet_jq  - identifier of subshell detetrminant w.f. as list of
 !                the one-electron lsm-orbitals according to the common
 !                list (-1/2, 1/2, -3/2, 3/2, ...)
 !     MD_jq    - list of the correspondent total magnetic quantum numbers
@@ -12,12 +12,12 @@
 !     Expansion coefficient for given determinant 'id' and term 'it'
 !     is presented as  sqrt [ ID_jq(id,it) / JD_jq(id,it) ].
 !
-!     Routines: 
+!     Routines:
 !
-!     DET_sh_jq (j,q,id,MJ,Idet) - gives the determinant 'id' and total MJ 
+!     DET_sh_jq (j,q,id,MJ,Idet) - gives the determinant 'id' and total MJ
 !                                  for the subshell j^q
 !
-!     DETC_jq (j,q,it,id) - gives the expansion coefficient 
+!     DETC_jq (j,q,it,id) - gives the expansion coefficient
 !                           for the subshell 'jq', term 'it' and determinant 'id'
 !----------------------------------------------------------------------
       Implicit none
@@ -124,7 +124,7 @@
 
       Integer, parameter :: kd_j5_q2 = 15
       Integer, parameter :: nt_j5_q2 =  3
- 
+
       Integer :: Idet_j5_q2(2,kd_j5_q2)
       Integer :: MD_j5_q2(kd_j5_q2)
       Integer :: ID_j5_q2(nt_j5_q2,kd_j5_q2)
@@ -189,7 +189,7 @@
 
       Integer, parameter :: kd_j5_q3 = 20
       Integer, parameter :: nt_j5_q3 =  3
- 
+
       Integer :: Idet_j5_q3(3,kd_j5_q3)
       Integer :: MD_j5_q3(kd_j5_q3)
       Integer :: ID_j5_q3(nt_j5_q3,kd_j5_q3)
@@ -269,7 +269,7 @@
 
       Integer, parameter :: kd_j5_q4 = 15
       Integer, parameter :: nt_j5_q4 =  3
- 
+
       Integer :: Idet_j5_q4(4,kd_j5_q4)
       Integer :: MD_j5_q4(kd_j5_q4)
       Integer :: ID_j5_q4(nt_j5_q4,kd_j5_q4)
@@ -334,7 +334,7 @@
 
       Integer, parameter :: kd_j5_q5 =  6
       Integer, parameter :: nt_j5_q5 =  1
- 
+
       Integer :: Idet_j5_q5(5,kd_j5_q5)
       Integer :: MD_j5_q5(kd_j5_q5)
       Integer :: ID_j5_q5(nt_j5_q5,kd_j5_q5)
@@ -371,7 +371,7 @@
 
       Integer, parameter :: kd_j5_q6 =  1
       Integer, parameter :: nt_j5_q6 =  1
- 
+
       Integer :: Idet_j5_q6(6,kd_j5_q6)
       Integer :: MD_j5_q6(kd_j5_q6)
       Integer :: ID_j5_q6(nt_j5_q6,kd_j5_q6)
@@ -393,7 +393,7 @@
 
       Integer, parameter :: kd_j7_q2 = 28
       Integer, parameter :: nt_j7_q2 =  4
- 
+
       Integer :: Idet_j7_q2(2,kd_j7_q2)
       Integer :: MD_j7_q2(kd_j7_q2)
       Integer :: ID_j7_q2(nt_j7_q2,kd_j7_q2)
@@ -498,7 +498,7 @@
 
       Integer, parameter :: kd_j7_q3 = 56
       Integer, parameter :: nt_j7_q3 =  6
- 
+
       Integer :: Idet_j7_q3(3,kd_j7_q3)
       Integer :: MD_j7_q3(kd_j7_q3)
       Integer :: ID_j7_q3(nt_j7_q3,kd_j7_q3)
@@ -690,7 +690,7 @@
 
       Integer, parameter :: kd_j7_q4 = 70
       Integer, parameter :: nt_j7_q4 =  8
- 
+
       Integer :: Idet_j7_q4(4,kd_j7_q4)
       Integer :: MD_j7_q4(kd_j7_q4)
       Integer :: ID_j7_q4(nt_j7_q4,kd_j7_q4)
@@ -925,7 +925,7 @@
 
       Integer, parameter :: kd_j7_q5 = 56
       Integer, parameter :: nt_j7_q5 =  6
- 
+
       Integer :: Idet_j7_q5(5,kd_j7_q5)
       Integer :: MD_j7_q5(kd_j7_q5)
       Integer :: ID_j7_q5(nt_j7_q5,kd_j7_q5)
@@ -1117,7 +1117,7 @@
 
       Integer, parameter :: kd_j7_q6 = 28
       Integer, parameter :: nt_j7_q6 =  4
- 
+
       Integer :: Idet_j7_q6(6,kd_j7_q6)
       Integer :: MD_j7_q6(kd_j7_q6)
       Integer :: ID_j7_q6(nt_j7_q6,kd_j7_q6)
@@ -1222,7 +1222,7 @@
 
       Integer, parameter :: kd_j7_q7 =  8
       Integer, parameter :: nt_j7_q7 =  1
- 
+
       Integer :: Idet_j7_q7(7,kd_j7_q7)
       Integer :: MD_j7_q7(kd_j7_q7)
       Integer :: ID_j7_q7(nt_j7_q7,kd_j7_q7)
@@ -1265,7 +1265,7 @@
 
       Integer, parameter :: kd_j7_q8 =  1
       Integer, parameter :: nt_j7_q8 =  1
- 
+
       Integer :: Idet_j7_q8(8,kd_j7_q8)
       Integer :: MD_j7_q8(kd_j7_q8)
       Integer :: ID_j7_q8(nt_j7_q8,kd_j7_q8)
@@ -1287,7 +1287,7 @@
 
       Integer, parameter :: kd_j9_q2 = 45
       Integer, parameter :: nt_j9_q2 =  5
- 
+
       Integer :: Idet_j9_q2(2,kd_j9_q2)
       Integer :: MD_j9_q2(kd_j9_q2)
       Integer :: ID_j9_q2(nt_j9_q2,kd_j9_q2)
@@ -1445,7 +1445,7 @@
 
       Integer, parameter :: kd_j11_q2 = 66
       Integer, parameter :: nt_j11_q2 =  6
- 
+
       Integer :: Idet_j11_q2(2,kd_j11_q2)
       Integer :: MD_j11_q2(kd_j11_q2)
       Integer :: ID_j11_q2(nt_j11_q2,kd_j11_q2)
@@ -1680,7 +1680,7 @@
 !-----------------------------------------------------------------------
       Use det_jq
 
-      Implicit none 
+      Implicit none
       Integer, intent(in) :: j,q,id
       Integer, intent(out) :: MJ
       Integer, intent(out) :: Idet(q)
@@ -1691,7 +1691,7 @@
 !-----------------------------------------------------------------------
 ! ... two-electron case for j>11, the only case we should compute:
 
-      if(q.eq.2.and.j.gt.11) then       
+      if(q.eq.2.and.j.gt.11) then
        nq=j+1; nd=nq*(nq-1)/2; if(id.gt.nd) Call DET_stop(j,q,id)
        k=0
        Do i=1,nq-1
@@ -1711,7 +1711,7 @@
        MJ=MJ_value(id)
        Idet(1)=id
        Return
-     
+
       else
 
       SELECT CASE(j*100+q)
@@ -1799,9 +1799,9 @@
 
 !======================================================================
       Subroutine DET_stop (j,q,id)
-!======================================================================       
+!======================================================================
 !     stops execution of DET_sh_jq with debug information
-!---------------------------------------------------------------------- 
+!----------------------------------------------------------------------
       Integer, intent(in) :: j,q,id
       write(*,'(a,a,3i5)') 'DET_sh_jq: id is out the range: ',  &
                            'j,q,id = ',j,q,id
@@ -1961,7 +1961,7 @@
 
       END SELECT
       end if
- 
+
       C=DBLE(i1)/DBLE(i2); C=sqrt(abs(C)); if(i1.lt.0) C=-C; DETC_jq=C
 
       End  Function  DETC_jq
@@ -1969,9 +1969,9 @@
 
 !======================================================================
       Subroutine DETC_stop (j,q,it,id)
-!======================================================================       
+!======================================================================
 !     stops execution of DETC_jq with debug information
-!---------------------------------------------------------------------- 
+!----------------------------------------------------------------------
       Integer, intent(in) :: j,q,it,id
       write(6,'(a,a,4i5)') 'DETC_jq: it(id) is out the range: ',  &
                            'j,q,it,id = ',j,q,it,id

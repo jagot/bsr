@@ -7,10 +7,10 @@
 !
 !======================================================================
 !
-!     transform name.c and name.j (name.cm) in jj-coupling to 
+!     transform name.c and name.j (name.cm) in jj-coupling to
 !     name_LS.c and name_LS.j in LS-coupling
 !
-!     Call as:  jj2ls  name (.c, .j)    
+!     Call as:  jj2ls  name (.c, .j)
 !
 !     At the moment - only one J total
 !----------------------------------------------------------------------
@@ -37,7 +37,7 @@
       AF = trim(name)//'.c'
       Call Check_file(AF)
       Open(nuc,file=AF)
-      
+
       AF = trim(name)//'_LS.log'
       Open(pri,file=AF)
 
@@ -62,35 +62,35 @@
 
       write(pri,*) 'ncfg_jj  = ', ncfg_jj
       write(pri,*) 'nterm_jj = ', jj_nterms
-      write(pri,*) 
+      write(pri,*)
 
-! ... define all possible LS-terms:	    
-	  
+! ... define all possible LS-terms:
+
       Call get_LS_terms;    LS_nterms = LS_nsymt
 
       write(pri,*) 'nterm_ls = ', ls_nterms
-      write(pri,*) 
+      write(pri,*)
 
-! ... define the recoupling coefficiens between jj and LS terms: 
+! ... define the recoupling coefficiens between jj and LS terms:
 
       Allocate(C_term(JJ_nterms,LS_nterms));  C_term =  zero
 
       Call get_tr_coefs
 
-      ncoef = 0 
+      ncoef = 0
       Do i=1,jj_nterms; Do j=1,ls_nterms
        if(C_term(i,j).ne.zero) ncoef=ncoef+1
       end do; end do
 
-      write(pri,*) 'get_tr_coef: ncoef =', ncoef,jj_nterms*ls_nterms      
-      write(pri,*) 
+      write(pri,*) 'get_tr_coef: ncoef =', ncoef,jj_nterms*ls_nterms
+      write(pri,*)
 
 ! ... define the LS configurations:
 
       Call get_LS_conf
 
       write(pri,*) 'ncfg_ls  = ', ncfg_ls
-      write(pri,*) 
+      write(pri,*)
 
 ! ... record LS configurations:
 
@@ -101,7 +101,7 @@
       Call R_term(nuc)
 
       write(pri,*) 'file ',trim(AF),' is done'
-      write(pri,*) 
+      write(pri,*)
 
 ! ... read transformation matrix from scratch file:
 
@@ -109,21 +109,21 @@
       Allocate (C_trans(ncfg_jj,ncfg_LS)); C_trans = zero
       rewind(nua)
     1 read(nua,end=2) i,j,C; C_trans(i,j)=C; go to 1
-    2 Close(nua,status='DELETE') 
-      
+    2 Close(nua,status='DELETE')
+
       write(pri,*) 'C_trans is done'
-      write(pri,*) 
+      write(pri,*)
 
 ! ... check if we have .m file:
 
       AF = trim(name)//'.m'
-      if(Icheck_file(AF).ne.0) then 
+      if(Icheck_file(AF).ne.0) then
        open(num,file=AF,form='UNFORMATTED')
        AF = trim(name)//'.j'
        open(nuj,file=AF)
        Call cm2j(num,nuj)
-      end if       
-       
+      end if
+
 ! ... transform solutions in j-file:
 
       AF = trim(name)//'.j'

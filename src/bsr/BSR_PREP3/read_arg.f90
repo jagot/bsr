@@ -5,7 +5,7 @@
 !----------------------------------------------------------------------
       Use bsr_prep
 
-      Implicit none 
+      Implicit none
 
       open(nup,file=AF_par)
 
@@ -39,11 +39,11 @@
        ' - tolerance for orthogonality between orbitals'
       write(pri,'(a,d15.5,a/)') 'eps_sub  = ',eps_sub, &
        ' - tolerance for substitution orbitals'
-      write(pri,'(a,d15.5,a/)') 'eps_phys = ',eps_phys,& 
+      write(pri,'(a,d15.5,a/)') 'eps_phys = ',eps_phys,&
        ' - tolerance for physical orbitals'
-      write(pri,'(a,i15  ,a/)') 'ii_sub   = ',ii_sub,  & 
+      write(pri,'(a,i15  ,a/)') 'ii_sub   = ',ii_sub,  &
        ' - restriction for substitution orbitals'
-      write(pri,'(a,d15.5,a/)') 'eps_targ = ',eps_targ,& 
+      write(pri,'(a,d15.5,a/)') 'eps_targ = ',eps_targ,&
        ' - restriction to target expansions'
 
       write(pri,'(/72(''-'')/)')

@@ -1,5 +1,5 @@
 !=====================================================================
-      Subroutine SUB1_HD    
+      Subroutine SUB1_HD
 !=====================================================================
 !     drive calculations for one partial wave
 !---------------------------------------------------------------------
@@ -35,7 +35,7 @@
        if(allocated(ipsol)) Deallocate(ipsol); Allocate(ipsol(0:nch))
        ipsol = 0
        Call igebr2d(ctxt,'all',' ',nch+1,1,ipsol,nch+1,rsrc,csrc)
-      end if    
+      end if
 
 ! ... diagonalize the matrix and get inner-region solutions:
 
@@ -67,7 +67,7 @@
 ! ... output of bound states in bound.nnn:
 
       if(itype.eq.-1) then
-       Call B_out 
+       Call B_out
        Call cpu_time (t1)
        if(io_processor) &
        write (*  ,'(/a,T20,f10.2,a)') 'B_out:', (t1-t0)/60, ' min.'

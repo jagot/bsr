@@ -1,29 +1,29 @@
 !=======================================================================
   Subroutine Det_d7 (id,ML,MS,Idet)
 !=======================================================================
-! determinamt id and corresponding ML,MS for subshell d7 
+! determinamt id and corresponding ML,MS for subshell d7
 !-----------------------------------------------------------------------
- 
+
   Implicit none
- 
+
   Integer, intent(in)  :: id
   Integer, intent(out) :: ML,MS,Idet(*)
- 
+
   Integer, parameter :: iq_d7 =   7
   Integer, parameter :: kd_d7 = 120
- 
+
   Integer :: Idet_d7 (iq_d7,kd_d7)
- 
+
   Integer :: ML_d7 (kd_d7)
   Integer :: MS_d7 (kd_d7)
- 
+
   if(id.le.0.or.id.gt.kd_d7) Stop "Det_d7: index id is out of range"
- 
+
   ML = ML_d7 (id)
   MS = MS_d7 (id)
- 
+
   Idet (1:iq_d7)= Idet_d7 (:,id)
- 
+
 
   Data Idet_d7 ( 1,:)/ &
    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, &
@@ -71,5 +71,5 @@
   0,  2,  0,  2,  0,  2,  2,  4,  2,  0,  2,  0,  2,  2,  4,  2,  4,  2,  0,  2,  0,  2,  0,  2,  0, -2,  0,  0,  2,  0, -2,  0, &
  -2,  0,  0,  2,  0,  2,  0, -2,  0, -2,  0, -2,  0,  0,  2,  0,  2,  0,  2,  0,  2,  0,  2,  2,  4,  2,  0,  2,  0,  2,  2,  4, &
   2,  4,  2,  0,  2,  0,  2,  0,  2,  2,  4,  2,  4,  2,  4,  2,  0,  2,  0,  2,  0,  2,  0,  2  /
- 
-  End Subroutine Det_d7 
+
+  End Subroutine Det_d7

@@ -95,7 +95,7 @@
     2 Continue
 
 ! ... shift the rest data up:
-      
+
       if(k.le.nbk) then
       Do i=nbk,k,-1
        m = i + 1

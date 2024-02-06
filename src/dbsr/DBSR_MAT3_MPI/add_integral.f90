@@ -10,22 +10,22 @@
       Real(8), intent(in) :: C
 
       Integer :: m,v
-      Real(8) :: S(8), t1,t2 
+      Real(8) :: S(8), t1,t2
       Real(8), external :: SMU
 
       Call CPU_time(t1)
 
       Select Case(icase)
 
-      Case(0)                           !  Overlaps  
+      Case(0)                           !  Overlaps
 
        Call Idef_Otype(C,ic,jc,io,jo)
 
-      Case(1)                           !  L-integral  
+      Case(1)                           !  L-integral
 
        Call Idef_Ltype(i1,i3,C,ic,jc,io,jo)
 
-      Case(2)                           !  R-integral  
+      Case(2)                           !  R-integral
 
        m = mod(lbs(i1)+lbs(i3)+kpol,2) + mod(lbs(i2)+lbs(i4)+kpol,2)
        if(m.eq.0.and.kpol.le.mk)  &

@@ -61,7 +61,7 @@
 
       GRAD = GRAD + (LL+D5)*DL*H1
 
-      IF (II .EQ. J) GRAD = - GRAD  
+      IF (II .EQ. J) GRAD = - GRAD
 
       END FUNCTION GRAD
 
@@ -73,7 +73,7 @@
 !     returns the dipole integral between i-th and j-th orbitals
 !     in the V-form:  INT{ P_j(r) [d/dr + l>/r] P_i(r); dr}
 !                     li > lj,  insert (-), then li < lj
-!                  
+!
 !---------------------------------------------------------------------
 
       Use RADIAL, L => lro
@@ -85,10 +85,10 @@
       LL = MAX0(L(I),L(J));  if(L(i).gt.L(j)) LL=-LL
 
       IP = nrf+1;  Call P_derive(J,IP)
-	  
+
       G = QUADR(I,IP,0); U = QUADR(I,J,-1)
 
       ZGRAD = G + (LL+1)*U
- 
+
       END FUNCTION ZGRAD
 

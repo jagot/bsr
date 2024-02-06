@@ -6,9 +6,9 @@
 !     The coefficient in the list are recorded by blocks -
 !     all integrals for all operators under concideration for
 !     the given matrix element    < 1, 2 | O | 3, 4>
-!     The operator O is defined by external procedure: Breit_coef 
+!     The operator O is defined by external procedure: Breit_coef
 !     This list is introduced to decrease the number of calls for
-!     nj-symbol subroutine. 
+!     nj-symbol subroutine.
 !----------------------------------------------------------------------
       Implicit none
 
@@ -19,7 +19,7 @@
 ! ... IB_int(1:mboef) - integral indentifier
 ! ... boef  (1:mboef) - correspondent angular coefficient
 
-      Integer, allocatable :: IB_int(:)     
+      Integer, allocatable :: IB_int(:)
       Real(8), allocatable :: boef(:)
 
       Integer :: nblk  = 0       ! number of blocks
@@ -29,16 +29,16 @@
 
 ! ... identifiers of block:
 
-      Integer, allocatable :: id1(:),id2(:),id3(:),id4(:) 
+      Integer, allocatable :: id1(:),id2(:),id3(:),id4(:)
 
 ! ... current identifiers:
 
-      Integer :: jd1,jd2,jd3,jd4    
+      Integer :: jd1,jd2,jd3,jd4
 
 ! ... ncblk - pointer on the last element in the block
 ! ... ipblk - ordering pointer
 
-      Integer, allocatable :: ipblk(:),ncblk(:) 
+      Integer, allocatable :: ipblk(:),ncblk(:)
 
 ! ... incoding basis parameters, see subroutine check_boef:
 
@@ -59,8 +59,8 @@
       Implicit none
       Integer, intent(in)  :: mm
       Integer              :: m
-      Integer, allocatable :: ia(:) 
-      Real(8), allocatable :: ra(:) 
+      Integer, allocatable :: ia(:)
+      Real(8), allocatable :: ra(:)
 
       m = mm; if(mm.lt.0) m=iboef
       if(m.le.0) then
@@ -75,13 +75,13 @@
        Allocate(IB_int(m), Boef(m));  mboef=m
       else
        Allocate(ra(nboef))
-       ra(1:nboef)=boef(1:nboef); Deallocate(boef) 
+       ra(1:nboef)=boef(1:nboef); Deallocate(boef)
        Allocate(boef(m)); boef(1:nboef)=ra(1:nboef)
-       Deallocate(ra) 
+       Deallocate(ra)
        Allocate(ia(nboef))
-       ia(1:nboef)=IB_INT(1:nboef); Deallocate(IB_INT) 
-       Allocate(IB_INT(m)); IB_INT(1:nboef)=ia(1:nboef) 
-       Deallocate(ia) 
+       ia(1:nboef)=IB_INT(1:nboef); Deallocate(IB_INT)
+       Allocate(IB_INT(m)); IB_INT(1:nboef)=ia(1:nboef)
+       Deallocate(ia)
        mboef=m
       end if
 
@@ -91,7 +91,7 @@
 !======================================================================
       Subroutine alloc_blk(mm)
 !======================================================================
-!     allocate, deallocate or reallocate coefficient "block" arrays 
+!     allocate, deallocate or reallocate coefficient "block" arrays
 !     in module boef_list
 !----------------------------------------------------------------------
       Use boef_list
@@ -99,7 +99,7 @@
       Implicit none
       Integer, intent(in)  :: mm
       Integer              :: m
-      Integer, allocatable :: ia(:) 
+      Integer, allocatable :: ia(:)
 
       m = mm; if(mm.lt.0) m=iblk
       if(m.le.0) then
@@ -116,19 +116,19 @@
        mblk = m
       else
        Allocate(ia(0:nblk))
-       ia(1:nblk)=ipblk(1:nblk); Deallocate(ipblk) 
-       Allocate(ipblk(m)); ipblk(1:nblk)=ia(1:nblk) 
-       ia(0:nblk)=ncblk(0:nblk); Deallocate(ncblk) 
-       Allocate(ncblk(0:m)); ncblk(0:nblk)=ia(0:nblk) 
-       ia(1:nblk)=id1(1:nblk); Deallocate(id1) 
-       Allocate(id1(m)); id1(1:nblk)=ia(1:nblk) 
-       ia(1:nblk)=id2(1:nblk); Deallocate(id2) 
-       Allocate(id2(m)); id2(1:nblk)=ia(1:nblk) 
-       ia(1:nblk)=id3(1:nblk); Deallocate(id3) 
-       Allocate(id3(m)); id3(1:nblk)=ia(1:nblk) 
-       ia(1:nblk)=id4(1:nblk); Deallocate(id4) 
-       Allocate(id4(m)); id4(1:nblk)=ia(1:nblk) 
-       Deallocate(ia) 
+       ia(1:nblk)=ipblk(1:nblk); Deallocate(ipblk)
+       Allocate(ipblk(m)); ipblk(1:nblk)=ia(1:nblk)
+       ia(0:nblk)=ncblk(0:nblk); Deallocate(ncblk)
+       Allocate(ncblk(0:m)); ncblk(0:nblk)=ia(0:nblk)
+       ia(1:nblk)=id1(1:nblk); Deallocate(id1)
+       Allocate(id1(m)); id1(1:nblk)=ia(1:nblk)
+       ia(1:nblk)=id2(1:nblk); Deallocate(id2)
+       Allocate(id2(m)); id2(1:nblk)=ia(1:nblk)
+       ia(1:nblk)=id3(1:nblk); Deallocate(id3)
+       Allocate(id3(m)); id3(1:nblk)=ia(1:nblk)
+       ia(1:nblk)=id4(1:nblk); Deallocate(id4)
+       Allocate(id4(m)); id4(1:nblk)=ia(1:nblk)
+       Deallocate(ia)
        mblk = m
       end if
 
@@ -157,32 +157,32 @@
       Subroutine Check_boef(l1,m1,s1,l2,m2,s2,l3,m3,s3,l4,m4,s4)
 !=======================================================================
 !     Check if we already have the m.e. for given orbitals,
-!     otherwise - calculate them. 
+!     otherwise - calculate them.
 !     Procedure uses "packing" the orbitals parameters, and that
-!     restricts the max. l to 2**10=1024. 
+!     restricts the max. l to 2**10=1024.
 !----------------------------------------------------------------------
       USE boef_list
 
       Implicit none
       Integer, intent(in) :: l1,m1,s1,l2,m2,s2,l3,m3,s3,l4,m4,s4
-      Integer :: k,l,m,ipm 
+      Integer :: k,l,m,ipm
 
       if(mblk.eq.0) Call Alloc_blk(iblk)
 
 ! ... prepare indentifiers:
 
-      jd1 = s1*ib28+l1*ib14+l1+m1    
-      jd2 = s2*ib28+l2*ib14+l2+m2    
-      jd3 = s3*ib28+l3*ib14+l3+m3    
-      jd4 = s4*ib28+l4*ib14+l4+m4    
+      jd1 = s1*ib28+l1*ib14+l1+m1
+      jd2 = s2*ib28+l2*ib14+l2+m2
+      jd3 = s3*ib28+l3*ib14+l3+m3
+      jd4 = s4*ib28+l4*ib14+l4+m4
 
 ! ... look for the same case in the list:
 
-      k=1; l = nblk 
-    1 if(k.gt.l) go to 2              
- 
+      k=1; l = nblk
+    1 if(k.gt.l) go to 2
+
       m=(k+l)/2; ipm=ipblk(m)
- 
+
       if(jd1.lt.id1(ipm)) then;      l = m - 1
       elseif(jd1.gt.id1(ipm)) then;  k = m + 1
       else
@@ -204,21 +204,21 @@
       end if; end if; end if; end if
 
       go to 1
-    2 Continue 
-    
-! ... new block:    
-            
+    2 Continue
+
+! ... new block:
+
       Call ee_coef(l1,m1,s1,l2,m2,s2,l3,m3,s3,l4,m4,s4)
 
-      nblk = nblk + 1;  ncblk(nblk) = nboef; kblk = nblk   
+      nblk = nblk + 1;  ncblk(nblk) = nboef; kblk = nblk
       id1(nblk)=jd1; id2(nblk)=jd2; id3(nblk)=jd3; id4(nblk)=jd4
-      
+
       if(k.eq.nblk) then
        ipblk(k)=nblk
       else
        Do m = nblk,k+1,-1; ipblk(m) = ipblk(m-1); End do
        ipblk(k)=nblk
-      end if        
+      end if
 
 ! ... it is time for re-allocation:
 
@@ -230,19 +230,19 @@
 !======================================================================
       Subroutine ee_coef (l1,m1,ms1,l2,m2,ms2,l3,m3,ms3,l4,m4,ms4)
 !======================================================================
-!     computes angular coefficients for the two-electron interactio 
+!     computes angular coefficients for the two-electron interactio
 !     in uncoupled nlms-representation.
 !----------------------------------------------------------------------
       Implicit none
       Integer, intent(in) :: l1,m1,ms1,l2,m2,ms2,l3,m3,ms3,l4,m4,ms4
       Integer :: k, kl,km, kl1,kl2, km1,km2
-      Real(8) :: S,C 
+      Real(8) :: S,C
       Real(8), external :: Z_3jj
 
       if(ms1.ne.ms3.or.ms2.ne.ms4) Return
 
 ! ... define the range of multipole indeces and common multiplier:
-    
+
       kl1=IABS(l1-l3);  kl2=IABS(l2-l4);  kl=MAX0(kl1,kl2)
       km1= l1+l3;       km2=l2+l4;        km=MIN0(km1,km2)
       if(km.lt.kl) Return
@@ -251,8 +251,8 @@
       S = sqrt(S) * (-1)**(m1+m4)
 
 ! ... cycle on multipoles:
-  
-      Do k = kl,km,2                         
+
+      Do k = kl,km,2
        C = S * Z_3jj(l1,0,l3,0,k,0);        if(C.eq.0.d0) Cycle
        C = C * Z_3jj(l1,-m1,l3,m3,k,m1-m3); if(C.eq.0.d0) Cycle
        C = C * Z_3jj(l2,0,l4,0,k,0);        if(C.eq.0.d0) Cycle

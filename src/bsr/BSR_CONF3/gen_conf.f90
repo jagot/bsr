@@ -2,7 +2,7 @@
       Subroutine GEN_CONF
 !====================================================================
 !     generates all configurations from given configuration 'ic'
-!     in module CONFIGS by adding the orbital 'ie' 
+!     in module CONFIGS by adding the orbital 'ie'
 !     so to obtain total term IS,IL
 !--------------------------------------------------------------------
       Use bsr_conf; Use conf_LS; Use orb_LS; Use target
@@ -14,17 +14,17 @@
 
 ! ... find if the same orbital is in the configuration ?
 
-      no = no - 1         
-      ii=0                                
+      no = no - 1
+      ii=0
       Do i=1,no
        if(n.ne.nn(i)) Cycle
        if(l.ne.ln(i)) Cycle
-       if(k.ne.kn(i)) Cycle        
+       if(k.ne.kn(i)) Cycle
        ii=i; Exit
       End do
 
       if(ii.gt.0) then  ! ... case of the orbital trap on the existing shell   v\
-!      if(ii.gt.0.and.coupling.eq.'LS') then  ! ... case of the orbital trap on the existing shell   
+!      if(ii.gt.0.and.coupling.eq.'LS') then  ! ... case of the orbital trap on the existing shell
 
        if(iq(ii).le.4*ln(ii)+1) then
         iq(ii)=iq(ii)+1
@@ -32,9 +32,9 @@
         IL_trap=ILP; IS_trap=ISP
         insert = -ii; S_cfp = 1.d0; S_recup = 1.d0
         Call SUM_TERM(ii)
-       end if 
-        
-      else              ! ... find the position for adding orbital        
+       end if
+
+      else              ! ... find the position for adding orbital
 
        Do i=1,no
         in = Ifind_nlk(nn(i),ln(i),kn(i),1)
@@ -50,16 +50,16 @@
 
        End do
 
-       if(ii.eq.0) then       ! ... add the new top shell     
+       if(ii.eq.0) then       ! ... add the new top shell
 
         no=no+1
         nn(no)=n; ln(no)=l; iq(no)=1; kn(no)=k
         LS(no,1)=1; LS(no,2)=l+l+1; LS(no,3)=2
         LS(no,4)=ILT; LS(no,5)=IST
-        insert = 0; S_cfp = 1.d0; S_recup = 1.d0 
+        insert = 0; S_cfp = 1.d0; S_recup = 1.d0
         Call Check_cfg
 
-       else                   ! ... insert new shell      
+       else                   ! ... insert new shell
 
        Do i=no,ii,-1; i1=i+1
         nn(i1)=nn(i); ln(i1)=ln(i); iq(i1)=iq(i); kn(i1)=kn(i)
@@ -73,18 +73,18 @@
        end if
 
       end if
-      
+
       End Subroutine GEN_CONF
 
 
 !=======================================================================
       Subroutine Sum_Term(i)
 !=======================================================================
-!     generates all terms for given shell 'i' 
+!     generates all terms for given shell 'i'
 !-----------------------------------------------------------------------
       Use bsr_conf
       Use conf_LS
-      
+
       Implicit none
       Integer :: i,j,m,ii,jp,i1,i2,i3
       Integer, External :: Iterm_LS

@@ -26,7 +26,7 @@
 
       Integer :: nub=2;  Character(40) :: AF_b = 'int_bnk'
                          Character(40) :: BF_b = 'int_bnk.nnn'
-      Logical :: new     ! pointer on the previous calculation  
+      Logical :: new     ! pointer on the previous calculation
 
 ! ... new results if any:
 
@@ -62,7 +62,7 @@
       Integer, parameter :: iszoef = 2000    ! in module ZOEF
       Integer, parameter :: iscoef = 2500    ! in module COEF
       Integer, parameter :: isboef = 50000   ! in module BOEF
-      Integer, parameter :: isblk  = 5000    ! in module BOEF   
+      Integer, parameter :: isblk  = 5000    ! in module BOEF
 
 
 ! ... MPI:

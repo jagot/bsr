@@ -6,7 +6,7 @@
       Implicit none
       Integer, intent(in ) :: n
       Integer, intent(in ) :: IS1(n),IS2(n)
-      Integer, intent(out) :: IPT(n) 
+      Integer, intent(out) :: IPT(n)
       Integer :: i,i1,j1,i2,j2
 
       Do i=1,n; IPT(i)=i; End do

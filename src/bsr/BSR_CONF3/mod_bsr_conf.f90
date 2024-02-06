@@ -17,18 +17,18 @@
       Integer :: nuo = 7;  Character(ma) :: AF_orb ='target_orb'
       Integer :: nuc = 8;  Character(ma) :: AF      ! c-files
       Integer :: nuw = 9;  Character(ma) :: AF_wfn ='target.bsw'
-      
-       
-! ... default values for parameters:    
 
-      Real(8) :: c_comp = 1.100  ! tolerance for compensation configurations          
-      Real(8) :: c_conf = 0.200  ! tolerance for physical configurations        
+
+! ... default values for parameters:
+
+      Real(8) :: c_comp = 1.100  ! tolerance for compensation configurations
+      Real(8) :: c_conf = 0.200  ! tolerance for physical configurations
       Real(8) :: c_phys = 0.750  ! sum of weights
 
       Integer :: max_ll = -1     ! upper limit for small "l"
       Integer :: min_ll = -1     ! lower limit for small "l"
-      Integer :: max_LT = -1     ! upper limit for big "L" (2L+1 - value) 
-      Integer :: max_ST = -1     ! upper limit for total spin (2S+1 - value)                                                           
+      Integer :: max_LT = -1     ! upper limit for big "L" (2L+1 - value)
+      Integer :: max_ST = -1     ! upper limit for total spin (2S+1 - value)
       Integer :: kort   = -1     ! if kort > 0, program will read additional
                                  ! orth. conditions from cfg.nnn file
 
@@ -42,9 +42,9 @@
       Real(8) :: wc_comp = 0.d0
       Integer :: ic_comp = 0
       Integer :: ii_comp = 0        ! channel obital under consideration
-      Integer :: ie_comp = 0        ! substitution orbital 
-      Integer :: it_comp = 0        ! channel target state 
-      Integer :: jt_comp = 0        ! substitution orb. target state 
+      Integer :: ie_comp = 0        ! substitution orbital
+      Integer :: it_comp = 0        ! channel target state
+      Integer :: jt_comp = 0        ! substitution orb. target state
       Integer :: insert  = 0
       Integer :: debug   = 0
       Integer :: igen_conf = 0
@@ -53,8 +53,8 @@
 ! ... coupling scheemes:
 
       Integer, parameter :: mshells = 25
-      Integer, parameter :: mcup=2*mshells   
-      Integer, parameter :: mmom=6*mshells   
+      Integer, parameter :: mcup=2*mshells
+      Integer, parameter :: mmom=6*mshells
       Integer :: J1_coupling(3,mcup)
       Integer :: J2_coupling(3,mcup)
       Integer :: momentS(mmom)
@@ -63,25 +63,25 @@
       Integer :: ILT,IST            ! total term
       Integer :: IAP,ILP,ISP        ! parent term
       Integer :: IL_trap,IS_trap    ! trap_term
-      Real(8) :: S_cfp 
-      Real(8) :: S_recup 
+      Real(8) :: S_cfp
+      Real(8) :: S_recup
 
       Integer :: I_cfp    = 1
       Integer :: I_recup  = 1
 
 ! ... additional arrays:
 
-      Integer, allocatable :: ip_phys_conf(:)  
-      Integer, allocatable :: jj_phys_conf(:)  
-      Integer, allocatable :: ic_targ(:)  
-      Integer, allocatable :: jc_targ(:)  
-      Integer, allocatable :: ic_pert(:)  
+      Integer, allocatable :: ip_phys_conf(:)
+      Integer, allocatable :: jj_phys_conf(:)
+      Integer, allocatable :: ic_targ(:)
+      Integer, allocatable :: jc_targ(:)
+      Integer, allocatable :: ic_pert(:)
       Real(8), allocatable :: WC_pert(:)
 
 ! ... channel-delete information if any:
 
       Character(ma) :: AF_del = 'target_del'
-      Integer :: ndel = 0  
+      Integer :: ndel = 0
       Integer, allocatable :: dlsp(:),dlch(:),dtar(:),djk(:)
 
       End module bsr_conf
@@ -91,7 +91,7 @@
       Subroutine Read_del
 !======================================================================
 !     read "chanel-delete" conditions if any
-!---------------------------------------------------------------------- 
+!----------------------------------------------------------------------
       Use bsr_conf
       Implicit none
       Integer :: i,j,m,nlsp,nch,lch,iptar,ipconf,jkch,idel,nud

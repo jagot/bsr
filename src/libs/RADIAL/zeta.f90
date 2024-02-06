@@ -54,4 +54,3 @@
        End do      !  over core orbitals
 
       END FUNCTION ZETA
-      

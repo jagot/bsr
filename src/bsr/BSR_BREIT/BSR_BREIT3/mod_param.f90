@@ -5,7 +5,7 @@
 !----------------------------------------------------------------------
       Implicit none
 
-! ... files: 
+! ... files:
 
 !     AF  -  standard (default) names
 !     BF  -  names with indication of partial wave number
@@ -31,17 +31,17 @@
 
 ! ... tolerence for coefficients:
 
-      Real(8) :: Eps_c = 1.d-8      
+      Real(8) :: Eps_c = 1.d-8
 
 ! ... packing basis for configurations:
 
-      Integer, parameter :: ibc = 2**15 
+      Integer, parameter :: ibc = 2**15
 
 ! ... maximum multipole index:
 
-      Integer :: mk = 7 
+      Integer :: mk = 7
 
-      Integer :: new     ! pointer on the previous calculation  
+      Integer :: new     ! pointer on the previous calculation
       Integer :: icalc   ! pointer for need of new calculations
 
 ! ... range of partial waves:
@@ -63,7 +63,7 @@
 !
 !-----------------------------------------------------------------------
 
-      Integer, parameter :: noper=7      
+      Integer, parameter :: noper=7
       Integer ioper(noper)/1,1,1,0,0,0,0/, joper(noper)
       Real(8) :: coper(noper)
 

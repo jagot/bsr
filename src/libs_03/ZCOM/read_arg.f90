@@ -1,7 +1,7 @@
 !======================================================================
       Subroutine Read_rarg(name,rvalue)
 !======================================================================
-!     read real argument as name=... from the command line 
+!     read real argument as name=... from the command line
 !----------------------------------------------------------------------
       Implicit none
       Character(*) :: name
@@ -9,7 +9,7 @@
       Integer :: iarg,i,i1,i2,iname
       Character(80) :: AS
 
-      iarg = command_argument_count(); if(iarg.eq.0) Return 
+      iarg = command_argument_count(); if(iarg.eq.0) Return
       iname=LEN_TRIM(name)
       Do i=1,iarg
        Call GET_COMMAND_ARGUMENT(i,AS)
@@ -24,7 +24,7 @@
 !======================================================================
       Subroutine Read_iarg(name,ivalue)
 !======================================================================
-!     read integer argument as name=... from the command line 
+!     read integer argument as name=... from the command line
 !----------------------------------------------------------------------
       Implicit none
       Character(*) :: name
@@ -32,7 +32,7 @@
       Integer :: iarg,i,i1,i2,iname
       Character(80) :: AS
 
-      iarg = command_argument_count(); if(iarg.eq.0) Return 
+      iarg = command_argument_count(); if(iarg.eq.0) Return
       iname=LEN_TRIM(name)
       Do i=1,iarg
        Call GET_COMMAND_ARGUMENT(i,AS)
@@ -47,14 +47,14 @@
 !======================================================================
       Subroutine Read_aarg(name,avalue)
 !======================================================================
-!     read character argument as name=... from the command line 
+!     read character argument as name=... from the command line
 !----------------------------------------------------------------------
       Implicit none
       Character(*) :: name, avalue
       Integer :: iarg,i,i1,i2,iname
       Character(80) :: AS
 
-      iarg = command_argument_count(); if(iarg.eq.0) Return 
+      iarg = command_argument_count(); if(iarg.eq.0) Return
       iname=LEN_TRIM(name)
       Do i=1,iarg
        Call GET_COMMAND_ARGUMENT(i,AS)
@@ -77,7 +77,7 @@
       Integer :: iarg,ia,iname,i,i1,i2,j,j1,j2,k,k1,k2
       Character(180) :: AS
 
-      iarg = command_argument_count(); if(iarg.eq.0) Return 
+      iarg = command_argument_count(); if(iarg.eq.0) Return
       iname=LEN_TRIM(name)
       k=0
       Do i=1,iarg
@@ -89,7 +89,7 @@
       if(k.eq.0) Return
 
       ia=0; j1=i1; ! iarr=0
-      Do 
+      Do
        j2=INDEX(AS(j1:i2),',')
        if(j2.eq.0) then; j2=i2; else; j2=j2+j1-1; end if
        j=0 ! INDEX(AS(j1:j2),'-'); k = j+j1-1
@@ -104,7 +104,7 @@
          iarr(ia)=k
         End do
        end if
-       j1=j2+1; 
+       j1=j2+1;
        if(j1.gt.i2) Exit
       End do
 
@@ -121,7 +121,7 @@
       Integer :: iarg,i
       Character(80) :: AS
 
-      iarg = command_argument_count(); if(iarg.eq.0) Return 
+      iarg = command_argument_count(); if(iarg.eq.0) Return
       Do i=1,iarg
        Call GET_COMMAND_ARGUMENT(i,AS)
        if(INDEX(AS,'=').ne.0) Cycle
@@ -144,7 +144,7 @@
       Integer :: ii,j,j1,j2,k,k1,k2
 
       ia=0; ii=LEN_TRIM(AS); j1=1
-      Do 
+      Do
        j2=INDEX(AS(j1:ii),',')
        if(j2.eq.0) then; j2=ii; else; j2=j1+j2-1; end if
        j=INDEX(AS(j1:j2),'-'); k = j1+j-1
@@ -157,7 +157,7 @@
          ia=ia+1; iarr(ia)=k
         End do
        end if
-       j1=j2+1; 
+       j1=j2+1;
        if(j1.gt.ii) Exit
       End do
 

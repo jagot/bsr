@@ -1,7 +1,7 @@
 !======================================================================
       Subroutine LAP_ZHEEV(job,UPLO,n,m,A,eval,info)
 !======================================================================
-!     Call LAPACK procedure ZHEEV to obtain the eigenvalues (eval) and 
+!     Call LAPACK procedure ZHEEV to obtain the eigenvalues (eval) and
 !     eigenvectors (A) for complex Hermitian matrix A(n,n)
 !
 !     job = 'V' or 'N' - compute or not the eigenvectors

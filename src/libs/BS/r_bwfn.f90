@@ -6,7 +6,7 @@
       Use spline_atomic
       Use spline_param
       Use spline_orbitals
-      
+
       Implicit none
       Integer, intent(in) :: nu
       Real(8) :: zw,hw,hmw,rmw
@@ -26,7 +26,7 @@
       i = Iadd_bsorb(n,l,k)
       read(nu) pbs(1:mw,i)
       mbs(i) = mw
-      if(mw.lt.ns) pbs(mw+1:ns,i) = 0.d0 
+      if(mw.lt.ns) pbs(mw+1:ns,i) = 0.d0
       go to 1
     2 Continue
 

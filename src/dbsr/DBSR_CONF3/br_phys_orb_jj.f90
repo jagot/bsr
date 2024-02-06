@@ -5,7 +5,7 @@
       Use phys_orb_jj
 
       Implicit none
-      
+
       Integer :: myid,ierr, m, ntarg
 
       Call MPI_COMM_RANK(MPI_COMM_WORLD, myid, ierr)

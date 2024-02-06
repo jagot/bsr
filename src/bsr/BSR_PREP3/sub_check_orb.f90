@@ -4,9 +4,9 @@
 !     analize the orbitals in the file 'AFW' and assign new set indexis
 !     if needed
 !     orbitals recorded in the "orbitals" list: module orb_LS, and in
-!     the "radial" list: module "spline_orbitals" 
+!     the "radial" list: module "spline_orbitals"
 !     pointer IEF provides connection between these two lists
-!     (two spectroscopic orbitals may have the same radial functions) 
+!     (two spectroscopic orbitals may have the same radial functions)
 !----------------------------------------------------------------------
       Use bsr_prep
 
@@ -21,7 +21,7 @@
 !----------------------------------------------------------------------
 ! ... read radial functions< one by one:
 
-    1 m=nbf+1; if(m.ge.mbf) CALL Allocate_bsorb(mbf+jbf)                                       
+    1 m=nbf+1; if(m.ge.mbf) CALL Allocate_bsorb(mbf+jbf)
 
       read(nuw,end=2) elw,zw,hw,hmw,rmw,ksw,nsw,mw
 
@@ -43,7 +43,7 @@
        Call EL4_nlk(elw,n,l,k);  k=k+kshift
        ii=Ifind_nlk(n,l,k,0)
 
-       if(ii.gt.0) then                              
+       if(ii.gt.0) then
         mbs(m)=mw; nbs(m)=n; lbs(m)=l; kbs(m)=k; ebs(m)=elw
        else
         write(pri,'(a4,12x,a)') elw,' excessive orbital'
@@ -61,11 +61,11 @@
 
 !----------------------------------------------------------------------
 ! ...  compare with the existing orbitals:
-       
+
        SM1 = QUADR(m,m, 1); SM2 = QUADR(m,m, 2)
        Do i = 1,nbf;     if(abs(OBS(i,m)).lt.eps_ovl) Cycle
 
-        ! ... check orthogonality to core: 
+        ! ... check orthogonality to core:
 
         if(i.le.nclosd.and.ii.gt.nclosd) then
          write(pri,'(a,a,a,a,a,f12.8)') ' file ', trim(AFC), '  orbital ', &
@@ -82,20 +82,20 @@
         IEF(ii) = i
         write(pri,'(a,a,a,a)')  elw,' --> ',ebs(i),'    the same'
         go to 1
-       
+
        End do
 
 !---------------------------------------------------------------------
-! ...  core orbitals should be the same:   
+! ...  core orbitals should be the same:
 
        if(ii.le.nclosd) then
         write(pri,'(a,a,a)') 'file ',AFW,'  has another core orbital'
         Stop ' another core orbital? '
        end if
 
-! ... assign set index for new radial orbital: 
+! ... assign set index for new radial orbital:
 
-       Call Assign_index(m); nbf=m; IEF(ii)=m 
+       Call Assign_index(m); nbf=m; IEF(ii)=m
 
        go to 1    ! go to next orbital
    2  Continue

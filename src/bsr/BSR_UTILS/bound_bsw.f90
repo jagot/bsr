@@ -4,7 +4,7 @@
 !               C O P Y R I G H T -- 2016
 !
 !     Written by:   Oleg Zatsarinny
-!                   email: oleg_zoi@yahoo.com 
+!                   email: oleg_zoi@yahoo.com
 !
 !======================================================================
 !     converts bound.nnn files to (c- + bsw-) files
@@ -64,18 +64,18 @@
 
 ! ... short instructions:
 
-      Call get_command_argument(1,AF)  
+      Call get_command_argument(1,AF)
       if(AF.eq.'?') then
-       write(*,'(/a)') 'bound_bsw extracts solution and records it as pair of c- and bsw-files'   
+       write(*,'(/a)') 'bound_bsw extracts solution and records it as pair of c- and bsw-files'
        write(*,'(/a,a)') 'Call as: ',  &
-        'bound_bsw  klsp=  sol=... name=... [mode=...]' 
+        'bound_bsw  klsp=  sol=... name=... [mode=...]'
        write(*,'(/a,a,a)') 'or use bound_bsw.inp with ',  &
-        'klsp  sol  name  for each state in one line, with * marks end of the list' 
+        'klsp  sol  name  for each state in one line, with * marks end of the list'
        write(*,'(/a)') 'klsp - partial wave index'
        write(*,'( a)') 'sol  - solution index'
        write(*,'( a)') 'name - results will be in name.c and name.bsw files'
        write(*,'( a)') 'mode - all names have the same style: [mode]_klsp_sol'
-       Stop 
+       Stop
       end if
 
       Call Read_aarg('mode',mode)
@@ -83,7 +83,7 @@
       Call Read_aarg('AFb',AFb)
 
 !----------------------------------------------------------------------
-! ... input file:          
+! ... input file:
 
       jnp = Icheck_file(AF_inp)
       if(len_trim(AFb).ne.0) jnp=0
@@ -92,7 +92,7 @@
 
 !----------------------------------------------------------------------
 ! ... read target and channel information from "target":
-   
+
       Call Check_file(AF_t)
       Open(nut,file=AF_t)
       Call R_target(nut);
@@ -106,7 +106,7 @@
        Open(nui,file=AF_LS)
        Call R_target_ion(nui)
        LS_flag = 1
-      end if 
+      end if
       close(nui)
 
       if(Icheck_file(AF_pert).ne.0) then
@@ -121,8 +121,8 @@
 
 !----------------------------------------------------------------------
 ! ... sets up grid points and initializes the values of the spline
-! ... according to the file "knot.dat" : 
-    
+! ... according to the file "knot.dat" :
+
       Call define_grid(z);   Call define_spline;   Allocate(v(ns))
 
 !----------------------------------------------------------------------
@@ -140,15 +140,15 @@
 ! ... loop for all input states:
 
       klsp=0; Call Read_iarg('klsp',klsp); ilsp = klsp
-      is=0;   Call Read_iarg('sol' ,is)  
-      BF=' '; Call Read_aarg('name',BF)   
+      is=0;   Call Read_iarg('sol' ,is)
+      BF=' '; Call Read_aarg('name',BF)
 
       if(jnp.ne.0) rewind(inp)
    10 Continue
 
       if(jnp.ne.0.and.ilsp.eq.0) then
 
-       read(inp,'(a)',end=20,err=10) AS              
+       read(inp,'(a)',end=20,err=10) AS
        if(AS(1:1).eq.'*') go to 20
        if(Len_trim(AS).eq.0) go to 10
        read(AS,*,err=10) klsp,is,BF
@@ -161,9 +161,9 @@
       if(Len_trim(mode).gt.0) then
        write(BF,'(a,a1,i3.3,a1,i3.3)') trim(mode),'_',klsp,'_',is
       end if
-      if(klsp.eq.0) Stop 'klsp=0' 
-      if(is.eq.0)   Stop 'sol=0'  
-      if(Len_trim(BF).eq.0) Stop 'name - ?'                         
+      if(klsp.eq.0) Stop 'klsp=0'
+      if(is.eq.0)   Stop 'sol=0'
+      if(Len_trim(BF).eq.0) Stop 'name - ?'
 
       write(ALSP,'(i3.3)') klsp
       nbf=nbf_targ
@@ -176,7 +176,7 @@
        Open(nuw,file=AF,form='UNFORMATTED')
        Call Read_bsw(nuw)
        Close(nuw)
-      end if      
+      end if
 
 ! ... allocate space for outer orbitals:
 
@@ -191,7 +191,7 @@
       Call R_CLOSED(nuc)
       ncfg=0; lcfg=0; Call Add_conf_LS(nuc,0)
       Close(nuc)
-  
+
       write(pri,'(/a,a)') 'Partial wave:  ',trim(AF_c)
 
       write(pri,'(/a,i6,a)') 'ncfg = ',ncfg,' - number of configurations'
@@ -199,7 +199,7 @@
       write(pri,'( a,i6,a)') 'nbf  = ',nbf, ' - total number of orbitals'
 
       if(allocated(WCC)) deallocate(WCC); allocate(WCC(ncfg))
-     
+
 !----------------------------------------------------------------------
 ! ... read bound.nnn, ubound.nnn, or pol.nnn:
 
@@ -226,7 +226,7 @@
          write(*,*) 'Can not find ',trim(AF_b)
          Stop ' '
         end if
-       end if 
+       end if
       end if
 
 !---------------------------------------------------------------------
@@ -247,7 +247,7 @@
       write(pri,'(a,i6,a)') 'kcp  = ',kcp,' - number of perturbers'
 
       if(is.lt.1.or.is.gt.nstate) Stop ' required solution is out of range '
-          
+
       if(allocated(A)) Deallocate(A); Allocate(A(nhm))
 
       if(iform.eq.10) then
@@ -255,25 +255,25 @@
         read(nub) ii,Lab
         read(nub) ET,S,neff,ipch(klsp,1:kch)
         read(nub) A
-       End do 
+       End do
       elseif(iform.eq.20) then
        Do i = 1,is
         read(nub,*) ii,Lab
         read(nub,*) ET,S,neff,ipch(klsp,1:kch)
         read(nub,'(5D15.8)') A
-       End do 
+       End do
       else
        Do i = 1,is
         read(nub,*) ii,Lab
         read(nub,*) ET
         read(nub,'(5D15.8)') A
-       End do 
+       End do
        n=9; Call Read_iarg('n',n)
        ipch(klsp,1:kch)=n
       end if
 
       Close(nub)
-        
+
       write(pri,'(/a,i6)'   ) 'Solution:',is
       write(pri,'( a,T15,a)') 'Label: ',trim(LAB)
       write(pri,'( a,f16.8)') 'Energy:   ',ET
@@ -282,12 +282,12 @@
 !  ... transfer the solution 'is' to the p-functions:
 
         ic1 = 0; ic2 = 0
-        
+
         write(pri,'(/a/)') 'Channel decomposition and renormalization:'
 
         Do ich = 1,kch
          ishft=(ich-1)*ns;  v(1:ns)=A(ishft+1:ishft+ns)
-         ii=nbt+ich; pbs(1:ns,ii) = v;  mbs(ii)=ns-1 
+         ii=nbt+ich; pbs(1:ns,ii) = v;  mbs(ii)=ns-1
          s = QUADR(ii,ii,0); ss = sqrt(s)
          if(V(lch(klsp,ich)+2).lt.0.d0) ss = -ss
          v = v / ss; pbs(1:ns,ii) = v; mbs(ii)=ns-1
@@ -306,7 +306,7 @@
          ishft =kch*ns
          jshft =ipconf(klsp,kch)
          j = ipert(klsp)
-         Do i=1,npert(klsp); 
+         Do i=1,npert(klsp);
           ss = A(ishft+i)
           ic1=jshft+ippert(j+i-1)+1
           if(i.eq.1) ic1=jshft+1
@@ -314,7 +314,7 @@
           WCC(ic1:ic2) = WC(ic1:ic2) * ss
           s = SUM(WCC(ic1:ic2)*WCC(ic1:ic2))
           write(pri,'(i4,1x,2i5,2f16.8)') i,ic1,ic2,s,ss
-         End do         
+         End do
         end if
 
 !----------------------------------------------------------------------
@@ -327,11 +327,11 @@
          kk = ipch(klsp,ich) ! k --> kk in spectroscopic notation:
 
          Call EL4_nlk(ELC(klsp,ich),n,l,k); EBS(nbt+ich)=ELF4(kk,l,k)
-         
+
          Do ic = ic1,ic2
           no = no_ic_LS (ic)
           ip = ip_state(ic) + no; i=ip_orb(ip)
-          NEF(i) = kk 
+          NEF(i) = kk
          End do
         End do
 
@@ -339,18 +339,18 @@
 !----------------------------------------------------------------------
 !  ...  output c - file for given solution:
 
-        AF = trim(BF)//'.c'     
+        AF = trim(BF)//'.c'
         Open(nuc,file=AF)
 
         if(allocated(ipt)) Deallocate(ipt); Allocate(ipt(ncfg))
         Call SORTA(ncfg,WCC,ipt)
         if(IST.gt.0) then
          write(nuc,'(15x,f16.8,5x,a,a)') &
-                         ET,'conf: ',trim(LAB)  
+                         ET,'conf: ',trim(LAB)
         else
          write(nuc,'(15x,f16.8,a,i3,5x,a,a)') &
                          ET, '  2J =',ILT,'conf: ',trim(LAB)
-        end if        
+        end if
         write(nuc,'(a)') trim(CLOSED)
 
         Do jc = 1,ncfg; ic=IPT(jc)
@@ -368,19 +368,19 @@ write(*,*) 'ncfg_1=',ncfg
         if(ncp(klsp).gt.0) then
 
          ncfg=0; lcfg=0; WC = 0.d0
-   
+
          Call RR_conf_LS(nuc,0)
-   
+
          Call SORTA(ncfg,WC,ipt)
-   
+
          rewind(nuc)
          if(IST.gt.0) then
           write(nuc,'(15x,f16.8,5x,a,a)') ET,'conf: ',trim(LAB)
          else
           write(nuc,'(15x,f16.8,a,i3,5x,a,a)') ET, '  2J =',ILT,'conf: ',trim(LAB)
-         end if        
+         end if
          write(nuc,'(a)') trim(CLOSED)
-   
+
          Do jc = 1,ncfg; ic=IPT(jc)
           if(abs(WC(ic)).lt.eps_c) Cycle
           Call Get_cfg_LS(ic)
@@ -402,22 +402,22 @@ write(*,*) 'ncfg_2=',ncfg
 
          SN = 0.d0
          Do i = 1, npert(klsp)
-           write(nuc,'(i6,f16.8)') index_kpert(klsp,i), A(kch*ns+i) 
+           write(nuc,'(i6,f16.8)') index_kpert(klsp,i), A(kch*ns+i)
            SN = SN +  A(kch*ns+i)*A(kch*ns+i)
          End do
         end if
-        write(nuc,'(a,f16.8)') '*     ', SN 
+        write(nuc,'(a,f16.8)') '*     ', SN
         Close(nuc)
 
-                
+
 !----------------------------------------------------------------------
 ! ...  output bsw-file:
-        
+
         Do ich = 1,kch
 !         ebs(nbt+ich)=ELC(klsp,ich)
         End do
 
-        AF = trim(BF)//'.bsw'     
+        AF = trim(BF)//'.bsw'
         Open(nuw,file=AF,form='UNFORMATTED')
         Do i = 1,nbf
          write(nuw) ebs(i),z,h,hmax,rmax,ks,ns,mbs(i),t
@@ -431,13 +431,13 @@ write(*,*) 'ncfg_2=',ncfg
    20 Continue
 
       End   !  utility BOUND_BSW
-          
+
 
 !======================================================================
       Subroutine Read_bsw(nu)
 !======================================================================
-!     read B-spline radial orbitals from unit 'nu' and omit 
-!     the orbitals with nlk already in memory 
+!     read B-spline radial orbitals from unit 'nu' and omit
+!     the orbitals with nlk already in memory
 !----------------------------------------------------------------------
       USE spline_param
       USE spline_atomic
@@ -488,7 +488,7 @@ write(*,*) 'ncfg_2=',ncfg
 !     the dublicated configurations are omitted
 !--------------------------------------------------------------------
       Use conf_LS
-      
+
       Implicit none
       Integer, intent(in) :: nu
       Integer, intent(in) :: kshift
@@ -496,7 +496,7 @@ write(*,*) 'ncfg_2=',ncfg
       Integer, External :: Ifind_cfg_LS
       Character(100) :: AS
       Real(8) :: W
-      
+
       if(mcfg.eq.0) Call alloc_cfg_LS(icfg)
 
       rewind(nu)
@@ -515,4 +515,3 @@ write(*,*) 'ncfg_2=',ncfg
     2 Continue
 
       End Subroutine RR_conf_LS
-         

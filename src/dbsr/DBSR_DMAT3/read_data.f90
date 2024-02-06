@@ -1,10 +1,10 @@
 !======================================================================
-      Subroutine Read_data 
+      Subroutine Read_data
 !======================================================================
-      Use dbsr_dmat;    Use conf_jj;       
-                        Use channels_jj;   Use DBS_gauss 
+      Use dbsr_dmat;    Use conf_jj;
+                        Use channels_jj;   Use DBS_gauss
                         Use target_jj;     Use DBS_orbitals_pq
-                        Use orb_jj        
+                        Use orb_jj
       Implicit none
 
       Integer :: i,ii,met, n,l,k,j,iset
@@ -16,8 +16,8 @@
 
       Call Read_arg
 
-! ... sets up grid points and initializes the B-spline arrays: 
-    
+! ... sets up grid points and initializes the B-spline arrays:
+
       Call read_knot_dat
       Call alloc_DBS_gauss
 
@@ -45,7 +45,7 @@
       end if
       Allocate(C1(ncfg1))
       C1=WC(1:ncfg1);  if(ctype1.eq.'j') C1=1.d0
-     
+
       nch2=0; npert2=ncfg2
       if(ilsp2.gt.0) then
        nch2=nch(ilsp2)
@@ -59,7 +59,7 @@
 
       kdm1= ms*nch1+npert1
       kdm2= ms*nch2+npert2
-        
+
       write(pri,'(a,a,a,i6,a,i4,a,i8,a,i3/)' )  'initial state - ',trim(name1), &
        '   ncfg1 =',ncfg1,'   nwf1 =',nwf1,'   kdm1 =',kdm1,'   jot1 =',jot1
       write(pri,'(a,a,a,i6,a,i4,a,i8,a,i3/)' )  'final state   - ',trim(name2), &
@@ -67,7 +67,7 @@
 
 
 ! ... allocate orbitals arrays:
-   
+
       Call alloc_DBS_orbitals_pq(nwf,ns)
       nbf = nwf
       Do i = 1,nbf
@@ -131,16 +131,16 @@
 
       end if
 
-! ... check the correspondence between c- and w-files: 
+! ... check the correspondence between c- and w-files:
 
       met = 0
-      Do i = 1,nwf  
+      Do i = 1,nwf
         if(ipbs(i).ne.0) Cycle; if(mbs(i).ne.0) Cycle
         write(pri,'(a,a)') ' Absent expansion for w.f. ',ELF(i)
         met = met + 1
       End do
       if(met.gt.0) Stop 'no correspondence between c- and w- files'
-      
+
 ! ... the < . | p > values (convolution with B matrix)
 
       Do i=1,nbf
@@ -149,7 +149,7 @@
        bpq(1:ns,2,i) = MATMUL(fqbs, pq(:,2,i))
       End do
 
-! ... the < p | p > values 
+! ... the < p | p > values
 
       Call Alloc_radial_overlaps(0)
       Do i=1,nwf1; Do j=nwf1+1,nwf; if(kbs(i).ne.kbs(j)) Cycle
@@ -170,7 +170,7 @@
 
 ! ... dipole integrals:
 
-      Call Gen_dbs(nwf1,nwf2,0.d0,kpol,ktype)  
+      Call Gen_dbs(nwf1,nwf2,0.d0,kpol,ktype)
 
 ! ... prepare B-spline dipole matrixes:
 
@@ -183,10 +183,10 @@
        dbs(1:ns,1,i) = MATMUL(dipLp,pq(1:ns,1,i))
        dbs(1:ns,2,i) = MATMUL(dipLq,pq(1:ns,2,i))
       End do
-                                                                          
+
       if(ktype.eq.'E') then
        Allocate(dipVp(ns,ns),dipVq(ns,ns),vbs(ns,2,nbf))
-       Call ZINTYk (kpol-1,ksp,ksq,pbsp,qbsp,ns,dipVp) 
+       Call ZINTYk (kpol-1,ksp,ksq,pbsp,qbsp,ns,dipVp)
        Call ZINTYk (kpol-1,ksq,ksp,qbsp,pbsp,ns,dipVq)
        Do i=1,nbf; if(ipbs(i).ne.0) Cycle
         vbs(1:ns,1,i) = MATMUL(dipVq,pq(1:ns,1,i))         !  ??? Vq     Vp

@@ -72,12 +72,12 @@
       SL=0.d0; SV=0.d0
       if(jmode.eq.1) then
 
-       Do i=1,kdm1; ii=LSP1(i) 
+       Do i=1,kdm1; ii=LSP1(i)
        Do j=1,kdm2; jj=LSP2(j)
         SL = SL + C1(i)*DL(i,j)*C2(j)*DJ (ii,jj)
         SV = SV + C1(i)*DV(i,j)*C2(j)*DJM(ii,jj)
        End do; End do
-      
+
       else
 
        SL=0.d0; SV=0.d0
@@ -109,7 +109,7 @@
 
       kp = kpol+kpol+1
       S = 1.d0;  Do i = 1,kp,2;  S = S * i;  End do
-      S = 2*kp*(kpol+1)/(S*S)/kpol 
+      S = 2*kp*(kpol+1)/(S*S)/kpol
       S = S * (de/c_au)**kp
 
       GWL = S*SL; GFL = c_au**3/2*GWL/(de*de)
@@ -123,22 +123,22 @@
 
       g1 = jot1; g2 = jot2
 
-      alfL = 2*dmatL*dmatL/(E2-E1)/(kp*g1); alfaL = alfaL + alfL   
+      alfL = 2*dmatL*dmatL/(E2-E1)/(kp*g1); alfaL = alfaL + alfL
       alfV = 2*dmatV*dmatV/(E2-E1)/(kp*g1); alfaV = alfaV + alfV
 
-      KLT1 = IPT1*jot1 
-      KLT2 = IPT2*jot2 
+      KLT1 = IPT1*jot1
+      KLT2 = IPT2*jot2
 
       if(E2.gt.E1) then
        FL = GFL/g1; WL = GWL/g2/time_au
        FV = GFV/g1; WV = GWV/g2/time_au
-       write(nur,'(/i4,f14.8,2x,a)') KLT1,E1,trim(Label1) 
-       write(nur,'( i4,f14.8,2x,a)') KLT2,E2,trim(Label2) 
+       write(nur,'(/i4,f14.8,2x,a)') KLT1,E1,trim(Label1)
+       write(nur,'( i4,f14.8,2x,a)') KLT2,E2,trim(Label2)
       else
        FL = GFL/g2; WL = GWL/g1/time_au
        FV = GFV/g2; WV = GWV/g1/time_au
-       write(nur,'(/i4,f14.8,2x,a)') KLT2,E2,trim(Label2) 
-       write(nur,'( i4,f14.8,2x,a)') KLT1,E1,trim(Label1) 
+       write(nur,'(/i4,f14.8,2x,a)') KLT2,E2,trim(Label2)
+       write(nur,'( i4,f14.8,2x,a)') KLT1,E1,trim(Label1)
       end if
 
       de = abs(E1-E2)*au_cm; ANGS=1.d+8/de; ANGSA=ANGS_AIR(ANGS)
@@ -151,17 +151,17 @@
       if(ialfa.eq.0) then
        write(nur,'(1x,a1,i1,2x,a4,1PD12.5,3x,a5,D12.5,3x,a6,D12.5)') &
                    ktype,kpol,'S = ',SL,AA,FL,'AKI = ',WL
-       if(SV.ne.0.d0) & 
+       if(SV.ne.0.d0) &
        write(nur,'(9x,1PD12.5,8x,D12.5,9x,D12.5)') SV,FV,WV
       else
        write(nur,'(1x,a1,i1,2x,a4,1PD12.5,3x,a5,D12.5,3x,a6,D12.5, &
                    a8,d16.8,0P2f10.5)') &
                    ktype,kpol,'S = ',SL,AA,FL,'AKI = ',WL, &
                    '   RME =',dmatL, alfL,alfaL
-       if(SV.ne.0.d0) & 
+       if(SV.ne.0.d0) &
        write(nur,'(9x,1PD12.5,8x,D12.5,9x,D12.5,8x,d16.8,0P2f10.5)') &
-                   SV,FV,WV, dmatV, alfV,alfaV 
-      end if      
+                   SV,FV,WV, dmatV, alfV,alfaV
+      end if
 
 ! ... additional output of matrix elements between solutions:
 
@@ -170,4 +170,3 @@
       End do; End do   !  over solutions
 
       End Subroutine J_case
- 

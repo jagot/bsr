@@ -26,7 +26,7 @@
       Subroutine allocate_matrix(ns,ks,nch1,nch2,ncp1,ncp2,ncfg1,ncfg2)
 !======================================================================
 !     allocate arrays in module "dmatrix"
-!----------------------------------------------------------------------    
+!----------------------------------------------------------------------
       Use dmatrix
 
       Implicit none
@@ -34,22 +34,22 @@
 
       kns=ns; kks=ks
       kch1=nch1; kch2=nch2; kcp1=ncp1; kcp2=ncp2
-      kcfg1=ncfg1; kcfg2=ncfg2 
+      kcfg1=ncfg1; kcfg2=ncfg2
 
       knc1 = kns * kch1; kdm1 = knc1 + kcp1
       knc2 = kns * kch2; kdm2 = knc2 + kcp2
 
       if(kdm1*kdm2.le.0) Stop 'DMATRIX: kdm1*kdm2 <= 0'
 
-      if(allocated(DL)) Deallocate(DL) 
-      if(allocated(DV)) Deallocate(DV) 
-     
+      if(allocated(DL)) Deallocate(DL)
+      if(allocated(DV)) Deallocate(DV)
+
       Allocate( DL(kdm1,kdm2), DV(kdm1,kdm2) )
-      
+
       DL = 0.d0; DV = 0.d0
 
       Allocate( BLC(kch1,kch2), BVC(kch1,kch2), AC(kch1,kch2) )
-      
+
       BLC = 0.d0; BVc = 0.d0; AC = 0.d0
 
       End Subroutine allocate_matrix
@@ -58,7 +58,7 @@
 !======================================================================
       Subroutine UPDATE_DX(ich,jch,ns,ks,d1,d2)
 !======================================================================
-!     update channel block with nonsymmetric band matrix 
+!     update channel block with nonsymmetric band matrix
 !----------------------------------------------------------------------
       Use dmatrix
 
@@ -103,7 +103,7 @@
        DL(i,j) = DL(i,j) + v1(ii)*w1(jj)
        DV(i,j) = DV(i,j) + v2(ii)*w2(jj)
       End do;  End do
-     
+
       End Subroutine UPDATE_DW
 
 
@@ -130,7 +130,7 @@
        DL(i,j+1:j+ns) = DL(i,j+1:j+ns) + v1(1:ns)
        DV(i,j+1:j+ns) = DV(i,j+1:j+ns) + v2(1:ns)
       else
-       Stop ' UPDATE_DV: non-allowed combination of ich,jch' 
+       Stop ' UPDATE_DV: non-allowed combination of ich,jch'
       end if
 
       End Subroutine UPDATE_DV

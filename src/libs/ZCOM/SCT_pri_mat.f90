@@ -1,7 +1,7 @@
 !======================================================================
       Subroutine pri_matr(iout,ii,jj,n,m,R,A)
 !======================================================================
-!     print matrix R(n,m) with name A 
+!     print matrix R(n,m) with name A
 !----------------------------------------------------------------------
       Implicit none
       Integer, intent(in) :: iout,ii,jj,n,m

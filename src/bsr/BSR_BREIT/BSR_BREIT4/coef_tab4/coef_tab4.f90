@@ -4,10 +4,10 @@
 !               C O P Y R I G H T -- 2011
 !
 !     Written by:   Oleg Zatsarinny,   email: oleg_zoi@yahoo.com
-!                         
+!
 !======================================================================
 !     prints from unformated INT_BNK file to COEF.TAB file the integral
-!     coefficients for selected states in CFG.INP 
+!     coefficients for selected states in CFG.INP
 !----------------------------------------------------------------------
       Use param_br
       Use conf_LS
@@ -28,18 +28,18 @@
 
       Integer :: NNP(me),NNP1(me),NNP2(me), MP(me),MP1(me),MP2(me)
 
-      Integer, external :: IDET_SIMP1, Iadd_int, Iadd_ndet, Iadd_ndef, Def_ij 
+      Integer, external :: IDET_SIMP1, Iadd_int, Iadd_ndet, Iadd_ndef, Def_ij
 
       Real(8) :: C
- 
+
       Character(80) ::  name   = ' '
-      Character(80) ::  AF_cfg = 'cfg.inp';  Integer :: nuc = 1 
+      Character(80) ::  AF_cfg = 'cfg.inp';  Integer :: nuc = 1
       Character(80) ::  AF_bnk = 'int_inf';  Integer :: nub = 2
       Character(80) ::  AF_int = 'int_int';  Integer :: nui = 3
       Character(80) ::  AF_tab = 'coef.tab'; Integer :: nur = 4
-        
+
       iarg = command_argument_count()
-      if(iarg.gt.0) Call GET_COMMAND_ARGUMENT(1,name)      
+      if(iarg.gt.0) Call GET_COMMAND_ARGUMENT(1,name)
 
       if(iarg.lt.1.or.name.eq.'?') then
        write(*,*)
@@ -56,19 +56,19 @@
        write(*,*) 'int=...  -  bnk-file with coefficients [int_int]'
        write(*,*) 'tab=...  -  output tables [coef.tab]'
        write(*,*) 'jort={-1,0,1}  - orbital orthogonality mode:'
-       write(*,*) 'jort=-1  -  full orthogonality'  
-       write(*,*) 'jort= 0  -  full non-orthogonality'  
-       write(*,*) 'jort= 1  -  partial orthogonality, default'  
-       write(*,*) 'jc1=.. jc2=.. -  matrix-element index; [0,0] - all'  
-       write(*,*) 'oper=..  -   matrix-element index, as in the bsr_breit program'  
-       Stop 
+       write(*,*) 'jort=-1  -  full orthogonality'
+       write(*,*) 'jort= 0  -  full non-orthogonality'
+       write(*,*) 'jort= 1  -  partial orthogonality, default'
+       write(*,*) 'jc1=.. jc2=.. -  matrix-element index; [0,0] - all'
+       write(*,*) 'oper=..  -   matrix-element index, as in the bsr_breit program'
+       Stop
       end if
 
       if(LEN_TRIM(name).ne.0) then
-        AF_cfg = trim(name)//'.c'  
-        AF_bnk = trim(name)//'.int_inf'  
-        AF_tab = trim(name)//'.tab'  
-        AF_int = trim(name)//'.int_int'  
+        AF_cfg = trim(name)//'.c'
+        AF_bnk = trim(name)//'.int_inf'
+        AF_tab = trim(name)//'.tab'
+        AF_int = trim(name)//'.int_int'
       end if
       Call Read_aarg('c'  ,AF_cfg)
       Call Read_aarg('bnk',AF_bnk)
@@ -76,7 +76,7 @@
       Call Read_aarg('tab',AF_tab)
       jc1=0;   Call Read_iarg('jc1',jc1)
       jc2=0;   Call Read_iarg('jc2',jc2)
-      if(jc1.lt.jc2) then; i=jc1; jc1=jc2; jc2=i; end if 
+      if(jc1.lt.jc2) then; i=jc1; jc1=jc2; jc2=i; end if
       jort=-1; Call Read_iarg('jort',jort)
 
       oper='1110000'                                  ! ???
@@ -93,7 +93,7 @@
       Open(nui,file=AF_int,form='UNFORMATTED')
 
 ! ... cfg.inp file:
-      
+
       Call Check_file(AF_cfg)
       Open(nuc,file=AF_cfg)
 
@@ -112,7 +112,7 @@
 !                                                         determinants:
       Call Load_det(nub)
       Call Load_def(nub)
-      write(nur,*) 
+      write(nur,*)
       write(nur,*) 'ndet,kdet =',ndet,kdet
       write(nur,*) 'ndef,kdef =',ndef,kdef
 
@@ -140,11 +140,11 @@ write(*,*) 'ncbuf',ncbuf
       if(allocated(cbuf)) Deallocate(cbuf,k1,k2,k3,k4)
       Allocate(cbuf(ncbuf),k1(ncbuf),k2(ncbuf),k3(ncbuf),k4(ncbuf))
 
-      read(nui) cbuf 
-      read(nui) k1  
-      read(nui) k2  
-      read(nui) k3 
-      read(nui) k4 
+      read(nui) cbuf
+      read(nui) k1
+      read(nui) k2
+      read(nui) k3
+      read(nui) k4
 
       Do ibuf=1,ncbuf
 
@@ -153,8 +153,8 @@ write(*,*) 'ncbuf',ncbuf
       Call Decode_int(icase,kpol,I1,I2,I3,I4,int)
 
       Do ic1=1,ncfg; Do ic2=1,ic1
-       if(jc1.gt.0.and.jc1.ne.ic1) Cycle 
-       if(jc2.gt.0.and.jc2.ne.ic2) Cycle 
+       if(jc1.gt.0.and.jc1.ne.ic1) Cycle
+       if(jc2.gt.0.and.jc2.ne.ic2) Cycle
        it1 = IC_term(ic1)
        it2 = IC_term(ic2)
        m = 0
@@ -171,7 +171,7 @@ write(*,*) 'ncbuf',ncbuf
       else
        j1 = IP_orb(ip2+i1); j2 = IP_orb(ip2+i2)
        j3 = IP_orb(ip1+i3); j4 = IP_orb(ip1+i4)
-      end if	 
+      end if
 
       int = Iadd_int(icase,kpol,j1,j2,j3,j4)
 
@@ -208,20 +208,20 @@ write(*,*) 'ncbuf',ncbuf
        mm = IDET_SIMP1(kz,nd,NNP1,NNP2,mwf,IORT)
 
        if(mm.eq.1) Cycle; if(mm.eq.0) Exit
- 
-       MP(1:nd) = NNP1(1:nd)*ibd+NNP2(1:nd) 
+
+       MP(1:nd) = NNP1(1:nd)*ibd+NNP2(1:nd)
        jd = Iadd_ndet(nd,MP)
        md = md + 1; MP1(md) = jd; MP2(md) = iext
- 
+
       End do  ! over kd
       if(mm.eq.0) Cycle
 
        idf = 0
-       if(md.gt.0) then 
+       if(md.gt.0) then
         MP(1:md) = MP1(1:md)*ibf + MP2(1:md)
         idf = Iadd_ndef(md,MP)
        end if
-      
+
       end if   !  idf > 0
 
       C = cbuf(ibuf) * (-1)**(kz+kzz);  Call Add_rk4_data(int,idf,ic1,ic2,C)
@@ -237,8 +237,8 @@ write(*,*) 'ncbuf',ncbuf
 !----------------------------------------------------------------------
 !                                                        print results:
       Do ic1=1,ncfg; Do ic2=1,ic1
-       if(jc1.gt.0.and.jc1.ne.ic1) Cycle 
-       if(jc2.gt.0.and.jc2.ne.ic2) Cycle 
+       if(jc1.gt.0.and.jc1.ne.ic1) Cycle
+       if(jc2.gt.0.and.jc2.ne.ic2) Cycle
 
        it1 = IC_term(ic1)
        it2 = IC_term(ic2)
@@ -251,7 +251,7 @@ write(*,*) 'ncbuf',ncbuf
 
        Call PRI_COEF(nur,ic1,ic2,mo,mi,mso,mee,msoo,mss,moo)
 
-      End do; End do  
+      End do; End do
 
       End ! program COEF_TAB
 

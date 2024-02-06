@@ -1,11 +1,11 @@
 !======================================================================
       Subroutine Term_ic (ic,L,S)
 !======================================================================
-!     term of the state ic                   
+!     term of the state ic
 !----------------------------------------------------------------------
       Use conf_LS;  Use symc_list_LS;  Use symt_list_LS
 
-      Implicit none 
+      Implicit none
       Integer :: ic,L,S
 
       iterm=IC_term(ic)

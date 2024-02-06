@@ -122,7 +122,7 @@
       if(io_processor) then
        par(1)=i
        Call igebs2d (ctxt, 'all', ' ', 1, 1, par, 1)
-      else      
+      else
        Call igebr2d (ctxt, 'all', ' ', 1, 1, par, 1, 0, 0)
        i = par(1)
       end if
@@ -141,7 +141,7 @@
       if(io_processor) then
        par(1)=i
        Call dgebs2d (ctxt, 'all', ' ', 1, 1, par, 1)
-      else      
+      else
        Call dgebr2d (ctxt, 'all', ' ', 1, 1, par, 1, 0, 0)
        i = par(1)
       end if

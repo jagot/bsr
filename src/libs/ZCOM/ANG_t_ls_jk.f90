@@ -8,7 +8,7 @@
 !--------------------------------------------------------------------
       Implicit none
       Integer, intent(in) :: l1,l2,s1,s2,L,S,js,jk,J
-      Real(8), external :: Z_6j      
+      Real(8), external :: Z_6j
 
       T_LS_jk = Z_6j(L,s1,jk,s2,J,S) * Z_6j(l2,l1,L,s1,jk,js) * &
                 sqrt(1.d0*L*S*js*jk)* (-1)**((s2+J-l2-js)/2)
@@ -27,7 +27,7 @@
       Implicit none
       Integer, intent(in) :: l1,l2,s1,s2,L,S,j1,j2,J
       Integer :: k,k_min,k_max
-      Real(8), external :: Z_6j      
+      Real(8), external :: Z_6j
 
       T_LS_jj = 0.d0
       k_min = max(iabs(l2-j1),iabs(s2-J),iabs(L-s1))+1
@@ -54,7 +54,7 @@
 !--------------------------------------------------------------------
       Implicit none
       Integer, intent(in) :: l2,s2,j1,j2,K,J
-      Real(8), external ::  Z_6j2      
+      Real(8), external ::  Z_6j2
 
       T_jj_jk = Z_6j2(j1,l2,K,s2,J,j2) * sqrt(1.d0*(K+1)*(j2+1)) &
                 *(-1)**((j1+l2+s2+J)/2)

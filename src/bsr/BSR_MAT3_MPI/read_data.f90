@@ -28,7 +28,7 @@
       Open(nuc,file=AF_cfg,status='OLD')
 
 ! ... bnk-file:
- 
+
       i=LEN_TRIM(AF_bnk); AF_bnk(i-2:i)=ALSP
       Open(nub,file=AF_bnk,status='OLD',form='UNFORMATTED')
 
@@ -52,7 +52,7 @@
 
 !----------------------------------------------------------------------
 ! ... read configurations:
-           
+
       Call Read_conf(nuc,nub)
 
 ! ... read physical orbitals if they not in c-file:
@@ -97,14 +97,14 @@
 
 !----------------------------------------------------------------------
 ! ... read B-spline expantions for bound orbitals:
-   
+
       Call Allocate_bsorb(nwf)
       nbf = nwf
       Do i = 1,nbf
        ebs(i)=ELF(i); nbs(i)=NEF(i); lbs(i)=LEF(i); kbs(i)=KEF(i)
        iech(i)=ief(i); mbs(i) = 0
       End do
- 
+
 ! ... target radial functions:
 
       Open(nuw, file=AF_bsw, form='UNFORMATTED')
@@ -114,7 +114,7 @@
 ! ... perturber radial functions:
 
       if(nwp.gt.0) then
-       i=LEN_TRIM(AFP); 
+       i=LEN_TRIM(AFP);
        if(AFP(i-1:i).eq.'.c') i=i-2
        AF=AFP(1:i)//'.bsw'
        Call Check_file(AF)
@@ -122,12 +122,12 @@
        Call Read_bsw(nuw)
        Close(nuw)
       end if
-      
+
 ! ... correction of pertuber pointer:
 
       if(ncp.gt.0) ippert = ippert + ipconf(nch)
 
-! ... check the correspondence between c- and bsw-files: 
+! ... check the correspondence between c- and bsw-files:
 
       j = 0
       Do i = 1,nwf
@@ -138,7 +138,7 @@
        end if
       End do
       if(j.gt.0) Stop 'no correspondence between c- and w- files'
-      
+
 ! ... the < B | p > values (convolution with B matrix)
 
       Do i=1,nbf
@@ -173,7 +173,7 @@
       Call R_orth(nup)
       Do i=1,nwf; Do j=1,i
        IORT(j,i)=IORT(i,j); IBORT(i,j)=IORT(i,j); IBORT(j,i)=IORT(i,j)
-      End do; End do     
+      End do; End do
 
       Do i=1,nwf; ich=iech(i)
       Do j=1,nwf; jch=iech(j)
@@ -190,9 +190,9 @@
         IBORT(i,j) = i*ibo+j
        end if
       End do
-      End do 
-       
-! ... the < p | p > values 
+      End do
+
+! ... the < p | p > values
 
       OBS = 0.d0
       Do i=1,nbf; if(iech(i).ne.0) Cycle
@@ -208,4 +208,4 @@
       End do
 
       End Subroutine Read_data
-    
+

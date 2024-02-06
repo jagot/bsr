@@ -8,7 +8,7 @@
       Implicit none
 
       Real(8) :: atomic_number  = zero
-      Real(8) :: atomic_weight  = zero 
+      Real(8) :: atomic_weight  = zero
 
       Character(20) :: nuclear = 'Fermi'
 
@@ -58,7 +58,7 @@
 !======================================================================
 !     Set up the nuclear parameters in module DBS_nuclear
 !     z,awt - data from the calling program
-!     if they are zero - try to get them from file unit "nu" 
+!     if they are zero - try to get them from file unit "nu"
 !----------------------------------------------------------------------
       Use DBS_nuclear
 
@@ -70,7 +70,7 @@
 ! ... read parameters from file:
 
       if(nu.gt.0) then
-                                            
+
        Call Read_rpar(nu,'atomic_number',atomic_number)
        Call Read_rpar(nu,'atomic_weight',atomic_weight)
        Call Read_apar(nu,'nuclear',nuclear)
@@ -89,7 +89,7 @@
       if(an.lt.1.or.an.gt.104) Stop 'Stop in Read_nuclear:  Z out of range'
       Call Def_atom(an,atom,A,rms,core,conf)
 
-      if(atw.le.0.d0) atw = A 
+      if(atw.le.0.d0) atw = A
       if(rrms.eq.0.d0) rrms = rms
       if(rrms.lt.0.d0) then
        if(an.le.90)  then
@@ -105,7 +105,7 @@
        write(*,*) 'rrms is changed to 2.0 because GETCPR routine from GRASP'
        write(*,*) 'is nor working for small values of rrms'
        write(*,'(70("_")/)')
-      end if  
+      end if
 
       atomic_number = z
       atomic_weight = atw
@@ -154,12 +154,12 @@
        Z_nuclear = zero                                          ! ???
        if(r.le.0.0219)  Z_nuclear = Z       ! after GRASP
       elseif(nuclear.eq.'uniform') then     ! uniform distribution
-       ro_uniform = Z/(4*pi/3*b**3)        
+       ro_uniform = Z/(4*pi/3*b**3)
        Z_nuclear = zero
        if(r.le.b)  Z_nuclear = ro           ! ???
       elseif(nuclear.eq.'Fermi') then       ! Fermi distribution
        if(ro_fermi.eq.zero) Call  DEF_ro_fermi
-       Z_nuclear = ro_fermi/(one+exp((r-c)/a)) 
+       Z_nuclear = ro_fermi/(one+exp((r-c)/a))
       else
         Stop 'Z_nuclear: unknown charge distribution '
       end if

@@ -1,7 +1,7 @@
 !======================================================================
       Subroutine LAP_DGESV(m,n,k,A,B,info)
 !======================================================================
-!     Call LAPACK procedure DGESV to solve the system of algebraic 
+!     Call LAPACK procedure DGESV to solve the system of algebraic
 !     equations A x = B, results in B.
 !---------------------------------------------------------------------
       IMPLICIT NONE
@@ -14,10 +14,10 @@
 
       Allocate(IPIV(m))
 
-      Call DGESV( n,k, A, m, IPIV, B, m, INFO )    
- 
+      Call DGESV( n,k, A, m, IPIV, B, m, INFO )
+
       if(info.ne.0) write(*,*) ' DGESV(lapack) give INFO =',INFO
- 
+
       Deallocate(IPIV)
 
       End Subroutine LAP_DGESV

@@ -8,12 +8,12 @@
       Use DBS_gauss
       Use DBS_moments
       Use DBS_integrals
-      
+
       Implicit none
       Integer, intent(in) :: k
       Integer :: i,j, ii,jj, iv,jv, ih,jh, ihp,jhp, ip,jp, met
       Real(8) :: c
-   
+
 
 ! ... check the need of calculations
 
@@ -25,43 +25,43 @@
       if(stype.gt.0 .and. k.ge.krs_min .and. k.le.krs_max) then
        rkb => rks(:,:,:,:,k,1)
        if(isk(k,1) == 1) then
-        krk=k; itype = 'ppqq'; Return 
+        krk=k; itype = 'ppqq'; Return
        end if
        met = 0
       end if
 
-      if(met.eq.-1) then 
+      if(met.eq.-1) then
        if(jtype1.eq.0) Call alloc_Sk_integral(ns,ks)
        rkb => rks1(:,:,:,:)
        if(stype1.eq.'ppqq'.and.krs1.eq.k) then
         krk=k; itype = 'ppqq'; Return
-       end if 
+       end if
        met = 1
       end if
 
 ! ... compute the spline moments:
-   
+
       Call moments_pq(  k   ,kk,nv,rkd1)
       Call moments_pq(-(k+1),kk,nv,rkd2)
       Call diag_ppqq(k)
-  
+
 ! ... generate the rkb array
-   
+
       rkb=0.d0
-   
+
       DO jv = 1,nv;   jj = 0
       DO jh = 1,ksp;  j  = jv  + jh - 1
-      DO jhp= 1,ksq;  jp = jhp - jh + ks  
+      DO jhp= 1,ksq;  jp = jhp - jh + ks
                       jj = jj + 1
 
       DO iv = 1,jv;   ii = 0
       DO ih = 1,ksp;  i  = iv  + ih - 1
-      DO ihp= 1,ksq;  ip = ihp - ih + ks  
+      DO ihp= 1,ksq;  ip = ihp - ih + ks
                       ii = ii + 1
 
         IF( iv == jv ) THEN
           c =  rkd(ii,jj,iv)
-        ELSE         
+        ELSE
           c =  rkd1(ii,iv)*rkd2(jj,jv)
         END IF
 
@@ -69,10 +69,10 @@
 
       END DO;  END DO;  END DO
       END DO;  END DO;  END DO
-          
+
       if(met.eq.0) isk(k,1)=1
       if(met.eq.1) then; krs1=k; stype1 = 'ppqq'; end if
-      krk=k; itype = 'ppqq' 
+      krk=k; itype = 'ppqq'
 
       End Subroutine msk_ppqq
 
@@ -96,14 +96,14 @@
 !======================================================================
     Subroutine triang_ppqq (k,iv)
 !======================================================================
-!   Returns the two-dimensional array of B-spline integrals 
+!   Returns the two-dimensional array of B-spline integrals
 !               <B_i B_j|r^k/r^(k+1)|B_i' B_j'>
-!   over the given triangle diagonal cell 
+!   over the given triangle diagonal cell
 !
 !   On entry   iv  -  index of the diagonal cell
 !   --------
 !
-!   On exit    rkd(.,.,iv) - arrays of Rk B-spline integrals for given 
+!   On exit    rkd(.,.,iv) - arrays of Rk B-spline integrals for given
 !   --------                 interval iv in the reduced-dimension mode
 !
 !   Calls:   gauleg, zbsplvd
@@ -159,10 +159,10 @@
        gw(:) = gx(:)*bspTmp(:,j)
        Do jp=1,ksq; INTPQ(j,jp,m)= SUM(gw(:)*bspTmq(:,jp));  END DO
       End do
-    
+
     END DO     !  over m
 
-! .. second integration  
+! .. second integration
 
              gx(:) = grw(iv,:)*grm(iv,:)**(k+1)
 
@@ -173,7 +173,7 @@
              bi(:) = pbsp(iv,:,i)*qbsp(iv,:,ip)*gx(:)
 
     jj = 0;  DO j=1,ksp;  DO jp=1,ksq;  jj = jj+1
-    
+
              rkd(jj,ii,iv) =  SUM(bi(:)*INTPQ(j,jp,:))
 
              END DO; END DO

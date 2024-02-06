@@ -6,7 +6,7 @@
 !----------------------------------------------------------------------
       Implicit none
       Integer :: ib4=2**4, ib5=2**5, ib6=2**6
-      Integer, intent(in) :: met,k,I1,I2,I3,I4       
+      Integer, intent(in) :: met,k,I1,I2,I3,I4
       if(max(i1,i2,i3,i4).ge.ib5) Stop 'Incode_INT: i >= 2**5'
       if(met.gt.ib4) Stop 'Incode_INT: met >= 2**4'
       if(k.gt.ib6) Stop 'Incode_INT: met >= 2**6'
@@ -45,7 +45,7 @@
       Integer, Intent(in)  :: int
       Integer, Intent(out) :: met
 
-      met = int/ib20; met = mod(met,ib4) 
+      met = int/ib20; met = mod(met,ib4)
 
       End Subroutine Decode_met
 
@@ -59,7 +59,7 @@
 !           = 3  -  ???
 !----------------------------------------------------------------------
       Implicit none
-      Integer, intent(in) :: itype,i1,i2       
+      Integer, intent(in) :: itype,i1,i2
       Integer :: jb=2**10
 
       if(max(i1,i2).ge.jb) then
@@ -70,7 +70,7 @@
       if(itype.gt.3) then
        write(*,'(a,i5,a)')  &
                ' Incode_mult: itype =',itype,'  is out of range (>3)'
-       Stop 
+       Stop
       end if
 
       Incode_mult = (itype*jb+i1)*jb+i2
@@ -89,7 +89,7 @@
 !----------------------------------------------------------------------
       Implicit none
       Integer, Intent(in) :: int
-      Integer, Intent(out) :: itype,i1,i2 
+      Integer, Intent(out) :: itype,i1,i2
       Integer :: jb=2**10, k
 
       k  = int

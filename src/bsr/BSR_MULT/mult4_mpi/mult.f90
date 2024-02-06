@@ -9,7 +9,7 @@
 !
 !     The program evaluates MULTIPOLE operators in LS-coupling
 !     including the case of non-orthogonal orbitals
-!     
+!
 !     The used technique is described in:
 !
 !     Comp.Phys.Commun. 98 (1996) 235-254
@@ -17,11 +17,11 @@
 !======================================================================
 !
 !    INPUT ARGUMENTS:
-!    
+!
 !     AF1  -  c-file for initial state
 !     AF2  -  c-file for final state
 !     AA   -  type of calculation:  E1,M1,E2,M2,...
-! 
+!
 !     INPUT FILES:
 !
 !     AF1  -  c-file for initial state
@@ -54,12 +54,12 @@
        Allocate(ip_proc(nprocs)); ip_proc=0
       end if
 
-      t0 = MPI_WTIME()                                                           
+      t0 = MPI_WTIME()
 
 !----------------------------------------------------------------------
 ! ... read arguments from command line:
 
-      if(myid.eq.0) Call Read_arg;    Call br_arg   
+      if(myid.eq.0) Call Read_arg;    Call br_arg
 
 ! ... open log-file:
 
@@ -105,11 +105,11 @@
       Use def_list, only: ndef,ldef,jdef
       Use spin_orbitals, only: mls_max
 
-      Implicit none 
+      Implicit none
       Character :: AS*80, kt*1
       Integer :: nc, k, l
 
-      t1 = MPI_WTIME()                                                           
+      t1 = MPI_WTIME()
 
 !------------------------------------------------------------------
 ! ... read the configuration list:
@@ -125,14 +125,14 @@
       if(icalc.eq.0) Return
 
       Call MPI_BCAST(ne,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
- 
+
       if(myid.eq.0) then; Call Def_maxl(l);  mls_max=4*l+2; end if
 
       Call MPI_BCAST(mls_max,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
 
-      Call Alloc_spin_orbitals(ne)  
+      Call Alloc_spin_orbitals(ne)
 
-! ... extract old results: 
+! ... extract old results:
 
       if(myid.eq.0)   Call Read_dets(nub,new)
 
@@ -141,7 +141,7 @@
       if(myid.eq.0) then
        Open(nua,form='UNFORMATTED')
        Open(nud,form='UNFORMATTED')
-       Call Pre_det_exp 
+       Call Pre_det_exp
        Open(nui,form='UNFORMATTED')
       end if
 
@@ -154,7 +154,7 @@
 !----------------------------------------------------------------------------
 ! ... calculations for new angular symmetries:
 
-      if(myid.eq.0)     Call Conf_loop 
+      if(myid.eq.0)     Call Conf_loop
       if(myid.gt.0)     Call Conf_calc
 
       Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
@@ -173,7 +173,7 @@
       Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
 
       t2=MPI_wtime()
-      if(pri.gt.0) & 
+      if(pri.gt.0) &
       write(pri,'(a,F12.2,a)') 'time:',(t2-t0)/60,' min'
 
       End Subroutine MULT_calc
@@ -187,7 +187,7 @@
 
       Integer :: nub, new
 
-      if(new.eq.1) then 
+      if(new.eq.1) then
        Call Alloc_det(-1)
        Call Alloc_def(-1)
       else
@@ -220,8 +220,8 @@
       Call Write_symc_LS(nur)
       Call Write_symt_LS(nur)
 
-      Call Record_done_LS(nur)    
-  
+      Call Record_done_LS(nur)
+
       adet=ldet; adet=adet/ndet
       Call Write_det(nur)
       adef=ldef; adef=adef/ndef
@@ -235,30 +235,30 @@
 
       Close(in1); Close(in2); Close(nub); Close(nur)
       Close(nui,status='DELETE')
-      Close(nua,status='DELETE') 
-      Close(nud,status='DELETE') 
- 
+      Close(nua,status='DELETE')
+      Close(nud,status='DELETE')
 
-! ... move new results to data bank (inr_res -> int_bnk): 
- 
-      write(AS,'(a,1x,a,1x,a)') move,trim(AF_r),trim(AF_b)  
+
+! ... move new results to data bank (inr_res -> int_bnk):
+
+      write(AS,'(a,1x,a,1x,a)') move,trim(AF_r),trim(AF_b)
 
  write(pri,*) 'SYSTEM call: ', trim(AS)
 
       Call System(trim(AS))
-     
-  write(pri,*) 'closing files'
- 
-!      Close(nur,status='DELETE') 
 
-! ... print the main dimensions:      
+  write(pri,*) 'closing files'
+
+!      Close(nur,status='DELETE')
+
+! ... print the main dimensions:
 
       write(pri,'(/a/)') &
           ' Results for new angular symmetry calculations:'
       write(pri,'(a,i10,f10.1,i10)') &
           ' number of overlap determinants =', ndet,adet,ldet
       write(pri,'(a,i10,f10.1,i10)') &
-          ' number of overlap factors      =', ndef,adef,ldef 
+          ' number of overlap factors      =', ndef,adef,ldef
       write(pri,'(a,i10)') &
           ' new coeff.s                    =', nc
 

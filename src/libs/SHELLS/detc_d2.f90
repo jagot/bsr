@@ -1,29 +1,29 @@
 !=======================================================================
   Real(8) Function detc_d2 (id,it)
 !=======================================================================
-! coefficient for determinamt id and term it for subshell d2 
+! coefficient for determinamt id and term it for subshell d2
 !-----------------------------------------------------------------------
- 
+
   Implicit none
- 
+
   Integer, intent(in)  :: id,it
- 
+
   Integer, parameter :: kd_d2 =  45
   Integer, parameter :: nt_d2 =   5
- 
+
   Integer :: INT_d2 (kd_d2,nt_d2)
- 
+
   Integer :: Norm_d2  = 70
- 
+
   if(id.le.0.or.id.gt.kd_d2) Stop "detc_d2: index id is out of range"
   if(it.le.0.or.it.gt.nt_d2) Stop "detc_d2: index it is out of range"
- 
+
   detc_d2 = dfloat(INT_d2(id,it))/dfloat(Norm_d2)
- 
+
   detc_d2 = dsqrt(dabs(detc_d2))
- 
+
   if(INT_d2(id,it).lt.0) detc_d2=-detc_d2
- 
+
 
   Data INT_d2 (:,   1)/ &
       -14,        0,        0,        0,        0,        0,        0,        0,        0,        0,        0,        0, &
@@ -54,5 +54,5 @@
         0,       15,        0,       15,        0,      -40,        0,      -16,        0,      -35,        0,       -5, &
        16,        0,       35,        0,        5,        0,      -40,        0,       -5,        0,      -35,        5, &
         0,       35,        0,      -70,        0,       -1,        1,        0,      -70  /
- 
+
   End Function detc_d2

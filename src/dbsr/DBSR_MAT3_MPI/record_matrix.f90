@@ -1,9 +1,9 @@
 !======================================================================
-      Subroutine Record_matrix 
+      Subroutine Record_matrix
 !======================================================================
 !     record the overlap or Hamiltonian matrix to unit nui
 !----------------------------------------------------------------------
-      Use dbsr_mat      
+      Use dbsr_mat
 
       Implicit none
       Integer :: i, ni,nj, ip,jp, ich,jch
@@ -13,7 +13,7 @@
 
       Do ich = 2,nch;    ni=ipsol(ich)
       Do jch = 1,ich-1;  nj=ipsol(jch)
-       i=icc(ich,jch); if(i.eq.0) Cycle 
+       i=icc(ich,jch); if(i.eq.0) Cycle
        S = maxval(abs(hch(1:ni,1:nj,i)))
        if(S.lt.1.d-20) Cycle
        write(nui) ich,jch
@@ -34,7 +34,7 @@
        write(nui) ip+nch,ich
        write(nui) hcp(1:ni,i)
       End do; End do
-       
+
 ! ... perturter-perturber elements:
 
       Do ip = 1,npert; Do jp = 1,ip; i = ibb(ip,jp)

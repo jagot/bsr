@@ -32,9 +32,9 @@
 
       Call LAP_ZHEEV('V',nopen,nopen,Q,qval,info)
 
-! ... time-delay is equal to largest eigenvalue: 
+! ... time-delay is equal to largest eigenvalue:
 
-      tdvalue = qval(nopen)   
+      tdvalue = qval(nopen)
 
 ! ... decay mode is defined by corr. eigenvector:
 

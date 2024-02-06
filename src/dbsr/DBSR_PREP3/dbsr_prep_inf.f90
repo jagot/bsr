@@ -5,7 +5,7 @@
 !---------------------------------------------------------------------
       Implicit none
       Character ::  name = ' '
-      
+
       Call Read_name(name)
       if(name.ne.'?') Return
       write(*,'(a)') &
@@ -29,8 +29,8 @@
 '                                                                            ', &
 '  additional arguments JJ_min, JJ_max  can be used at nlsp=0 for generation ', &
 '  of possible partial waves                                                 ', &
-'                                                                            '   
-      Stop 
-                                                                             
-      End Subroutine dbsr_prep_inf                                             
+'                                                                            '
+      Stop
+
+      End Subroutine dbsr_prep_inf
 

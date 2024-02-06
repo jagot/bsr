@@ -1,7 +1,7 @@
 !=======================================================================
       Subroutine Conf_loop
 !=======================================================================
-!     run loop over configurations 
+!     run loop over configurations
 !-----------------------------------------------------------------------
 
       USE mult_par,      only: pri,nui,nud,ic,jc, kpol,ktype, &
@@ -19,12 +19,12 @@
       USE coef_list,    only: ntrm,ctrm
       USE zoef_list,    only: nzoef
 
-      Implicit none 
+      Implicit none
 
       Integer :: k1,k2,is,js, it,jt, ij, MLT1,MST1,MLT2,MST2, m,k
       Integer, external :: DEF_ij
 
-      Real(8) :: t1,t2, zero=0.d0,one=1.d0  
+      Real(8) :: t1,t2, zero=0.d0,one=1.d0
       Real(8), external :: Z_3j, Clebsh
 
       Character(80) :: conf
@@ -77,16 +77,16 @@
        read(nud) NNsym2(1:ne)
        read(nud) Lsym2(1:ne)
 
-       if(JC_need(DEF_ij(ic,jc)).eq.0) Cycle      
+       if(JC_need(DEF_ij(ic,jc)).eq.0) Cycle
 
 !----------------------------------------------------------------------
 ! ...  define number of terms:
 
        ntrm = 0
-       Do k1=1,kt1; it=IP_kt1(k1) 
-       Do k2=1,kt2; jt=IP_kt2(k2)  
+       Do k1=1,kt1; it=IP_kt1(k1)
+       Do k2=1,kt2; jt=IP_kt2(k2)
         if(ic.eq.jc.and.it.gt.jt) Cycle;  ntrm = ntrm + 1
-       End do; End do 
+       End do; End do
 
 !----------------------------------------------------------------------
 ! ...  joper and JT_oper:
@@ -95,14 +95,14 @@
        Allocate(JT_oper(ntrm),CT_oper(ntrm))
 
        k = 0; m = 0; JT_oper=0
-       Do k1=1,kt1; it=IP_kt1(k1) 
-       Do k2=1,kt2; jt=IP_kt2(k2)  
+       Do k1=1,kt1; it=IP_kt1(k1)
+       Do k2=1,kt2; jt=IP_kt2(k2)
         if(ic.eq.jc.and.it.gt.jt) Cycle;  k=k+1
-        ij=DEF_ij(it,jt) 
-        if(IT_done(ij).ne.0) Cycle 
+        ij=DEF_ij(it,jt)
+        if(IT_done(ij).ne.0) Cycle
         JT_oper(k) = 1
         m = m + 1
-       End do; End do 
+       End do; End do
 
        if(m.eq.0) Cycle
 
@@ -118,7 +118,7 @@
 
       if(ktype.eq.'E') then
        CNB = zero
-      else  
+      else
        CNB =  Z_3j(ILT1,-MLT1+2,2*kpol-1,MLT1-MLT2+1,ILT2,MLT2) &
 	        * (-1)**((ILT1-MLT1)/2) &
 	      		* Z_3j(IST1,-MST1+2,3,MST1-MST2+1,IST2,MST2) &
@@ -129,8 +129,8 @@
 
       if(abs(CNA)+abs(CNB).eq.zero) then; Call DEF_IC; Cycle; end if
 
-      if(CNA.ne.0.d0) CNA = one/CNA  
-      if(CNB.ne.0.d0) CNB = one/CNB  
+      if(CNA.ne.0.d0) CNA = one/CNA
+      if(CNB.ne.0.d0) CNB = one/CNB
 
 !----------------------------------------------------------------------
 ! ...  initial allocations for coefficients:
@@ -146,26 +146,26 @@
         Ssym1(1:ne)=IS_det1(1:ne,kd1)
 
         Call Det_mult1
- 
+
        Do kd2 = 1,kdt2
 
         k = 0; m = 0; nzoef = 0; CT_oper = 0.d0
-        Do k1=1,kt1; it=IP_kt1(k1) 
-        Do k2=1,kt2; jt=IP_kt2(k2)  
+        Do k1=1,kt1; it=IP_kt1(k1)
+        Do k2=1,kt2; jt=IP_kt2(k2)
          if(ic.eq.jc.and.it.gt.jt) Cycle
          k = k + 1
          CT_oper(k) = JT_oper(k)*C_det1(k1,kd1)*C_det2(k2,kd2)
          if(CT_oper(k).ne.0.d0) m=1
-        End do; End do 
+        End do; End do
 
         if(m.eq.0) Cycle
- 
+
         Msym2(1:ne)=IM_det2(1:ne,kd2)
         Ssym2(1:ne)=IS_det2(1:ne,kd2)
 
-        Call Det_mult2; Call Term_loop 
+        Call Det_mult2; Call Term_loop
 
-       End do 
+       End do
        End do
 
 ! ...  store results for given config.s:
@@ -190,7 +190,7 @@
 !======================================================================
 !     configuration conf from ZOI format to c-file format
 !----------------------------------------------------------------------
-      Use conf_LS, only: LTOTAL,STOTAL,no,nn,ln,iq,kn 
+      Use conf_LS, only: LTOTAL,STOTAL,no,nn,ln,iq,kn
 
       Implicit none
       Integer, Intent(in) :: ic

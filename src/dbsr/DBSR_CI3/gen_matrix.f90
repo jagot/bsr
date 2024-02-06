@@ -4,7 +4,7 @@
 !     generation of interaction and overlap matrices
 !     according to JNT_BNK
 !----------------------------------------------------------------------
-      Use dbsr_ci      
+      Use dbsr_ci
       Use conf_jj
       Use c_data
       Use det_list
@@ -22,7 +22,7 @@
 
 ! ... read overlap factors:
 
-      rewind(nub) 
+      rewind(nub)
       Call Read_symc(nub)
       Call Read_symt(nub)
       Call Read_done(nub)
@@ -48,7 +48,7 @@
 
        if(kpol.gt.mk) Cycle
 
-! ... determine the range of states for given coeff. 
+! ... determine the range of states for given coeff.
 
       C = CBUF(ibuf)
 
@@ -99,7 +99,7 @@
          if(abs(DF).lt.Eps_det) Exit
         End do
         if(abs(DF).lt.Eps_det) Cycle
-       end if 
+       end if
 
        CC = C * DF; if(abs(CC).lt.eps_C) Cycle
 
@@ -159,7 +159,7 @@
         write(nuo,'(2I8,2x,F13.5)') i,j,SM(i,j)
        End do
       End do
-      
+
       C = 5*eps_ovl
       write(pri,'(/a,f10.8/)') &
 	   'Non-normalized states: > 5*eps_ovl = ',C

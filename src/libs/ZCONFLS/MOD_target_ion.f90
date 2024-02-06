@@ -11,13 +11,13 @@
       Integer :: nphys	 !  number of physical states
       Integer :: nelc    !  number of atomic electrons
       Integer :: nz      !  atomic number
-      Integer :: nct	 !  total number of target config.s 
+      Integer :: nct	 !  total number of target config.s
       Integer :: nwt     !  total number of taget orbitals
 
-      Integer, allocatable :: istarg(:) !  (2*S+1) for target i 
-      Integer, allocatable :: ltarg(:)  !  total L 
+      Integer, allocatable :: istarg(:) !  (2*S+1) for target i
+      Integer, allocatable :: ltarg(:)  !  total L
       Integer, allocatable :: iptarg(:) !  parity (+-1)
-      Integer, allocatable :: jtarg(:)  !  (2*J+1) 
+      Integer, allocatable :: jtarg(:)  !  (2*J+1)
       REAL(8), allocatable :: etarg(:)  !  target energy in au
 
       Integer, allocatable :: nctarg(:) !  number of target configurations
@@ -35,12 +35,12 @@
 !======================================================================
       Subroutine allocate_target_ion(m)
 !======================================================================
-!     allocate (deallocate) space in module "target" 
+!     allocate (deallocate) space in module "target"
 !----------------------------------------------------------------------
       Use target_ion
 
       Implicit none
-      Integer, intent(in) :: m      
+      Integer, intent(in) :: m
 
       if(m.le.0) then
        if(allocated(istarg)) Deallocate(istarg,ltarg,iptarg,jtarg, &
@@ -64,15 +64,15 @@
 !======================================================================
       Subroutine R_target_ion(nut)
 !======================================================================
-!     read from file 'nut' target information 
+!     read from file 'nut' target information
 !----------------------------------------------------------------------
-      Use target_ion 
-      
+      Use target_ion
+
       Implicit none
       Integer, intent(in) :: nut
       Character(20) :: AF
       Integer :: i
- 
+
       Call Read_ipar(nut,'nelc',nelc)
       Call Read_ipar(nut,'nz',nz)
       Call Read_ipar(nut,'nphys',nphys)
@@ -81,19 +81,19 @@
 
       if(ntarg.le.0) Stop 'R_targ: ntarg <= 0 '
       i = ntarg; Call Allocate_target_ion(i)
-        
+
       Call Read_ipar(nut,'nwt',nwt)
       Call Read_ipar(nut,'ntarg',ntarg)
 
       nct = 0
-      read(nut,*) 
+      read(nut,*)
       Do i=1,ntarg
        read(nut,*) BFT(i),AFT(i),ltarg(i),istarg(i),iptarg(i),etarg(i), &
                    nctarg(i),nwtarg(i)
        nct=nct+nctarg(i)
 !       nwt=nwt+nwtarg(i)
        ictarg(i) = nct
-       jtarg(i)=0; if(istarg(i).eq.0) jtarg(i)=ltarg(i)+1 
+       jtarg(i)=0; if(istarg(i).eq.0) jtarg(i)=ltarg(i)+1
       End do
 
       End Subroutine R_target_ion

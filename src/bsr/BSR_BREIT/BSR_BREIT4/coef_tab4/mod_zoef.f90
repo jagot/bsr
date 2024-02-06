@@ -10,8 +10,8 @@
       Integer(4) :: nzoef = 0       ! number of determinants
       Integer(4) :: mzoef = 0       ! current dimentsion of list
       Integer(4) :: izoef = iszoef  ! supposed max. dimentsion
-    
-      Integer(4), Allocatable, Dimension(:) :: IZ_int,IZ_df   
+
+      Integer(4), Allocatable, Dimension(:) :: IZ_int,IZ_df
       Real(8), Allocatable, Dimension(:) :: Zoef
 
       End MODULE ZOEF_list
@@ -84,7 +84,7 @@
 ! ... add new integral:
 
       if(Nzoef.eq.mzoef) Call Alloc_zoef(mzoef+izoef)
-      Nzoef = Nzoef+1 
+      Nzoef = Nzoef+1
       Zoef(Nzoef)=C; IZ_int(Nzoef)=int; IZ_DF(Nzoef)=idf
 
       End Subroutine Iadd_zoef

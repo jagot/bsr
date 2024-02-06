@@ -12,7 +12,7 @@
 !
 !---------------------------------------------------------------------
 
-      Implicit none 
+      Implicit none
       Integer, intent(in ) :: l,q,id
 	     Integer, intent(out) :: ML, MS, Idet(q)
       Integer :: i,j,k,nd,nq
@@ -30,7 +30,7 @@
        if(id.gt.1) Call DET_LS_stop(l,q,id)
        ML=1; MS=1; Do i=1,q; Idet(i)=i; End do
 
-      elseif(q.eq.4*l+1) then                          ! one-electron vacancy 
+      elseif(q.eq.4*l+1) then                          ! one-electron vacancy
        if(id.gt.4*l+2) Call DET_LS_stop(l,q,id)
        ML=-ML_id(id)+2; MS=-MS_id(id)+2
        k=0
@@ -56,32 +56,32 @@
          ML=ML_id(i)+ML_id(j)-1; MS=MS_id(i)+MS_id(j)-1
         End Select
 
-      else             
+      else
         Select case(l)
-         case(1);   
+         case(1);
                        if(q.eq.3) Call Det_p3(id,ML,MS,Idet)
                        if(q.eq.4) Call Det_p4(id,ML,MS,Idet)
-         case(2);      
+         case(2);
                        if(q.eq.3) Call Det_d3(id,ML,MS,Idet)
                        if(q.eq.4) Call Det_d4(id,ML,MS,Idet)
                        if(q.eq.5) Call Det_d5(id,ML,MS,Idet)
                        if(q.eq.6) Call Det_d6(id,ML,MS,Idet)
                        if(q.eq.7) Call Det_d7(id,ML,MS,Idet)
                        if(q.eq.8) Call Det_d8(id,ML,MS,Idet)
-         case(3);      
+         case(3);
                        if(q.eq.3) Call Det_f3(id,ML,MS,Idet)
                        if(q.eq.4) Call Det_f4(id,ML,MS,Idet)
          case default
                        Call Det_LS_stop (l,q,id)
         End Select
-       end if     
+       end if
 
       End  Subroutine  DET_sh_LS
 
 
 !======================================================================
       Subroutine DET_LS_stop (l,q,id)
-!======================================================================       
+!======================================================================
 
       Integer, Intent(in) :: l,q,id
 

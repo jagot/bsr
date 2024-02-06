@@ -1,7 +1,7 @@
 !=====================================================================
       Module term_LS
 !=====================================================================
-!     description of involved terms 
+!     description of involved terms
 !     ROUTINES:  alloc_term_LS
 !                ifind_term()
 !---------------------------------------------------------------------
@@ -15,23 +15,23 @@
       Integer, allocatable :: ISterm(:)   ! total S
 
       Integer :: ncfgt = 0
-      Integer, allocatable :: LSP(:)      ! term pointer 
+      Integer, allocatable :: LSP(:)      ! term pointer
 
 ! ... first copy:
 
-      Integer :: nterm1 =  0      
-      Integer, allocatable :: ILterm1(:)  
-      Integer, allocatable :: ISterm1(:)  
+      Integer :: nterm1 =  0
+      Integer, allocatable :: ILterm1(:)
+      Integer, allocatable :: ISterm1(:)
       Integer :: ncfgt1 = 0
-      Integer, allocatable :: LSP1(:)   
+      Integer, allocatable :: LSP1(:)
 
 ! ... second copy:
 
-      Integer :: nterm2 =  0      
-      Integer, allocatable :: ILterm2(:)  
-      Integer, allocatable :: ISterm2(:)  
+      Integer :: nterm2 =  0
+      Integer, allocatable :: ILterm2(:)
+      Integer, allocatable :: ISterm2(:)
       Integer :: ncfgt2 = 0
-      Integer, allocatable :: LSP2(:)   
+      Integer, allocatable :: LSP2(:)
 
 ! ... DJ-factors
 
@@ -104,7 +104,7 @@
       if(job.eq.1) then
        write(*,'(a,a,5i5)') 'Ifind_term can not find the term:',&
                             ' L,S = ',L,S
-       Stop 
+       Stop
       end if
 
       if(nterms.ge.mterms) Call Alloc_term_LS(mterms+iterms)
@@ -130,9 +130,9 @@
       ILterm1 = ILterm(1:nterm1)
       ISterm1 = ISterm(1:nterm1)
 
-      if(ncfgt.eq.0) Return 
+      if(ncfgt.eq.0) Return
       if(allocated(LSP1)) Deallocate(LSP1)
-      ncfgt1=ncfgt 
+      ncfgt1=ncfgt
       Allocate(LSP1(ncfgt1))
       LSP1 = LSP(1:ncfgt1)
 
@@ -153,9 +153,9 @@
       ILterm2 = ILterm(1:nterm2)
       ISterm2 = ISterm(1:nterm2)
 
-      if(ncfgt.eq.0) Return 
+      if(ncfgt.eq.0) Return
       if(allocated(LSP2)) Deallocate(LSP2)
-      ncfgt2=ncfgt 
+      ncfgt2=ncfgt
       Allocate(LSP2(ncfgt2))
       LSP2 = LSP(1:ncfgt2)
 

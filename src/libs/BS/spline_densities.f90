@@ -1,7 +1,7 @@
-!====================================================================    
+!====================================================================
       MODULE spline_densities
 !====================================================================
-!     contains symmetric (lower-band column storage mode) 
+!     contains symmetric (lower-band column storage mode)
 !     and non-symmetric densities for two orbitals
 !--------------------------------------------------------------------
       IMPLICIT NONE
@@ -30,11 +30,11 @@
          Stop 'make_density: orbital is out of range'
 
       if(sym.eq.'s') then
-                                             
+
        if(ids.eq.io.and.jds.eq.jo) Return
 
        do i=1,ns;  ds(i,ks) = pbs(i,io)*pbs(i,jo); end do                                                                              !     o*
-       do j = 1,ks-1                           
+       do j = 1,ks-1
         do i = ks+1-j,ns
          ds(i,j) =  pbs(i,io)*pbs(i+j-ks,jo) + pbs(i+j-ks,io)*pbs(i,jo)
         end do

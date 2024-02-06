@@ -3,17 +3,17 @@
 !====================================================================
 !     core-associated  parameters for core energy
 !--------------------------------------------------------------------
-      Implicit none 
-    
+      Implicit none
+
       Integer :: nbk = 0       ! current number of coefficients
       Integer :: mbk = 0       ! maximum dimension
       Integer :: ibk = 2**10   ! initial dimension
-      Integer :: ibi = 2**15   ! packing basis 
+      Integer :: ibi = 2**15   ! packing basis
       Real(8) :: eps_c = 1.d-10
 
 ! ... coefficients and their attributes:
 
-      Real(8), allocatable :: cbk(:)   
+      Real(8), allocatable :: cbk(:)
       Integer, allocatable :: kr1(:),kr2(:),kr3(:),kr4(:)
 
       End Module DBS_core_energy
@@ -33,7 +33,7 @@
 
       if(m.le.0) then
        if(allocated(cbk)) Deallocate (cbk,kr1,kr2,kr3,kr4)
-       nbk = 0; mbk = 0 
+       nbk = 0; mbk = 0
       elseif(.not.allocated(cbk)) then
        mbk = m; nbk = 0
        Allocate(cbk(mbk),kr1(mbk),kr2(mbk),kr3(mbk),kr4(mbk))
@@ -62,7 +62,7 @@
 !======================================================================
       Subroutine Add_core_coef(int,kpol,i1,i2,i3,i4,C)
 !======================================================================
-!     add new data to the list 
+!     add new data to the list
 !----------------------------------------------------------------------
       Use DBS_core_energy
 
@@ -73,12 +73,12 @@
 
       if(mbk.eq.0) Call Alloc_core_coefs(ibk)
 
-      k1=int; k2=kpol; k3=i1*ibi+i3; k4=i2*ibi+i4 
+      k1=int; k2=kpol; k3=i1*ibi+i3; k4=i2*ibi+i4
 
 ! ... search position (k) for new integral
 
       k=1; l=nbk
-    1 if(k.gt.l) go to 2              
+    1 if(k.gt.l) go to 2
       m=(k+l)/2
       if    (k1.lt.kr1(m)) then;       l = m - 1
       elseif(k1.gt.kr1(m)) then;       k = m + 1
@@ -99,7 +99,7 @@
        end if
       end if
       go to 1
-    2 Continue 
+    2 Continue
 
 ! ... shift the rest data up:
 
@@ -112,7 +112,7 @@
 ! ... add new integral:
 
       cbk(k)=C; kr1(k)=k1; kr2(k)=k2; kr3(k)=k3; kr4(k)=k4; nbk=nbk+1
-      if(nbk.eq.mbk) Call Alloc_core_coefs(mbk+ibk) 
+      if(nbk.eq.mbk) Call Alloc_core_coefs(mbk+ibk)
 
       End Subroutine Add_core_coef
 
@@ -138,32 +138,32 @@
 
        Call Add_core_coef(0,0,i,i,i,i,ca)
 
-       C=ca*ja/two;  k=0;  Call Add_core_coef(1,k,i,i,i,i,C) 
+       C=ca*ja/two;  k=0;  Call Add_core_coef(1,k,i,i,i,i,C)
                            Call Add_core_coef(2,k,i,i,i,i,C)
                            Call Add_core_coef(3,k,i,i,i,i,C)
                            Call Add_core_coef(4,k,i,i,i,i,C)
        Do k = 2,2*la,2
         C = -Cjkj(ja,k,ja)**2 / two
-        Call Add_core_coef(1,k,i,i,i,i,C) 
-        Call Add_core_coef(2,k,i,i,i,i,C) 
-        Call Add_core_coef(3,k,i,i,i,i,C) 
-        Call Add_core_coef(4,k,i,i,i,i,C) 
+        Call Add_core_coef(1,k,i,i,i,i,C)
+        Call Add_core_coef(2,k,i,i,i,i,C)
+        Call Add_core_coef(3,k,i,i,i,i,C)
+        Call Add_core_coef(4,k,i,i,i,i,C)
        End do
 
        Do j=i+1,ncore
         kb=kbs(j); jb=j_kappa(kb); lb=l_kappa(kb); cb=jb+1
 
-        C=ca*cb; k=0; Call Add_core_coef(1,k,i,j,i,j,C) 
+        C=ca*cb; k=0; Call Add_core_coef(1,k,i,j,i,j,C)
                       Call Add_core_coef(2,k,i,j,i,j,C)
                       Call Add_core_coef(3,k,i,j,i,j,C)
                       Call Add_core_coef(4,k,i,j,i,j,C)
 
         Do k = iabs(la-lb),la+lb,2
-         C = -Cjkj(ja,k,jb)**2 
+         C = -Cjkj(ja,k,jb)**2
          Call Add_core_coef(1,k,i,j,j,i,C)
-         Call Add_core_coef(2,k,i,j,j,i,C) 
-         Call Add_core_coef(3,k,i,j,j,i,C) 
-         Call Add_core_coef(4,k,i,j,j,i,C) 
+         Call Add_core_coef(2,k,i,j,j,i,C)
+         Call Add_core_coef(3,k,i,j,j,i,C)
+         Call Add_core_coef(4,k,i,j,j,i,C)
         End do
 
       End do; End do
@@ -217,11 +217,11 @@
       if(nbk.eq.0) Call Get_core_coef (ncore,mbreit,kbs)
 
 ! ... evaluate the integrals:
-  
-      Do i = 1,nbk; int=kr1(i); k=kr2(i)  
+
+      Do i = 1,nbk; int=kr1(i); k=kr2(i)
        if(abs(cbk(i)).lt.eps_C) Cycle
-       i1=kr3(i)/ibi; i2=mod(kr3(i),ibi)      
-       j1=kr4(i)/ibi; j2=mod(kr4(i),ibi)      
+       i1=kr3(i)/ibi; i2=mod(kr3(i),ibi)
+       j1=kr4(i)/ibi; j2=mod(kr4(i),ibi)
        Ecore_dbs = Ecore_dbs + cbk(i)*zint_pq(int,i1,j1,i2,j2,k)
       End do
       End Function Ecore_dbs

@@ -25,6 +25,6 @@
        Call Recup_jj_shells
 
       End do
- 
+
       End  Subroutine get_tr_coefs
 

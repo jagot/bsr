@@ -1,11 +1,11 @@
 !======================================================================
       Subroutine Check_det(kdn,N1,N2,iext)
 !======================================================================
-!     Expend the total overlap determinants so that to extract 
+!     Expend the total overlap determinants so that to extract
 !     matrix elements with continuum orbitals.
 !     Converted overlaps are stored in module new_dets with Iadd_ndets.
 !----------------------------------------------------------------------
-      Use spline_orbitals, only: iech, ebs 
+      Use spline_orbitals, only: iech, ebs
       Use conf_LS,         only: ne
 
       Implicit none
@@ -13,7 +13,7 @@
       Integer, intent(in) :: N1(kdn),N2(kdn)
       Integer :: N3(ne),N4(ne),N5(ne),N6(ne)
       Integer :: i,j, j1,j2,j3,j4, io,jo, kdn1,kdn2
-      Real(8) :: S      
+      Real(8) :: S
       Real(8), external :: VDET
       Integer, external :: IBORT
 
@@ -32,12 +32,12 @@
       if(j1.eq.0.and.j2.eq.0) then               ! no cont.orb
 
        S = VDET(kdn,N1,N2)**iext
-       Call Iadd_ndets(0,0,S)  
+       Call Iadd_ndets(0,0,S)
 
       elseif(kdn.eq.1) then                      ! <kl|nl>
 
        if(iext.gt.1) Stop ' Check_det: iext > 1'
-          
+
        io=IBORT(N1(1),N2(1))
 
        if(io.ne.0) Call Iadd_ndets(io,0,1.d0)
@@ -47,7 +47,7 @@
        if(iext.gt.1) Stop ' Check_det: iext > 1'
 
         Do j=1,kdn
-         io=IBORT(N1(j1),N2(j))        
+         io=IBORT(N1(j1),N2(j))
          if(io.eq.0) Cycle
          Call Shift(kdn,j1,N1,N3)
          Call Shift(kdn,j ,N2,N4)
@@ -61,7 +61,7 @@
         if(iext.gt.1) Stop ' Check_det: iext > 1'
 
          Do j=1,kdn
-          io=IBORT(N1(j),N2(j2))        
+          io=IBORT(N1(j),N2(j2))
           if(io.eq.0) Cycle
           Call Shift(kdn,j ,N1,N3)
           Call Shift(kdn,j2,N2,N4)
@@ -115,7 +115,7 @@
 !======================================================================
 !     N2 obtained from N1 by deleting element 'm'
 !----------------------------------------------------------------------
-      Implicit none 
+      Implicit none
       Integer, intent(in)  :: n,m, N1(n)
       Integer, intent(out) :: N2(n)
       Integer :: i,k

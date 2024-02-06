@@ -1,47 +1,47 @@
 !======================================================================
       Module c_data
 !======================================================================
-! ... contains a set of coefficients with four identifiers 
+! ... contains a set of coefficients with four identifiers
 ! ... (k1,k2,k3,k4) and one pointer (ipt), devided in blocks;
-! ... each block contain data for given multipole and type   
+! ... each block contain data for given multipole and type
 !
 ! ... internal procedures: Alloc_c_data (mm)
 !                          Add_coef     (kpol,itype,C,j1,j2,j3,j4)
 !                          Add_cdata    (ip,jp,C,j1,j2,j3,j4)
 !                          Add_matrix   (jtype,jpol)
 !                          Merge_cdata  (nn, ip, jp, nc)
-! ... external calls:      RK_evaluate  (jtype,jpol) 
+! ... external calls:      RK_evaluate  (jtype,jpol)
 !----------------------------------------------------------------------
-      Implicit none 
+      Implicit none
 
       Integer :: ncdata = 0               ! number of coefficients:
-      Real(8), allocatable :: CDATA(:)    ! their values 
+      Real(8), allocatable :: CDATA(:)    ! their values
                                           ! their attributes:
       Integer, allocatable :: K1(:),K2(:),K3(:),K4(:),IPT(:)
 
 ! ... default dimension limits:
 
       Integer :: mk    =      7     ! max. multipole index
-      Integer :: nb    =   5000     ! number of blocks in c_data       
+      Integer :: nb    =   5000     ! number of blocks in c_data
       Integer :: mb    =   1000     ! size of blocks
       Integer :: kb    =    100     ! max.nb for given case
 
-      Real(8) :: eps_c    = 1.0D-10 !  tolerance for coefficients	                               
+      Real(8) :: eps_c    = 1.0D-10 !  tolerance for coefficients
 
-! ... pointer on first(last) element in given block 
+! ... pointer on first(last) element in given block
 
-      Integer, allocatable :: ipblk(:), ipi(:)   
-      Integer, allocatable :: jpblk(:), ipj(:)  
+      Integer, allocatable :: ipblk(:), ipi(:)
+      Integer, allocatable :: jpblk(:), ipj(:)
 
 ! ... current block for given kpol and itype:
 
-      Integer, allocatable :: iblk(:,:)    
+      Integer, allocatable :: iblk(:,:)
 
-! ... number of blocks for given kpol and itype: 
+! ... number of blocks for given kpol and itype:
 
       Integer, allocatable :: nblk(:,:)
-    
-! ... chain ponter for given kpol and itype:       
+
+! ... chain ponter for given kpol and itype:
 
       Integer, allocatable :: kblk(:,:,:)
 
@@ -49,9 +49,9 @@
 
       Integer, parameter :: ntype =  6  ! 4-Rk and 2-Sk integrals
       Integer, parameter :: ibi = 2**15 ! packing basis for orbitals
-      Integer :: kpol1  =  0            !  min. multipole index                   
-      Integer :: kpol2  =  0            !  max. multipole index                   
-    
+      Integer :: kpol1  =  0            !  min. multipole index
+      Integer :: kpol2  =  0            !  max. multipole index
+
       End Module c_data
 
 
@@ -90,7 +90,7 @@
 
       if(i.gt.nb/2) &
        Stop 'Stop in alloc_c_data: increase nb parameter in c_data'
-	        
+
       End Subroutine Alloc_c_data
 
 
@@ -106,8 +106,8 @@
 
 ! ... add coefficient to list:
 
-      i = iblk(kpol,itype); ip = ipblk(i); jp = jpblk(i) 
-      Call Add_cdata(ip,jp,C,j1,j2,j3,j4)                    
+      i = iblk(kpol,itype); ip = ipblk(i); jp = jpblk(i)
+      Call Add_cdata(ip,jp,C,j1,j2,j3,j4)
       jpblk(i) = jp
 
 ! ... check if the block full:
@@ -127,7 +127,7 @@
       End do
       if(m.ne.0) Return
       end if
-     
+
 ! ... everything is full - it is time to generate matrix:
 
       jtype=itype; jpol=kpol; n = nblk(kpol,itype)
@@ -149,8 +149,8 @@
        m = 1; Exit
       End do
       if(m.eq.0) Stop ' Add_coef: problems with new block '
-      
-      End Subroutine Add_coef 
+
+      End Subroutine Add_coef
 
 
 !======================================================================
@@ -170,12 +170,12 @@
        cdata(ip)=C; k1(ip)=j1; k2(ip)=j2; k3(ip)=j3; k4(ip)=j4
        jp=ip
 	      Return
-      end if       
+      end if
 
 ! ... search position (k) for new integral
 
       k=ip; l=jp;
-    1 if(k.gt.l) go to 2              
+    1 if(k.gt.l) go to 2
       m=(k+l)/2
       if    (j1.lt.K1(m)) then;       l = m - 1
       elseif(j1.gt.K1(m)) then;       k = m + 1
@@ -195,7 +195,7 @@
        end if
       end if
       go to 1
-    2 Continue 
+    2 Continue
 
 ! ... shift the rest of data up:
 
@@ -217,7 +217,7 @@
 !======================================================================
 !     merge data and generate the interaction matrix for given type
 !     jtype and mutipole index jpol
-!     Call(s):  RK_data1 
+!     Call(s):  RK_data1
 !----------------------------------------------------------------------
       Use c_data, nc => ncdata
 
@@ -226,13 +226,13 @@
       Integer :: i,j,k,n
 
 ! ... prepare the data:
-       
+
       n = nblk(jpol,jtype)          ! number of blocks
       i = kblk(jpol,jtype,1)        ! first block
       if(n.eq.1.and.jpblk(i).le.0) n=0
 
       if(n.eq.0) then          ! nothing to do
-       Return  
+       Return
 
       elseif(n.eq.1) then      ! simple case - one block
 
@@ -240,17 +240,17 @@
        j = ipblk(i)-1
        Do i = 1,nc;  IPT(i)=j+i;  End do
 
-      else                      ! need merging data from 
+      else                      ! need merging data from
                                 ! different blocks
-       Do i = 1,n               
+       Do i = 1,n
         j = kblk(jpol,jtype,i)
-        ipi(i) = ipblk(j)  
+        ipi(i) = ipblk(j)
         ipj(i) = jpblk(j)
        End do
 
        Call Merge_cdata(n, ipi, ipj, nc)
 
-! ... release the blocks:       
+! ... release the blocks:
 
        Do i=1,n; jpblk(kblk(jpol,jtype,i))=-1;  End do
 
@@ -263,7 +263,7 @@
 
 ! ... generate matrix:
 
-      Call Rk_evaluate(jpol,jtype) 
+      Call Rk_evaluate(jpol,jtype)
 
       End Subroutine Add_matrix
 
@@ -279,7 +279,7 @@
 !     nc    - number of result coeff's
 !     EPS_c - all coefficients < EPS_c are ignored
 !----------------------------------------------------------------------
-      Use c_data 
+      Use c_data
 
       Implicit none
       Integer :: nn,nc,ip(nn),jp(nn),i,ii, j,jj, m,mm
@@ -294,7 +294,7 @@
 ! ... main loop ...
 
     1 Continue
-                             
+
 ! ... compare integrals in different blocks and merge the coefficients
 ! ... in case of equal integrals
 
@@ -309,7 +309,7 @@
        End do
       End do
 
-! ... choose the minimum K1, then K2, then K3, then K4 
+! ... choose the minimum K1, then K2, then K3, then K4
 
       j=IP(mm)
       Do m=1,nn
@@ -328,7 +328,7 @@
        end if
       End do
 
-! ... mark the chosen coefficient 
+! ... mark the chosen coefficient
 
       if(abs(CDATA(IP(mm))).gt.Eps_C) then
         nc=nc+1; IPT(nc)=IP(mm)

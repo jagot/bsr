@@ -8,12 +8,12 @@
 
       Implicit none
       Integer :: myid,ierr
-      
+
       Call MPI_COMM_RANK(MPI_COMM_WORLD, myid, ierr)
 
       Call MPI_BCAST(mwf,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
       Call MPI_BCAST(nwf,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-    
+
       if(myid.ne.0) then
        if(allocated(NEF)) Deallocate(NEF,LEF,KEF,IEF,ELF)
        Allocate(NEF(mwf),LEF(mwf),KEF(mwf),IEF(mwf),ELF(mwf))

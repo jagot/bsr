@@ -3,39 +3,39 @@
 !====================================================================
 !     contains a set of coefficients with four identifiers
 !     (k1,k2,k3,k4) and one pointer (ipt)
-!     other arrays define the decomposition of coefficients into 
-!     blocks according corresponding integral type 
+!     other arrays define the decomposition of coefficients into
+!     blocks according corresponding integral type
 !--------------------------------------------------------------------
       Use bsr_mat
 
-      Implicit none 
+      Implicit none
       Integer :: ncdata = 0                 ! number of coefficients
-      Real(8), allocatable :: CDATA(:)      ! coefficients    
-    
+      Real(8), allocatable :: CDATA(:)      ! coefficients
+
 ! ... their attributes:
 
       Integer, allocatable :: K1(:),K2(:),K3(:),K4(:),IPT(:)
 
-! ... the data are divided on blocks: 
+! ... the data are divided on blocks:
 
       Integer :: nblocks =  0       !  number of blocks
       Integer :: mblocks =  0       !  size of blocks
       Integer :: kblocks =  0       !  number of blocks for one type
 
-! ... pointer on first(last) element in given block 
+! ... pointer on first(last) element in given block
 
-      Integer, allocatable :: ipblk(:), ipi(:)   
-      Integer, allocatable :: jpblk(:), ipj(:)  
+      Integer, allocatable :: ipblk(:), ipi(:)
+      Integer, allocatable :: jpblk(:), ipj(:)
 
 ! ... current block for given type and multipole:
 
-      Integer, allocatable :: iblk(:,:)    
+      Integer, allocatable :: iblk(:,:)
 
-! ... number of blocks for given type and multipole: 
+! ... number of blocks for given type and multipole:
 
       Integer, allocatable :: nblk(:,:)
-    
-! ... ponter for chain of blocks for given type:       
+
+! ... ponter for chain of blocks for given type:
 
       Integer, allocatable :: kblk(:,:,:)
 
@@ -47,10 +47,10 @@
 
       Integer, parameter :: ibi = 2**15 ! packing basis for orbitals
 
-      Integer :: icase =  0     !  current case    
-      Integer :: itype =  0     !  current structure    
-      Integer :: kpol  =  0     !  current multipole index                   
-    
+      Integer :: icase =  0     !  current case
+      Integer :: itype =  0     !  current structure
+      Integer :: kpol  =  0     !  current multipole index
+
 ! ... IJCASE  -  correspondence between icase and itype
 
       Integer IJCASE(ntype)  /2,1,2,1,2,1,2,3,4/
@@ -63,8 +63,8 @@
 
       Real(8) :: timeg (ntype)
       Integer :: ibcoef(ntype)
-      Real(8) :: Tadd=0.d0, Tcoef=0.d0, Tmerge=0.d0 
- 
+      Real(8) :: Tadd=0.d0, Tcoef=0.d0, Tmerge=0.d0
+
       End MODULE cmdata
 
 
@@ -75,7 +75,7 @@
 !----------------------------------------------------------------------
       Use cmdata
       Use bsr_mat, only: nb,mb,kb
-   
+
       m=nb*mb;  nblocks=nb; mblocks=mb; kblocks=kb
 
       if(m.eq.0) then
@@ -94,7 +94,7 @@
                 iblk(-1:npol,ntype),nblk(-1:npol,ntype), &
                 kblk(-1:npol,ntype,nb) )
       end if
-	        
+
       End Subroutine Allocate_cmdata
 
 
@@ -122,4 +122,4 @@
       End do
 
       End Subroutine Initilize_cmdata
-     
+

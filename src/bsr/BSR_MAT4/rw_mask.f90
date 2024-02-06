@@ -20,7 +20,7 @@
 
 ! ... overlap matrix:
 
-      Do 
+      Do
        read(nud) ich,jch,ii
        write(nui) ich,jch,ii
        if(ich.le.0) Exit
@@ -31,16 +31,16 @@
 ! ... L-integrals:
 
       Call Gen_Lval
-      hl_full = -0.5d0 * hl_full 
+      hl_full = -0.5d0 * hl_full
 
 ! ... Hamiltonian matrix:
 
-      Do 
+      Do
        read(nud) ich,jch,ii
        write(nui) ich,jch,ii
        if(ich.le.0) Exit
        read(nud) a
-       if(ich.eq.jch)  a(:,:) = a(:,:) + hl_full(:,:,lch(ich)) 
+       if(ich.eq.jch)  a(:,:) = a(:,:) + hl_full(:,:,lch(ich))
        write(nui) a
       End do
 

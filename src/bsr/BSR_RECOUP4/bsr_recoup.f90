@@ -5,28 +5,28 @@
 !
 !     Written by:   Oleg Zatsarinny
 !                   email: oleg_zoi@yahoo.com
-!                        
+!
 !======================================================================
-!     Make recoupling the LS Hamiltionian/Overlap matrixes 
+!     Make recoupling the LS Hamiltionian/Overlap matrixes
 !     to the JK coupling based on the target expansions over LS-states
 !======================================================================
 !
 !     INPUT FILES:
 !
-!     target_JK      -  description of target states and partial waves                        
+!     target_JK      -  description of target states and partial waves
 !                       in JK-coupling
 !     target_LS      -  description of target states and partial waves
-!                          in LS-coupling                                
-!     bsr_mat_LS.nnn -  LS Hamiltonian matrix for nnn-partion wawe 
-!                    
+!                          in LS-coupling
+!     bsr_mat_LS.nnn -  LS Hamiltonian matrix for nnn-partion wawe
+!
 !     target_exp     -  LSJ target expansions over LS-states
 !
-!     OUTPUT FILES:  
-!                    
+!     OUTPUT FILES:
+!
 !     recoup.nnn     -  running information
 !
 !     bsr_mat_JK.nnn -  LS Hamiltonian matrix for nnn-partion wawe
-!                    
+!
 !     INPUT ARGUMENT:  see subroutine read_arg.f90
 !
 !----------------------------------------------------------------------
@@ -36,7 +36,7 @@
       Character(80) :: AS
 
 !      Call bsr_recoup_inf
-!---------------------------------------------------------------------- 
+!----------------------------------------------------------------------
 ! ... read target information:
 
       Call Check_file(AF_tar)
@@ -62,9 +62,9 @@
        if(it.ne.jt) Stop 'it <> jt  in target_LS_expn'
        Do i = 1,npert
         k = k + 1
-        read(nue,*) it_expn(k),c_expn(k) 
+        read(nue,*) it_expn(k),c_expn(k)
        End do
-       ip_expn(it) = k      
+       ip_expn(it) = k
       End do
       if(k.ne.mpert) Stop 'mpert ??? on target_LS_expn'
 

@@ -1,5 +1,5 @@
 !=======================================================================
-      Subroutine b_out 
+      Subroutine b_out
 !=======================================================================
 !     output the bound solutions
 !-----------------------------------------------------------------------
@@ -8,7 +8,7 @@
       Use channel
       Use conf_LS
       Use spline_param, only: ns
-      
+
       Implicit none
       Character(64) :: Labl
       Real(8) :: Ebind(khm), eff_n(khm)
@@ -45,23 +45,23 @@
        if(eval(is).lt.E1.and.E1.ne.0.d0) Cycle
        ich = isol(is); it = 0
        if(ich.le.kch) then
-        it=iptar(ich); Ebind(is)=eval(is)-Etarg(it)  
+        it=iptar(ich); Ebind(is)=eval(is)-Etarg(it)
 
-        ! ... define 'n' for outer electron: 
+        ! ... define 'n' for outer electron:
 
         if(Ebind(is).gt.0.d0) then
          n_eff(is) = ICHAR('k')-ICHAR('1')+1
-         eff_n(is) = sqrt(2*Ebind(is)) 
+         eff_n(is) = sqrt(2*Ebind(is))
         else
-         eff_n(is) = zion / sqrt(abs(2*Ebind(is))) 
+         eff_n(is) = zion / sqrt(abs(2*Ebind(is)))
          n_eff(is) = ICHAR('n')-ICHAR('1')+1
         end if
        else  ! perturber
         n_eff(is) = -2
        end if
        nbound = nbound + 1
-      End do        
-        
+      End do
+
 !----------------------------------------------------------------------
 ! ... store the solutions:
 
@@ -93,7 +93,7 @@
        Do ich = 1,kch; i1=(ich-1)*ns+1; i2=ich*ns
         j1 = ipsol(ich-1)+1; j2=ipsol(ich)
         Do j=j1,j2
-         v(i1:i2) = v(i1:i2) + a(j,is)*bb(1:ns,j)     
+         v(i1:i2) = v(i1:i2) + a(j,is)*bb(1:ns,j)
         End do
        End do
        if(kcp.gt.0) v(kch*ns+1:nhm)=a(ksol+1:khm,is)

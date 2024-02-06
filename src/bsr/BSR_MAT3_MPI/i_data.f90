@@ -5,7 +5,7 @@
 !----------------------------------------------------------------------
 !     we have following different structures:
 !
-! 1 1.0  Rk( . . . .)  ic, jc               -  bound-bound  
+! 1 1.0  Rk( . . . .)  ic, jc               -  bound-bound
 ! 2 1.1  Rk( . . . .) < i | . > ic          -  bound-channel
 ! 3 1.2  Rk( . . . .) < i | . > < j | . >   -  channel-channel
 ! 4 1.3  Rk( . . . .) < i | j >             -  target structure
@@ -31,7 +31,7 @@
 !     we assume that target states diagonalize Hamiltonian
 !     These elements are included after in B(.,.) * Etarget(i)
 !     where B(.,.) is B-spline overlap matrix
-!     These elements are also used for control calculation of 
+!     These elements are also used for control calculation of
 !     interaction matrix between target states (Target_h).
 !
 !     sym_d -  symmetry for convolution
@@ -63,7 +63,7 @@
       dd=0.d0; xx=0.d0; v=0.d0; w=0.d0
 
 !----------------------------------------------------------------------
-!                prepare B_spline representation and define symmetries: 
+!                prepare B_spline representation and define symmetries:
 
       Select case(icase)
        Case( 3); Call MTK_cell(jpol); sym_i='n'; sym_j='n'    !  Tk
@@ -78,7 +78,7 @@
       jcase = IJCASE(jtype)
       Select case(jcase)
        Case(1);      sym_d=sym_j; sym_r=sym_i
-       Case(2);      sym_d=sym_i; sym_r=sym_j 
+       Case(2);      sym_d=sym_i; sym_r=sym_j
        Case Default; sym_d='x';   sym_r='x'
       End Select
 
@@ -87,8 +87,8 @@
       Select Case(jtype)
 
 !----------------------------------------------------------------------
-!                                                       Rk( . . ; . . )      
-      Case(1)                                  
+!                                                       Rk( . . ; . . )
+      Case(1)
 
         iii=0; jjj=0
         Do j=1,ncdata;  i=IPT(j)
@@ -120,7 +120,7 @@
           Call GET_V(i1,i2,v)
           ich=iech(i1)
           Call UPDATE_HV(ich,jc,ns,v,C)
-  
+
          elseif(ic.lt.0.and.jc.lt.0) then            ! R(..) <i|.> <.|j>
 
           i1=io/ibo; i2=mod(io,ibo)
@@ -130,9 +130,9 @@
           ich = iech(i1); jch = iech(j1)
           v = v * C
 
-          Call UPDATE_HW(ich,jch,ns,v,w)         
+          Call UPDATE_HW(ich,jch,ns,v,w)
 
-         elseif(ic.lt.0.and.jc.eq.0) then            ! R(..) <i|j>  
+         elseif(ic.lt.0.and.jc.eq.0) then            ! R(..) <i|j>
 
           i1=io/ibo; i2=mod(io,ibo)
           ich = iech(i1); jch = iech(i2)
@@ -154,9 +154,9 @@
         End do
 
 !----------------------------------------------------------------------
-!                                                       R ( i . ; . . ) 
-      Case(2,3,4,5)                               
-      
+!                                                       R ( i . ; . . )
+      Case(2,3,4,5)
+
         jjj=0; iii=0
         Do j=1,ncdata; i=IPT(j); jj=k1(i); ii=k2(i); ich=k3(i); io=k4(i)
 
@@ -171,11 +171,11 @@
 
           sym_v = 'l';  if(icase.gt.2) sym_v = 'r'
           CALL BAV(ns,ks,xx,p(1,ii),v,sym_r,sym_v)
-          iii = ii 
+          iii = ii
 
          end if
 
-        if(io.gt.0) then 
+        if(io.gt.0) then
           j1 = io/ibo; j2 = mod(io,ibo); jch=iech(j1)
           Call GET_V(j1,j2,w)
           w = cdata(i) * w
@@ -187,11 +187,11 @@
           Stop ' I_data: uknown structure for itype 2-5 '
         end if
 
-        End do     
+        End do
 
 !----------------------------------------------------------------------
 !                                                      RK ( i . ; j . )
-      Case(6,7,8,9)                         
+      Case(6,7,8,9)
 
        xx=0.d0;  CA=0.d0
 
@@ -200,9 +200,9 @@
         Call Density(ns,ks,dd,p(1,i1),p(1,j1),sym_d)
         xx = xx + cdata(i)*dd
         CA = CA + cdata(i)*QUADR(i1,j1,jpol)
-       
+
         if(j.lt.ncdata) then
-         if(k1(i).eq.k1(IPT(j+1))) Cycle 
+         if(k1(i).eq.k1(IPT(j+1))) Cycle
         end if
 
         Call Convol(ns,ks,dd,xx,jcase,sym_i,sym_j)

@@ -9,9 +9,9 @@
 !     nc     - number of result coeff's
 !     eps_cc - all coefficients < EPS_c are ignored
 !----------------------------------------------------------------------
-	
+
       USE bsr_mat, only: pri,debug
-      USE cmdata 
+      USE cmdata
 
       Implicit none
 
@@ -35,7 +35,7 @@
 ! ...  main loop ...
 
     1 Continue
-                             
+
 ! ...  compare integrals in different blocks and merge the coefficients
 ! ...  in case of equal integrals
 
@@ -52,7 +52,7 @@
         End do
        End do
 
-! ...  choose the minimum K1, then K2, then K3, then K4 
+! ...  choose the minimum K1, then K2, then K3, then K4
 
        j=IP(mm)
        Do m=1,nn
@@ -71,7 +71,7 @@
         end if
        End do
 
-! ...  mark the chosen coefficient 
+! ...  mark the chosen coefficient
 
        i=IP(mm)
        if(abs(CDATA(i)).gt.EPS_cc) then; nc=nc+1; IPT(nc)=i; end if

@@ -1,7 +1,7 @@
 !=====================================================================
       Subroutine get_LS_conf
 !======================================================================
-!     generate all possible LS states from list of JJ configurations 
+!     generate all possible LS states from list of JJ configurations
 !--------------------------------------------------------------------
       Use jj2ls,    JTOT => JT
       Use conf_jj
@@ -13,15 +13,15 @@
       Do jc=1,ncfg
 
        Call Get_cfg_jj(jc); jt=iterm
- 
+
        no1 = 1; nn1(1)=nn(1); in1(1)=in(1)
        Do i=2,no
         if(nn(i).eq.nn(i-1).and.ln(i).eq.ln(i-1)) Cycle
         no1=no1+1; nn1(no1)=nn(i); in1(no1)=in(i)
-       End do                
+       End do
        Do it=1,LS_nterms; if(C_term(jt,it).eq.zero) Cycle
 
-        ic = Jadd_cfg_LS(it,no1,nn1,in1)       
+        ic = Jadd_cfg_LS(it,no1,nn1,in1)
         write(nua) jc,ic,C_term(jt,it)
 
        End do
@@ -31,21 +31,21 @@
 
 
 !======================================================================
-      Integer Function Jadd_cfg_LS(it,no_i,nn_i,kn_i) 
+      Integer Function Jadd_cfg_LS(it,no_i,nn_i,kn_i)
 !======================================================================
 !     add new CAS to cfg_list with given term 'it'
 !----------------------------------------------------------------------
 
       USE conf_LS
 
-      Implicit none 
+      Implicit none
       Integer, intent(in) :: no_i,nn_i(*),kn_i(*)
 
       Integer :: i,ic,it,ip
       Integer, External :: Ifind_nlk
 
       Jadd_cfg_LS = 0;  if(no_i.le.0) Return
-      
+
       if(mcfg.eq.0) Call Alloc_cfg_LS(icfg)
 
       Call Get_symt_LS(it,ic,no,LS)
@@ -140,7 +140,7 @@
 
       Character(*) :: core_LS
       Character(4), External :: ELF4
- 
+
       core_LS = ' '; if(ncore.eq.0) Return
       core_LS(1:4) = ELF4(nn_core(1),l_core(1),0)
       ii = 1
@@ -148,7 +148,7 @@
        if(nn_core(i-1).eq.nn_core(i).and.l_core(i-1).eq.l_core(i)) Cycle
        ii=ii+1; j = (ii-1)*4 + 1
        core_LS(j:j+3) = ELF4(nn_core(i),l_core(i),0)
-      End do      
+      End do
 
       End Subroutine get_LS_core
 

@@ -4,7 +4,7 @@
 !
 !     we have following 16 different structures for radial integrals:
 !
-! 1 1.0  Rk( . . . .)  ic, jc               -  bound-bound  
+! 1 1.0  Rk( . . . .)  ic, jc               -  bound-bound
 ! 2 1.1  Rk( . . . .) < i | . > ic          -  bound-channel
 ! 3 1.2  Rk( . . . .) < i | . > < j | . >   -  channel-channel
 ! 4 1.3  Rk( . . . .) < i | j >             -  target structure
@@ -29,10 +29,10 @@
 !     How it is packing:
 !
 !                                        ibi         ibi
-! 1.0 Rk( . . . .)  ic, jc       -  k1=(i1,i3)  k2=(i2,i4)  k3=-ic  k4=-jc 
-! 1.1 Rk( . . . .) < i | . > ic  -  k1=(i1,i3)  k2=(i2,i4)  k3= io  k4=-ic 
+! 1.0 Rk( . . . .)  ic, jc       -  k1=(i1,i3)  k2=(i2,i4)  k3=-ic  k4=-jc
+! 1.1 Rk( . . . .) < i | . > ic  -  k1=(i1,i3)  k2=(i2,i4)  k3= io  k4=-ic
 ! 1.2 Rk( . . . .) <i|.> <j|.>   -  k1=(i1,i3)  k2=(i2,i4)  k3= io  k4= jo
-! 1.3 Rk( . . . .) < i | j >     -  k1=(i1,i3)  k2=(i2,i4)  k3= io  k4= 0 
+! 1.3 Rk( . . . .) < i | j >     -  k1=(i1,i3)  k2=(i2,i4)  k3= io  k4= 0
 !
 ! 2.0 Rk( i . . .) < j | . >     -  k1=(i2,i4)  k2=i3  k3=ich  k4=io
 ! 3.0 Rk( . i . .) < j | . >     -  k1=(i1,i3)  k2=i4  k3=ich  k4=io
@@ -40,7 +40,7 @@
 ! 5.0 Rk( . . . i) < j | . >     -  k1=(i1,i3)  k2=i2  k3=ich  k4=io
 !
 ! 2.1 Rk( i . . .)  ic           -  k1=(i2,i4)  k2=i3  k3=ich  k4=-ic
-! 3.1 Rk( . i . .)  ic           -  k1=(i1,i3)  k2=i4  k3=ich  k4=-ic           
+! 3.1 Rk( . i . .)  ic           -  k1=(i1,i3)  k2=i4  k3=ich  k4=-ic
 ! 4.1 Rk( . . i .)  ic           -  k1=(i2,i4)  k2=i1  k3=ich  k4=-ic
 ! 5.1 Rk( . . . i)  ic           -  k1=(i1,i3)  k2=i2  k3=ich  k4=-ic
 !
@@ -91,7 +91,7 @@
         k1=ief(i1)*ibi+ief(i4); k2=i3; k3=i2; k4=0; Idef_itype = 8
        elseif(ief(i2).gt.0.and.ief(i3).gt.0) then
         k1=ief(i3)*ibi+ief(i2); k2=i1; k3=i4; k4=0; Idef_itype = 9
-       end if                                       
+       end if
 
       elseif(io.gt.0.and.jo.eq.0) then
 

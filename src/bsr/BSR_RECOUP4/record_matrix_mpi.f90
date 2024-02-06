@@ -17,7 +17,7 @@
 ! ... channel-channal blocks:
 
       nn = ns * ns
-      Do ich = 1,nch; Do jch = 1,ich;  i=icc(ich,jch) 
+      Do ich = 1,nch; Do jch = 1,ich;  i=icc(ich,jch)
 
 !       if(ich.lt.I1_channel.or.ich.gt.I2_channel) Cycle
 !       if(jch.lt.J1_channel.or.jch.gt.J2_channel) Cycle
@@ -47,7 +47,7 @@
 
 ! ... channel-perturber rows:
 
-       Do ich = 1,nch; Do ip = 1,npert; i = icb(ich,ip) 
+       Do ich = 1,nch; Do ip = 1,npert; i = icb(ich,ip)
 
 !        if(ich.lt.I1_channel.or.ich.gt.I2_channel) Cycle
 !        if(ip.lt.J1_channel.or.ip.gt.J2_channel) Cycle

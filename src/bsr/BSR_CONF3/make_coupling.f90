@@ -13,7 +13,7 @@
       JJ_coupling(1,1) = 1
       JJ_coupling(2,1) =   2
       JJ_coupling(3,1) = n+2
-	  
+
       Do i=2,n-1
        JJ_coupling(1,i) = n+i
        JJ_coupling(2,i) =   i+1
@@ -23,9 +23,9 @@
 ! ... moments
 
       Do i=1,n
-       momentS(i)  =  LS(i,3)        
+       momentS(i)  =  LS(i,3)
        momentS(i+n) = LS(i,5)
-       momentL(i)  =  LS(i,2)        
+       momentL(i)  =  LS(i,2)
        momentL(i+n) = LS(i,4)
       End do
 
@@ -42,12 +42,12 @@
 !     with outer orbital is going to position ii: J2_coupling
 !----------------------------------------------------------------------
 
-      Use bsr_conf,  JJ_coupling => J2_coupling   
+      Use bsr_conf,  JJ_coupling => J2_coupling
 
       Use conf_LS,   n=>no
 
       Integer :: i,ii, ipos(msh)
- 
+
       if(n.gt.msh) Stop 'make_coupling: no > mshells'
 
       Do i=1,n
@@ -63,7 +63,7 @@
       JJ_coupling(1,1) = ipos(1)
       JJ_coupling(2,1) = ipos(2)
       JJ_coupling(3,1) = m+2
-	  
+
       Do i=2,n-1
        JJ_coupling(1,i) = i+m
        JJ_coupling(2,i) = ipos(i+1)
@@ -78,7 +78,7 @@
       End do
 
       JJ_coupling(3,ncup)=J1_coupling(3,ncup)
- 
+
       End Subroutine make_coupling_insert
 
 
@@ -89,12 +89,12 @@
 !     with outer orbital is going to position ii
 !----------------------------------------------------------------------
 
-      Use bsr_conf,  JJ_coupling => J2_coupling   
+      Use bsr_conf,  JJ_coupling => J2_coupling
 
       Use conf_LS
 
       Integer :: i,ii
- 
+
       n = ncup + 1
       m = n + n
 
@@ -109,7 +109,7 @@
       JJ_coupling(1,2) = 1
       JJ_coupling(2,2) = 2
       JJ_coupling(3,2) = m+2
-	  
+
       if(ii.eq.1) then
        JJ_coupling(1,2) = m+1
        JJ_coupling(2,2) = 2

@@ -1,28 +1,28 @@
 !=======================================================================
       Subroutine DCWF (n,kappa,Z,E,NTP,R,P,Q)
 !=======================================================================
-!   This subroutine computes the  Dirac-Coulomb  bound-state orbital    
-!   radial wavefunction.                                           
-!                                                                       
-!   Input:                                                              
-!                                                                       
-!      n          The (usual) principal quantum number                  
-!      kappa      The relativistic angular quantum number               
-!      Z          The effective nuclear charge                          
+!   This subroutine computes the  Dirac-Coulomb  bound-state orbital
+!   radial wavefunction.
+!
+!   Input:
+!
+!      n          The (usual) principal quantum number
+!      kappa      The relativistic angular quantum number
+!      Z          The effective nuclear charge
 !      R(1:NTP)   Radial grid
 !
 !   Output:
 !
-!      E          The Dirac-Coulomb Eigenenergy (E-mc^2)                    
-!                                   
+!      E          The Dirac-Coulomb Eigenenergy (E-mc^2)
+!
 !      P          r times the large component wavefunction of
-!      
-!      Q          r times the small component wavefunction of           
-!                                                                       
-!   Call(s) to: CGAMMA                                                  
-!                                                                       
-!   Written by Farid A Parpia, at Oxford    Last Update: 14 Oct 1992    
-!                                                                       
+!
+!      Q          r times the small component wavefunction of
+!
+!   Call(s) to: CGAMMA
+!
+!   Written by Farid A Parpia, at Oxford    Last Update: 14 Oct 1992
+!
 !=======================================================================
 !   For a given value of n > 0, there are 2*n-1 eigenfunctions:
 !   n  with  kappa = -1,-2,...,-n
@@ -30,19 +30,19 @@
 !
 !   k = iabs(kappa);  gamma = sqrt[k^2-(alfa*Z)^2]
 !
-!   N = sqrt[n^2 - 2(n-k)(k-gamma)]   
+!   N = sqrt[n^2 - 2(n-k)(k-gamma)]
 !
 !   E(n,k) = c^2 / sqrt[1 + (alfa*Z)^2 / (gamma+n-k)^2 ]
 !
 !   x = 2*Z/N*r
 !
-!   P_nk(r) = sqrt[1+E(n,k)/c^2]  N(n,k)  e^-x/2  x^gamma * 
+!   P_nk(r) = sqrt[1+E(n,k)/c^2]  N(n,k)  e^-x/2  x^gamma *
 !             [(N-kappa) F2  -  (n-k) F1]
 !
-!   Q_nk(r) = sqrt[1-E(n,k)/c^2]  N(n,k)  e^-x/2  x^gamma * 
+!   Q_nk(r) = sqrt[1-E(n,k)/c^2]  N(n,k)  e^-x/2  x^gamma *
 !             [(N-kappa) F2  +  (n-k) F1]
 !
-!   N(n,k) = 1/[N*G(2*gamma+1)]  *  
+!   N(n,k) = 1/[N*G(2*gamma+1)]  *
 !            sqrt [ [Z*G(2*gamma+1+n-k)] / [2(n-k)!(N-kappa)] ]
 !
 !   G(x) - GAMMA function
@@ -56,7 +56,7 @@
       Implicit real(8) (A-H,O-Z)
       Real(8) :: R(*), P(*), Q(*)
       Real(8) :: T1(n),T2(n)
- 
+
 ! ... Check the input arguments:
 
       IF(n.le.0)     Stop 'DCWF: Principal quantum number < 0'
@@ -165,22 +165,22 @@
 
       E = 1.d0 /SQRT(1.d0+(Za/(gamma+n-k))**2)
 
-      E_dcwf = -(1.d0-E)*C*C     
-      
-      End Function E_dcwf   
-	  
+      E_dcwf = -(1.d0-E)*C*C
+
+      End Function E_dcwf
+
 
 !========================================================================
       Subroutine DCME(n,kappa,z,ar1,ar2,am1,am2,am3)
 !========================================================================
 ! ... provides radial moments <r^k> for Dirac-Coulomb wave functions
-! ... expressions are taken from DRAKE HANDBOOK,2006 
+! ... expressions are taken from DRAKE HANDBOOK,2006
 !------------------------------------------------------------------------
 !     let  x = 2Z * r, then
 !
 !     <x^2> = 2*N^2*[(5*N^2-2*kappa^2)*R^2 + (1-gamma^2) - 3*kappa*R]
 !
-!     <x>   = -kappa + (3*N^2-kappa^2)*R 
+!     <x>   = -kappa + (3*N^2-kappa^2)*R
 !
 !     <x-1> = [n*gamma + (k-gamma)*k] / [2*gamma*N^3]
 !
@@ -193,7 +193,7 @@
 !            N = sqrt[n^2-2*(n-k)(k-gamma)]
 !            gamma = sqrt[kappa^2-(Z/c)^2]
 !            k = abs(kappa)
-!------------------------------------------------------------------------ 
+!------------------------------------------------------------------------
       USE zconst, ONLY: c_au
 
       Implicit none
@@ -205,7 +205,7 @@
 
       k = iabs(kappa); kk = k*k
       Za = (z/c_au)**2
-      gamma = sqrt(kk-Za); gg = gamma*gamma; 
+      gamma = sqrt(kk-Za); gg = gamma*gamma;
       BigN = sqrt(n*n-2*(n-k)*(k-gamma)); bb=BigN*BigN
       R = sqrt(1-Za/bb); RR = R*R
 
@@ -254,20 +254,20 @@
 
       ap(-1) = a**3 / g**2 * (dk**2 /la + nr)
       bp(-1) = a*a / g
-      cp(-1) = dk * a**3 / (g*la) 
+      cp(-1) = dk * a**3 / (g*la)
 
       ap(-2) = two*dk*a**3 / (g*la) * (two*dk*E-one) / (four*la*la-one)
       bp(-2) = two*a**3 / (g*la) * (two*la**2-dk*E) / (four*la*la-one)
       cp(-2) = two*a**3 / la * (two*dk*E-one) / (four*la*la-one)
 
-      x = two*a**3 / la / (four*la*la-one) 
+      x = two*a**3 / la / (four*la*la-one)
       y = la*la-one
 
       ap(-3) = x * ( three*dk*E*(dk*E-one)/y - one)
       bp(-3) = x * E *( three*(la*la-dk*E)/y - one)
       cp(-3) = x /g * ( three*g*g*E*(dk*E-one)/y - a*a*dk)
 
-      x = (four*la**2-three**2) 
+      x = (four*la**2-three**2)
       y = E*bp(-3) - ap(-3)
 
       ap(-4) = two/three/x * &
@@ -280,11 +280,10 @@
              x = (four*la*la-p*p)
              y = (E*bp(ip)-ap(ip))
       ap(ip-1) = two / p /x  * ( four*g*dk*y+ &
-                (two*dk*p*E+four*g*g+p*p)*cp(ip) ) 
-      bp(ip-1) = two / x * ( two*g*y + (two*dk+p*E)*cp(ip) ) 
+                (two*dk*p*E+four*g*g+p*p)*cp(ip) )
+      bp(ip-1) = two / x * ( two*g*y + (two*dk+p*E)*cp(ip) )
       cp(ip-1) = two / p /x  * ( (four*dk*dk-p*p)*y + &
                  two*g*(two*dk+p*E)*cp(ip) )
 
-      End Subroutine  Exp_dcwf  
-	  
-  
+      End Subroutine  Exp_dcwf
+

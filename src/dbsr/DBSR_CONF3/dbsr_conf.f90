@@ -5,12 +5,12 @@
 !
 !     Written by:   Oleg Zatsarinny
 !                   email: oleg_zoi@yahoo.com
-!                        
+!
 !======================================================================
 !     Generates configuration lists for DBSR code in JJ coupling
 !======================================================================
 !
-!     INPUT ARGUMENT:  
+!     INPUT ARGUMENT:
 !
 !     c_comp   -->  tolerance for compansation configurations [1.01]
 !     max_ll   -->  restriction on orbitals momentums for continuum
@@ -21,31 +21,31 @@
 !     INPUT FILES:
 !
 !     dbsr_par      -  parameters of calculations
-!     target_jj     -  description of target states and partial waves                        
+!     target_jj     -  description of target states and partial waves
 !     targ_nnn.c    -  c-files for target states
-!     pert_nnn.c    -  c-files for perturber if any  
+!     pert_nnn.c    -  c-files for perturber if any
 !
 !     OUTPUT FILES:
 !
 !     dbsr_conf.log -  running information
 !     cfg.nnn       -  c-file for given partial wave nnn
 !
-!     orthogonal conditions: 
+!     orthogonal conditions:
 !
-!     By default continuum orbital are supposed to be non-orthogonal 
-!     to all bound orbitals in the open subshells; 
-!     however, we should check if different channels can generate 
-!     the same (N+1)-electron states. In this case, the total overlap 
+!     By default continuum orbital are supposed to be non-orthogonal
+!     to all bound orbitals in the open subshells;
+!     however, we should check if different channels can generate
+!     the same (N+1)-electron states. In this case, the total overlap
 !     matrix may not be positively defined preventing the Hamilton matrix
 !     diagonalization. To avoid such  situation, program assing needed
 !     orthogonal conditions, considering only physical orbitals.
 !
-!     additional orthogonal conditions if any can be given by user 
+!     additional orthogonal conditions if any can be given by user
 !     in the dbsr_par file, or in the end of files cfg.###, as
 !
 !               < nl1 | nl2 >=0
 
-!---------------------------------------------------------------------- 
+!----------------------------------------------------------------------
 !======================================================================
 ! ... positions of configurations in the conf_jj list:
 !
@@ -54,7 +54,7 @@
 !     their pointers ->  ip_phys_conf
 !     limit position ->  ncfg_phys
 !
-! 2.  target configurations   
+! 2.  target configurations
 !
 !     their pointers ->  ic_targ  (=ictarg + ncfg_phys)
 !     limit position ->  ncfg_targ
@@ -79,26 +79,26 @@
 ! 4.  define spectroscopic target configurations (target.nnn + target_orb)
 ! 5.  read all target configurations  (files target.nnn)
 ! 6.  read "channel-delete" conditions if any
-! 7.  read information about included partial waves (file target); 
-!     this information should be prepared by hand - not convivient, 
-!     I am sorry, but you may copy these lines from previous calculations) 
+! 7.  read information about included partial waves (file target);
+!     this information should be prepared by hand - not convivient,
+!     I am sorry, but you may copy these lines from previous calculations)
 !----------------------------------------------------------------------
-! ... loop other partial waves:  
+! ... loop other partial waves:
 !----------------------------------------------------------------------
 ! 8.  define and record channel configurations in cfg.nnn
 ! 9.  record pertuber configurations if any
 !10.  record imposed orthogonality constrans
 !11.  record channels information in file target
 !----------------------------------------------------------------------
-! ... check if we need additional orth.conditions:  
+! ... check if we need additional orth.conditions:
 !----------------------------------------------------------------------
 !12.  define scattering channels with phys.target states only
 !13.  add pertuber physical configurations and check double-counting
 !14.  define orthogonal conditions (routine def_orth_cond) and
 !     record all compensation configurations in file "cfg.nnn_comp"
 !15.  record "derived" orth.constraints in cfg.nnn
-!---- end of partial waves loop   
-!...  finish by recording overall information in file target    
+!---- end of partial waves loop
+!...  finish by recording overall information in file target
 !----------------------------------------------------------------------
       Use dbsr_conf
 
@@ -114,7 +114,7 @@
 ! ... read target information:
 
       Open(nut,file=AF_tar);    Call Read_target_jj(nut)
- 
+
 ! ... target orbitals:
 
       Open(nuw,file=AF_wfn,form='UNFORMATTED')
@@ -140,10 +140,10 @@
       Do it=1,ntarg
        AF = trim(BFT(it))//'.c'
        Open(nuc,file=AF)
-       if(it.eq.1) Call Read_core_jj(nuc) 
+       if(it.eq.1) Call Read_core_jj(nuc)
        Call Read_conf_jj(nuc,0,'add','nocheck')
        Close(nuc)
-      End do    
+      End do
       write(pri,'(/a,T33,i8)') &
        'number of target configurations:',ncfg-ncfg_phys
       if(ncfg-ncfg_phys.ne.nct) Stop 'ncfg_target <> nct from target'
@@ -161,7 +161,7 @@
       Do i=1,nlsp;  read(nut,'(a)') line(i);  End do
       if(kpert.gt.0) then;  Do i=1,kpert+3; read(nut,*); End do; end if
 
-      write(pri,'(/72(''-'')/)') 
+      write(pri,'(/72(''-'')/)')
       write(pri,'(i3,a)') nlsp,' - nlsp, number of partial waves'
 
       write(nut,'(80(''-''))')
@@ -170,7 +170,7 @@
 
 ! ... do we have the channels to ignore?
 
-      Call Def_del      
+      Call Def_del
 
 !======================================================================
 ! ... loop other partial waves:
@@ -184,11 +184,11 @@
       read(AF,*)  Tpar,Jpar,ipar
       if(LEN_trim(AF).gt.12) read(AF(19:),*) AFP,BFP,ncp,nwp
 
-       write(pri,'(/72(''-'')/)') 
+       write(pri,'(/72(''-'')/)')
        write(pri,'(a,5(a,i4))') 'Partial wave:', &
        ' ilsp =',ilsp,'   2J =',jpar,'  parity =',ipar,'  ncp =',ncp, '  nwp =',nwp
 
-       ncfg = ncfg_targ; lcfg = lcfg_targ; nwf = nwf_targ 
+       ncfg = ncfg_targ; lcfg = lcfg_targ; nwf = nwf_targ
 
 ! ... read perturber configurations to get pertuber orbitals if any
 ! ... (to be sure that set indexes are same as in bsr_prep)
@@ -224,10 +224,10 @@
       end if
       ncfg_pert = ncfg
 
-! ... output scattering configuration:    
+! ... output scattering configuration:
 
       Call Alloc_orthogonality(0)
-      Call Prepare_iort_jj                   
+      Call Prepare_iort_jj
       Call Read_orth_jj(nup)
 
       write(AF,'(a,i3.3)')'cfg.',ilsp
@@ -236,10 +236,10 @@
 
       rewind(nuc)
       write(nuc,'(a15,f16.8)') 'Core subshells:',Etarg(1)
-      write(nuc,'(a)') core(1:ncore*5) 
-      write(nuc,'(a)') 'Peel subshells:' 
+      write(nuc,'(a)') core(1:ncore*5)
+      write(nuc,'(a)') 'Peel subshells:'
       write(nuc,'(20a5)') (ELF(i),i=ncore+1,nwf)
-      write(nuc,'(a)') 'CSF(s):' 
+      write(nuc,'(a)') 'CSF(s):'
       Do ic=ncfg_targ+1,ncfg
         Call Print_conf_jj (nuc,ic,WC(ic))
       End do
@@ -261,17 +261,17 @@
       max_ch = max(max_ch,nch)
 
 !======================================================================
-! ... orthogonal conditions:   
+! ... orthogonal conditions:
 !======================================================================
 
-      if(max_ll_targ.lt.min_ll_ch) Cycle     
+      if(max_ll_targ.lt.min_ll_ch) Cycle
 
-      ncfg=ncfg_targ; lcfg=lcfg_targ; nwf=nwf_pert 
+      ncfg=ncfg_targ; lcfg=lcfg_targ; nwf=nwf_pert
       ic_targ=jc_targ
 
 ! ... define scattering channels with phys.target states:
 
-      nch_save = nch 
+      nch_save = nch
       nch=0; Call Alloc_channel_jj(imch)
       c_norm = 0.5   !  tollerance for spectroscopic states normalization
 
@@ -286,7 +286,7 @@
       write(nuc,'(/a/)') 'Imposed orth. conditions:'
 
       Do ich=1,nch; i=ipch(ich)
-       Do j=ncore+1,nwf 
+       Do j=ncore+1,nwf
         if(KEF(i).ne.KEF(j)) Cycle
         if(IORT(i,j).ne.0) Cycle
         write(nuc,'(a1,a5,a1,a5,a3)') '<',ELF(i),'|',ELF(j),'>=0'
@@ -295,12 +295,12 @@
       End do
       Close(nuc)
 
-! ... add pertuber physical configurations: 
+! ... add pertuber physical configurations:
 
       if(ncp.gt.0) Call Check_perturber
-     
+
       ncfg_pert=ncfg; lcfg_pert=lcfg; nwf_pert=nwf
- 
+
 ! ... define orthogonal conditions
 
       Call Def_orth_cond

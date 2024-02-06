@@ -21,14 +21,14 @@
 
       jj = ii
       Do i=1,nbf; if(iech(i).ne.1) Cycle
-       S = OBS(i,m); if(abs(S).lt.eps_ovl) Cycle           
+       S = OBS(i,m); if(abs(S).lt.eps_ovl) Cycle
        p(:,m) = p(:,m) - S * p(:,i);  jj=m
        mbs(m) = max(mbs(i),mbs(m))
       End do
 
       if(jj.eq.ii) then; iech(ii)=1; Return; End if
 
-       S = QUADR(m,m,0);  S=sqrt(S);  p(:,m)=p(:,m)/S  
+       S = QUADR(m,m,0);  S=sqrt(S);  p(:,m)=p(:,m)/S
 
        OBS(:,m) = 0.d0
        Do i = 1,m
@@ -37,7 +37,7 @@
         OBS(m,i)=OBS(i,m)
        End do
 
-! ... assign set index for new sub. orbital: 
+! ... assign set index for new sub. orbital:
 
       Call Assign_index(m); nbf=m; iech(m)=1; jj=m
 

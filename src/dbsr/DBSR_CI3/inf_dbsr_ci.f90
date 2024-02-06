@@ -42,7 +42,7 @@
 '     dbsr_ci name jmin=1 jmax=3 mbreit=0 msol=1                        ',&
 '---------------------------------------------------------------------- ',&
 '                                                                       '
-      Stop                          
-                                    
-      End Subroutine inf_dbsr_ci       
-                                     
+      Stop
+
+      End Subroutine inf_dbsr_ci
+

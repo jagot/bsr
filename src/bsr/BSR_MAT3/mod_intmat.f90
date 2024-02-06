@@ -42,8 +42,8 @@
 
       kch=nch; kns=ns; kcp=ncp; kmk=mk; kcfg=ncfg
 
-      if(allocated(hcc)) Deallocate(hcc,ACF,htarg,otarg,x) 
-      if(allocated(hcb)) Deallocate(hcb,hbb) 
+      if(allocated(hcc)) Deallocate(hcc,ACF,htarg,otarg,x)
+      if(allocated(hcb)) Deallocate(hcb,hbb)
       if(kch.eq.0.or.kns.eq.0) Return
 
       ich = nch*(nch+1)/2
@@ -51,7 +51,7 @@
                htarg(ich),otarg(ich),x(kns,kns))
       hcc=0.d0; acf=0.d0; htarg=0.d0; otarg=0.d0
 
-      if(kcp.gt.0) then  
+      if(kcp.gt.0) then
        Allocate(hbb(kcp*(kcp+1)/2),hcb(kns,kch,kcp))
        hbb=0.d0; hcb=0.d0
       end if
@@ -60,7 +60,7 @@
 
 !----------------------------------------------------------------------
 !     next routines updates the matrixes;
-!     we have coefficients only for the half of the matrix,  
+!     we have coefficients only for the half of the matrix,
 !     so then we should h -->  h + h*   for diagonal blocks
 !----------------------------------------------------------------------
 
@@ -68,10 +68,10 @@
 !======================================================================
       Subroutine UPDATE_HX(ich,jch,ns,ks,d,sym)
 !======================================================================
-!     update channel block 
+!     update channel block
 !
 !     sym = 's'  -->  symmetric banded upper-column storage mode
-!     sym = 'n'  -->  non-symmetric band matrix  
+!     sym = 'n'  -->  non-symmetric band matrix
 !     sym = 'x'  -->  non-symmetric full matrix
 !----------------------------------------------------------------------
       Use bsr_matrix
@@ -121,7 +121,7 @@
       if(ich.ge.jch) then
        hcc(:,:,ij) = hcc(:,:,ij) + x
       else
-       hcc(:,:,ij) = hcc(:,:,ij) + TRANSPOSE(x) 
+       hcc(:,:,ij) = hcc(:,:,ij) + TRANSPOSE(x)
       end if
 
       End Subroutine UPDATE_HX
@@ -173,7 +173,7 @@
       Integer, intent(in) :: ic,jc
       Real(8), intent(in) :: c
       Integer :: i,j,ij
-      
+
       if(ic.gt.kcp.or.jc.gt.kcp.or.ic.le.0.or.jc.le.0) &
        Stop 'UPDATE_HB: indeces out of range'
 
@@ -223,7 +223,7 @@
        Stop 'UPDATE_HW: channel index out of range'
       if(ns.lt.1.or.ns.gt.kns) &
        Stop 'UPDATE_HW: B-spline index out of range'
- 
+
       Do i = 1,ns
        Do j = 1,ns
         x(i,j) = v(i)*w(j)
@@ -235,7 +235,7 @@
       if(ich.ge.jch) then
        hcc(:,:,ij) = hcc(:,:,ij) + x
       else
-       hcc(:,:,ij) = hcc(:,:,ij) + TRANSPOSE(x) 
+       hcc(:,:,ij) = hcc(:,:,ij) + TRANSPOSE(x)
       end if
 
       End Subroutine UPDATE_HW
@@ -267,7 +267,7 @@
 !======================================================================
       Subroutine Target_h(ich,jch,C,CC)
 !======================================================================
-!     update target interaction and overlap matrixes, by considering 
+!     update target interaction and overlap matrixes, by considering
 !     the terms with structure <kl|k'l> <target|H|target'>
 !
 !     It is not pure target states, but the basis states before |kl>,
@@ -357,7 +357,7 @@
 !======================================================================
       Subroutine Target_new
 !======================================================================
-!     new target energies 
+!     new target energies
 !----------------------------------------------------------------------
       Use bsr_matrix, only: htarg
       Use channel,    only: nch,iptar,ELC
@@ -376,7 +376,7 @@
 
       Allocate(itarget(ntarg,ntarg), htarget(ntarg,ntarg), eval(ntarg))
 
-      k=0; itarget=0; htarget=0.d0 
+      k=0; itarget=0; htarget=0.d0
       Do it=1,ntarg; htarget(it,it)=Etarg(it); End do
 
 ! ... find target matrix:
@@ -420,15 +420,15 @@
       Call LAP_DSYEV('N','L',ntarg,ntarg,htarget,eval,info)
 
       if(info.ne.0) Stop 'DSYEV failed in Target_new'
-      
+
       ilen=LEN_TRIM(AF_new)+1
       AF=AF_new; write(AF(ilen:),'(a,i3.3)') '.',klsp
 
-      write(pri,'(/a/)') 'new target energies:'      
+      write(pri,'(/a/)') 'new target energies:'
       open(nun,file=AF)
       Do i=1,ntarg
-       write(nun,'(3F20.8)') eval(i),Etarg(i),eval(i)-Etarg(i)       
-       write(pri,'(3F20.8)') eval(i),Etarg(i),eval(i)-Etarg(i)       
+       write(nun,'(3F20.8)') eval(i),Etarg(i),eval(i)-Etarg(i)
+       write(pri,'(3F20.8)') eval(i),Etarg(i),eval(i)-Etarg(i)
       End do
 
       Deallocate(eval,itarget,htarget)

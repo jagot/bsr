@@ -1,7 +1,7 @@
 !======================================================================
       Subroutine Add_integral (kpol,ic,jc,i1,i2,i3,i4,C,mbreit)
 !======================================================================
-!     add integral two-electron two-component integral to the common 
+!     add integral two-electron two-component integral to the common
 !     list as the sum of one-component integrals
 ! ??? we have different numbering of integrals in different programs
 !----------------------------------------------------------------------
@@ -16,7 +16,7 @@
       Integer, external :: l_kappa
       Real(8), external :: SMU
 
-! ... Rk-integrals  
+! ... Rk-integrals
 
       m = mod(lef(i1)+lef(i3)+kpol,2) + mod(lef(i2)+lef(i4)+kpol,2)
       if(m.eq.0) then

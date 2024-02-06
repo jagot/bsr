@@ -12,7 +12,7 @@
 
     USE spline_atomic
     USE spline_param
-    USE spline_grid    
+    USE spline_grid
 
     IMPLICIT REAL(8) (A-H,O-Z)
     Character(20) :: AF
@@ -29,7 +29,7 @@
     CALL define_spline
 
     ! .. print B-splines in separate files:
-     
+
     Allocate(c(ns))
 
     n = 100;  Call Read_iarg('n',n)

@@ -12,7 +12,7 @@
       Character elw*4
       Real(8) :: x, zw,hw,hmw,rmw
       Integer :: nu, i,ii, ksw,nsw,mw, nw,lw,kw
-      Integer, external :: Ifind_nlk  
+      Integer, external :: Ifind_nlk
 
       rewind(nu)
     1 read(nu,end=2) elw,zw,hw,hmw,rmw,ksw,nsw,mw

@@ -4,16 +4,16 @@
       Use target_jj
       Use channel_jj
 
-      Implicit real(8) (A-H,O-Z) 
+      Implicit real(8) (A-H,O-Z)
       Real(8), allocatable :: CF(:,:,:)
       Character(80) :: AF
 
-      Call get_command_argument(1,AF)  
-      if(AF.eq.'?') then    !  help section 
+      Call get_command_argument(1,AF)
+      if(AF.eq.'?') then    !  help section
        write(*,*)
-       write(*,*) 'f_values_jj calculates the f-values on the base of asymptotic' 
+       write(*,*) 'f_values_jj calculates the f-values on the base of asymptotic'
        write(*,*)
-       write(*,*) 'coefficients stored in file h.nnn' 
+       write(*,*) 'coefficients stored in file h.nnn'
        write(*,*)
        write(*,*) 'h.nnn, target_jj  -->  f_values_nnn'
        write(*,*)
@@ -50,7 +50,7 @@
       read(in) (L,N=1,NAST)
       read(in) (I,N=1,NAST)
       read(in) ((C,K=1,3),L=1,LRANG2)
-      
+
       read(in) LRGL, NSPN, NPTY, NCHAN, MNP2, MORE0
 
       read(in) (NCONAT, N=1,NAST)
@@ -67,7 +67,7 @@
       Open(nu,file=AF)
 
       eps = 1.D-6
-      Call f_values(nu,eps,lamax,CF) 
+      Call f_values(nu,eps,lamax,CF)
 
       End ! program
 
@@ -76,9 +76,9 @@
       Subroutine f_values(pri,eps_acf,km,ACF)
 !======================================================================
 !     define the f-values between target states based on the
-!     given asimptotic coefficients ACF for k=1 
+!     given asimptotic coefficients ACF for k=1
 !----------------------------------------------------------------------
-      Use zconst, only: c_au, time_au  
+      Use zconst, only: c_au, time_au
       Use target_jj
       Use channel_jj
 
@@ -87,10 +87,10 @@
       Integer :: pri,km
       Real(8) :: eps_acf
 
-      Real(8), allocatable :: AK(:,:), AS(:,:)      
-      Integer, allocatable :: IP(:,:)      
+      Real(8), allocatable :: AK(:,:), AS(:,:)
+      Integer, allocatable :: IP(:,:)
       Real(8) :: S,SS, g1,g2, de, a,f
-      Integer :: i,j, i1,i2,nt 
+      Integer :: i,j, i1,i2,nt
       Real(8), external :: CLEBCH, Z_6jj, Reduce_factor
 
       if(.not.allocated(AK)) Allocate(AK(ntarg,ntarg)); AK=0.d0
@@ -98,7 +98,7 @@
       if(.not.allocated(IP)) Allocate(IP(ntarg,ntarg)); IP=0
 
       Do i=1,nch-1; Do j=i+1,nch
-     
+
        i1=iptar(i); i2=iptar(j);   if(i1.eq.i2) Cycle
        S = ACF(i,j,1)/2.d0;        if(abs(S).lt.eps_acf) Cycle
        SS = Reduce_factor(i,j,1);  if(abs(SS).lt.eps_acf) Cycle
@@ -107,7 +107,7 @@
 
        S = S / SS
 
-       S = S*S        
+       S = S*S
        g1 = jtarg(i1)+1
        g2 = jtarg(i2)+1
 
@@ -116,7 +116,7 @@
 
        AS(i1,i2) = AS(i1,i2) + S
        AK(i1,i2) = AK(i1,i2) + f
-       AK(i2,i1) = AK(i2,i1) + a 
+       AK(i2,i1) = AK(i2,i1) + a
        IP(i1,i2) = IP(i1,i2) + 1
 
       End do; End do
@@ -131,8 +131,8 @@
       End do; End do
 
 ! ... total decay probabilities:
-  
-      Do i=2,ntarg;  AK(i,i) = SUM(AK(i,1:i-1)); End do  
+
+      Do i=2,ntarg;  AK(i,i) = SUM(AK(i,1:i-1)); End do
 
 ! ... print results:
 
@@ -153,7 +153,7 @@
       a = 0.d0
       Do i = 2,ntarg
        de = Etarg(i)-Etarg(1)
-       a = a + AK(1,i)/(de*de) 
+       a = a + AK(1,i)/(de*de)
       End do
 
       if(a.ne.0.d0) &
@@ -176,8 +176,8 @@
       Integer :: j1,j2,JT1,JT2,JJ,kz
       Real(8) :: S, zero = 0.d0
       Real(8), external :: Cjkj, Z_6j2
-      Integer, external :: j_kappa 
-       
+      Integer, external :: j_kappa
+
       Reduce_factor = zero
 
       j1 = j_kappa(kch(ich))

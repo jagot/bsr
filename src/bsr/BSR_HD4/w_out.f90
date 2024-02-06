@@ -46,7 +46,7 @@
 
       ii = INDEX(AF_cfg,'.',BACK=.TRUE.); AF = AF_cfg(1:ii)//ALSP
       Open(nuc,file=AF,status='OLD')
-      ncfg=0; lcfg=0; Call Add_conf_LS(nuc,0) 
+      ncfg=0; lcfg=0; Call Add_conf_LS(nuc,0)
       Close(nuc)
 
 !----------------------------------------------------------------------
@@ -60,7 +60,7 @@
 ! ... define and record weights:
 
       Do is = 1,khm
-       
+
        cval(1:khm) = a(1:khm,is) * a(1:khm,is)
 
        ! ... weights of channels:
@@ -75,7 +75,7 @@
 
        ! ... find channel with maximum contribution:
 
-       nwt = kch+kcp 
+       nwt = kch+kcp
        Call SORTA(nwt,WT,iprm);  isol(is) = iprm(1)
 
        ! ... find label:
@@ -113,7 +113,7 @@
          it = iptar(ich)
          if(Etarg(it).gt.eval(is))  AS = 'closed ch:'
          write(pri,'(a,i6,f11.5,5x,a)') AS,ich,WT(ich),TRIM(Labl(ich))
-        end if 
+        end if
 
        End do
       end if

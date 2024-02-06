@@ -33,9 +33,9 @@
       Integer :: nv_ch = 0
       Real(8), allocatable :: V_ch(:,:)
       Integer, allocatable :: i_ch(:),j_ch(:)
-      Integer, parameter   :: ib = 2**15  
+      Integer, parameter   :: ib = 2**15
       Real(8) :: eps_v = 1.d-10
-      
+
       End Module DBS_orbitals_pq
 
 
@@ -215,7 +215,7 @@
       if(allocated(i_ch)) Deallocate(i_ch)
       if(allocated(j_ch)) Deallocate(j_ch)
       nv_ch = 0
-      if(m.le.0) Return 
+      if(m.le.0) Return
 
       k = 0
       Do i=1,nbf;  Do j=1,nbf
@@ -225,11 +225,11 @@
        if(ibs(j).eq.0) Cycle
        k = k + 1
       End do; End do
-      nv_ch = k 
+      nv_ch = k
 
       if(nv_ch.eq.0) Return
 
-      Allocate(i_ch(nv_ch),j_ch(nv_ch)) 
+      Allocate(i_ch(nv_ch),j_ch(nv_ch))
       i_ch = 0; j_ch = 0
       k = 0
       Do i=1,nbf;  Do j=1,nbf
@@ -260,19 +260,19 @@
 ! ... search position (m) for given overlap
 
       k=1; l=nv_ch
-    1 if(k.gt.l) go to 2              
+    1 if(k.gt.l) go to 2
       m=(k+l)/2
       if    (i.lt.i_ch(m)) then;       l = m - 1
       elseif(i.gt.i_ch(m)) then;       k = m + 1
       else
        if    (j.lt.j_ch(m)) then;      l = m - 1
-       elseif(j.gt.j_ch(m)) then;      k = m + 1                                      
+       elseif(j.gt.j_ch(m)) then;      k = m + 1
        else
-        KBORT=m;  Return 
+        KBORT=m;  Return
        end if
       end if
-      go to 1 
-    2 KBORT = 0 
+      go to 1
+    2 KBORT = 0
 
       End Function KBORT
 
@@ -323,7 +323,7 @@
       Do k=m,nv_ch
        i_ch(k) = i_ch(k+1)
        j_ch(k) = j_ch(k+1)
-      End do 
+      End do
 
       End Subroutine Nulify_bort
 
@@ -331,7 +331,7 @@
 !======================================================================
       Subroutine read_bort_jj(nuc)
 !======================================================================
-!     read from file nuc the imposed orthogonal conditions given as 
+!     read from file nuc the imposed orthogonal conditions given as
 !     < n1k1| n2k2>=0  (or 1 | 2)
 !----------------------------------------------------------------------
       Use DBS_orbitals_pq, only: nbf,kbs,nbs
@@ -340,14 +340,14 @@
 
       rewind(nuc)
     1 read(nuc,'(a)',end=2) Aort
-      if(Aort(1:1).ne.'<') go to 1 
+      if(Aort(1:1).ne.'<') go to 1
       Call EL_nljk(Aort(2: 6),n1,kap1,l1,j1,k1)
       i1 = Ifind_jjorb(n1,kap1,k1,0)
       if(i1.eq.0.and.k1.ne.0) go to 1
       Call EL_nljk(Aort(8:12),n2,kap2,l2,j2,k2)
       i2 = Ifind_jjorb(n2,kap2,k2,0)
       if(i2.eq.0.and.k2.ne.0) go to 1
-      if(kap1.ne.kap2) go to 1 
+      if(kap1.ne.kap2) go to 1
       read(Aort(15:15),'(i1)') ii
 
       if(ii.ne.0) go to 1
@@ -358,25 +358,25 @@
        Do i2=1,nbf
         if(kap2.ne.kbs(i2).or.n2.ne.nbs(i2)) Cycle
         Call Nulify_bort(i1,i2)
-       End do       
+       End do
       elseif(k1.eq.0.and.k2.gt.0) then
        Do i1=1,nbf
         if(kap1.ne.kbs(i1).or.n1.ne.nbs(i1)) Cycle
         Call Nulify_bort(i1,i2)
-       End do       
+       End do
       elseif(k1.eq.0.and.k2.eq.0) then
        Do i1=1,nbf
         if(kap1.ne.kbs(i1).or.n1.ne.nbs(i1)) Cycle
        Do i2=1,nbf
         if(kap2.ne.kbs(i2).or.n2.ne.nbs(i2)) Cycle
         Call Nulify_bort(i1,i2)
-       End do; End do       
+       End do; End do
       end if
 
       go to 1
     2 Continue
 
-      End Subroutine read_bort_jj 
+      End Subroutine read_bort_jj
 
 
 !=======================================================================
@@ -391,13 +391,13 @@
       if(allocated(v_ch)) Deallocate(v_ch)
       if(m.le.0) Return
 
-      if(nv_ch.gt.0) Allocate(V_ch(ns+ns,nv_ch)) 
+      if(nv_ch.gt.0) Allocate(V_ch(ns+ns,nv_ch))
 
       Do k = 1,nv_ch
        i = i_ch(k); j = j_ch(k)
-       if(IBORT(i,j).eq.0) Cycle    
+       if(IBORT(i,j).eq.0) Cycle
        Call Get_v (i,j,V_ch(1,k))
-      End do      
+      End do
 
       i = mbf
       memory_DBS_orbitals = (32*i + 12*i*i + 4*8*i*ns)/(1024d0*1024d0)
@@ -413,7 +413,7 @@
       Subroutine get_V (kl,nl,v)
 !======================================================================
 !     provides <.|nl>  for <kl|nl>
-!     if additionally <kl|n'l'> = 0  then  nl -> nl - <nl|n'l'> n'l' 
+!     if additionally <kl|n'l'> = 0  then  nl -> nl - <nl|n'l'> n'l'
 !----------------------------------------------------------------------
       Use DBS_grid
       Use DBS_orbitals_pq
@@ -423,8 +423,8 @@
       Real(8) :: v(ms), w(ms)
       Integer :: i
       Real(8), external :: obs
-      Integer, external :: IBORT   
-   
+      Integer, external :: IBORT
+
       if(IBORT(kl,nl).eq.0) then
        write(*,'(2a6,10i5)') &
         ebs(kl),ebs(nl),IBORT(kl,nl),IBORT(nl,kl),kl,nl,nbf

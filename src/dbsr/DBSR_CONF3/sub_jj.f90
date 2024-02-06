@@ -1,4 +1,4 @@
-!======================================================================      
+!======================================================================
       Subroutine SUB_JJ
 !======================================================================
 !     define channels orbitals in case of JJ-coupling
@@ -8,7 +8,7 @@
       Implicit none
 
       Real(8) :: CT
-      Integer :: j,l,n,kappa,ip,iset,it,ic,jc,ic1,ic2,JT 
+      Integer :: j,l,n,kappa,ip,iset,it,ic,jc,ic1,ic2,JT
       Integer :: lch_min,lch_max
       Character(5), external :: ELi
       Integer, external :: New_index, Ifind_jjorb, Iadd_cfg_jj, &
@@ -38,7 +38,7 @@
          if(max_ka.ne.0.and.kappa.gt.max_ka) Cycle
          if(min_ka.ne.0.and.kappa.lt.min_ka) Cycle
 
-         iset = New_index(kappa,ksmax,nwf,KEF,IEF) 
+         iset = New_index(kappa,ksmax,nwf,KEF,IEF)
          n = ichar('k')
 
          ip=Ifind_jjorb(n,kappa,iset,2)
@@ -48,10 +48,10 @@
          if(nch.eq.mch) Call Alloc_channel_jj(mch+imch)
          nch=nch+1; kch(nch)=kappa; iptar(nch)=it
                     lch(nch)=l;  jjch(nch) = j
-         ipch(nch) = ip 
+         ipch(nch) = ip
          ELC(nch)=ELi(n,kch(nch),iset)
 
-! ... define scattering configurations:      
+! ... define scattering configurations:
 
          ic1=ic_targ(it-1)+1; ic2=ic_targ(it)
          CT = 0.d0
@@ -73,10 +73,10 @@
 !         if(abs(CT-1.d0).gt.c_norm) &
 !         write(pri,'(i5,a20,a20,a,F10.3,a)') &
 !                  nch, BFT(it),AFT(it),ELC(nch),CT, '  - check normalization'
-  
+
         End do     ! over small l
        End do      ! over small j
 
       End do       ! over targets
-  
+
       End Subroutine SUB_JJ

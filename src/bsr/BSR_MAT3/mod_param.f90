@@ -8,9 +8,9 @@
 ! ... input/output files and units:
 
       Integer, parameter :: ma=20    ! limit for file-name length
-      Character(ma) :: AF     
+      Character(ma) :: AF
 
-      Integer :: prj =  3; Character(ma) :: AF_prj = 'bsr_mat.log'                            
+      Integer :: prj =  3; Character(ma) :: AF_prj = 'bsr_mat.log'
       Integer :: pri = 66; Character(ma) :: AF_pri = 'mat_log.nnn'
 
       Integer :: nut = 10; Character(ma) :: AF_tar = 'target'
@@ -25,16 +25,16 @@
 
 ! ... range of partial waves:
 
-      Integer :: klsp=0, klsp1=1, klsp2=1      
+      Integer :: klsp=0, klsp1=1, klsp2=1
       Character(3) :: ALSP
 
-! ... treat the target states as othonormalized w.f.: 
+! ... treat the target states as othonormalized w.f.:
 
-      Integer :: iitar  =  0      
+      Integer :: iitar  =  0
 
 ! ... relativistic corrections:
 
-      Integer :: mrel  =   0      
+      Integer :: mrel  =   0
       Integer :: mso   =   0
       Integer :: msoo  =   0
       Integer :: mss   =   0
@@ -56,17 +56,17 @@
 ! ... dimension limits:
 
       Integer :: mk    =      7   ! max. multipole index
-      Integer :: nb    =   2000   ! number of blocks in cmdata       
+      Integer :: nb    =   2000   ! number of blocks in cmdata
       Integer :: mb    =   5000   ! size of blocks
       Integer :: kb    =    100   ! max.nb for given case
-	                               
+
 ! ... tolerence parameters:
 
       Real(8) :: Eps_c    = 1.0D-10  !  tolerance for coefficients
       Real(8) :: Eps_det  = 1.0D-10  !  tolerance for determinants
       Real(8) :: Eps_ovl  = 1.0D-8   !  tolerance for overlaps
 
-      Real(8) :: S_ovl    = 0.75     !  channel overlap limit 
+      Real(8) :: S_ovl    = 0.75     !  channel overlap limit
       Real(8) :: S_pert   = 0.5      !  perturber overlap limit
 
       Real(8) :: Eps_acf  = 1.0D-5   !  tolerance for asympt. coeff.s

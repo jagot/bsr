@@ -8,7 +8,7 @@
 
       Implicit none
 
-! ... main files: 
+! ... main files:
 
       Integer, parameter :: ma=80;  Character(ma) :: AF
 
@@ -28,7 +28,7 @@
       Real(8) :: eps_acf  = 1.0D-5   !  tolerance for asympt. coeff.s
       Character(200) :: line
 
-! ... LSJ target expansions: 
+! ... LSJ target expansions:
 
       Integer, allocatable :: ip_expn(:), it_expn(:)
       Real(8), allocatable :: c_expn(:)
@@ -58,9 +58,8 @@
 ! ... Calculations in parts:     ???
 
       Integer :: ij_block = 0
-      Integer :: I1_channel, I2_channel, J1_channel, J2_channel 
-      Integer :: I1_chan=0, I2_chan=0, J1_chan=0, J2_chan=0 
+      Integer :: I1_channel, I2_channel, J1_channel, J2_channel
+      Integer :: I1_chan=0, I2_chan=0, J1_chan=0, J2_chan=0
 
       End Module bsr_recoup
 
-     

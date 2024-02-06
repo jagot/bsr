@@ -1,7 +1,7 @@
 !=====================================================================
       Real(8) Function ZIS(H,N,A)
 !=====================================================================
-!     the simplest routine to evaluate the integral value 
+!     the simplest routine to evaluate the integral value
 !     according to the Simpson rule;
 !     integral function A is supposed to given in N equal-spaced points
 !     with interval H.

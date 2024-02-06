@@ -37,7 +37,7 @@
       Real(8), intent(out) :: EN(nch)
       Integer :: K,N,NC
       Real(8) :: ECH
-       
+
       NOPEN = 0
       K = 0
       DO N = 1,nast
@@ -49,6 +49,6 @@
           EN(K) = ECH
         END DO
       END DO
- 
+
       End Subroutine ZOPEN
- 
+

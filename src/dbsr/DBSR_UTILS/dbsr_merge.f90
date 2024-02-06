@@ -1,5 +1,5 @@
 !======================================================================
-!     PROGRAM       D B S R _ M E R G E              
+!     PROGRAM       D B S R _ M E R G E
 !
 !               C O P Y R I G H T -- 2008
 !
@@ -7,17 +7,17 @@
 !                   email: oleg_zoi@yahoo.com
 !
 !======================================================================
-!  Analizes the orthogonality conditions for one-electron orbitals 
+!  Analizes the orthogonality conditions for one-electron orbitals
 !  and generates new c- and bsw-files  with consistent
-!  indication of the set indexes 
-! 
-!  In order to define the same orbitals, the following criteria are 
-!  used:  
+!  indication of the set indexes
+!
+!  In order to define the same orbitals, the following criteria are
+!  used:
 !              | <p1|p2> - 1 |  <  eps_ovl
 !              | <p1|r|p1> - <p2|r|p2> | <  eps_ovl
 !              | <p1|1/r|p1> - <p2|1/r|p2> | <  eps_ovl
 !
-!  where the parameter eps_ovl can be read from bsr_par, 
+!  where the parameter eps_ovl can be read from bsr_par,
 !  or as argument: eps_ovl=...
 !======================================================================
 !
@@ -34,7 +34,7 @@
 !======================================================================
       Use conf_jj; Use orb_jj
       Use DBS_grid; Use DBS_orbitals_pq; Use DBS_gauss
-      
+
       Implicit real(8) (A-H,O-Z)
       Integer, parameter :: ma = 80
       Character(ma) :: AFC,AFW, BFC,BFW, AF_inp
@@ -45,7 +45,7 @@
       Integer :: nuw = 12;         ! input w-file
       Integer :: muc = 13;         ! temp c-file
 
-! ... default value for overlap parameter: 
+! ... default value for overlap parameter:
 
       Real(8) :: eps_ovl  = 1.d-7
       Real(8) :: eps_core = 1.d-5
@@ -63,7 +63,7 @@
        write(*,*)
        write(*,*) 'list of merging files (AF1.c, AF.2.c, ...) '
        write(*,*) 'also can be given in input file:  inp=...  '
-       write(*,*)  
+       write(*,*)
        write(*,*) 'nfile  - number of merging files'
        write(*,*) 'merge  - name for resulting files: merge.c and merge.bsw'
        write(*,*) 'jjmin  - minimum 2J value (optional)'
@@ -74,7 +74,7 @@
       end if
 
 !----------------------------------------------------------------------
-! ... sets up grid points and initializes the values of the B-spline: 
+! ... sets up grid points and initializes the values of the B-spline:
 
       Call Check_file('knot.dat')
       Call read_knot_dat
@@ -94,13 +94,13 @@
       write(pri,'( a,i5)') 'jjmax    = ',jjmax
 
       Call Read_iarg('nfile',nfile)
-      
+
       AF_inp = 'no'
       Call Read_aarg('inp',AF_inp)
       if(AF_inp.ne.'no') then
        Call Check_file(AF_inp)
        open(inp,file=AF_inp)
-       nfile=0       
+       nfile=0
     11 read(inp,'(a)',end=12) AS
        if(AS(1:1).eq.'*') go to 12
        if(LEN_TRIM(AS).eq.0) go to 12
@@ -123,35 +123,35 @@
 
 !----------------------------------------------------------------------
       Do it=1,nfile
- 
+
        if(AF_inp.ne.'no') then
         read(inp,'(a)') AFC
-       else 
+       else
         Call Getarg(it,AFC)
        end if
 
        Call Check_file(AFC)
        Open(nuc,file=AFC)
-              
+
        if(it.eq.1) then
         Call Read_core_jj(nuc)
        else
         read(nuc,'(/a)') CLOSED
         if(CLOSED.ne.core)  then
          write(pri,'(/a,a,a)') 'case ',AFC,' has different core'
-         Stop ' ' 
+         Stop ' '
         end if
        end if
 
        write(pri,'(/a,a/)') 'case ',AFC
-      
+
        ii=LEN_TRIM(AFC)
-       if(AFC(ii:ii).ne.'c') Stop ' c-file must end by .c '       
+       if(AFC(ii:ii).ne.'c') Stop ' c-file must end by .c '
        AFW = AFC(1:ii-1)//'bsw'
 
        CALL  SUB1
 
-      End do 
+      End do
 
 !-----------------------------------------------------------------------
 ! ... create the final.bsw file:
@@ -174,7 +174,7 @@
       write(nuc,'(a)')  core(1:ncore*5)
       write(nuc,'(a)') 'Peel subshells:'
       write(nuc,'(20a5)') (ebs(i),i=ncore+1,nbf)
-      write(nuc,'(a)') 'CSF(s):' 
+      write(nuc,'(a)') 'CSF(s):'
 
       rewind(muc)
     1 read(muc,'(a)',end=2) AS; if(AS(6:6).ne.'(') go to 1
@@ -187,9 +187,9 @@
       go to 1
     2 write(nuc,'(a)') '*'
 
-! ... output of the orthogonal conditions in the case when 
-! ... orbitals are orthogonal but we cannot assign them the same set 
-! ... index 
+! ... output of the orthogonal conditions in the case when
+! ... orbitals are orthogonal but we cannot assign them the same set
+! ... index
 
       rewind(muc)
     3 read(muc,'(a)',end=4) AS; if(AS(1:1).ne.'<') go to 3
@@ -217,7 +217,7 @@ CONTAINS
 !----------------------------------------------------------------------
 ! ... read configurations and define the list of orbitals:
 
-      ncfg=0; nwf=ncore; Call read_conf_jj(nuc,0,'add','check') 
+      ncfg=0; nwf=ncore; Call read_conf_jj(nuc,0,'add','check')
 
       ipef=0
 
@@ -225,7 +225,7 @@ CONTAINS
 
       Call Check_file(AFW);  Open(nuw,file=AFW,form='UNFORMATTED')
       read(nuw) igrid,nsw,ksw,tw(1:nsw+ksw),kp,kq
-      if(igrid.ne.grid_type) Stop 'Another knot grid?'      
+      if(igrid.ne.grid_type) Stop 'Another knot grid?'
       if(ksw.ne.ks) Stop ' Read_bsw:  ksw <> ks'
       if(nsw.ne.ns) Stop ' Read_bsw:  nsw <> ns'
       if(ksp.ne.kp) Stop ' Read_bsw:  ksp <> kp'
@@ -234,7 +234,7 @@ CONTAINS
       k=1
       Do i=1,ns+ks
        if(abs(t(i)-tw(i)).lt.1.d-10) Cycle; k=0; Exit
-      End do    
+      End do
       if(k.eq.0) Stop 'Another knot grid t(1:ns+ks) ?'
 
     1 m=nbf+1; if(m.gt.mbf) CALL Alloc_dbs_orbitals_pq(mbf+ibf,ns)
@@ -244,10 +244,10 @@ CONTAINS
 
       pbw=0.d0; read(nuw) (pbw(i),i=1,mbw)
       qbw=0.d0; read(nuw) (qbw(i),i=1,mbw)
-     
+
       Call EL_nljk(elw,n,kappa,l,j,k); ii=Ifind_jjorb(n,kappa,k,0)
 
-      if(ii.gt.0) then                              
+      if(ii.gt.0) then
        mbs(m)=ns; nbs(m)=n; kbs(m)=kappa; ibs(m)=k; ebs(m)=elw
        pq(1:ns,1,m)=pbw(1:ns)
        pq(1:ns,2,m)=qbw(1:ns)
@@ -259,7 +259,7 @@ CONTAINS
 ! ... define overlaps with existing orbitals:
 
       Do i = 1,m
-       if(kbs(i).ne.kbs(m)) Cycle 
+       if(kbs(i).ne.kbs(m)) Cycle
        S = QUADR_pq(m,i,0)
        if(abs(S).lt.eps_ovl) Cycle
        Call Iadd_obs(m,i,S)
@@ -274,10 +274,10 @@ CONTAINS
 
 !---------------------------------------------------------------------
 !                                  compare with the existing orbitals:
-       
+
       Do i = 1,nbf;  if(abs(OBS(i,m)).lt.eps_ovl) Cycle
 
-       ! ... check orthogonality to core: 
+       ! ... check orthogonality to core:
 
        if(i.le.ncore.and.ii.gt.ncore) then
         if(abs(OBS(i,m)).gt.eps_core) then
@@ -294,15 +294,15 @@ CONTAINS
        S2 = abs(QUADR_pq(i,i,2)-SM2)
 
 
-       if(S.lt.eps_ovl.and.S1.lt.eps_ovl.and.S2.lt.eps_ovl) then           
+       if(S.lt.eps_ovl.and.S1.lt.eps_ovl.and.S2.lt.eps_ovl) then
         ipef(ii) = i
         write(pri,'(a,a,a,a)') elw,' --> ',ebs(i),'    the same'
         go to 1
        end if
-       
+
       End do
 
-      ! ...  core orbitals should be the same:   
+      ! ...  core orbitals should be the same:
 
       if(it.gt.1.and.ii.le.ncore) then
        write(pri,'(a,a,a)') 'file ',AFW,'  has another core orbital'
@@ -310,7 +310,7 @@ CONTAINS
       end if
 
 !---------------------------------------------------------------------
-!                                    assign set index for new orbital: 
+!                                    assign set index for new orbital:
       ibs(m)=-1
       inew = New_index(kappa,ksmax,nbf,kbs,ibs)
       S = 0.d0
@@ -318,22 +318,22 @@ CONTAINS
 ! ... check existing orthogonal subsets:
 
       Do i = 1,inew-1
-       S=0.d0           
+       S=0.d0
        Do j = 1,nbf
         if(kappa.ne.kbs(j).or.i.ne.ibs(j)) Cycle
         S=max(S,abs(OBS(j,m)))
        End do
        if(S.lt.eps_ovl) then; ibs(m)=i; Exit; end if
-      End do  
+      End do
 
-      if(ibs(m).eq.-1) then  ! the orbital belongs to new set  
+      if(ibs(m).eq.-1) then  ! the orbital belongs to new set
 
        ibs(m) = inew
        EBS(m)=ELi(nbs(m),kbs(m),ibs(m))
        write(pri,'(a,a,a,a,f15.9)') &
              elw,' --> ',EBS(m),'    new orbitals and new set index',S
 
-      else              ! check the same label for diff.orbitals            
+      else              ! check the same label for diff.orbitals
 
        EBS(m)=ELi(nbs(m),kbs(m),ibs(m))
        Do i = 1,nbf
@@ -373,30 +373,30 @@ CONTAINS
       end if
       read(nuc,'(a)') SHELLJ
       read(nuc,'(9x,a)') INTRAJ
-      
+
       Call Decode_cj
 
-      if(jjmin.ge.0.and.Jtotal.lt.jjmin) go to 3 
-      if(jjmax.ge.0.and.Jtotal.gt.jjmax) go to 3 
+      if(jjmin.ge.0.and.Jtotal.lt.jjmin) go to 3
+      if(jjmax.ge.0.and.Jtotal.gt.jjmax) go to 3
 
       Do i=1,no
        ii=Ifind_jjorb(nn(i),kn(i),in(i),1); ii=ipef(ii)
-       nn(i)=nbs(ii); kn(i)=kbs(ii); in(i)=ibs(ii); 
+       nn(i)=nbs(ii); kn(i)=kbs(ii); in(i)=ibs(ii);
       End do
-      
+
       Call Incode_cj
 
       ii = 72; if(no.gt.8) ii=9*no
       write(muc,'(a,f12.8)') CONFIG(1:ii),C
       write(muc,'(a)') SHELLJ
       write(muc,'(9x,a)') INTRAJ
-       
+
       go to 3
     4 Continue
 
-! ... output of the orthogonal conditions in the case when 
-! ... orbitals are orthogonal but we cannot assign them the same set 
-! ... index 
+! ... output of the orthogonal conditions in the case when
+! ... orbitals are orthogonal but we cannot assign them the same set
+! ... index
 
       write(pri,'(/a/)') ' Orthogonal conditions:'
 
@@ -406,7 +406,7 @@ CONTAINS
         if(kbs(i).ne.kbs(j)) Cycle
         S = abs(OBS(i,j))
         if(ibs(i).eq.ibs(j).and.S.gt.eps_ovl)  then
-         write(pri,*) & 
+         write(pri,*) &
               ' i_set1 = i_set2, but orbitals are not orthogonal ???'
          write(pri,'(2a5,f12.8)') EBS(i),EBS(j),S
          Stop ' i_set1 = i_set2, but orbitals are not orthogonal ???'
@@ -419,9 +419,9 @@ CONTAINS
       End do
 
       write(pri,'(72(''-''))')
-      
+
       End Subroutine Sub1
-      
+
       End  ! program dbsr_merge
 
 

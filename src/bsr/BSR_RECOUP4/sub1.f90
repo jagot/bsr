@@ -7,7 +7,7 @@
 
       Use channels_ion, only: nlsp_LS => nlsp, nch_LS => nch, &
                               ipar_LS => ipar, lpar_LS => lpar, ispar_LS => ispar
-      
+
       Implicit real(8) (A-H,O-Z)
 
       Call R_channel(nut,klsp)
@@ -22,7 +22,7 @@
       Call Allocate_matrix(m)
 
       mui = kui
-      Do ilsp = 1,nlsp_LS; kch = nch_LS(ilsp); LL = 2*lpar_LS(ilsp)+1 
+      Do ilsp = 1,nlsp_LS; kch = nch_LS(ilsp); LL = 2*lpar_LS(ilsp)+1
 
        if(ipar.ne.ipar_LS(ilsp)) Cycle
        if(ITRI (jpar,LL,ispar_LS(ilsp)).eq.0) Cycle
@@ -32,16 +32,16 @@
        Call Check_file(BF_mat)
        mui = mui + 1
        open(mui,file=BF_mat,form='UNFORMATTED',action='READ')
-       rewind(mui)       
+       rewind(mui)
        read(mui) ns1, nch1, npert1
 
-       Do 
+       Do
         read(mui) ic,jc
         if(ic.le.0) Exit
         if(ic.gt.kch.or.jc.gt.kch) Stop 'not channel-channel block'
         read(mui) x(:,:)
         Call Add_block(ilsp,ic,jc,1)
-         if(ic.ne.jc)  Call Add_block(ilsp,jc,ic,1) 
+         if(ic.ne.jc)  Call Add_block(ilsp,jc,ic,1)
        End do
 
       End do
@@ -53,20 +53,20 @@
       Call Allocate_matrix(m)
 
       mui = kui
-      Do ilsp = 1,nlsp_LS; kch = nch_LS(ilsp); LL = 2*lpar_LS(ilsp)+1 
+      Do ilsp = 1,nlsp_LS; kch = nch_LS(ilsp); LL = 2*lpar_LS(ilsp)+1
 
        if(ipar.ne.ipar_LS(ilsp)) Cycle
        if(ITRI (jpar,LL,ispar_LS(ilsp)).eq.0) Cycle
 
        mui = mui + 1
 
-       Do 
+       Do
         read(mui) ic,jc
         if(ic.le.0) Exit
         if(ic.gt.kch.or.jc.gt.kch) Stop 'not channel-channel block'
         read(mui) x(:,:)
         Call Add_block(ilsp,ic,jc,1)
-         if(ic.ne.jc)  Call Add_block(ilsp,jc,ic,1) 
+         if(ic.ne.jc)  Call Add_block(ilsp,jc,ic,1)
        End do
 
       End do
@@ -83,15 +83,15 @@
       Allocate(acf(nch,nch,0:mk));  acf = 0.d0
 
       mui = kui
-      Do ilsp = 1,nlsp_LS; kch = nch_LS(ilsp); LL = 2*lpar_LS(ilsp)+1 
+      Do ilsp = 1,nlsp_LS; kch = nch_LS(ilsp); LL = 2*lpar_LS(ilsp)+1
 
        if(ipar.ne.ipar_LS(ilsp)) Cycle
        if(ITRI (jpar,LL,ispar_LS(ilsp)).eq.0) Cycle
        mui = mui + 1
 
-       if(allocated(bcf)) deallocate(bcf)      
+       if(allocated(bcf)) deallocate(bcf)
        read(mui) km
-       Allocate(bcf(kch,kch,0:km))                       
+       Allocate(bcf(kch,kch,0:km))
        read(mui) bcf
 
        Call print_acf (pri,kch,km,bcf,eps_acf)
@@ -99,7 +99,7 @@
        Do ic=1,kch
         Do jc=1,ic
          Call Add_block(ilsp,ic,jc,2)
-         if(ic.ne.jc)  Call Add_block(ilsp,jc,ic,2) 
+         if(ic.ne.jc)  Call Add_block(ilsp,jc,ic,2)
         End do
        End do
 
@@ -134,9 +134,9 @@
        if(SUM(acf(:,:,k)).eq.0) Cycle
        write(pri,'(a,i2)') 'k = ',k
        ij = 0
-       Do i=1,nch; Do j = 1,i      
+       Do i=1,nch; Do j = 1,i
         if(abs(acf(i,j,k)).lt.eps_acf) Cycle
-        i1=ij*20+1; i2=i1+19 
+        i1=ij*20+1; i2=i1+19
         write(line(i1:i2),'(2i4,E12.3)') i,j,acf(i,j,k)
         ij=ij+1
         if(ij.lt.5) Cycle

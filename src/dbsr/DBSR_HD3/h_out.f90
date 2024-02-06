@@ -1,5 +1,5 @@
 !======================================================================
-      Subroutine H_OUT   
+      Subroutine H_OUT
 !======================================================================
 !     Output results in H.DAT file (unit 'nuh') for further asymptotic
 !     calculations
@@ -73,7 +73,7 @@
 
 
 !======================================================================
-      Subroutine H_OUT_exp   
+      Subroutine H_OUT_exp
 !======================================================================
 !     Output results in H.DAT file (unit 'nuh') for further asymptotic
 !     calculations
@@ -104,7 +104,7 @@
 
       NCONAT=0
       write(nuh) nelc,nz,LRANG2,km,ntarg,RA,RB
-      write(nuh) (E_exp(ip_exp(i)),i=1,ntarg) 
+      write(nuh) (E_exp(ip_exp(i)),i=1,ntarg)
       write(nuh) (jtarg(ip_exp(i)),i=1,ntarg)
       write(nuh) (0,i=1,ntarg)
 
@@ -122,7 +122,7 @@
 ! ... number of channels, coupled to each target state:
 
       NCONAT=0
-      Do i=1,ntarg; it=ip_exp(i)      
+      Do i=1,ntarg; it=ip_exp(i)
        Do ich=1,nch; if(iptar(ich).ne.it) Cycle
         NCONAT(i) = NCONAT(i) + 1
        End do
@@ -132,7 +132,7 @@
 ! ... new channel order:
 
       k = 0
-      Do i=1,ntarg; it=ip_exp(i)      
+      Do i=1,ntarg; it=ip_exp(i)
        Do ich=1,nch; if(iptar(ich).ne.it) Cycle
         k=k+1; npch(k)=ich
        End do

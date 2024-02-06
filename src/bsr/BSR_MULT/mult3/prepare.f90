@@ -1,5 +1,5 @@
 !======================================================================
-      Subroutine pre_det_exp 
+      Subroutine pre_det_exp
 !======================================================================
 !     define the det. expansions and write the information
 !     in scratch file 'nud'. 'nua' is just used for temporally storing.
@@ -14,7 +14,7 @@
       USE symc_list_LS, only: nsymc,IC_need,JC_need,IC_term1,IC_term2
       USE symt_list_LS, only: IT_sort, IT_need
 
-      Implicit none 
+      Implicit none
 
       Integer :: i,j,k,kt,kdt,kti,it,it1,it2,ic
       Integer, Allocatable :: IP_kt(:)
@@ -70,7 +70,7 @@
 
        rewind(nua)
        Call Det_expn (nua,kt,kdt,MLT,MST)
-       rewind(nua)      
+       rewind(nua)
 
        if(kdt.eq.0) Stop 'Pre_detexp: kdt = 0'
 
@@ -99,32 +99,32 @@
 
       if(Allocated(IP_kt)) Deallocate(IP_kt)
 
-      End Subroutine pre_det_exp 
+      End Subroutine pre_det_exp
 
 
 
 !======================================================================
-      Subroutine Det_expn (nua,kt,kdt,MLT,MST) 
+      Subroutine Det_expn (nua,kt,kdt,MLT,MST)
 !======================================================================
 !     determined all possible determinants and their coefficients
 !     for given set of terms (kt). Results are recorded to unit 'nua'
 !----------------------------------------------------------------------
 
       USE conf_LS,       only: ne,no,ln,iq,LS,LS1,LSI
-      USE spin_orbitals, only: in,md,Msym,Ssym,MS_orb,ML_orb 
+      USE spin_orbitals, only: in,md,Msym,Ssym,MS_orb,ML_orb
 
       Implicit none
 
       Integer :: nua,kt,kdt,MLT,MST, kd,i,j,k,m,ii
-      Integer :: nd(ne),idet(ne),ML(ne),MS(ne),MLp(ne),MSp(ne)  
+      Integer :: nd(ne),idet(ne),ML(ne),MS(ne),MLp(ne),MSp(ne)
       Real(8) :: Cdet(kt)
       Real(8) :: C
       Real(8), External :: Clebsh, DETC_sh
 
-      kd=0; kdt=0; i=1; nd(i)=1              
+      kd=0; kdt=0; i=1; nd(i)=1
     1 kd = kd + 1
       ii = in(i)
-      Call DET_sh(ln(i),iq(i),nd(i),ML(i),MS(i),Idet(ii)) 
+      Call DET_sh(ln(i),iq(i),nd(i),ML(i),MS(i),Idet(ii))
 
       m = iabs(ML(i)); if(ML(i).lt.0) m=m+2
       if(m.gt.LS1(i,2)) go to 2

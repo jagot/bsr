@@ -1,24 +1,24 @@
 !=================================================================
       Module phys_orb_LS
 !=================================================================
-!     contains the list of physical orbitals for all target states 
+!     contains the list of physical orbitals for all target states
 !-----------------------------------------------------------------
       Implicit none
-   
+
       Integer :: nphys_orb = 0           !  number of phys.orbitals
 
-      Integer, allocatable :: ip_tar(:)  !  target pointer 
-      Integer, allocatable :: ip_phy(:)  !  orbital pointer 
-      Integer, allocatable :: ip_sub(:)  !  substitution pointer 
+      Integer, allocatable :: ip_tar(:)  !  target pointer
+      Integer, allocatable :: ip_phy(:)  !  orbital pointer
+      Integer, allocatable :: ip_sub(:)  !  substitution pointer
       Real(8), allocatable :: S_orb (:)  !  population
 
       Integer :: nphys_sub = 0           !  number of sub.orbitals
-      Integer, allocatable :: jp_sub(:)  !  index of sub. orbitals 
-      Integer, allocatable :: jp_tar(:)  !  index of sub. orbitals 
+      Integer, allocatable :: jp_sub(:)  !  index of sub. orbitals
+      Integer, allocatable :: jp_tar(:)  !  index of sub. orbitals
 
       Integer :: npert_sub = 0           !  number of sub.orbitals
-      Integer, allocatable :: np_phy(:)  !  orbital pointer 
-      Integer, allocatable :: np_sub(:)  !  substitution pointer 
+      Integer, allocatable :: np_phy(:)  !  orbital pointer
+      Integer, allocatable :: np_sub(:)  !  substitution pointer
       Real(8), allocatable :: SP_orb(:)  !  population
 
       End Module phys_orb_LS
@@ -91,8 +91,8 @@
       Allocate(jp_tar(nphys_orb))
       jp_tar = 0
       Do it=1,ntarg
-       i1=1; if(it.gt.1) i1=ip_tar(it-1)+1; i2=ip_tar(it) 
-       Do i=i1,i2  
+       i1=1; if(it.gt.1) i1=ip_tar(it-1)+1; i2=ip_tar(it)
+       Do i=i1,i2
         ip = Ipointer(nphys_sub,jp_sub,ip_sub(i))
         if(jp_tar(ip).eq.0) jp_tar(ip)=it
        End do

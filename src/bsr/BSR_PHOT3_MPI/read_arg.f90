@@ -10,7 +10,7 @@
       Real(8) :: EKK
       Real(8), allocatable :: ee(:)
 
-      rewind(nu); Elow=0.d0; Ehigh=0.d0; Estep=0.d0 
+      rewind(nu); Elow=0.d0; Ehigh=0.d0; Estep=0.d0
     1 read(nu,'(a)',end=2) AS
       i=INDEX(AS,'='); if(i.lt.2) go to 1
       i1=i+1; i2=INDEX(AS,'!')-1; if(i2.lt.i1) i2=LEN_TRIM(AS)
@@ -32,7 +32,7 @@
        Case('bth'   );  read(AS(i1:i2),*) bthreshold
       End Select
       go to 1
-    2 Continue   
+    2 Continue
 
       Call Read_iarg('klsp' ,klsp )
       Call Read_iarg('iauto',iauto)
@@ -59,14 +59,14 @@
       open(iph,file=AF)
       ne = 0
     3 read(iph,*,end=4) ekk
-      ne = ne + 1   
+      ne = ne + 1
       go to 3
     4 Allocate(ee(0:ne)); ee = -1.0d0
       rewind(iph)
       Do i = 1,ne; read(iph,*) ee(i); End do
-      rewind(iph) 
-     
-      me = 0 
+      rewind(iph)
+
+      me = 0
       Do i = 1,nrange
        if(Elow(i).le.0.d0) Cycle
        if(Ehigh(i).lt.Elow(i)) Cycle
@@ -77,7 +77,7 @@
       End do; End do
 
       write(*,'(a,i6,a)') 'me =', me,' - number of energies'
-      Allocate(EK(0:me),IEK(0:me)) 
+      Allocate(EK(0:me),IEK(0:me))
       if(me.eq.0) Return
       me = 0; ie=0
       Do i = 1,nrange
@@ -103,14 +103,14 @@
       Use bsr_phot
 
       Implicit none
-      
+
       Call MPI_BCAST(klsp,  1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
       Call MPI_BCAST(iauto, 1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
       Call MPI_BCAST(mfgi,  1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
       Call MPI_BCAST(nwt,   1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
       Call MPI_BCAST(ikm,   1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
       Call MPI_BCAST(ibug,  1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      
+
       Call MPI_BCAST(AC,   1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
       Call MPI_BCAST(DR,   1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
       Call MPI_BCAST(AWT,  1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)

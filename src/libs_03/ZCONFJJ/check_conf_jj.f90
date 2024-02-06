@@ -2,7 +2,7 @@
       Subroutine Check_conf_jj(nuc,nub)
 !======================================================================
 !     Read the configuration list from c-file (unit 'nuc'),
-!     define there angular symmetries and compare with ones in the 
+!     define there angular symmetries and compare with ones in the
 !     angular coefficients data bank (unit 'nub')
 !     Prepare other angular arrays.
 !----------------------------------------------------------------------
@@ -41,7 +41,7 @@
       Call Decode_cj;  Call Test_cj
       i = Iadd_cfg_jj('add')
       go to 1
-    2 Continue     
+    2 Continue
 
       if(nsymt.gt.nsymt0.or.nsymc.gt.nsymc0) &
        Stop 'bnk-file is not complete; run DBSR_BREIT first!'
@@ -59,7 +59,7 @@
 
       Do i=1,ncfg
        it=IS_term(IS_order(i))
-       if(IT_state1(it).eq.0) IT_state1(it)=i; IT_state2(it)=i 
+       if(IT_state1(it).eq.0) IT_state1(it)=i; IT_state2(it)=i
       End do
 
 !----------------------------------------------------------------------

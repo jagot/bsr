@@ -1,5 +1,5 @@
 !======================================================================
-!     PROGRAM       B S R _ P R E P 3                     
+!     PROGRAM       B S R _ P R E P 3
 !
 !               C O P Y R I G H T -- 2014
 !
@@ -10,21 +10,21 @@
 !
 !  1. Target states are ordered according to their energies.
 !  2. The one-electron orbitals are analized and new c-files for target
-!     states (targ_nnn.c)  and pertubers (pert_nnn.c and pert_nnn.bsw) 
-!     are generated with consistent set-indexes.  
+!     states (targ_nnn.c)  and pertubers (pert_nnn.c and pert_nnn.bsw)
+!     are generated with consistent set-indexes.
 !     File target.bsw contains all target orbitals.
 !  3. The list of spectroscopic orbitals for target states is created
 !     and recorded in the "target_orb" file.
 !  4  The orthogonal set of "substitution" orbitals is readed from
 !     target_sub.bsw (or created if target_sub.bsw is absent).
 !
-!  In order to define the same orbitals, the following criteria are 
-!  used:  
+!  In order to define the same orbitals, the following criteria are
+!  used:
 !              | <p1|p2> - 1 |               <  eps_ovl
 !              | <p1|r|p1> - <p2|r|p2> |     <  eps_ovl
 !              | <p1|1/r|p1> - <p2|1/r|p2> | <  eps_ovl
 !
-!  where the parameter eps_ovl can be read from bsr_par, 
+!  where the parameter eps_ovl can be read from bsr_par,
 !  or as argument: eps_ovl=value
 !
 !======================================================================
@@ -32,30 +32,30 @@
 !  INPUT FILES:
 !
 !     bsr_par   -  parameters of calculation (optional)
-!     target    -  list of target states and partial waves 
+!     target    -  list of target states and partial waves
 !     c- and bsw-files for target states and perturbers if any
 !     knot.dat  -  B-spline parameters
-!     target_sub.bsw  - substitution orbitals (optional) 
+!     target_sub.bsw  - substitution orbitals (optional)
 !
 !  OUTPUT FILES:
 !
 !     target        -  modified list of target states
-!     target.bsw    -  all one-elelectron target orbitals 
-!     target_orb    -  list of physical target orbitals 
+!     target.bsw    -  all one-elelectron target orbitals
+!     target_orb    -  list of physical target orbitals
 !     targ_nnn.c    -  c-file for target "nnn"
 !     pert_nnn.c    -  c-file for perturber "nnn", if any
 !     pert_nnn.bsw  -  w-file for perturber "nnn", if any
 !     bsr_prep.log  -  running information
 !
-!  ARGUMENTS:   
+!  ARGUMENTS:
 !
 !     eps_ovl  [1.d-6] - tolerance for overlaps
-!     eps_phys [0.5  ] - minimum occupation number for physical orbital 
+!     eps_phys [0.5  ] - minimum occupation number for physical orbital
 !     eps_sub  [0.5  ] - tolerance for substitution orbitals
 !     ii_sub   [0    ] - if > 0, prevents the generation new substitution
-!                        orbitals   
+!                        orbitals
 !======================================================================
-     
+
       Use bsr_prep
 
       Implicit real(8) (A-H,O-Z)
@@ -72,8 +72,8 @@
 
       Call read_arg
 
-! ... sets up grid points and initializes the values of the spline: 
-    
+! ... sets up grid points and initializes the values of the spline:
+
       CALL define_grid(z);  CALL define_spline
 
 ! ... read file "target":
@@ -93,7 +93,7 @@
       if(nelc.le.0) Stop 'bsr_prep: nelc = 0  ? '
 
 ! ... define number of target states:
-      
+
       ntarg=0; Call Read_ipar(nut,'ntarg',ntarg)
       if(ntarg.le.0) Stop 'bsr_prep: ntarg = 0  ? '
       m=ntarg; Call Allocate_target(m)
@@ -102,7 +102,7 @@
        read(nut,*) AFT(i)
        Call Check_BSR_name(AFT(i))
       End do
- 
+
 ! ... define the target energies:
 
       Do it=1,ntarg
@@ -143,7 +143,7 @@
        Call R_CLOSED(nuc)
        if(CLOSED.ne.core)  then
          write(pri,'(/a,a,a)') 'target ',AFC,' has different core'
-         Stop ' check core ! ' 
+         Stop ' check core ! '
        end if
        Close(nuc)
       End do
@@ -160,7 +160,7 @@
        write(pri,'(a,4x,a20/)') ' substitution orbitals are read from',AF_sub
        ncfg = 0; lcfg = 0;  nwf = ncore
 
-       AFC = 'no';    AFW = AF_sub;   BFC = 'no';   BFW = 'no'  
+       AFC = 'no';    AFW = AF_sub;   BFC = 'no';   BFW = 'no'
 
        Call Check_file(AFW)
        Open(nuw,file=AFW,form='UNFORMATTED')
@@ -169,10 +169,10 @@
        kshift=0; IEF=0;  CALL SUB_check_orb
 
       end if
- 
+
       nwt = nbf;  iech = 0; iech(1:nbf) = 1  ! sub.orb. pointer
       write(pri,'(/72(''-'')/)')
-     
+
 !============================================================================
 ! ... proceed target files:
 
@@ -186,16 +186,16 @@
        Call Check_file(AFC)
        Open(nuc,file=AFC)
        nwf=ncore; ncfg=0; lcfg=0;  Call R_conf_LS(nuc,0)
-       
+
        AFW=trim(AFT(it))//'.bsw'
-       
+
        kshift=0; IEF=0;     CALL SUB_check_orb
 
        if(ntarg.lt.1000) then
          write(BFC,'(a,i3.3,a)') 'targ_',it
        elseif(ntarg.lt.10000) then
          write(BFC,'(a,i4.4,a)') 'targ_',it
-       elseif(ntarg.lt.100000) then 
+       elseif(ntarg.lt.100000) then
          write(BFC,'(a,i5.5,a)') 'targ_',it
        else
          Stop 'Stop in bsr_prep:  ntarg > 100000 '
@@ -208,7 +208,7 @@
 
        kcfg = ncfg
        Do ic=1,ncfg; if(abs(WC(ic)).gt.eps_targ) Cycle
-        WC(ic) = 0.d0;  kcfg = kcfg - 1 
+        WC(ic) = 0.d0;  kcfg = kcfg - 1
        End do
 
        if(allocated(ipt)) deallocate(ipt); Allocate(ipt(ncfg))
@@ -223,7 +223,7 @@
        Call Def_term_BSR(nuc,ltarg(it),istarg(it),iptarg(it))
        nctarg(it) = kcfg
        nwtarg(it) = nbf-nwt
-       nct=nct+kcfg; nwt=nbf  
+       nct=nct+kcfg; nwt=nbf
        write(pri,'(/72(''-'')/)')
 
       End do ! over it - target states
@@ -238,14 +238,14 @@
       End do
       Close(muw)
 
-! ... final list of target one-electron orbitals: 
+! ... final list of target one-electron orbitals:
 
       write(pri,'(/a,i5/)') ' target orbitals, nbf = ',nbf
       write(pri,'(14a5)') (EBS(j),j=1,nbf)
       write(pri,'(/72(''-'')/)')
 
 ! ... re-write the substitution orbitals:
- 
+
       Open(muw,file='target_sub.bsw',form='UNFORMATTED')
       Do i = 1,nbf;  if(iech(i).ne.1) Cycle
        write(muw) ebs(i),z,h,hmax,rmax,ks,ns,mbs(i)
@@ -254,7 +254,7 @@
       Close(muw)
 
 ! ... substitution orbitals information:
-      
+
       nwf_sub = 0
       Do i=1,nbf; if(iech(i).gt.0) nwf_sub=nwf_sub+1; End do
       write(pri,'(/a,i5/)') &
@@ -269,7 +269,7 @@
        k=1
       End do
       if(k.gt.1) write(pri,'(a)') AS
- 
+
       k = 0
       Do i=1,nbf; if(iech(i).ne.1) Cycle
        Do j=1,i; if(iech(j).ne.1) Cycle
@@ -329,36 +329,36 @@
        if(JJ_max.ne.-1.and.JJ_min.ne.-1) then
 
         nlsp = JJ_max-JJ_min + 2
-        Allocate(ispar(nlsp),lpar(nlsp),ipar(nlsp), Tpar(nlsp), & 
+        Allocate(ispar(nlsp),lpar(nlsp),ipar(nlsp), Tpar(nlsp), &
                  AFP(nlsp), BFP(nlsp),ncp(nlsp),nwp(nlsp))
         i = 0
         Do JJ = JJ_min,JJ_max,2
          Do ip = -1,1,2
-          i = i + 1  
-          ispar(i)=0; lpar(i)=JJ; ipar(i)=ip; AFP(i) = 'no'      
+          i = i + 1
+          ispar(i)=0; lpar(i)=JJ; ipar(i)=ip; AFP(i) = 'no'
           write(Tpar(i),'(i3.3)') i
          End do
 
         End do
 
        elseif(IS_max.ne.-1.and.IS_min.ne.-1) then
-        nlsp = (LT_max-LT_min + 1) * (IS_max-IS_min + 2)        
+        nlsp = (LT_max-LT_min + 1) * (IS_max-IS_min + 2)
         write(*,*) 'nlsp =',nlsp
 
-        Allocate(ispar(nlsp),lpar(nlsp),ipar(nlsp), Tpar(nlsp), & 
+        Allocate(ispar(nlsp),lpar(nlsp),ipar(nlsp), Tpar(nlsp), &
                  AFP(nlsp), BFP(nlsp),ncp(nlsp),nwp(nlsp))
 
         i = 0
         Do L = LT_min,LT_max
          Do is = IS_min,IS_max,2
           Do ip = -1,1,2
-           i = i + 1  
-           ispar(i)=is; lpar(i)=L; ipar(i)=ip; AFP(i) = 'no'      
+           i = i + 1
+           ispar(i)=is; lpar(i)=L; ipar(i)=ip; AFP(i) = 'no'
            write(Tpar(i),'(i3.3)') i
           End do
          End do
         End do
-       end if 
+       end if
 
        AFP ='no';  BFP = 'no'
 
@@ -374,7 +374,7 @@
        Call R_CLOSED(nuc)
        if(CLOSED.ne.core)  then
          write(pri,'(/a,a,a)') 'perturber ',AFC,' has different core'
-         Stop ' check core ! ' 
+         Stop ' check core ! '
        end if
        Close(nuc)
       End do
@@ -385,7 +385,7 @@
        Call R_CLOSED(nuc)
        if(CLOSED.ne.core)  then
          write(pri,'(/a,a,a)') 'perturber ',AFC,' has different core'
-         Stop ' check core ! ' 
+         Stop ' check core ! '
        end if
        Close(nuc)
       End do
@@ -397,7 +397,7 @@
 
        nbf = nwt
        BFC = 'no'; BFW = 'no'
-       ncfg = 0; lcfg = 0; nwf = ncore  
+       ncfg = 0; lcfg = 0; nwf = ncore
 
        npert = 0;  Call Allocate_pert(0)
 
@@ -406,7 +406,7 @@
 
        if(LEN_TRIM(AFP(ilsp)).gt.0.and.AFP(ilsp).ne.'no') then
 
-        AFC = trim(AFP(ilsp))//'.c'  
+        AFC = trim(AFP(ilsp))//'.c'
         write(pri,'(/a,i4,4x,a/)') 'perturber', ilsp, trim(AFC)
         Call Check_file(AFC)
         Open(nuc,file=AFC)
@@ -415,9 +415,9 @@
         ncp(ilsp) = ncfg
 
         Call Allocate_pert(ncfg+ipert); npert=ncfg
- 
+
         Do i=1,npert; ippert(i)=i; End do
-        
+
         AFW = trim(AFP(ilsp))//'.bsw';
         Call Check_file(AFW)
 
@@ -441,7 +441,7 @@
         Call Add_conf_LS(nuc,kshift)
 
         if(npert+1.gt.mpert) Call Allocate_pert(mpert+ipert)
-        npert = npert + 1        
+        npert = npert + 1
         ippert(npert)=ncfg
         ncp(ilsp) = ncfg
         AFW = trim(AFK(iip))//'.bsw'
@@ -449,7 +449,7 @@
 
         CALL SUB_check_orb
 
-       End do 
+       End do
 
 ! ... collective perturber configurations:
 
@@ -474,7 +474,7 @@
 ! ... if we have additional perturber orbitals:
 
        nwp(ilsp) = nbf - nwt
-       if(nwp(ilsp).gt.0) then 
+       if(nwp(ilsp).gt.0) then
         BFW = trim(BFP(ilsp))//'.bsw'
         Open(muw,file=BFW,form='UNFORMATTED',status='UNKNOWN')
         Do i = nwt+1,nbf
@@ -485,7 +485,7 @@
        end if
 
        ncp(ilsp) = ncfg
- 
+
       End do  ! over partial waves
 
       write(pri,'(/72(''-'')/)')
@@ -494,12 +494,12 @@
 ! ... update the target file:
 
       rewind(nut)
-      write(nut,'(a)') TITLE 
+      write(nut,'(a)') TITLE
       write(nut,'(72(''-''))')
       write(nut,'(a,a2,4x,a)') &
                 'coupling = ',coupling, '!   coupling scheme'
       write(nut,'(a,i5,T18,a)') &
-                'nz     =',nz,   '!   nuclear charge' 
+                'nz     =',nz,   '!   nuclear charge'
       write(nut,'(a,i5,T18,a)') &
                 'nelc   =',nelc, '!   number of electrons'
       write(nut,'(72(''-''))')
@@ -512,15 +512,15 @@
       End do
       write(nut,'(72(''-''))')
       write(nut,'(a,i5,T18,a)') 'nct    =',nct, &
-       '!   total number of target configurations' 
+       '!   total number of target configurations'
       write(nut,'(a,i5,T18,a)') 'nwt    =',nwt, &
-       '!   total number of target orbitals' 
+       '!   total number of target orbitals'
       write(nut,'(a,i5,T18,a)') 'nsub   =',nwf_sub, &
-       '!   number of substitution orbitals' 
+       '!   number of substitution orbitals'
 
       write(nut,'(72(''-''))')
       write(nut,'(a,i5,T18,a)') &
-           'nlsp   =',nlsp, '!   number of partial waves' 
+           'nlsp   =',nlsp, '!   number of partial waves'
       write(nut,'(72(''-''))')
 
       if(nlsp.gt.0) then
@@ -528,7 +528,7 @@
         if(AFP(i).ne.'no'.or.BFP(i).ne.'no') then
           write(nut,'(a3,3i5,3x,a20,1x,a10,2i5)') &
           Tpar(i),lpar(i),ispar(i),ipar(i),AFP(i),BFP(i),ncp(i),nwp(i)
-        else 
+        else
           write(nut,'(a3,3i5)') Tpar(i),lpar(i),ispar(i),ipar(i)
         end if
        End do
@@ -537,10 +537,10 @@
 
       if(kpert.gt.0) then
        write(nut,'(a,i5,T18,a)') &
-            'kpert  =',kpert,   '!   number of additional perturbers' 
+            'kpert  =',kpert,   '!   number of additional perturbers'
        write(nut,'(72(''-''))')
        Do i = 1,kpert
-        write(nut,'(i3,3x,a)') klsp(i),trim(AFK(i))      
+        write(nut,'(i3,3x,a)') klsp(i),trim(AFK(i))
        End do
        write(nut,'(72(''-''))')
       end if

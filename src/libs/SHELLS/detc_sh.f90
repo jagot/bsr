@@ -12,7 +12,7 @@
 !----------------------------------------------------------------------
 
       Use det_exp; Use det_f3; Use det_f4; Use det_f5
-     
+
       Implicit none
       Integer, Intent(in) :: l,q,it,id
       Integer :: i,j,k,ll,m,ml,ml1,ml2,ms,ms1,ms2,IL,IS,nd,nq
@@ -29,7 +29,7 @@
       if(q.eq.2.and.l.gt.5) then
        if(it.gt.2*l+1) Call DETC_shw (l,q,it,id)
        IL=2*it-1; IS=2*mod(it-1,2)+1    ! 1S, 3P, 1D, 3F, ...
-       nq=4*l+2; nd=nq*(nq-1)/2 
+       nq=4*l+2; nd=nq*(nq-1)/2
        if(id.gt.nd) Call DETC_shw (l,q,it,id)
        k=0
        Do i=1,nq-1;
@@ -124,14 +124,14 @@
 
       END SELECT
       end if
- 
+
       C=DBLE(i)/DBLE(j); C=sqrt(abs(C)); if(i.lt.0) C=-C; DETC_sh=C
 
       End  Function  DETC_sh
 
 !----------------------------------------------------------------------
       Subroutine DETC_shw (l,q,it,id)
-!----------------------------------------------------------------------       
+!----------------------------------------------------------------------
 
       Integer, Intent(in) :: l,q,it,id
 

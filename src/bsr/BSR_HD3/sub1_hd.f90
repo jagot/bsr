@@ -1,5 +1,5 @@
 !=====================================================================
-      Subroutine SUB1_HD    
+      Subroutine SUB1_HD
 !=====================================================================
 !     calculations for given partial wave
 !---------------------------------------------------------------------
@@ -7,10 +7,10 @@
       Use target
       Use channel
       Use spline_param, only: ns
-      
+
       Implicit none
       Integer :: i,j, i1,i2,i3
-      Integer, External :: Icheck_file      
+      Integer, External :: Icheck_file
 
       Call R_channel(nut,klsp)
 
@@ -22,12 +22,12 @@
       write(ALSP,'(i3.3)') klsp
       i = INDEX(AF_log,'.'); AF=AF_log(1:i)//ALSP
       Open(pri,file=AF)
-      
+
       write(pri,'(a/a)') 'B S R _ H D ', &
                          '***********'
       write(pri,*)
       write(pri,'(a,i3)') 'calculations for partial wave:  klsp =',klsp
-	  
+
       write(pri,*)
       if(itype.eq.-1) &
       write(pri,'(a)') 'itype =   -1  -  bound-state calculations'
@@ -43,7 +43,7 @@
       write(pri,'(a,i5,a)') 'npert =',kcp,'  -  number of pertubers'
       write(pri,'(a,i5,a)') 'nhm   =',nhm,'  -  full size of matrix'
 
-  
+
       write(pri,*)
       if(iexp.eq.0) &
       write(pri,'(a)') 'iexp  =    0  -  theoretical target energies are used'
@@ -58,23 +58,23 @@
        write(pri,'(/a/)') 'index  new oder  Etarg   E_exp    Etarg-E_exp (eV)'
        Do j=1,ntarg; i=ip_exp(j)
         write(pri,'(2i6,2f16.8,f10.5)') &
-        j, i, Etarg(j), E_exp(j), (E_exp(j)-Etarg(j))*27.2112   
+        j, i, Etarg(j), E_exp(j), (E_exp(j)-Etarg(j))*27.2112
        End do
       end if
 
-  
+
       write(pri,*)
       write(pri,'(a,i5,a)') 'jmvc  =',jmvc, &
-       '  -  number of channel solutions for inclusion of' 
-      write(pri,'(17x,a)') 'mass-velocity corrections' 
-             
+       '  -  number of channel solutions for inclusion of'
+      write(pri,'(17x,a)') 'mass-velocity corrections'
+
       write(pri,*)
       write(pri,'(a,1PE10.2,a)') 'Edmax =',Emax,  &
-       '  - if /=0, all one-channel solutions with E > Edmax will be ignored' 
+       '  - if /=0, all one-channel solutions with E > Edmax will be ignored'
 !      write(pri,'(a,f10.5)') 'Egap  =',Egap
 
       if(itype.eq.-1.and.msol.gt.0) &
-      write(pri,'(/a,i5,a)') 'msol  =',msol,  '  - max. number of bound solutions for output' 
+      write(pri,'(/a,i5,a)') 'msol  =',msol,  '  - max. number of bound solutions for output'
 
 !----------------------------------------------------------------------
 ! ... check the file with interaction matrix:
@@ -99,7 +99,7 @@
 ! ... diagonalize the matrix and get inner-region solutions:
 
       Call Diag_hd
- 
+
 !----------------------------------------------------------------------
 ! ... output of solutions and find the surface amplitudes:
 
@@ -111,7 +111,7 @@
       if(itype.ge.0) then
 
        ! read max. mutipole order and asymptotic coef.s:
-      
+
        read(nui) lamax
        if(allocated(CF)) Deallocate(CF)
        Allocate (CF(kch,kch,lamax+1))
@@ -129,7 +129,7 @@
 !----------------------------------------------------------------------
 ! ... output of bound states in bound.nnn:
 
-      if(itype.lt.0) Call B_out 
+      if(itype.lt.0) Call B_out
 
       if(iwt.le.0) Close(nuw,status='DELETE')
 

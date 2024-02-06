@@ -6,7 +6,7 @@
 !     data in the mult-bnk.
 !     Prepares the angular-coefficient arrays.
 !----------------------------------------------------------------------
-      Use dbsr_dmat;  Use conf_jj;  Use symc_list  
+      Use dbsr_dmat;  Use conf_jj;  Use symc_list
                       Use orb_jj;   Use symt_list
 
       Implicit none
@@ -55,12 +55,12 @@
          parity1.eq.parity2) Stop 'DBSR_mult: parity ?'
 
       if(nsymc.gt.nsymc0) then
-       write(*,*) 'nsymc0, nsymc', nsymc0, nsymc 
+       write(*,*) 'nsymc0, nsymc', nsymc0, nsymc
        Stop 'DBSR_DMAT: run DBSR_MULT first'
       end if
- 
+
       if(nsymt.gt.nsymt0) then
-       write(*,*) 'nsymt0, nsymt', nsymt0, nsymt 
+       write(*,*) 'nsymt0, nsymt', nsymt0, nsymt
        Stop 'DBSR_DMAT: run DBSR_MULT first'
       end if
 
@@ -79,7 +79,7 @@
       IT_state1=0; IT_state2=0
       Do i=1,ncfg
        it=IS_term(IS_order(i))
-       if(IT_state1(it).eq.0) IT_state1(it)=i; IT_state2(it)=i 
+       if(IT_state1(it).eq.0) IT_state1(it)=i; IT_state2(it)=i
       End do
 
 !----------------------------------------------------------------------
@@ -93,10 +93,10 @@
 
       k = 1
       Do i =       1,ncfg1; it = IS_term(i)
-      Do j = ncfg1+1,ncfg ; jt = IS_term(j) 
+      Do j = ncfg1+1,ncfg ; jt = IS_term(j)
        if(IT_done(DEF_ij(it,jt)).eq.0) k=0
        if(k.eq.0) Exit
-      End do; if(k.eq.0) Exit; End do 
+      End do; if(k.eq.0) Exit; End do
       if(k.eq.0) then
        write(*,*) ' mult_bnk is not full '
        Stop 'DBSR_mult: run DBSR_MULT first'
@@ -113,15 +113,15 @@
 !======================================================================
 !     read and add configurations to the list "conf_jj"
 !     job  =  'add'     -  just add
-!          =  'detect'  -  return -ic if exist and 
-!          =   others   -  add if not exist 
-!     check = 'check'   -  check the configurations for number of 
-!                          electrons and parity 
+!          =  'detect'  -  return -ic if exist and
+!          =   others   -  add if not exist
+!     check = 'check'   -  check the configurations for number of
+!                          electrons and parity
 !----------------------------------------------------------------------
       Use conf_jj
 
       Implicit none
-      Character(*), intent(in) :: job, check 
+      Character(*), intent(in) :: job, check
       Integer, intent(in) :: muc,kshift
       Integer, external :: Iadd_cfg_jj
       Integer :: nuc,i,ic

@@ -6,7 +6,7 @@
 !---------------------------------------------------------------------
       Use dbsr_mchf
       Use df_orbitals
- 
+
       Implicit none
       Integer :: i
       Real(8), intent(in)  :: hfm(ms,ms), hx(ms,ms), rhs(ms)
@@ -19,13 +19,13 @@
       Real(8), external  :: a
       Real(8) :: x(ms), y(ms), w(ms)
       Real(8) :: eii, eij
-        
+
       Integer :: mm,md, k,  info, j, jp,ii, ipos(1)
 
       Call Get_pv_df(i,v)
       md = ms+nbf
 
-! ... compute the residuals     
+! ... compute the residuals
 
       res = 0.d0
       aa = 0.d0
@@ -42,10 +42,10 @@
       y = matmul(fppqq,v)
       aa(1:ms,mm) = -y
       aa(mm,1:ms) = -y
-        
+
 ! ... add orthogonality constraints with orbital j
 
-      Do j = 1,nbf 
+      Do j = 1,nbf
        if(kbs(i).ne.kbs(j)) Cycle
        if(j.eq.i) Cycle
        mm = mm + 1
@@ -62,7 +62,7 @@
       End do
 
 ! ... add H_aa contributions
-        
+
       aa(1:ms,1:ms) = aa(1:ms,1:ms) + hx
 
 ! ... apply boundary conditions (delete the extra B-splines)
@@ -76,7 +76,7 @@
         k=k+1; xx(k)=aa(jp,j)
        End do
        ax(1:k,ii)=xx(1:k); yy(ii)=res(j)
-      End do 
+      End do
 
 ! ... solve the matrx equation with LAPACK routines:
 
@@ -91,8 +91,8 @@
       Do j=1,ms
        if(iprm(j,i).eq.0) Cycle
        k=k+1; res(j)=yy(k)
-      End do 
-       
+      End do
+
       v = v - res(1:ms)
       y = matmul(fppqq,v)
       v = v/sqrt(Dot_Product(v,y))
@@ -102,6 +102,6 @@
       ipos=maxloc(abs(v))
       if(v(ipos(1)).lt.0.d0) v=-v
 
-      e(i) = (eii - res(ms+1))  
+      e(i) = (eii - res(ms+1))
 
       End Subroutine  Solve_nr

@@ -4,7 +4,7 @@
 !     Testing two-electron integrals: list of desirable integrals are
 !     supposed to be in name.int file, the corresponding one-electron
 !     orbitals - in name.bsw.
-!     Results - in name.test 
+!     Results - in name.test
 !     B-splines requires knot.dat file
 !----------------------------------------------------------------------
       Use DBS_grid
@@ -31,9 +31,9 @@
       Call Read_aarg('AF_int',AF_int)
       Call Read_aarg('AF_out',AF_out)
 
-! ... generate 
+! ... generate
 
-      nn=3;  Call Read_iarg('nn',nn) 
+      nn=3;  Call Read_iarg('nn',nn)
 
       Do n=1,nn
        Do k = -n,n-1
@@ -49,14 +49,14 @@
 
       Open(nui,file=AF_int)
       Open(nut,file=AF_out)
-    
+
       write(nut,'(a,i5)') 'ksp =',ksp
       write(nut,'(a,i5)') 'ksq =',ksq
-      write(nut,*) 
+      write(nut,*)
 
       write(nut,*) 'number of radial functions:',nbf
       write(nut,'(10a5)') EBS(1:nbf)
-      write(nut,*) 
+      write(nut,*)
 
       CALL test_integrals(nui,nut)
 
@@ -99,7 +99,7 @@
       if(AS(1:1).eq.'*') go to 2          ! end of data
       if(LEN_TRIM(AS).eq.0) go to 1
 !----------------------------------------------------------------------
-      if(AS(1:1).eq.'#') then             ! timing block                 
+      if(AS(1:1).eq.'#') then             ! timing block
        go to 1
       end if                              ! end of timing mode (#)
 
@@ -168,19 +168,19 @@
 
       go to 1    ! go to new integral
 
-    2 Continue   ! end of data 
+    2 Continue   ! end of data
 
       End Subroutine test_integrals
 
 
 !======================================================================
-      Real(8) Function rk1 (i1,j1,i2,j2,k) 
+      Real(8) Function rk1 (i1,j1,i2,j2,k)
 !======================================================================
 !     INT = 1  - convolution other 2 and 4 variables, RK(.a;.b)
 !----------------------------------------------------------------------
       Use DBS_grid,         only: ns,ks
-      Use DBS_orbitals_pq,  only: p => pq 
-  
+      Use DBS_orbitals_pq,  only: p => pq
+
       Implicit none
       Integer, intent(in) :: i1,j1,i2,j2,k
       Real(8) :: dens1(ns,ks),dens2(ns,ks),dens3(ns,ks),dens4(ns,ks), &
@@ -230,13 +230,13 @@
 
 
 !======================================================================
-      Real(8) Function rk2 (i1,j1,i2,j2,k) 
+      Real(8) Function rk2 (i1,j1,i2,j2,k)
 !======================================================================
 !     INT = 2  - convolution other 1 and 3 variables, RK(a.;b.)
 !----------------------------------------------------------------------
       Use DBS_grid,         only: ns,ks
-      Use DBS_orbitals_pq,  only: p => pq 
-  
+      Use DBS_orbitals_pq,  only: p => pq
+
       Implicit none
       Integer, intent(in) :: i1,j1,i2,j2,k
       Real(8) :: dens1(ns,ks),dens2(ns,ks),dens3(ns,ks),dens4(ns,ks), &
@@ -253,7 +253,7 @@
       Call mrk_pppp(k)
       Call convol  (ns,ks,conv,dens1,2,'s','s')
       rk2 = rk2 + SUM_AmB(ns,ks,conv,dens2,'s')
-  
+
       Call mrk_qqqq(k)
       Call convol  (ns,ks,conv,dens3,2,'s','s')
       rk2 = rk2 + SUM_AmB(ns,ks,conv,dens4,'s')
@@ -270,13 +270,13 @@
 
 
 !======================================================================
-      Real(8) Function rk3 (i1,j1,i2,j2,k) 
+      Real(8) Function rk3 (i1,j1,i2,j2,k)
 !======================================================================
 !     INT = 3  - convolution other 2 and 3 variables, RK(.a;b.)
 !----------------------------------------------------------------------
       Use DBS_grid,         only: ns,ks
-      Use DBS_orbitals_pq,  only: p => pq 
-  
+      Use DBS_orbitals_pq,  only: p => pq
+
       Implicit none
       Integer, intent(in) :: i1,j1,i2,j2,k
       Real(8) :: dens(ns,ns), conv(ns,ns), RRTC, t1,t2
@@ -300,7 +300,7 @@
 
  write(*,*) '3, x,x, 1000', t2-t1
 
-  
+
       Call mrk_qqqq(k)
       Call density (ns,ks,dens,p(1,2,i2),p(1,2,j1),'x')
       Call convol  (ns,ks,conv,dens,3,'s','s')
@@ -323,13 +323,13 @@
 
 
 !======================================================================
-      Real(8) Function rk4 (i1,j1,i2,j2,k) 
+      Real(8) Function rk4 (i1,j1,i2,j2,k)
 !======================================================================
 !     INT = 4  - convolution other 1 and 4 variables, RK(a.;.b)
 !----------------------------------------------------------------------
       Use DBS_grid,         only: ns,ks
-      Use DBS_orbitals_pq,  only: p => pq 
-  
+      Use DBS_orbitals_pq,  only: p => pq
+
       Implicit none
       Integer, intent(in) :: i1,j1,i2,j2,k
       Real(8) :: dens(ns,ns), conv(ns,ns),  RRTC, t1,t2
@@ -379,23 +379,23 @@
 
 
 !======================================================================
-      Real(8) Function hf_gk1 (i,j,k)                  
+      Real(8) Function hf_gk1 (i,j,k)
 !======================================================================
 !     Returns  Fk (i, j) base on the assembling two-electron
 !     B-spline integrals (see module DBS_integral)
 !----------------------------------------------------------------------
       Use DBS_grid, only: ns,ks         ! Rk(i,j,j,i)
 !      Use df_orbitals
-      Use DBS_orbitals_pq,  only: p => pq 
-  
+      Use DBS_orbitals_pq,  only: p => pq
+
       Implicit none
       Integer, intent(in) :: i,j,k
       Real(8), external :: SUM_AmB
 
-      Real(8) :: xppi(ns,ns),xqqi(ns,ns),xpqi(ns,ns),xqpi(ns,ns), &    
-                 xppj(ns,ns),xqqj(ns,ns),xpqj(ns,ns),xqpj(ns,ns), &    
-                 xpppp(ns,ns),xqqqq(ns,ns),xqpqp(ns,ns),xpqpq(ns,ns)   
- 
+      Real(8) :: xppi(ns,ns),xqqi(ns,ns),xpqi(ns,ns),xqpi(ns,ns), &
+                 xppj(ns,ns),xqqj(ns,ns),xpqj(ns,ns),xqpj(ns,ns), &
+                 xpppp(ns,ns),xqqqq(ns,ns),xqpqp(ns,ns),xpqpq(ns,ns)
+
       hf_gk1 = 0.d0
 
 !     if(i.ne.igk.or.k.ne.kgk) then
@@ -415,7 +415,7 @@
         Call mrk_qpqp(k)
         Call convol (ns,ks,xqpqp,xqpi,4,'s','s')
 !      end if
-      
+
 !      if(j.ne.jgk) then
        Call density (ns,ks,xppj,p(1,1,j),p(1,1,j),'x')
        Call density (ns,ks,xqqj,p(1,2,j),p(1,2,j),'x')
@@ -441,7 +441,7 @@
       Subroutine convol(ns,ks,a,d,icase,sym_i,sym_j)
 !======================================================================
 !     convolutes the rkb(i,j,i',j') array of spline integrals
-!     with density matrix d(:,:) 
+!     with density matrix d(:,:)
 !
 !     results in array a(:,:)
 !
@@ -480,7 +480,7 @@
       if(sym_i.eq.'s'.and.sym_j.eq.'s') then
 
         do ip=1,ks
-        do i=1,ns-ip+1   
+        do i=1,ns-ip+1
            a(i,ip) = SUM(d(1:ns,1:ks)*rkb(i,1:ns,ip,1:ks))
         end do; end do
 
@@ -527,7 +527,7 @@
       if(sym_i.eq.'s'.and.sym_j.eq.'s') then
 
         do ip=1,ks
-        do i=1,ns-ip+1   
+        do i=1,ns-ip+1
            a(i,ip) = SUM(d(1:ns,1:ks)*rkb(1:ns,i,1:ks,ip))
         end do; end do
 
@@ -574,7 +574,7 @@
         end do; end do;   a(j,jp)=c
         end do; end do
 
-      end if 
+      end if
 
 !----------------------------------------------------------------------
       Case(3);  a(1:ns,1:ns) = 0.d0                    ! I( . a ; b . )
@@ -607,9 +607,9 @@
       elseif(sym_i.eq.'l'.and.sym_j.eq.'l') then
 
         do jp=1,ks
-        do j=ks+1-jp,ns; jj=j+jp-ks 
+        do j=ks+1-jp,ns; jj=j+jp-ks
         do ip=1,ks
-        do i=ks+1-ip,ns; ii=i+ip-ks 
+        do i=ks+1-ip,ns; ii=i+ip-ks
           c = rkb(i,j,ip,jp);       a( i,jj) = a( i,jj) + c*d(ii, j)
           if(ip.ne.ks)              a(ii,jj) = a(ii,jj) + c*d( i, j)
           if(jp.ne.ks)              a( i, j) = a( i, j) + c*d(ii,jj)
@@ -630,7 +630,7 @@
       elseif(sym_i.eq.'n'.and.sym_j.eq.'l') then
 
         do jp=1,ks
-        do j=ks+1-jp,ns; jj=j+jp-ks 
+        do j=ks+1-jp,ns; jj=j+jp-ks
         do ip=1,ks+ks-1; imin=max(1,1+ks-ip); imax=min(ns,ns+ks-ip)
         do i =imin,imax; ii=i+ip-ks
           c = rkb(i,j,ip,jp);      a( i,jj) = a( i,jj) + c*d(ii, j)
@@ -643,7 +643,7 @@
         do jp=1,ks+ks-1; jmin=max(1,1+ks-jp); jmax=min(ns,ns+ks-jp)
         do j =jmin,jmax; jj=j+jp-ks
         do ip=1,ks
-        do i=ks+1-ip,ns; ii=i+ip-ks 
+        do i=ks+1-ip,ns; ii=i+ip-ks
           c = rkb(i,j,ip,jp);       a( i,jj) = a( i,jj) + c*d(ii, j)
           if(ip.ne.ks)              a(ii,jj) = a(ii,jj) + c*d( i, j)
         end do; end do
@@ -679,9 +679,9 @@
       elseif(sym_i.eq.'l'.and.sym_j.eq.'l') then
 
         do jp=1,ks
-        do j=ks+1-jp,ns; jj=j+jp-ks 
+        do j=ks+1-jp,ns; jj=j+jp-ks
         do ip=1,ks
-        do i=ks+1-ip,ns; ii=i+ip-ks 
+        do i=ks+1-ip,ns; ii=i+ip-ks
           c = rkb(i,j,ip,jp);       a(ii, j) = a(ii, j) + c*d( i,jj)
           if(ip.ne.ks)              a( i, j) = a( i, j) + c*d(ii,jj)
           if(jp.ne.ks)              a(ii,jj) = a(ii,jj) + c*d( i, j)
@@ -692,7 +692,7 @@
       elseif(sym_i.eq.'n'.and.sym_j.eq.'l') then
 
         do jp=1,ks
-        do j=ks+1-jp,ns; jj=j+jp-ks 
+        do j=ks+1-jp,ns; jj=j+jp-ks
         do ip=1,ks+ks-1; imin=max(1,1+ks-ip); imax=min(ns,ns+ks-ip)
         do i =imin,imax; ii=i+ip-ks
           c = rkb(i,j,ip,jp);       a(ii, j) = a(ii, j) + c*d( i,jj)
@@ -705,7 +705,7 @@
         do jp=1,ks+ks-1; jmin=max(1,1+ks-jp); jmax=min(ns,ns+ks-jp)
         do j =jmin,jmax; jj=j+jp-ks
         do ip=1,ks
-        do i=ks+1-ip,ns; ii=i+ip-ks 
+        do i=ks+1-ip,ns; ii=i+ip-ks
           c = rkb(i,j,ip,jp);       a(ii, j) = a(ii, j) + c*d( i,jj)
           if(ip.ne.ks)              a( i, j) = a( i, j) + c*d(ii,jj)
         end do; end do

@@ -9,62 +9,62 @@
 
       if(nch.eq.0.and.npert.eq.0) Return
 
-      mhm = nch*ms + npert 
+      mhm = nch*ms + npert
       kprocs=nprocs-1
 
-      if(Allocated(icc)) Deallocate(icc) 
+      if(Allocated(icc)) Deallocate(icc)
       Allocate(icc(nch,nch)); icc = 0; iicc = 0
       k = 0; i=0
       Do ich=1,nch
        k=k+1; if(k.gt.kprocs) k=1; if(nprocs.eq.1) k=0
-       if(myid.ne.k) Cycle       
+       if(myid.ne.k) Cycle
        i=i+1; icc(ich,ich) = i; icc(ich,ich) = i
       End do
       Do ich=2,nch; Do jch=1,ich-1
        k=k+1; if(k.gt.kprocs) k=1; if(nprocs.eq.1) k=0
-       if(myid.ne.k) Cycle       
+       if(myid.ne.k) Cycle
        i=i+1; icc(ich,jch) = i; icc(jch,ich) = i
       End do; End do
       iicc=i
- 
-      if(Allocated(hch)) Deallocate(hch) 
+
+      if(Allocated(hch)) Deallocate(hch)
       Allocate(hch(ms,ms,iicc)); hch=0.d0
-      if(Allocated(acf)) Deallocate(acf) 
+      if(Allocated(acf)) Deallocate(acf)
       Allocate(acf(iicc ,0:mk)); acf=0.d0
-      if(Allocated(diag)) Deallocate(diag) 
+      if(Allocated(diag)) Deallocate(diag)
       Allocate (diag(ms,ms,nch)); diag=0.d0
-      mem_mat = 8.d0*ms*ms*iicc + 4.d0*iicc*(mk+1) + 8.d0*ms*ms*nch      
+      mem_mat = 8.d0*ms*ms*iicc + 4.d0*iicc*(mk+1) + 8.d0*ms*ms*nch
 
       if(allocated(htarg)) Deallocate(htarg)
       Allocate(htarg((ntarg+1)*ntarg/2)); htarg=0.d0
       if(allocated(otarg)) Deallocate(otarg)
       Allocate(otarg((ntarg+1)*ntarg/2)); otarg=0.d0
       mem_mat = mem_mat + 16.d0*(ntarg*(ntarg+1)/2)
- 
+
       if(.not.allocated(x)) Allocate(x(ms,ms),xx(ms,ms))
       if(.not.allocated(y)) Allocate(y(ns,ns),yy(ns,ns))
       mem_mat = mem_mat + 16.d0*(ms*ms+ns*ns)
 
-      if(npert.eq.0) go to 1  
+      if(npert.eq.0) go to 1
 
-      if(Allocated(hcp)) Deallocate(hcp,icb) 
+      if(Allocated(hcp)) Deallocate(hcp,icb)
       Allocate(icb(nch,npert)); icb=0
       k = 0; i=0
       Do ich=1,nch; Do jch=1,npert
        k=k+1; if(k.gt.kprocs) k=1; if(nprocs.eq.1) k=0
-       if(myid.ne.k) Cycle       
+       if(myid.ne.k) Cycle
        i=i+1; icb(ich,jch) = i
       End do; End do
       iicb = i
       Allocate(hcp(ms,iicb)); hcp=0.d0
       mem_mat = mem_mat + 8.d0*ms*iicb
 
-      if(Allocated(hp)) Deallocate(hp,ibb) 
+      if(Allocated(hp)) Deallocate(hp,ibb)
       Allocate(ibb(npert,npert)); ibb = 0
       k = 0; i=0
       Do ich=1,npert; Do jch=1,ich
        k=k+1; if(k.gt.kprocs) k=1; if(nprocs.eq.1) k=0
-       if(myid.ne.k) Cycle       
+       if(myid.ne.k) Cycle
        i=i+1; ibb(ich,jch) = i; ibb(jch,ich) = i
       End do; End do
       iibb = i
@@ -96,21 +96,21 @@
        xx = C * d
       else
        xx = C * TRANSPOSE(d)
-      end if      
+      end if
 
-      i = icc(ich,jch)   
+      i = icc(ich,jch)
       if(i.lt.0.or.i.gt.iicc) Stop 'UPDATE_HX: i out of range'
       hch(:,:,i) = hch(:,:,i) + xx
-     
+
       END Subroutine UPDATE_HX
 
 
 !======================================================================
       Subroutine UPDATE_HS(ich,jch,d,sym,ii,jj)
 !======================================================================
-!     update 'small' channel block (ns,ns) 
+!     update 'small' channel block (ns,ns)
 !     sym = 's'  -->  symmetric banded upper-column storage mode
-!     sym = 'n'  -->  non-symmetric band matrix  
+!     sym = 'n'  -->  non-symmetric band matrix
 !     sym = 'x'  -->  non-symmetric full matrix
 !----------------------------------------------------------------------
       Use dbsr_mat
@@ -156,7 +156,7 @@
       i = icc(ich,jch)
       if(i.lt.0.or.i.gt.iicc) Stop 'UPDATE_HX: i out of range'
 
-      i1 = 1+(ii-1)*ns; i2=i1+ns-1     
+      i1 = 1+(ii-1)*ns; i2=i1+ns-1
       j1 = 1+(jj-1)*ns; j2=j1+ns-1
 
       if(ich.gt.jch) then
@@ -171,9 +171,9 @@
        hch(i1:i2,j1:j2,i) = hch(i1:i2,j1:j2,i) + y
        hch(j1:j2,i1:i2,i) = hch(j1:j2,i1:i2,i) + yy
 
-      end if      
+      end if
 
-     
+
       End Subroutine UPDATE_HS
 
 
@@ -195,7 +195,7 @@
       if(ich.gt.nch) Stop 'UPDATE_HW: ich > nch'
       if(jch.gt.nch) Stop 'UPDATE_HW: jch > nch'
 
-      Do i=1,ms; Do j=1,ms; x(i,j)=v(i)*w(j); End do; End do      
+      Do i=1,ms; Do j=1,ms; x(i,j)=v(i)*w(j); End do; End do
 
       if(ich.gt.jch) then
        xx = C * x
@@ -303,7 +303,7 @@
         if(idiag.eq.-1.and.ich.eq.jch) Cycle
         write(pri,'(/a,2i5/)') 'ich,jch', ich,jch
         Do i = 1,10
-         write(pri,'(10E15.5)') (hch(i,j,k),j=1,10) 
+         write(pri,'(10E15.5)') (hch(i,j,k),j=1,10)
         End do
        End do
       End do
@@ -315,7 +315,7 @@
         k = icb(ich,jch); if(k.eq.0) Cycle
         if(idiag.eq.1) Cycle
         write(pri,'(/a,2i5/)') 'ich,ip', ich,jch
-        write(pri,'(10E15.5)') hcp(1:10,k) 
+        write(pri,'(10E15.5)') hcp(1:10,k)
        End do
       End do
 
@@ -324,7 +324,7 @@
         k = ibb(ich,jch); if(k.eq.0) Cycle
         if(idiag.eq.1) Cycle
         write(pri,'(/a,2i5/)') 'ip,jp', ich,jch
-        write(pri,'(10E15.5)') hp(k) 
+        write(pri,'(10E15.5)') hp(k)
        End do
       End do
 

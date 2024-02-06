@@ -1,7 +1,7 @@
 !=====================================================================
       Module conf_LS
 !=====================================================================
-!     description of configuration lists 
+!     description of configuration lists
 !     ROUTINES:  alloc_cfg_LS (m)
 !                Iadd_cfg_LS  ()
 !                Ifind_cfg_LS ()
@@ -16,7 +16,7 @@
       Integer :: ne     = 0     !  number of electrons
       Integer :: parity = 0     !  parity of states (+1,-1)
 
-! ... description of 1 conf.w.function:  
+! ... description of 1 conf.w.function:
 
       Integer :: no, Ltotal, Stotal, Jtotal, Ptotal, iconf, iterm
       Integer, dimension(msh) :: nn,ln,iq,kn, np_orb, np
@@ -36,13 +36,13 @@
 
       Character(200) :: CONFIG, COUPLE
 
-! ... closed shells core 
+! ... closed shells core
 
-      Real(8) :: Ecore = 0.d0 
+      Real(8) :: Ecore = 0.d0
       Integer :: nclosd = 0, ncore = 0
       Character(200) :: closed='    ', core='    '
 
-! ... CONFIGURATION LIST PARAMETERS 
+! ... CONFIGURATION LIST PARAMETERS
 
       Integer :: ncfg  = 0       !  current number of configurations
       Integer :: mcfg  = 0       !  max. number of configurations
@@ -61,7 +61,7 @@
 
       Real(8), allocatable :: WC(:)
 
-! ... label representation of configurations 
+! ... label representation of configurations
 
       Character(200), allocatable :: LABEL(:)
 
@@ -80,7 +80,7 @@
       Integer, allocatable :: IT_state2(:)
       Integer, allocatable :: IC_sym(:)
 
-      Integer :: m_conf_LS 
+      Integer :: m_conf_LS
 
       End Module conf_LS
 
@@ -125,24 +125,24 @@
        Allocate(ip_orb(kcfg)); ip_orb(1:lcfg)=ia
        Deallocate(ia)
        Allocate(ra(ncfg))
-       ra=WC(1:ncfg); Deallocate(WC); Allocate(WC(mcfg)); 
+       ra=WC(1:ncfg); Deallocate(WC); Allocate(WC(mcfg));
        WC=0.d0; WC(1:ncfg)=ra
        Deallocate(ra)
       end if
 
-      m_conf_LS = 4*mcfg + kcfg +  200 + 4*mcfg   ! ??? last is optional      
+      m_conf_LS = 4*mcfg + kcfg +  200 + 4*mcfg   ! ??? last is optional
 
       End Subroutine alloc_cfg_LS
 
 
 !======================================================================
-      Integer Function Iadd_cfg_LS() 
+      Integer Function Iadd_cfg_LS()
 !======================================================================
 !     add new CAS to cfg_list
 !----------------------------------------------------------------------
       Use conf_LS
 
-      Implicit none 
+      Implicit none
       Integer :: i,ic,ip
       Integer, external :: Iadd_symc_LS, Iadd_symt_LS, Ifind_nlk
 
@@ -166,13 +166,13 @@
 
 
 !======================================================================
-      Integer Function Ifind_cfg_LS() 
+      Integer Function Ifind_cfg_LS()
 !======================================================================
 !     find or add new CAS to cfg_list
 !----------------------------------------------------------------------
       Use conf_LS
 
-      Implicit none 
+      Implicit none
       Integer :: i,ic,ip
       Integer, External :: Iadd_symc_LS, Iadd_symt_LS, Ifind_nlk
 
@@ -208,14 +208,14 @@
 
 
 !======================================================================
-      Integer Function Jfind_cfg_LS() 
+      Integer Function Jfind_cfg_LS()
 !======================================================================
 !     find or add new CAS to cfg_list
 !     Jfind_cfg_LS = configuration index (<0 if was found)
 !----------------------------------------------------------------------
       Use conf_LS
 
-      Implicit none 
+      Implicit none
       Integer :: i,ic,ip
       Integer, External :: Iadd_symc_LS, Iadd_symt_LS, Ifind_nlk
 
@@ -275,7 +275,7 @@
       end if
       ip = ip_state(ic)
       Do i=1,no; ip=ip+1
-       j = IP_orb(ip); Call Get_nlki (j,nn(i),l,kn(i),ii)  
+       j = IP_orb(ip); Call Get_nlki (j,nn(i),l,kn(i),ii)
       End do
 
       End Subroutine Get_cfg_LS
@@ -284,27 +284,27 @@
 !======================================================================
       Subroutine Save_cfg_LS(i)
 !======================================================================
-!     save(restore) curent state in position i                   
+!     save(restore) curent state in position i
 !----------------------------------------------------------------------
       Use conf_LS
-      Implicit none 
+      Implicit none
       Integer, intent(in) :: i
 
-      Select Case(i) 
-      Case(1) 
-       no1=no; nn1=nn; kn1=kn; ln1=ln; iq1=iq      
+      Select Case(i)
+      Case(1)
+       no1=no; nn1=nn; kn1=kn; ln1=ln; iq1=iq
        LS1 = LS; Stotal1=Stotal; Ltotal1=Ltotal
        iconf1=iconf; iterm1=iterm
-      Case(2) 
-       no2=no; nn2=nn; kn2=kn; ln2=ln; iq2=iq       
+      Case(2)
+       no2=no; nn2=nn; kn2=kn; ln2=ln; iq2=iq
        LS2 = LS; Stotal2=Stotal; Ltotal2=Ltotal
        iconf2=iconf; iterm2=iterm
-      Case(-1) 
-       no=no1; nn=nn1; kn=kn1; ln=ln1; iq=iq1       
+      Case(-1)
+       no=no1; nn=nn1; kn=kn1; ln=ln1; iq=iq1
        LS=LS1; Stotal=Stotal1; Ltotal=Ltotal1
        iconf=iconf1; iterm=iterm1
-      Case(-2) 
-       no=no2; nn=nn2; kn=kn2; ln=ln2; iq=iq2       
+      Case(-2)
+       no=no2; nn=nn2; kn=kn2; ln=ln2; iq=iq2
        LS=LS2; Stotal=Stotal2; Ltotal=Ltotal2
        iconf=iconf2; iterm=iterm2
        Case Default
@@ -317,11 +317,11 @@
 !======================================================================
       Integer Function no_ic_LS (ic)
 !======================================================================
-!     number of shells in state 'ic'                   
+!     number of shells in state 'ic'
 !----------------------------------------------------------------------
       Use conf_LS
 
-      Implicit none 
+      Implicit none
       Integer :: ic
       Integer, External :: no_term_LS
 

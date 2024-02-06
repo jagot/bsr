@@ -4,21 +4,21 @@
 !
 !   Defines moments for Nk-integrals in the B-spline cells
 !
-!   Calling sequence:          nk_moments             
-!                              ----------             
-!                               /    \\           
-!                           moments nk_pdiag      
-!                                     ||          
-!                                   nk_triang     
-!                                    /   \        
-!                                 gauss  vbsplvb  
-! 
+!   Calling sequence:          nk_moments
+!                              ----------
+!                               /    \\
+!                           moments nk_pdiag
+!                                     ||
+!                                   nk_triang
+!                                    /   \
+!                                 gauss  vbsplvb
+!
 !-------------------------------------------------------------------------
 !
 !   on entry    k  -  multipole index
 !   --------
-!       
-!   on exit     rkd1,rkd2,rkd - off-diagonal and diagonal moments 
+!
+!   on exit     rkd1,rkd2,rkd - off-diagonal and diagonal moments
 !   -------                     (in module spline_moments)
 !
 !-------------------------------------------------------------------------
@@ -37,11 +37,11 @@
     if(mtype == 'nk ' .and. kmk == k) Return
 
     ! .. compute the moments in the spline basis
-  
+
     CALL moments(  k   , rkd1,'s','b')
     CALL moments(-(k+3), rkd2,'s','b')
     CALL nk_pdiag
- 
+
     mtype = 'nk '
     kmk = k
 
@@ -103,16 +103,16 @@
 !
 !   Returns the two-dimensional array of B-splin integrals
 !         <B_i B_j|r2^k/r1^(k+3) E(r1-r2)|B_i' B_j'>
-!   over the given triangle diagonal cell 
-!                                                           
+!   over the given triangle diagonal cell
+!
 !   Calls:   gauss, vbsplvd
 !
 !   On entry   iv  -  the index of the diagonal cell
 !   --------
 !
-!   On exit    rkd(.,.,iv) - arrays of Nk B-spline integrals for given 
+!   On exit    rkd(.,.,iv) - arrays of Nk B-spline integrals for given
 !   --------                 interval iv in the reduced-dimension mode
-!                            (in module spline_moments)      
+!                            (in module spline_moments)
 !----------------------------------------------------------------------
 
     IMPLICIT NONE
@@ -166,7 +166,7 @@
 
     END DO    ! over m
 
-! .. second integration 
+! .. second integration
 
     ii = 0
     DO i=1,ks

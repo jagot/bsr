@@ -8,7 +8,7 @@
       Real(8), intent(in) :: x,y,s
       Real(8), save :: A,B,PI
       Integer, save :: start = 0
-     
+
       if(start.eq.0) then
        PI = ACOS(-1.0)
        A  = 2.d0*sqrt(LOG(2.d0)/PI)

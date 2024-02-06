@@ -4,7 +4,7 @@
 !     Evaluates   <fi | r^m | fj>     with respect to r
 !     where fi, fj  - two-component Dirac functions in B-spline basis
 !----------------------------------------------------------------------
-      Use DBS_grid    
+      Use DBS_grid
       Use DBS_gauss
 
       Implicit none
@@ -15,8 +15,8 @@
 
       quadr = 0.d0
 
-      Do iv=1,nv   
-       gx(:) = gr(iv,:)**m * grw(iv,:) 
+      Do iv=1,nv
+       gx(:) = gr(iv,:)**m * grw(iv,:)
        Do ith=1,ksp;  i=iv+ith-1; pi=fi(i,1)
         gw(:) = gx(:)*pbsp(iv,:,ith)
         Do jth=1,ksp;  j=iv+jth-1; pj=fj(j,1)
@@ -24,9 +24,9 @@
         End do
        End do
       End do
-      
-      Do iv=1,nv   
-       gx(:) = gr(iv,:)**m * grw(iv,:) 
+
+      Do iv=1,nv
+       gx(:) = gr(iv,:)**m * grw(iv,:)
        Do ith=1,ksq;  i=iv+ith-1; qi=fi(i,2)
         gw(:) = gx(:)*qbsp(iv,:,ith)
         Do jth=1,ksq;  j=iv+jth-1; qj=fj(j,2)
@@ -35,7 +35,7 @@
        End do
       End do
 
-      End Function quadr 
+      End Function quadr
 
 
 
@@ -52,8 +52,8 @@
       Integer :: i,j, iv, ith,jth
 
       quadrm = 0.d0
-      Do iv=1,nv   
-       gx(:) = gr(iv,:)**m * grw(iv,:) 
+      Do iv=1,nv
+       gx(:) = gr(iv,:)**m * grw(iv,:)
        Do ith=1,ks1;  i=iv+ith-1
        gw(:) = gx(:)*bsp1(iv,:,ith)
         Do jth=1,ks2;  j=iv+jth-1
@@ -62,7 +62,7 @@
        End do
       End do
 
-      End Function quadrm 
+      End Function quadrm
 
 
 

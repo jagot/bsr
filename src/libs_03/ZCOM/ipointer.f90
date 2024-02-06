@@ -2,7 +2,7 @@
       Integer Function Ipointer (n,ii,i)
 !======================================================================
 !     Determines position of an element i in the integer array ii
-!     A zero value indicates that the element is absent 
+!     A zero value indicates that the element is absent
 !----------------------------------------------------------------------
       Integer, intent(in) :: n,ii(n),i
 
@@ -18,7 +18,7 @@
       Integer Function Rpointer (n,rr,r)
 !======================================================================
 !     Determines position of an element i in the set ii
-!     A zero value indicates that element is not a member of the set 
+!     A zero value indicates that element is not a member of the set
 !----------------------------------------------------------------------
       Integer, intent(in) :: n
       Real(8), intent(in) :: r, rr(n)
@@ -35,7 +35,7 @@
       Integer Function Apointer (n,AA,a)
 !======================================================================
 !     Determines position of an element i in the set ii
-!     A zero value indicates that element is not a member of the set 
+!     A zero value indicates that element is not a member of the set
 !----------------------------------------------------------------------
       Integer, intent(in)      :: n
       Character(*), intent(in) :: a,AA(n)
