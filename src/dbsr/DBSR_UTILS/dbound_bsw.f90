@@ -120,7 +120,7 @@
        state=0;   Call Read_iarg('state',state)
        name=' ';  Call Read_aarg('name',name)
        kk=ICHAR('k'); Call Read_iarg('n',kk)
-       Call Read_aarg('AF_bnd',AF_bound)
+       Call Read_aarg('AF_bnd',AF_bnd)
       end if
       if(klsp.eq.0) go to 2
       if(state.eq.0) go to 2
