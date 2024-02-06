@@ -1,5 +1,5 @@
-project(bsr)
 cmake_minimum_required(VERSION 3.13)
+project(bsr)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 set(CMAKE_Fortran_MODULE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/mods)
