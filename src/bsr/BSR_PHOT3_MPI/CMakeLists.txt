@@ -1,4 +1,5 @@
 if(MPI_Fortran_FOUND)
+  set_source_files_properties(crees.f PROPERTIES COMPILE_OPTIONS "-std=legacy")
   add_executable(bsr_phot3_mpi
     mod_phot.f90
     ak_coef.f90

@@ -35,6 +35,7 @@ if (Fortran_COMPILER_NAME MATCHES "gfortran.*")
   list(APPEND ZCOM_SOURCES replace_iargc.f90)
 endif()
 
+set_source_files_properties(FUN_zcfg.f90 PROPERTIES COMPILE_OPTIONS "-std=legacy")
 add_library(zcom ${ZCOM_SOURCES})
 target_link_libraries(zcom zconfls)
 set_target_properties(zcom PROPERTIES Fortran_MODULE_DIRECTORY ${GLOBAL_Fortran_MODULE_DIRECTORY})
