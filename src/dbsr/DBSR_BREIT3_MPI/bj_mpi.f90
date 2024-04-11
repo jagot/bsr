@@ -290,7 +290,7 @@
       Call Read_iarg('klsp2' ,klsp2 )
       Call Read_iarg('mk'    ,mk    )
       Call Read_rarg('eps_c' ,eps_c )
-      Call Read_rarg('RX'    ,RX    )
+      Call Read_iarg('RX'    ,RX    )
       Call Read_iarg('debug' ,debug )
 
       if(klsp.ne.0) then
