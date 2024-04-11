@@ -127,4 +127,29 @@ target_link_libraries(add_stgfb zconfls zcom)
 add_executable(sec_om sec_om.f90)
 target_link_libraries(sec_om zconfls zcom)
 
+add_executable(ak_tab_jj ak_tab_jj.f90)
+target_link_libraries(ak_tab_jj zconfjj zcom)
 
+add_executable(cm_j cm_j.f90)
+target_link_libraries(cm_j zconfjj zcom)
+
+add_executable(genjconf genjconf.f90)
+target_link_libraries(genjconf zconfjj zcom)
+
+add_executable(genjterm genjterm.f90)
+target_link_libraries(genjterm zconfjj zcom)
+
+add_executable(jcfile jcfile.f90)
+target_link_libraries(jcfile zconfjj zcom)
+
+add_executable(jfile jfile.f90)
+target_link_libraries(jfile zconfjj zcom)
+
+add_executable(jj_list jj_list.f90)
+target_link_libraries(jj_list zconfjj zcom)
+
+add_executable(mix_c mix_c.f90)
+target_link_libraries(mix_c zconfjj zcom)
+
+add_executable(order_jj order_jj.f90)
+target_link_libraries(order_jj zconfjj zcom)
