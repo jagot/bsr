@@ -116,6 +116,8 @@
       Character(124) :: AS
       Integer, external :: Iadd_line
 
+      Integer status(MPI_STATUS_SIZE)
+
 !----------------------------------------------------------------------
       Call MPI_INIT(ierr)
       Call MPI_COMM_RANK(MPI_COMM_WORLD, myid, ierr)

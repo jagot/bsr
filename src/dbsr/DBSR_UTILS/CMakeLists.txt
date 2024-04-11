@@ -1,6 +1,5 @@
-message(WARNING "coef_jj does not link correctly")
-# add_executable(coef_jj coef_jj.f90)
-# target_link_libraries(coef_jj zconfjj zcom)
+add_executable(coef_jj coef_jj.f90)
+target_link_libraries(coef_jj zconfjj zcom)
 
 add_executable(dbound_bsw dbound_bsw.f90)
 target_link_libraries(dbound_bsw dbs zconfjj zcom)

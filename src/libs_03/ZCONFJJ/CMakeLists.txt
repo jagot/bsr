@@ -12,3 +12,5 @@ add_library(zconfjj
   smu.f90                  test_cj.f90              gen_jj_states.f90
   coef_1conf.f90           coef_2conf_jj.f90        read_peel_orb.f90
   check_conf_jj.f90        read_iort_jj.f90)
+target_link_libraries(zconfjj zcom)
+set_target_properties(zconfjj PROPERTIES Fortran_MODULE_DIRECTORY ${GLOBAL_Fortran_MODULE_DIRECTORY})

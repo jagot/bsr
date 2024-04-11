@@ -36,3 +36,5 @@ if (Fortran_COMPILER_NAME MATCHES "gfortran.*")
 endif()
 
 add_library(zcom ${ZCOM_SOURCES})
+target_link_libraries(zcom zconfls)
+set_target_properties(zcom PROPERTIES Fortran_MODULE_DIRECTORY ${GLOBAL_Fortran_MODULE_DIRECTORY})

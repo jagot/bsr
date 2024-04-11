@@ -329,3 +329,68 @@
 
       End Function no_ic_LS
 
+
+!======================================================================
+      Subroutine Write_conf_LS(nu)
+!======================================================================
+      Use conf_LS
+
+      Implicit none
+      Integer :: nu,i
+
+      write(nu) ncfg,lcfg,ne
+      write(nu) (ip_state(i),i=1,ncfg)
+      write(nu) (ic_term(i),i=1,ncfg)
+      write(nu) (ip_orb(i),i=1,lcfg)
+      write(nu) (WC(i),i=1,ncfg)
+
+      End Subroutine Write_conf_LS
+
+
+!======================================================================
+      Subroutine Read_conf_LS(nu)
+!======================================================================
+      Use conf_LS
+
+      Implicit none
+      Integer :: nu,i
+
+      Call Alloc_cfg_LS(0)
+      read(nu) ncfg,lcfg,ne
+      Allocate(ip_state(ncfg),IC_term(ncfg),ip_orb(lcfg),WC(ncfg))
+      mcfg = ncfg; kcfg = lcfg; jcfg = kcfg/mcfg + 1
+      read(nu) (ip_state(i),i=1,ncfg)
+      read(nu) (ic_term(i),i=1,ncfg)
+      read(nu) (ip_orb(i),i=1,lcfg)
+      read(nu) (WC(i),i=1,ncfg)
+
+      End Subroutine Read_conf_LS
+
+
+!======================================================================
+      Subroutine Symc_conf(ic,conf)
+!======================================================================
+!     get label for configuration
+!----------------------------------------------------------------------
+      Use conf_LS, only: LTOTAL,STOTAL,no,nn,ln,iq,kn
+
+      Implicit none
+      Integer, intent(in) :: ic
+      Integer :: i,k
+      Character(*) :: conf
+      Character(4), external :: AL
+
+      conf = ' '
+
+      Call Get_symc_LS(ic,LTOTAL,STOTAL,no,nn,ln,iq,kn)
+
+      k=0
+      Do i=1,no; if(iq(i).eq.0) Cycle
+       conf(k+2:k+2) = AL(ln(i),1)
+       write(conf(k+3:k+6),'(a1,i2,a1)') '(',iq(i),')'
+       k=k+6
+      End do
+
+      End Subroutine Symc_conf
+
+

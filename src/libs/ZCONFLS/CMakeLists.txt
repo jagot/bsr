@@ -13,3 +13,4 @@ add_library(zconfls
   test_a.f90               test_c.f90               get_term_LS.f90
   incode_int.f90           idef_st.f90              r_expn.f90
   read_sol.f90             jopen.f90                SCT_tma_om.f90)
+set_target_properties(zconfls PROPERTIES Fortran_MODULE_DIRECTORY ${GLOBAL_Fortran_MODULE_DIRECTORY})

@@ -183,30 +183,3 @@
       End do    ! over ic
 
       End Subroutine Conf_loop
-
-
-!======================================================================
-      Subroutine Symc_conf(ic,conf)
-!======================================================================
-!     configuration conf from ZOI format to c-file format
-!----------------------------------------------------------------------
-      Use conf_LS, only: LTOTAL,STOTAL,no,nn,ln,iq,kn
-
-      Implicit none
-      Integer, Intent(in) :: ic
-      Character(*) :: conf
-      Character(4), External :: AL
-      Integer :: i,k
-
-      conf = ' '
-
-      Call Get_symc_LS(ic,LTOTAL,STOTAL,no,nn,ln,iq,kn)
-
-      k=0
-      Do i=1,no; if(iq(i).eq.0) Cycle
-       conf(k+2:k+2) = AL(ln(i),1)
-       write(conf(k+3:k+6),'(a1,i2,a1)') '(',iq(i),')'
-       k=k+6
-      End do
-
-      End Subroutine Symc_conf
