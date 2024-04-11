@@ -1,6 +1,17 @@
 name: Build BSR
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
+    tags: ['*']
+  pull_request:
+  workflow_dispatch:
+concurrency:
+  # Skip intermediate builds: always.
+  # Cancel intermediate builds: only if it is a pull request build.
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
 
 jobs:
   build:
@@ -8,13 +19,23 @@ jobs:
       matrix:
         os: ['ubuntu-latest', 'macos-latest']
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
 
     steps:
     - name: Install Dependencies (Linux)
-      run: sudo apt-get install -y build-essential gfortran liblapack-dev libblas-dev openmpi-bin openmpi-common libopenmpi-dev libscalapack-openmpi-dev
+      run: |
+        sudo apt-mark hold firefox
+        sudo apt-get update
+        sudo apt-get upgrade
+        sudo apt-get install -y build-essential gfortran cmake \
+           libopenblas-dev openmpi-bin openmpi-common libopenmpi-dev libscalapack-openmpi-dev
       if: matrix.os == 'ubuntu-latest'
     - name: Install Dependencies (macOS)
-      run: brew install gcc open-mpi
+      run: |
+        brew --prefix
+        ls $(brew --prefix)/bin
+        sudo ln -s $(brew --prefix)/bin/gfortran-13 $(brew --prefix)/bin/gfortran
+        brew install gcc gfortran cmake open-mpi openblas
       if: matrix.os == 'macos-latest'
 
     - name: Get Sources
