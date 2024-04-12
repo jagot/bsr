@@ -8,3 +8,5 @@ add_executable(bsr_breit3
   zno_0ee.f90              zno_1ee.f90              zno_2ee.f90
   zno_breit.f90            iort_conf.f90)
 target_link_libraries(bsr_breit3 zconfls shells zcom)
+
+add_subdirectory(coef_tab3)

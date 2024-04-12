@@ -1,4 +1,4 @@
-if(MPI_Fortran_FOUND)
+if(${MPI_Fortran_FOUND})
   add_executable(bsr_breit3_mpi
     mod_param.f90            mod_spinorb.f90          mod_termexp.f90
     mod_boef.f90             mod_coef.f90             mod_zoef.f90

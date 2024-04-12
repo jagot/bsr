@@ -1,4 +1,4 @@
-if(MPI_Fortran_FOUND)
+if(${MPI_Fortran_FOUND})
 message(WARNING "bsr_breit4_mpi does not build correctly")
 # add_executable(bsr_breit4_mpi
 #   MOD_bsr_breit.f90        bsr_breit_mpi.f90

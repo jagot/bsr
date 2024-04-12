@@ -87,8 +87,8 @@
        iiexp=0
        Do i=1,ntarg; if(ip_exp(i).ne.i) iiexp=1; End do
 
-       write(*,*) 'unit = ', unit, au_cm,au_eV
-       write(*,*) 'iiexp =',iiexp
+       write(*,*) 'unit = ', unit, au_cm,au_eV, '    iiexp =',iiexp
+       Do i=1,ntarg; write(*,*) i,ip_exp(i); End do
 
       end if
 

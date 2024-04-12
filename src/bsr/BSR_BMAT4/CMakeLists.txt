@@ -21,7 +21,7 @@ message(WARNING "bsr_bmat4 does not build correctly")
 #   conf_loop.f90)
 # target_link_libraries(bsr_bmat4 zconfls shells zcom bs)
 
-if(MPI_Fortran_FOUND)
+if(${MPI_Fortran_FOUND})
   message(WARNING "bsr_bmat4_mpi does not build correctly")
   # add_executable(bsr_bmat4_mpi
   #   ${BSR_BMAT4_COMMON_SOURCES}

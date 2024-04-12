@@ -1,3 +1,5 @@
 add_subdirectory(mult3)
 add_subdirectory(mult3_tab)
+add_subdirectory(mult4)
+add_subdirectory(mult4_mpi)
 add_subdirectory(simple2)
