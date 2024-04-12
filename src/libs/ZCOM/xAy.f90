@@ -78,7 +78,7 @@
         i1 = max0(1,1+k-jp)
         i2 = min0(n,n+k-jp)
         Do i = i1,i2;  j = i+jp-k
-         vav = vav + array(i,jp)*x(i)*y(j)
+         vav = vav + a(i,jp)*x(i)*y(j)
         End do
        End do
 
