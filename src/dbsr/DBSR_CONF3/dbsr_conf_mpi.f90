@@ -109,6 +109,8 @@
       Character(128) :: line
       Integer, external :: Iadd_line
 
+      Integer status(MPI_STATUS_SIZE)
+
 !----------------------------------------------------------------------
 
       Call MPI_INIT(ierr)
