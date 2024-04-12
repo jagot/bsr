@@ -8,7 +8,7 @@
 !
 !======================================================================
 !
-!  This proram analyzes the orthogonality conditions for one-electron
+!  This program analyzes the orthogonality conditions for one-electron
 !  orbitals and generates new c- and bsw-files for target states with
 !  consistent orbital set-indexes and sorted according to their energy.
 !
@@ -104,14 +104,14 @@
        Call read_dbsw(nuw,0,0)
        Do i=1,ncore
         Do j=1,ncore
-        if(kbs(i).ne.kbs(j)) Cycle
-        S = QUADR_00(i,j,0)
-        if(abs(S).lt.eps_core) Cycle
-        Call Iadd_obs(i,j,S)
+         if(kbs(i).ne.kbs(j)) Cycle
+         S = QUADR_00(i,j,0)
+         if(abs(S).lt.eps_core) Cycle
+         Call Iadd_obs(i,j,S)
+        End do
+        OBS1(i) = QUADR_pq(i,i,1)
+        OBS2(i) = QUADR_pq(i,i,2)
        End do
-       OBS1(i) = QUADR_pq(i,i,1)
-       OBS2(i) = QUADR_pq(i,i,2)
-      End do
 
       end if
 
@@ -166,7 +166,9 @@
 
       end if
 
-      nwt = nbf;  ipbs = 0; ipbs(1:nbf) = 1  ! sub. orb. pointer
+      if(nbf.gt.0) then
+       nwt = nbf;  ipbs = 0; ipbs(1:nbf) = 1  ! sub. orb. pointer
+      end if
 
 !-----------------------------------------------------------------------
 ! ... check orbitals in target states:
@@ -386,7 +388,7 @@
         write(pri,'(/a,i5,5x,a/)') 'perturber', ilsp, trim(AFK(iip))
         Open(nuc,file=AFC)
 
-        kshift = maxval(KEF(1:nwf))
+        kshift = maxval(IEF(1:nbf))
 
         Call Read_conf_jj(nuc,kshift,'add','check')
 
