@@ -32,8 +32,6 @@ jobs:
       if: matrix.os == 'ubuntu-latest'
     - name: Install Dependencies (macOS)
       run: |
-        brew --prefix
-        ls $(brew --prefix)/bin
         sudo ln -s $(brew --prefix)/bin/gfortran-13 $(brew --prefix)/bin/gfortran
         brew install gcc gfortran cmake open-mpi openblas
       if: matrix.os == 'macos-latest'
