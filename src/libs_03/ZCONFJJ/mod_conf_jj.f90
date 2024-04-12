@@ -154,7 +154,15 @@
 
       if(mcfg.eq.0) Call Alloc_cfg(icfg)
       Jtotal = Jintra(no)
+
+!      Do i=2,no
+!       if(nn(i-1).eq.nn(i).and.ln(i-1).eq.ln(i)) iq(i) = -iq(i)         ! ???
+!      End do
+
       iconf = Iadd_symc(Jtotal,no,iq,kn)
+
+!      iq = iabs(iq)                                                     ! ???
+
       iterm = Iadd_symt(iconf,no,Jshell,Vshell,Jintra)
 
       Do i = 1,no; np(i)=Ifind_jjorb(nn(i),kn(i),in(i),2); End do
@@ -305,7 +313,7 @@
 !======================================================================
       Integer Function jot_ic (ic)
 !======================================================================
-!     total momentum state "ic"
+!     total momentum of state "ic"
 !----------------------------------------------------------------------
       Use conf_jj
 

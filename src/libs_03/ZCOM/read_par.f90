@@ -19,7 +19,7 @@
       if(AS(i+1:i+1).ne.'='.and.AS(i+1:i+1).ne.' ') go to 1
       i=INDEX(AS,'=')+1
       if(i.eq.1) go to 1
-      read(AS(i:),*) ivalue
+      read(AS(i:),*,end=2,err=2) ivalue
     2 Continue
 
       End Subroutine Read_ipar
@@ -72,7 +72,7 @@
       if(i.eq.0) go to 1
       i=INDEX(AS,'=')+1
       if(i.eq.1) go to 1
-      read(AS(i:),*) rvalue
+      read(AS(i:),*,end=2,err=2) rvalue
     2 Continue
 
       End Subroutine Read_rval
@@ -99,7 +99,7 @@
       if(AS(i+1:i+1).ne.'='.and.AS(i+1:i+1).ne.' ') go to 1
       i=INDEX(AS,'=')+1
       if(i.eq.1) go to 1
-      read(AS(i:180),*) avalue
+      read(AS(i:180),*,end=2,err=2) avalue
     2 Continue
 
       End Subroutine Read_apar
@@ -125,7 +125,7 @@
       if(i.eq.0) go to 1
       i=INDEX(AS,'=')+1
       if(i.eq.1) go to 1
-      read(AS(i:),*) (ivalue(j),j=1,nv)
+      read(AS(i:),*,err=2,end=2) (ivalue(j),j=1,nv)
     2 Continue
 
       End Subroutine Read_iarray

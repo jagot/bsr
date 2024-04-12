@@ -10,11 +10,11 @@
 
       IMPLICIT NONE
 
-      Integer(4), Intent(in) :: nu
+      Integer, Intent(in) :: nu
       Character(4) :: el
       Real(8) :: zw,hw,hmw,rmw
-      Integer(4) :: ksw,nsw,mw,n,l,k,i
-      Integer(4), External :: Iadd_bsorb
+      Integer :: ksw,nsw,mw,n,l,k,i
+      Integer, external :: Iadd_bsorb
 
       rewind(nu)
     1 read(nu,end=2) el,zw,hw,hmw,rmw,ksw,nsw,mw

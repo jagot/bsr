@@ -136,6 +136,34 @@
 
       END SUBROUTINE allocate_bsorb
 
+!=======================================================================
+      SUBROUTINE alloc_spline_orbitals(m)
+!=======================================================================
+!     This program allocates (deallocates) space for list of atomic
+!     orbitals or reallocates it if necessary
+!-----------------------------------------------------------------------
+      USE spline_orbitals
+      USE spline_param
+
+      Implicit none
+      Integer, intent(in) :: m
+
+      if(m.le.0) then
+
+       if(Allocated(nbs))  Deallocate (nbs,lbs,kbs,mbs,ebs,pbs)
+       nbf = 0;  mbf = 0
+
+      elseif(m.gt.mbf.and.nbf.eq.0) then
+
+       if(Allocated(nbs)) Deallocate (nbs,lbs,kbs,mbs,ebs,pbs)
+
+       mbf = m; nbf = 0
+       Allocate(nbs(mbf),lbs(mbf),kbs(mbf),ebs(mbf),mbs(1:mbf),pbs(1:ns,1:mbf))
+       nbs = 0; lbs = 0; kbs = 0; ebs = ' '; mbs = 0; pbs = 0.d0
+
+      end if
+
+      End Subroutine  alloc_spline_orbitals
 
 !=======================================================================
       Integer function Ifind_bsorb(n,l,k)

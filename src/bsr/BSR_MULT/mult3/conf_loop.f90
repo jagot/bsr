@@ -4,7 +4,7 @@
 !     run loop over configurations
 !-----------------------------------------------------------------------
 
-      USE mult_par,      only: pri,nui,nud,ic,jc, kpol,ktype, &
+      USE mult_par,      only: pri,nui,nud,ic,jc, kpol,ktype, ovl, &
                                JT_oper,CT_oper, qpol,mpol,spol, CNA,CNB
       USE spin_orbitals, only: Lsym1,Msym1,Ssym1,NNsym1, &
                                Lsym2,Msym2,Ssym2,NNsym2
@@ -113,6 +113,8 @@
 
       CNA = Z_3j(ILT1,-MLT1+2,2*kpol+1,MLT1-MLT2+1,ILT2,MLT2) &
             * (-1)**((ILT1-MLT1)/2)
+
+      if(kpol.eq.0.and.ovl.eq.0) CNA = CNA * sqrt(1.d0*ILT1)
 
       if(IST1.ne.IST2) CNA = 0.d0
 

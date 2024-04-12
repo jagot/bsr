@@ -1,6 +1,7 @@
-!=======================================================================
-    Subroutine COULFG(XX,ETA1,XLMIN,XLMAX,FC,GC,FCP,GCP,MODE1,KFN,IFAIL)
-!=======================================================================
+C=======================================================================
+      Subroutine COULFG(XX,ETA1,XLMIN,XLMAX,FC,GC,FCP,GCP,
+     *                  MODE1,KFN,IFAIL)                                
+C=======================================================================
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C                                                                      C
 C  REVISED COULOMB WAVEFUNCTION PROGRAM USING STEED'S METHOD           C
@@ -37,211 +38,211 @@ C   USE AUTODBL + EXTENDED PRECISION ON HX COMPILER  ACCUR = 10**-33   C
 C   FOR MANTISSAS OF 56 & 112 BITS. FOR SINGLE PRECISION CDC (48 BITS) C
 C   REASSIGN DSQRT=SQRT ETC.  SEE TEXT FOR COMPLEX ARITHMETIC VERSION  C
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-C
-      IMPLICIT REAL*8 (A-H,O-Z)
-      DIMENSION    FC(1),GC(1),FCP(1),GCP(1)
-      LOGICAL      ETANE0,XLTURN
-      COMMON       /STEED/ PACCQ,NFP,NPQ,IEXP,M1
-C***  COMMON BLOCK IS FOR INFORMATION ONLY.  NOT REQUIRED IN CODE
-C***  COULFG HAS CALLS TO: DSQRT,DABS,DMOD,IDINT,DSIGN,DFLOAT,DMIN1
-      DATA ZERO,ONE,TWO,TEN2,ABORT /0.0D0, 1.0D0, 2.0D0, 1.0D2, 2.0D4/
-      DATA HALF,TM30 / 0.5D0, 1.0D-30 /
-      DATA RT2DPI /0.79788 45608 02865 35587 98921 19868 76373 D0/
-C *** THIS CONSTANT IS  DSQRT(TWO/PI):  USE Q0 FOR IBM REAL*16: D0 FOR
-C ***  REAL*8 & CDC DOUBLE P:  E0 FOR CDC SINGLE P; AND TRUNCATE VALUE.
-C
-                        ACCUR = 1.0D-16
-C ***            CHANGE ACCUR TO SUIT MACHINE AND PRECISION REQUIRED
-      MODE  = 1
-      IF(MODE1 .EQ. 2 .OR. MODE1 .EQ. 3 ) MODE = MODE1
-      IFAIL = 0
-      IEXP  = 1
-      NPQ   = 0
-      ETA   = ETA1
-      GJWKB = ZERO
-      PACCQ = ONE
-      IF(KFN .NE. 0) ETA = ZERO
-                 ETANE0  = ETA .NE. ZERO
-      ACC   = ACCUR
-      ACC4  = ACC*TEN2*TEN2
-      ACCH  = DSQRT(ACC)
-C ***    TEST RANGE OF XX, EXIT IF.LE.DSQRT(ACCUR) OR IF NEGATIVE
-C
-      IF(XX .LE. ACCH)                          GO TO 100
-      X     = XX
-      XLM   = XLMIN
-      IF(KFN .EQ. 2)  XLM = XLM - HALF
-      IF(XLM .LE. -ONE .OR. XLMAX .LT. XLMIN)   GO TO 105
-      E2MM1 = ETA*ETA + XLM*XLM + XLM
-      XLTURN= X*(X - TWO*ETA) .LT. XLM*XLM + XLM
-      DELL  = XLMAX - XLMIN + ACC
-      IF(DABS(DMOD(DELL,ONE)) .GT. ACC) WRITE(6,2040)XLMAX,XLMIN,DELL
-      LXTRA = IDINT(DELL)
-      XLL   = XLM + DFLOAT(LXTRA)
-C ***       LXTRA IS NUMBER OF ADDITIONAL LAMBDA VALUES TO BE COMPUTED
-C ***       XLL  IS MAX LAMBDA VALUE, OR 0.5 SMALLER FOR J,Y BESSELS
-C ***         DETERMINE STARTING ARRAY ELEMENT (M1) FROM XLMIN
-      M1  = MAX0(IDINT(XLMIN + ACC),0) + 1
-      L1  = M1 + LXTRA
-C
-C ***    EVALUATE CF1  =  F   =  FPRIME(XL,ETA,X)/F(XL,ETA,X)
-C
-      XI  = ONE/X
-      FCL = ONE
-      PK  = XLL + ONE
-      PX  = PK  + ABORT
-    2 EK  = ETA / PK
-      F   = (EK + PK*XI)*FCL + (FCL - ONE)*XI
-      PK1 =  PK + ONE
-C ***   TEST ENSURES B1 .NE. ZERO FOR NEGATIVE ETA; FIXUP IS EXACT.
-             IF(DABS(ETA*X + PK*PK1) .GT. ACC)  GO TO 3
-             FCL  = (ONE + EK*EK)/(ONE + (ETA/PK1)**2)
-             PK   =  TWO + PK
-      GO TO 2
-    3 D   =  ONE/((PK + PK1)*(XI + EK/PK1))
-      DF  = -FCL*(ONE + EK*EK)*D
-            IF(FCL .NE. ONE )  FCL = -ONE
-            IF(D   .LT. ZERO)  FCL = -FCL
-      F   =  F  + DF
-C
-C ***   BEGIN CF1 LOOP ON PK = K = LAMBDA + 1
-C
-      P     = ONE
-    4 PK    = PK1
-        PK1 = PK1 + ONE
-        EK  = ETA / PK
-        TK  = (PK + PK1)*(XI + EK/PK1)
-        D   =  TK - D*(ONE + EK*EK)
-              IF(DABS(D) .GT. ACCH)             GO TO 5
-              WRITE (6,1000) D,DF,ACCH,PK,EK,ETA,X
-              P = P  +   ONE
-              IF( P .GT. TWO )                  GO TO 110
-    5 D     = ONE/D
-              IF (D .LT. ZERO) FCL = -FCL
-        DF  = DF*(D*TK - ONE)
-        F   = F  + DF
-              IF(PK .GT. PX)                    GO TO 110
-      IF(DABS(DF) .GE. DABS(F)*ACC)             GO TO 4
-                  NFP = PK - XLL - 1
-      IF(LXTRA .EQ. 0)                          GO TO 7
-C
+C                                                                       
+      IMPLICIT REAL*8 (A-H,O-Z)                                         
+      DIMENSION    FC(1),GC(1),FCP(1),GCP(1)                            
+      LOGICAL      ETANE0,XLTURN                                        
+      COMMON       /STEED/ PACCQ,NFP,NPQ,IEXP,M1                        
+C***  COMMON BLOCK IS FOR INFORMATION ONLY.  NOT REQUIRED IN CODE       
+C***  COULFG HAS CALLS TO: DSQRT,DABS,DMOD,IDINT,DSIGN,DFLOAT,DMIN1     
+      DATA ZERO,ONE,TWO,TEN2,ABORT /0.0D0, 1.0D0, 2.0D0, 1.0D2, 2.0D4/  
+      DATA HALF,TM30 / 0.5D0, 1.0D-30 /                                 
+      DATA RT2DPI /0.79788 45608 02865 35587 98921 19868 76373 D0/      
+C *** THIS CONSTANT IS  DSQRT(TWO/PI):  USE Q0 FOR IBM REAL*16: D0 FOR  
+C ***  REAL*8 & CDC DOUBLE P:  E0 FOR CDC SINGLE P; AND TRUNCATE VALUE. 
+C                                                                       
+                        ACCUR = 1.0D-16                                 
+C ***            CHANGE ACCUR TO SUIT MACHINE AND PRECISION REQUIRED    
+      MODE  = 1                                                         
+      IF(MODE1 .EQ. 2 .OR. MODE1 .EQ. 3 ) MODE = MODE1                  
+      IFAIL = 0                                                         
+      IEXP  = 1                                                         
+      NPQ   = 0                                                         
+      ETA   = ETA1                                                      
+      GJWKB = ZERO                                                      
+      PACCQ = ONE                                                       
+      IF(KFN .NE. 0) ETA = ZERO                                         
+                 ETANE0  = ETA .NE. ZERO                                
+      ACC   = ACCUR                                                     
+      ACC4  = ACC*TEN2*TEN2                                             
+      ACCH  = DSQRT(ACC)                                                
+C ***    TEST RANGE OF XX, EXIT IF.LE.DSQRT(ACCUR) OR IF NEGATIVE       
+C                                                                       
+      IF(XX .LE. ACCH)                          GO TO 100               
+      X     = XX                                                        
+      XLM   = XLMIN                                                     
+      IF(KFN .EQ. 2)  XLM = XLM - HALF                                  
+      IF(XLM .LE. -ONE .OR. XLMAX .LT. XLMIN)   GO TO 105               
+      E2MM1 = ETA*ETA + XLM*XLM + XLM                                   
+      XLTURN= X*(X - TWO*ETA) .LT. XLM*XLM + XLM                        
+      DELL  = XLMAX - XLMIN + ACC                                       
+      IF(DABS(DMOD(DELL,ONE)) .GT. ACC) WRITE(6,2040)XLMAX,XLMIN,DELL   
+      LXTRA = IDINT(DELL)                                               
+      XLL   = XLM + DFLOAT(LXTRA)                                       
+C ***       LXTRA IS NUMBER OF ADDITIONAL LAMBDA VALUES TO BE COMPUTED  
+C ***       XLL  IS MAX LAMBDA VALUE, OR 0.5 SMALLER FOR J,Y BESSELS    
+C ***         DETERMINE STARTING ARRAY ELEMENT (M1) FROM XLMIN          
+      M1  = MAX0(IDINT(XLMIN + ACC),0) + 1                              
+      L1  = M1 + LXTRA                                                  
+C                                                                       
+C ***    EVALUATE CF1  =  F   =  FPRIME(XL,ETA,X)/F(XL,ETA,X)           
+C                                                                       
+      XI  = ONE/X                                                       
+      FCL = ONE                                                         
+      PK  = XLL + ONE                                                   
+      PX  = PK  + ABORT                                                 
+    2 EK  = ETA / PK                                                    
+      F   = (EK + PK*XI)*FCL + (FCL - ONE)*XI                           
+      PK1 =  PK + ONE                                                   
+C ***   TEST ENSURES B1 .NE. ZERO FOR NEGATIVE ETA; FIXUP IS EXACT.     
+             IF(DABS(ETA*X + PK*PK1) .GT. ACC)  GO TO 3                 
+             FCL  = (ONE + EK*EK)/(ONE + (ETA/PK1)**2)                  
+             PK   =  TWO + PK                                           
+      GO TO 2                                                           
+    3 D   =  ONE/((PK + PK1)*(XI + EK/PK1))                             
+      DF  = -FCL*(ONE + EK*EK)*D                                        
+            IF(FCL .NE. ONE )  FCL = -ONE                               
+            IF(D   .LT. ZERO)  FCL = -FCL                               
+      F   =  F  + DF                                                    
+C                                                                       
+C ***   BEGIN CF1 LOOP ON PK = K = LAMBDA + 1                           
+C                                                                       
+      P     = ONE                                                       
+    4 PK    = PK1                                                       
+        PK1 = PK1 + ONE                                                 
+        EK  = ETA / PK                                                  
+        TK  = (PK + PK1)*(XI + EK/PK1)                                  
+        D   =  TK - D*(ONE + EK*EK)                                     
+              IF(DABS(D) .GT. ACCH)             GO TO 5                 
+              WRITE (6,1000) D,DF,ACCH,PK,EK,ETA,X                      
+              P = P  +   ONE                                            
+              IF( P .GT. TWO )                  GO TO 110               
+    5 D     = ONE/D                                                     
+              IF (D .LT. ZERO) FCL = -FCL                               
+        DF  = DF*(D*TK - ONE)                                           
+        F   = F  + DF                                                   
+              IF(PK .GT. PX)                    GO TO 110               
+      IF(DABS(DF) .GE. DABS(F)*ACC)             GO TO 4                 
+                  NFP = PK - XLL - 1                                    
+      IF(LXTRA .EQ. 0)                          GO TO 7                 
+C                                                                       
 C *** DOWNWARD RECURRENCE TO LAMBDA = XLM. ARRAY GC,IF PRESENT,STORES RL
-C
-      FCL = FCL*TM30
-      FPL = FCL*F
-      IF(MODE .EQ. 1) FCP(L1) = FPL
-                      FC (L1) = FCL
-      XL  = XLL
-      RL  = ONE
-      EL  = ZERO
-      DO 6  LP = 1,LXTRA
-         IF(ETANE0) EL = ETA/XL
-         IF(ETANE0) RL = DSQRT(ONE + EL*EL)
-         SL    =  EL  + XL*XI
-         L     =  L1  - LP
-         FCL1  = (FCL *SL + FPL)/RL
-         FPL   =  FCL1*SL - FCL *RL
-         FCL   =  FCL1
-         FC(L) =  FCL
-         IF(MODE .EQ. 1) FCP(L)  = FPL
-         IF(MODE .NE. 3 .AND. ETANE0) GC(L+1) = RL
-    6 XL = XL - ONE
-      IF(FCL .EQ. ZERO) FCL = ACC
-      F  = FPL/FCL
-C ***    NOW WE HAVE REACHED LAMBDA = XLMIN = XLM
-C ***    EVALUATE CF2 = P + I.Q  AGAIN USING STEED'S ALGORITHM
-C ***    SEE TEXT FOR COMPACT COMPLEX CODE FOR SP CDC OR NON-ANSI IBM
-C
-    7 IF( XLTURN ) CALL JWKB(X,ETA,DMAX1(XLM,ZERO),FJWKB,GJWKB,IEXP)
-      IF( IEXP .GT. 1 .OR. GJWKB .GT. ONE/(ACCH*TEN2))  GO TO 9
-          XLTURN = .FALSE.
-      TA =  TWO*ABORT
-      PK =  ZERO
-      WI =  ETA + ETA
-      P  =  ZERO
-      Q  =  ONE - ETA*XI
-      AR = -E2MM1
-      AI =  ETA
-      BR =  TWO*(X - ETA)
-      BI =  TWO
-      DR =  BR/(BR*BR + BI*BI)
-      DI = -BI/(BR*BR + BI*BI)
-      DP = -XI*(AR*DI + AI*DR)
-      DQ =  XI*(AR*DR - AI*DI)
-    8 P     = P  + DP
-         Q  = Q  + DQ
-         PK = PK + TWO
-         AR = AR + PK
-         AI = AI + WI
-         BI = BI + TWO
-         D  = AR*DR - AI*DI + BR
-         DI = AI*DR + AR*DI + BI
-         C  = ONE/(D*D + DI*DI)
-         DR =  C*D
-         DI = -C*DI
-         A  = BR*DR - BI*DI - ONE
-         B  = BI*DR + BR*DI
-         C  = DP*A  - DQ*B
-         DQ = DP*B  + DQ*A
-         DP = C
-         IF(PK .GT. TA)                         GO TO 120
-      IF(DABS(DP)+DABS(DQ).GE.(DABS(P)+DABS(Q))*ACC)   GO TO 8
-                      NPQ   = PK/TWO
-                      PACCQ = HALF*ACC/DMIN1(DABS(Q),ONE)
-                      IF(DABS(P) .GT. DABS(Q)) PACCQ = PACCQ*DABS(P)
-C
-C *** SOLVE FOR FCM = F AT LAMBDA = XLM,THEN FIND NORM FACTOR W=W/FCM
-C
-      GAM = (F - P)/Q
-            IF(Q .LE. ACC4*DABS(P))             GO TO 130
-      W   = ONE/DSQRT((F - P)*GAM + Q)
-            GO TO 10
+C                                                                       
+      FCL = FCL*TM30                                                    
+      FPL = FCL*F                                                       
+      IF(MODE .EQ. 1) FCP(L1) = FPL                                     
+                      FC (L1) = FCL                                     
+      XL  = XLL                                                         
+      RL  = ONE                                                         
+      EL  = ZERO                                                        
+      DO 6  LP = 1,LXTRA                                                
+         IF(ETANE0) EL = ETA/XL                                         
+         IF(ETANE0) RL = DSQRT(ONE + EL*EL)                             
+         SL    =  EL  + XL*XI                                           
+         L     =  L1  - LP                                              
+         FCL1  = (FCL *SL + FPL)/RL                                     
+         FPL   =  FCL1*SL - FCL *RL                                     
+         FCL   =  FCL1                                                  
+         FC(L) =  FCL                                                   
+         IF(MODE .EQ. 1) FCP(L)  = FPL                                  
+         IF(MODE .NE. 3 .AND. ETANE0) GC(L+1) = RL                      
+    6 XL = XL - ONE                                                     
+      IF(FCL .EQ. ZERO) FCL = ACC                                       
+      F  = FPL/FCL                                                      
+C ***    NOW WE HAVE REACHED LAMBDA = XLMIN = XLM                       
+C ***    EVALUATE CF2 = P + I.Q  AGAIN USING STEED'S ALGORITHM          
+C ***    SEE TEXT FOR COMPACT COMPLEX CODE FOR SP CDC OR NON-ANSI IBM   
+C                                                                       
+    7 IF( XLTURN ) CALL JWKB(X,ETA,DMAX1(XLM,ZERO),FJWKB,GJWKB,IEXP)    
+      IF( IEXP .GT. 1 .OR. GJWKB .GT. ONE/(ACCH*TEN2))  GO TO 9         
+          XLTURN = .FALSE.                                              
+      TA =  TWO*ABORT                                                   
+      PK =  ZERO                                                        
+      WI =  ETA + ETA                                                   
+      P  =  ZERO                                                        
+      Q  =  ONE - ETA*XI                                                
+      AR = -E2MM1                                                       
+      AI =  ETA                                                         
+      BR =  TWO*(X - ETA)                                               
+      BI =  TWO                                                         
+      DR =  BR/(BR*BR + BI*BI)                                          
+      DI = -BI/(BR*BR + BI*BI)                                          
+      DP = -XI*(AR*DI + AI*DR)                                          
+      DQ =  XI*(AR*DR - AI*DI)                                          
+    8 P     = P  + DP                                                   
+         Q  = Q  + DQ                                                   
+         PK = PK + TWO                                                  
+         AR = AR + PK                                                   
+         AI = AI + WI                                                   
+         BI = BI + TWO                                                  
+         D  = AR*DR - AI*DI + BR                                        
+         DI = AI*DR + AR*DI + BI                                        
+         C  = ONE/(D*D + DI*DI)                                         
+         DR =  C*D                                                      
+         DI = -C*DI                                                     
+         A  = BR*DR - BI*DI - ONE                                       
+         B  = BI*DR + BR*DI                                             
+         C  = DP*A  - DQ*B                                              
+         DQ = DP*B  + DQ*A                                              
+         DP = C                                                         
+         IF(PK .GT. TA)                         GO TO 120               
+      IF(DABS(DP)+DABS(DQ).GE.(DABS(P)+DABS(Q))*ACC)   GO TO 8          
+                      NPQ   = PK/TWO                                    
+                      PACCQ = HALF*ACC/DMIN1(DABS(Q),ONE)               
+                      IF(DABS(P) .GT. DABS(Q)) PACCQ = PACCQ*DABS(P)    
+C                                                                       
+C *** SOLVE FOR FCM = F AT LAMBDA = XLM,THEN FIND NORM FACTOR W=W/FCM   
+C                                                                       
+      GAM = (F - P)/Q                                                   
+            IF(Q .LE. ACC4*DABS(P))             GO TO 130               
+      W   = ONE/DSQRT((F - P)*GAM + Q)                                  
+            GO TO 10                                                    
 C *** ARRIVE HERE IF G(XLM) .GT. 10**6 OR IEXP .GT. 70 & XLTURN = .TRUE.
-    9 W   = FJWKB
-      GAM = GJWKB*W
-      P   = F
-      Q   = ONE
-C
-C *** NORMALISE FOR SPHERICAL OR CYLINDRICAL BESSEL FUNCTIONS
-C
-   10                     ALPHA = ZERO
-          IF(KFN  .EQ. 1) ALPHA = XI
-          IF(KFN  .EQ. 2) ALPHA = XI*HALF
-                          BETA  = ONE
-          IF(KFN  .EQ. 1) BETA  = XI
-          IF(KFN  .EQ. 2) BETA  = DSQRT(XI)*RT2DPI
-      FCM  = DSIGN(W,FCL)*BETA
-           FC(M1)  = FCM
-                      IF(MODE .EQ. 3)           GO TO 11
-           IF(.NOT. XLTURN)   GCL =  FCM*GAM
-           IF(      XLTURN)   GCL =  GJWKB*BETA
-           IF( KFN .NE. 0 )   GCL = -GCL
-           GC(M1)  = GCL
-           GPL =  GCL*(P - Q/GAM) - ALPHA*GCL
-                      IF(MODE .EQ. 2)           GO TO 11
-           GCP(M1) = GPL
-           FCP(M1) = FCM*(F - ALPHA)
-   11 IF(LXTRA .EQ. 0 ) RETURN
-C *** UPWARD RECURRENCE FROM GC(M1),GCP(M1)  STORED VALUE IS RL
-C *** RENORMALISE FC,FCP AT EACH LAMBDA AND CORRECT REGULAR DERIVATIVE
-C ***    XL   = XLM HERE  AND RL = ONE , EL = ZERO FOR BESSELS
-         W    = BETA*W/DABS(FCL)
-         MAXL = L1 - 1
-      DO 12 L = M1,MAXL
-                      IF(MODE .EQ. 3)           GO TO 12
-                      XL = XL + ONE
-         IF(ETANE0)   EL = ETA/XL
-         IF(ETANE0)   RL = GC(L+1)
-                      SL = EL + XL*XI
-         GCL1     = ((SL - ALPHA)*GCL - GPL)/RL
-         GPL      =   RL*GCL -  (SL + ALPHA)*GCL1
-         GCL      = GCL1
-         GC(L+1)  = GCL1
-                      IF(MODE .EQ. 2)           GO TO 12
-         GCP(L+1) = GPL
-         FCP(L+1) = W*(FCP(L+1) - ALPHA*FC(L+1))
-   12 FC(L+1)     = W* FC(L+1)
-      RETURN
+    9 W   = FJWKB                                                       
+      GAM = GJWKB*W                                                     
+      P   = F                                                           
+      Q   = ONE                                                         
+C                                                                       
+C *** NORMALISE FOR SPHERICAL OR CYLINDRICAL BESSEL FUNCTIONS           
+C                                                                       
+   10                     ALPHA = ZERO                                  
+          IF(KFN  .EQ. 1) ALPHA = XI                                    
+          IF(KFN  .EQ. 2) ALPHA = XI*HALF                               
+                          BETA  = ONE                                   
+          IF(KFN  .EQ. 1) BETA  = XI                                    
+          IF(KFN  .EQ. 2) BETA  = DSQRT(XI)*RT2DPI                      
+      FCM  = DSIGN(W,FCL)*BETA                                          
+           FC(M1)  = FCM                                                
+                      IF(MODE .EQ. 3)           GO TO 11                
+           IF(.NOT. XLTURN)   GCL =  FCM*GAM                            
+           IF(      XLTURN)   GCL =  GJWKB*BETA                         
+           IF( KFN .NE. 0 )   GCL = -GCL                                
+           GC(M1)  = GCL                                                
+           GPL =  GCL*(P - Q/GAM) - ALPHA*GCL                           
+                      IF(MODE .EQ. 2)           GO TO 11                
+           GCP(M1) = GPL                                                
+           FCP(M1) = FCM*(F - ALPHA)                                    
+   11 IF(LXTRA .EQ. 0 ) RETURN                                          
+C *** UPWARD RECURRENCE FROM GC(M1),GCP(M1)  STORED VALUE IS RL         
+C *** RENORMALISE FC,FCP AT EACH LAMBDA AND CORRECT REGULAR DERIVATIVE  
+C ***    XL   = XLM HERE  AND RL = ONE , EL = ZERO FOR BESSELS          
+         W    = BETA*W/DABS(FCL)                                        
+         MAXL = L1 - 1                                                  
+      DO 12 L = M1,MAXL                                                 
+                      IF(MODE .EQ. 3)           GO TO 12                
+                      XL = XL + ONE                                     
+         IF(ETANE0)   EL = ETA/XL                                       
+         IF(ETANE0)   RL = GC(L+1)                                      
+                      SL = EL + XL*XI                                   
+         GCL1     = ((SL - ALPHA)*GCL - GPL)/RL                         
+         GPL      =   RL*GCL -  (SL + ALPHA)*GCL1                       
+         GCL      = GCL1                                                
+         GC(L+1)  = GCL1                                                
+                      IF(MODE .EQ. 2)           GO TO 12                
+         GCP(L+1) = GPL                                                 
+         FCP(L+1) = W*(FCP(L+1) - ALPHA*FC(L+1))                        
+   12 FC(L+1)     = W* FC(L+1)                                          
+      RETURN                                                            
  1000 FORMAT(/' CF1 ACCURACY LOSS: D,DF,ACCH,K,ETA/K,ETA,X = ',1P7D9.2/)
 C
 C ***    ERROR MESSAGES

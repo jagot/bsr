@@ -134,7 +134,7 @@
 
       Case(1)
 
-       if(kpol.eq.0) Return
+       if(kpol.eq.0.and.ovl.eq.1) Return
 
        Do i=1,NSYM; if(N1(i).le.0) Cycle; i1=i; Exit; End do
        Do i=1,NSYM; if(N2(i).le.0) Cycle; j1=i; Exit; End do
@@ -143,7 +143,7 @@
 
       Case(0)
 
-      if(kpol.eq.0) then
+      if(kpol.eq.0.and.ovl.eq.1) then
         Call ZNO_overlap
       else
         Call ZNO_000

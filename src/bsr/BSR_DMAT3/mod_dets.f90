@@ -70,4 +70,3 @@
       End do
 
       End Subroutine Read_dets
-

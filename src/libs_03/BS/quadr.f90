@@ -1,5 +1,5 @@
 !======================================================================
-      Double precision function  QUADR(i,j,m)
+      Real(8) Function QUADR(i,j,m)
 !======================================================================
 !     Evaluates   <P_i | r^m | P_j>     with respect to r
 !----------------------------------------------------------------------
@@ -8,12 +8,9 @@
       USE spline_galerkin
       USE spline_orbitals, p => pbs
 
-      IMPLICIT NONE
-
-      INTEGER, INTENT(in) :: i,j,m
-
-      REAL(KIND=8), EXTERNAL :: BVMV
-      REAL(KIND=8) :: rm(ns,ks)
+      Integer, intent(in) :: i,j,m
+      Real(8), external :: BVMV
+      Real(8) :: rm(ns,ks)
 
       if     ( m .eq. 1 ) then
         quadr = BVMV (ns,ks, r1,'s',p(1,i),p(1,j))

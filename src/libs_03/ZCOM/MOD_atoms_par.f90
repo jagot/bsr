@@ -137,11 +137,14 @@
        Ne='1s 2s 2p- 2p', &
        Mg='1s 2s 2p- 2p 3s', &
        Ar='1s 2s 2p- 2p 3s 3p- 3p', &
+       d3='1s 2s 2p- 2p 3s 3p- 3p 3d- 3d', &
        Zn='1s 2s 2p- 2p 3s 3p- 3p 3d- 3d 4s', &
        Kr='1s 2s 2p- 2p 3s 3p- 3p 3d- 3d 4s 4p- 4p', &
+       d4='1s 2s 2p- 2p 3s 3p- 3p 3d- 3d 4s 4p- 4p 4d- 4d', &
        Cd='1s 2s 2p- 2p 3s 3p- 3p 3d- 3d 4s 4p- 4p 4d- 4d 5s', &
        Xe='1s 2s 2p- 2p 3s 3p- 3p 3d- 3d 4s 4p- 4p 4d- 4d 5s 5p- 5p', &
        f4='1s 2s 2p- 2p 3s 3p- 3p 3d- 3d 4s 4p- 4p 4d- 4d 4f- 4f 5s 5p- 5p', &
+       d5='1s 2s 2p- 2p 3s 3p- 3p 3d- 3d 4s 4p- 4p 4d- 4d 4f- 4f 5s 5p- 5p 5d- 5d', &
        Hg='1s 2s 2p- 2p 3s 3p- 3p 3d- 3d 4s 4p- 4p 4d- 4d 4f- 4f 5s 5p- 5p 5d- 5d 6s', &
        Rn='1s 2s 2p- 2p 3s 3p- 3p 3d- 3d 4s 4p- 4p 4d- 4d 4f- 4f 5s 5p- 5p 5d- 5d 6s 6p- 6p', &
        f5='1s 2s 2p- 2p 3s 3p- 3p 3d- 3d 4s 4p- 4p 4d- 4d 4f- 4f 5s 5p- 5p 5d- 5d 5f- 5f 6s 6p- 6p'

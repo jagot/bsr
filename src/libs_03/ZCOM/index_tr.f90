@@ -18,7 +18,7 @@
         if(ion.ne.0) itr = itr - i2 + 1
        else
         itr = (np+1)*np/2 + (i2-np-1)*ni + i1
-        if(ion.ne.0)  itr = (np+1)*np/2 + (i2-np-1)*ni + i1
+        if(ion.ne.0)  itr = (np-1)*np/2 + (i2-np-1)*ni + i1
        end if
 
        Index_TR = itr

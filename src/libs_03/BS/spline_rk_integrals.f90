@@ -13,16 +13,16 @@
 
       IMPLICIT NONE
 
-      INTEGER(4) :: krk = -2
+      INTEGER :: krk = -2
       REAL(8), ALLOCATABLE :: rkb(:,:,:,:)
 
-      INTEGER(4) :: irkb1
+      INTEGER :: irkb1
       REAL(8), ALLOCATABLE :: rkb1(:,:,:)
 
-      INTEGER(4) :: irkbd,jrkbd, irkbe, jrkbe
+      INTEGER :: irkbd,jrkbd, irkbe, jrkbe
       REAL(8), ALLOCATABLE :: rkbd(:,:),rkbe(:,:)
 
-      Integer(4) :: irkbv1, irkbv2, irkbv3
+      Integer :: irkbv1, irkbv2, irkbv3
       REAL(8), ALLOCATABLE :: rkbv(:)
 
       END MODULE spline_Rk_integrals

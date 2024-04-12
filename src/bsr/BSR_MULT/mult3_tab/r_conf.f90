@@ -13,8 +13,8 @@
 
       Implicit none
 
-      Integer, Intent(in) :: in1,in2,nub
-      Integer :: nsymc_bnk, nsymt_bnk, ij, it,jt, i,k
+      Integer, intent(in) :: in1,in2,nub
+      Integer :: nsymc_bnk, nsymt_bnk, it,jt, i,k
 
 ! ... initialize arrays:
 

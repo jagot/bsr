@@ -140,14 +140,3 @@
       Stop
 
       End Subroutine inf_bsr_dmat
-
-
-
-
-
-
-
-
-
-
-

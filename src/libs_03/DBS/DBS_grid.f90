@@ -39,7 +39,7 @@
 !======================================================================
       SUBROUTINE def_grid (knot,name,z,atw)
 !======================================================================
-!     get input data for the grid and sets up the spline knots
+!     get input data for the grid and set up the spline knots
 !
 !     knot -  if not empty, it defines file with grid parameters
 !     name -  name of case; if is not empty, will be created name.knot,
@@ -159,6 +159,11 @@
 !======================================================================
       Subroutine read_knot_dat
 !======================================================================
+! ... simplified call to def_grid routine when we are expected that
+! ... knot.dat file exist
+!----------------------------------------------------------------------
+      Implicit none
+
       Character(40) :: knot = 'knot.dat', name = ' '
       Real(8) :: z = 0.d0, awt = 0.d0
 
@@ -207,6 +212,12 @@
       if(allocated(t)) Deallocate(t); Allocate(t(ns+ks))
       rewind(nu)
       read(nu) i,ns,ks,t,ksp,ksq
+
+      ms = ns + ns
+      nv = ns - ks + 1
+      nsp=nv+ksp-1
+      nsq=nv+ksq-1
+      tmax = t(ns+1)
 
       End Subroutine read_grid_bsw
 
@@ -283,7 +294,7 @@
 !======================================================================
       Subroutine mkgrid_01
 !======================================================================
-!     sets up the knots for splines in semi-exponential grid:
+!     set up the knots for splines in semi-exponential grid:
 !      1. first ml equal intervals "hi"  (this part depends on nuclear)
 !      2. then exponantial grid with interval increasing as (1+he)
 !      3. then again equal intervals "hmax" if any
@@ -302,9 +313,9 @@
        hs=hi/z
       elseif(nuclear.eq.'Fermi') then
        ts = 4.d0 * log(3.d0) * a_fermi
-       hs = ts*hi
+       hs = ts*hi   ! /ks; ml=ks+ks    ???
       else
-       hs = r_uniform*hi
+       hs = r_uniform/ks; ml=ks+ks    ! ???
       End if
 
       ti = hs*ml; ns = ks + ml
@@ -315,9 +326,10 @@
       Do
        tj = ti*ht
        if(tj-ti.gt.hmax) Exit
-       ns = ns + 1; ti = tj; ne = ns
+       ns = ns + 1; ti = tj
        if(ti.gt.rmax) then; ns=ns-1; Exit; end if
       End do
+      ne = ns
 
 ! ... rest of interval with step = hmax
 

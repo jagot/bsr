@@ -2,7 +2,7 @@
       Integer Function Index_mj (mj)
 !====================================================================
 !     index of jm-orbital in the common list: -1,+1,-3,+3,-5,+5, ...
-!     mj -> in 2j-representation
+!     mj -> in 2j-representation  (odd integers)
 !--------------------------------------------------------------------
       Implicit none
       Integer, intent(in) :: mj

@@ -115,8 +115,7 @@
 
 ! ... Add new symc.:
 
-      if(nsymc.ge.msymc.or.lsymc+no.ge.ksymc) &
-       Call Alloc_symc(msymc+isymc)
+      if(nsymc.ge.msymc.or.lsymc+no.ge.ksymc) Call Alloc_symc(msymc+isymc)
 
       nsymc=nsymc+1
       JT_conf(nsymc)=JT
@@ -140,8 +139,8 @@
 
       Implicit none
       Integer :: ic,JT,no,i,ip
-      Integer, Dimension(*) :: nn,kn,ln,jn,iq,in
-      Integer, External :: l_kappa, j_kappa
+      Integer, dimension(*) :: nn,kn,ln,jn,iq,in
+      Integer, external :: l_kappa, j_kappa
 
       if(ic.le.0.or.ic.gt.nsymc) Stop 'Get_symc: <ic> is out of range'
 

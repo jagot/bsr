@@ -143,8 +143,8 @@
            'nlsp  = ',nlsp,' !   number of partial waves'
       write(nut,'(80(''-''))')
       Do i = 1,nlsp
-       write(nut,'(i3,3i4,6x,a40,2x,a10,2i5)') &
-         i,lpar(i),ispar(i),ipar(i),AFP(i),BFP(i),ncp(i),nwp(i)
+       write(nut,'(i3,3i4,T22,a,T43,a,T53,2i5)') &
+         i,lpar(i),ispar(i),ipar(i),trim(AFP(i)),trim(BFP(i)),ncp(i),nwp(i)
       End do
       write(nut,'(80(''-''))')
 

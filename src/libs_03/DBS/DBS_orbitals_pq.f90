@@ -51,7 +51,6 @@
 
       Implicit none
       Integer, intent(in) :: m,ns
-      Integer :: i
       Integer, allocatable :: iarr(:)
       Real(8), allocatable :: parr(:,:,:), oarr(:)
       Character(5), allocatable :: carr(:)

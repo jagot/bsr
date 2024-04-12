@@ -16,7 +16,7 @@
       Real(8) :: d(ns,*)
       Real(8) :: t1,t2
 
-      t1 = RRTC()
+      Call CPU_time(t1)
 
       if(type.eq.'s'.or.type.eq.'u') then
 
@@ -52,7 +52,7 @@
 
       end if
 
-      t2 = RRTC()
+      Call CPU_time(t2)
       ic_density=ic_density+1
       time_density = time_density + (t2-t1)
 

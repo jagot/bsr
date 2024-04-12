@@ -146,9 +146,8 @@
       Integer, External :: Get_no
 
       if(iterm.le.0.or.iterm.gt.nsymt)  then
-        write(*,*) 'Get_symt: it =',iterm, &
-                   ' is out of range, nsymt=',nsymt
-        Stop
+       write(*,*) 'Get_symt: it =',iterm,' is out of range, nsymt=',nsymt
+       Stop
       end if
 
       iconf=it_conf(iterm)

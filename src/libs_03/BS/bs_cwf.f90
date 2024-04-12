@@ -56,7 +56,7 @@
 
 ! ... full matrixes:
 
-      h = 0.d0
+      a = 0.d0
       b = 0.d0
       Do j = 1,ks;  Do i = ks-j+1,ns; jp=i-ks+j
         a(i,jp)=hl(i,j);  a(jp,i)=hl(i,j)

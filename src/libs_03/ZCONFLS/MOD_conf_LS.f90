@@ -46,8 +46,8 @@
 
       Integer :: ncfg  = 0       !  current number of configurations
       Integer :: mcfg  = 0       !  max. number of configurations
-      Integer :: icfg  = 2**16   !  initial prediction of mcfg
-      Integer :: jcfg  = 2**3    !  average number of shells
+      Integer :: icfg  = 1000000 !  initial prediction of mcfg
+      Integer :: jcfg  = 5       !  average number of shells
       Integer :: kcfg  = 0       !  max. dimensionr
       Integer :: lcfg  = 0       !  last element
 
@@ -55,7 +55,7 @@
       Integer :: ncfg1,ncfg2
       Integer :: kshift1,kshift2
 
-      Integer :: L_min,L_max, S_min,S_max, J_min,J_max
+      Integer :: L_min,L_max, S_min,S_max, J_min,J_max, conf_mode = 0
 
 ! ... expansion coeficients
 

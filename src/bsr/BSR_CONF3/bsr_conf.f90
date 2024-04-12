@@ -344,6 +344,3 @@
 !      if(debug.eq.0) Call System('rm pert_comp.*')
 
      End  ! program BSR_CONF
-
-
-

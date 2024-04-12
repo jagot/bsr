@@ -3,20 +3,34 @@
                                no2,nn2,ln2,jn2,iq2,Jshell2,Vshell2,Jintra2,  &
                                mcoef,ncoef,icoefs,coefs)
 !=============================================================================
-!     compute the angular coefficients for 2 different atomic states
+!     compute the angular coefficients between two atomic states
+!-----------------------------------------------------------------------------
+!     Input:
+!
+!      no1,ln1,jn1,iq1,Jshell1,Vshell1,Jintra1 - description of the first state
+!      no2,ln2,jn2,iq2,Jshell2,Vshell2,Jintra2 - description of the second state
+!
+!      mcoef - max. number of angula coefficients
+!
+!     Output:
+!
+!      ncoef - number of angular coefficients
+!      icoefs(1:5,1:ncoef) - description of Slater integrals (k,a,b,a'.b')
+!      coefs(1:ncoef) - corresponding angular coefficients
 !-----------------------------------------------------------------------------
       Implicit none
 
-! ... input-output:
+! ... input:
 
       Integer, intent(in) :: no1,nn1(no1),ln1(no1),jn1(no1),iq1(no1), &
                              Jshell1(no1),Vshell1(no1),Jintra1(no1),  &
                              no2,nn2(no2),ln2(no2),jn2(no2),iq2(no2), &
                              Jshell2(no2),Vshell2(no2),Jintra2(no2),  &
                              mcoef
+! ... output:
+
       Integer ::  ncoef,icoefs(5,mcoef)
       Real(8) ::  coefs(mcoef)
-      Real(8), allocatable :: coef(:,:,:,:,:)
 
 ! ... determinant expansion:
 
@@ -30,6 +44,8 @@
       Integer              :: ne, Jtotal, i,j,k, kmax,kd1,kd2, i1,i2,j1,j2
       Integer, allocatable :: ip1(:),ip2(:)
       Integer, external    :: mj_value
+
+      Real(8), allocatable :: coef(:,:,:,:,:)
 
 ! ... initialize arrays:
 

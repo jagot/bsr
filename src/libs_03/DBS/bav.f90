@@ -1,5 +1,3 @@
-!     don't confuse bav and bxv - different storage modes  !!!
-
 !=======================================================================
       Subroutine bav(ns,ks,B,v,y,type,side)
 !=======================================================================
@@ -8,6 +6,8 @@
 !     where B is a symmetric or non-symmetric banded matrix
 !     (type = 's' or 'n') in upper-band storage mode
 !     and  v, y  are vectors      (used for RK-integrals)
+!
+!     don't confuse bav and bxv - different storage modes  !!!
 !-----------------------------------------------------------------------
       Implicit none
 

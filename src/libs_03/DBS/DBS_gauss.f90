@@ -18,7 +18,7 @@
 !... arrays for Gaussian-quadrature data (1:nv;1:ks)
 
      Real(8), allocatable :: gx(:)    ! gaussian points (1:ks)
-     Real(8), allocatable :: gw(:)    ! gaussian points (1:ks)
+     Real(8), allocatable :: gw(:)    ! gaussian weights (1:ks)
 
      Real(8), allocatable :: gr (:,:) ! gr (i,m) - gaussian points m in the interval i
      Real(8), allocatable :: grm(:,:) ! grm(i,m) - reciprocal value of gr(i,m)
@@ -27,7 +27,7 @@
 
      Real(8), allocatable :: dbiatx(:,:,:) ! working array Used for call zbsplvd
 
-!... standard B-splines: (keep for possible applications)
+!... standard B-splines: (not used, keep for possible applications)
 
      Real(8), allocatable :: bsp(:,:,:)
      Real(8), allocatable :: bsq(:,:,:)
@@ -179,7 +179,7 @@
      pbsp (nw,:,:) = 0.d0
      pbsd (nw,:,:) = 0.d0
 
-!... store values at the last knot
+!... store values at the last knot:
 
      Call zbsplvd(nsp,ksp,nv,tp,nsp,1,tp(nsp+1),2,dbip)
 
