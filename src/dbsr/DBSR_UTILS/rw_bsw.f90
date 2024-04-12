@@ -54,6 +54,8 @@
         write(*,*)
         write(*,*) 'Call as:  rw_bsw  name.w  [eps_end=  debug=]'
         write(*,*)
+        write(*,*) "'NB that the filename may not contain an '=\' character'"
+        write(*,*)
         write(*,*) 'optional parameters:'
         write(*,*)
         write(*,*) 'eps_end  -  tail cut-off value [1.d-7] '
@@ -109,7 +111,7 @@
        write(nub) pq(1:mbs(i),2,i)
       End do
 
-      END    !  PROGRAM rw_pqbs
+      END    !  PROGRAM rw_bsw
 
 
 !======================================================================
