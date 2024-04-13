@@ -36,6 +36,7 @@
       Integer :: nug = 15;  Character(ma) :: AF_grid = 'name.knot'
                             Character(ma) :: BF_grid = '.knot'
       Integer :: nua = 21;  ! scratch file
+
 ! ... name of case:
 
       Character(ma) :: name = ' '
@@ -68,6 +69,9 @@
       Real(8) :: end_tol=1.d-07
       Real(8) :: eps_ovl=1.d-07
       Integer :: max_it = 75
+
+      Real(8) :: aweight = 0.8
+      Real(8) :: bweight = 0.6
 
 ! ... debug options:
 
@@ -112,12 +116,6 @@
       Real(8) :: eps_c = 1.d-6
       Integer :: ibi = 2**16
       Integer :: mdiag = 0
-
-! ... solutions for Rydberg series:
-
-      Integer :: out_nl = 0
-      Integer :: nsol_nl = 0
-      Real(8), allocatable :: p_nl(:,:), e_nl(:)
 
       Integer :: out_w = 0     ! output in the GRASP format
       Integer :: out_plot = 0  ! output in table form

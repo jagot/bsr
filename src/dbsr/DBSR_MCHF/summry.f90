@@ -33,13 +33,15 @@
         ebs(i), e(i), rm1, r1, r2, dpm(i), mbs(i), t(mbs(i)+ks)
       End do
 
-      write(log,'(/a,T36,f25.16)') 'Average energy:', Etotal
+      write(log,'(/a,T32,f25.12)') 'Average energy:', Etotal
 
       write(log,'(/a/)') 'Optimized states:'
 
       Call SortR(nlevels,elevel,ip_level)
+      r1 = elevel(ip_level(1))
       Do j = 1,nlevels; i = ip_level(j)
-       write(log,'(a34,T36,f25.16)') labeln(i),elevel(i)
+       write(log,'(a34,T32,f25.12,5x,F12.5)') labeln(i),elevel(i), &
+                                              (elevel(i)-r1)*au_eV
       End do
 
       End Subroutine Summry
@@ -70,9 +72,9 @@
         CM = 0.d0; k = 1
         Do j=ip+1,ip+nc
          if(abs(coefs(j)).lt.CM) Cycle
-         k = i; CM = abs(coefs(j))
+         k = j-ip; CM = abs(coefs(j))
         End do
-        Call Get_cfg_jj(k)
+        Call Get_cfg_jj(JTc1(ib)+k-1)
         Call Label_jj (mlab,Lab,0); Labeln(i) = Lab
         write(nuj,'(i8,2x,a)') i,trim(LAB)
         write(nuj,'(f16.8,3i8)') elevel(i), JJc(ib), JTc1(ib),JTc2(ib)

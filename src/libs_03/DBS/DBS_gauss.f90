@@ -25,7 +25,7 @@
      Real(8), allocatable :: grw(:,:) ! grw(i,m) - corr. gaussian weights
      Real(8), allocatable :: ygw(:,:) ! working array
 
-     Real(8), allocatable :: dbiatx(:,:,:) ! working array Used for call zbsplvd
+     Real(8), allocatable :: dbiatx(:,:,:) ! working array (used for calling zbsplvd routine)
 
 !... standard B-splines: (not used, keep for possible applications)
 

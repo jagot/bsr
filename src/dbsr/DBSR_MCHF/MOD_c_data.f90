@@ -350,21 +350,3 @@
       S = nc; S = S / (nb*mb)
 
       End Subroutine nc_c_data
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

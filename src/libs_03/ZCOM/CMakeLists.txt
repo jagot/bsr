@@ -1,5 +1,5 @@
 set(ZCOM_SOURCES
-  MOD_zconst.f90           MOD_coef_list.f90        MOD_det.f90   MOD_dets.f90
+  MOD_zconst.f90           MOD_coef_list.f90        MOD_det.f90
   MOD_id4.f90              MOD_int_lst.f90          MOD_rk.f90
   MOD_rk4.f90              MOD_tmat_ion.f90         MOD_tmat_list.f90
   MOD_tm_list.f90          MOD_tm_LS.f90            MOD_zoef.f90
@@ -27,7 +27,8 @@ set(ZCOM_SOURCES
   splin3.f90               xlagr.f90                zis.f90
   xAy.f90                  det_fact.f90             stop_mp.f90
   check_det_new.f90        det_fact_new.f90         index_tr.f90
-  derivatives.f90)
+  derivatives.f90          check_bsr_name.f90
+  Coulomb_integrals_0.f90  Coulomb_integrals_Z.f90)
 
 # Gfortran no longer provides an implementation of iargc, so this
 # simple routine is added when Gfortran is the compiler used.

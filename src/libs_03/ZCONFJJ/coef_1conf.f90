@@ -1,14 +1,39 @@
 !======================================================================
       Subroutine coef_1conf(no,ln,jn,iq,Jshell,Vshell,Jintra,kmax,coefs)
 !======================================================================
-!     compute the angular coefficients for 1 atomic states
+!     compute the angular coefficients for 1 atomic state
+!
+!     Input:
+!
+!      no,ln,jn,iq,Jshell,Vshell,Jintra - description of the input state
+!
+!      no - number of subshells
+!      ln(1:no) - l-values for subshell orbitals
+!      jn(1:no) - 2j-values for subshell orbitals (integers)
+!      iq(1:no) - occuation numbers
+!      JSHELL(1:no) - 2J-values for subshell terms
+!      VSHELL(1:no) - seniority numbers
+!      Jintra(1:no) - 2J-values for intermidiate terms
+!                     Jintra(1) = JSHELL(1)
+!                     Jintra(no) - total 2J-value of the state
+!      kmax - max. multipole index (= max(jn))
+!
+!     Output:
+!
+!      coefs(1:no,1:no,0:kmax) - angular coefficients for
+!
+!      direct integrals:     coef(i,j,k) with i <= j
+!      exchange integrals:   coef(i,j,k) with i > j
+!
 !----------------------------------------------------------------------
       Implicit none
 
-! ... input-output:
+! ... input:
 
       Integer, intent(in) :: no,ln(no),jn(no),iq(no), kmax, &
                              Jshell(no),Vshell(no),Jintra(no)
+! ... output:
+
       Real(8), intent(out):: coefs(no,no,0:kmax)
 
 ! ... determinant expansion:
@@ -54,9 +79,12 @@ CONTAINS
 !======================================================================
       Subroutine Det_expn_jj
 !======================================================================
-!     procedure of exaustion of all possible determinants for given
-!     configurations. The determinants and their coefficients
-!     are recoded on unit 'nua'
+!     determine all possible determinants for given configuration;
+!
+!     results in arrays of the calling routine:
+!     kdt - number of determinants
+!     IP_det (1:ne,1:kdt) - pointer to involved njm orbitals
+!     C_det - ecpansion coeffocients
 !
 !     Calls: Det_sh_jq, DETC_jq, Clebsh2, Ndets_jq, Jterm, mj_value
 !----------------------------------------------------------------------
@@ -198,7 +226,7 @@ CONTAINS
          k2 = isym2+1
         end if
 
-	       if(idif.eq.0) Cycle
+       if(idif.eq.0) Cycle
 
 ! ... second orbital:
 

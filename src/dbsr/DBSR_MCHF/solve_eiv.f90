@@ -20,7 +20,7 @@
        Call solve_direct (i,hfm,v,rhs); Return
       end if
 
-      if(debug.eq.1) write(log,'(a)') 'method - solve_eiv'
+      write(amethod,'(a)') 'diagonalization MCHF matrix'
 
       eii = e(i)
 
@@ -87,7 +87,7 @@
 
       else   !  with rhs
 
-      if(debug.eq.1) write(log,'(a)') 'method - inverse iterations'
+      write(amethod,'(a)') 'diagonalization MCHF matrix with rhs'
 
        a = 0.d0
        Do j = 1,ii

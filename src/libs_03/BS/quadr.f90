@@ -8,6 +8,8 @@
       USE spline_galerkin
       USE spline_orbitals, p => pbs
 
+      Implicit none
+
       Integer, intent(in) :: i,j,m
       Real(8), external :: BVMV
       Real(8) :: rm(ns,ks)

@@ -97,7 +97,9 @@
       Call Read_core_jj(nuc)
       write(pri,'(80(''-''))')
       write(pri,'(a,i5/)') 'CORE:  ncore =', ncore
+
       if(ncore.gt.0) then
+
        write(pri,'(10a8)') (ELF(j),j=1,nwf)
        AFW = trim(AFT(1))//'.bsw'
        Open(nuw,file=AFW,form='UNFORMATTED')
@@ -351,13 +353,11 @@
        BFC = 'no'; BFW = 'no'
        nbf = nwt; ncfg = 0; lcfg = 0; nwf = ncore
        if(mbf.gt.nwt) ipbs(nwt+1:mbf) = 0
-
        npert = 0;  Call Allocate_pert(0)
 
 ! ... usual perturber (as list of separate configurations) :
 
        if(LEN_TRIM(AFP(ilsp)).gt.0.and.AFP(ilsp).ne.'no') then
-
         AFC = trim(AFP(ilsp))//'.c'
         write(pri,'(a,i6,T24,a/)') 'perturber', ilsp, trim(AFC)
         Call Check_file(AFC)
