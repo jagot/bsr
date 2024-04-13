@@ -8,27 +8,25 @@ set(BSR_MAT4_COMMON_SOURCES
   read_conf.f90            read_data.f90            rw_mask.f90
   Z_data.f90               check_idef.f90           bsr_mat_inf.f90)
 
-message(WARNING "bsr_mat4 does not build correctly")
-# add_executable(bsr_mat4
-#   ${BSR_MAT4_COMMON_SOURCES}
-#   bsr_mat.f90
-#   read_matrix.f90
-#   record_matrix.f90
-#   state_res.f90
-#   sub1.f90
-#   check_mat.f90)
-# target_link_libraries(bsr_mat4 bs zconfls zcom)
+add_executable(bsr_mat4
+  ${BSR_MAT4_COMMON_SOURCES}
+  bsr_mat.f90
+  read_matrix.f90
+  record_matrix.f90
+  state_res.f90
+  sub1.f90
+  check_mat.f90)
+target_link_libraries(bsr_mat4 bs zconfls zcom ${BLAS_LAPACK_LIBRARIES})
 
-message(WARNING "bsr_mat4_mpi does not build correctly")
-# add_executable(bsr_mat4_mpi
-#   ${BSR_MAT4_COMMON_SOURCES}
-#   bsr_mat_mpi.f90
-#   br_arg.f90
-#   check_mat_mpi.f90
-#   collect_mpi.f90
-#   read_matrix_mpi.f90
-#   record_matrix_mpi.f90
-#   state_res_mpi.f90
-#   stop_mpi.f90
-#   sub1_mpi.f90)
-# target_link_libraries(bsr_mat4_mpi bs zconfls zcom MPI::MPI_Fortran)
+add_executable(bsr_mat4_mpi
+  ${BSR_MAT4_COMMON_SOURCES}
+  bsr_mat_mpi.f90
+  br_arg.f90
+  check_mat_mpi.f90
+  collect_mpi.f90
+  read_matrix_mpi.f90
+  record_matrix_mpi.f90
+  state_res_mpi.f90
+  stop_mpi.f90
+  sub1_mpi.f90)
+target_link_libraries(bsr_mat4_mpi bs zconfls zcom bsr_mpi MPI::MPI_Fortran ${BLAS_LAPACK_LIBRARIES})

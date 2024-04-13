@@ -16,8 +16,10 @@ concurrency:
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         os: ['ubuntu-latest', 'macos-latest']
+        bsr_version: ['3', '4']
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
 
@@ -33,7 +35,7 @@ jobs:
     - name: Install Dependencies (macOS)
       run: |
         sudo ln -s $(brew --prefix)/bin/gfortran-13 $(brew --prefix)/bin/gfortran
-        brew install gcc gfortran cmake open-mpi openblas
+        brew install gcc gfortran cmake open-mpi openblas scalapack
       if: matrix.os == 'macos-latest'
 
     - name: Get Sources
@@ -43,7 +45,7 @@ jobs:
       run: |
         mkdir "${{ runner.workspace }}/build"
         cd "${{ runner.workspace }}/build"
-        cmake $GITHUB_WORKSPACE/src
+        cmake -DBSR_VERSION=${{ matrix.bsr_version}} $GITHUB_WORKSPACE/src
       shell: bash
 
     - name: Build

@@ -23,7 +23,7 @@
 
       if(exch_mode.eq.2) Return
 
-      if(mode.eq.7) then;  Call Sub1_mso_mpi; Return; end if
+      if(mode.eq.7) then;  Call Sub1_mso; Return; end if
 
 ! ... debug output if any:
 
@@ -101,7 +101,7 @@
       else
 
        Call Allocate_matrix(i)
-       Call Read_matrix_mpi
+       Call Read_matrix
        if(myid.eq.0) then
         read(nui) m
         read(nui) ACF

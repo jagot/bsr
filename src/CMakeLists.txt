@@ -60,7 +60,17 @@ endif()
 set(FC_MALLOC LINUX)
 set(BLAS_LAPACK_LIBRARIES ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
 
-# add_subdirectory(libs) # Disable building version 4 of the libraries for the time being.
-add_subdirectory(libs_03)
+if (NOT BSR_VERSION)
+  set(BSR_VERSION 3)
+endif()
+
+message("Will build version ${BSR_VERSION} of libraries and programs")
+
+if(BSR_VERSION STREQUAL "4")
+  add_subdirectory(libs)
+else()
+  add_subdirectory(libs_03)
+endif()
+
 add_subdirectory(bsr)
 add_subdirectory(dbsr)
