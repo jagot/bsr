@@ -28,7 +28,7 @@
       Use dbsr_mat
 
       Implicit none
-      Real(8) :: S, vv(ms),ww(ms), aa(ms,ms), bb(ms,ms),cc(ms,ms)
+      Real(8) :: S, vv(ms),ww(ms), aa(ms,ms), bb(ms,ms),cc(ms,ms), x(ms,ms)
       Integer :: i,j,ich,jch,ii,jj,ij,ic,jc, nort
       Integer, external :: IBORT
 

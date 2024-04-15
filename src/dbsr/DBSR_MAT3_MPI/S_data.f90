@@ -46,7 +46,7 @@
 !
 !     where p1,p2 - known bound orbitals
 !----------------------------------------------------------------------
-      Use dbsr_mat, xxx => xx
+      Use dbsr_mat
       Use c_data
 
       Implicit none

@@ -105,9 +105,9 @@
 ! ... dimension limits:
 
       Integer :: mk    =      7           ! max. multipole index
-      Integer :: nblock  = 2000           ! number of blocks in c_data
-      Integer :: mblock  = 3000           ! size of blocks
-      Integer :: kblock  =  500           ! max.nb for given case
+      Integer :: nblock  = 1000           ! number of blocks in c_data
+      Integer :: mblock  = 2000           ! size of blocks
+      Integer :: kblock  =  100           ! max.nb for given case
 
 ! ... debug printing and timing:
 
@@ -135,9 +135,6 @@
       Real(8), allocatable :: acf(:,:), bcf(:,:,:)
       Real(8), allocatable :: htarg(:), otarg(:)
       Integer, allocatable :: itarget(:)
-
-      Real(8), allocatable :: x(:,:),xx(:,:)   !  ms * ms
-      Real(8), allocatable :: y(:,:),yy(:,:)   !  ns * ns
 
       Integer :: idiag     ! =-1,0,1 (none-diagonal, all, diagonal blocks)
       Integer :: nsol      ! number of solutions from diagonal blocks

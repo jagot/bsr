@@ -41,11 +41,9 @@
        write(pri,'( a,i7,i9,a/)') &
        'ndef,kdef  = ',ndef,kdef,'  - number of overlap factors'
        C = 4.d0*(2*ndet + kdet + 2*ndef + kdef)/(1024*1024)
-       write(pri,'(a,T40,f10.2,a)') 'memory of dets:', C,' Mb'
+       write(pri,'(a,T40,f10.2,a/)') 'memory of dets:', C,' Mb'
        write(pri,'(a,T40,f10.2,a/)') 'broadcast of dets:',(t2-t1)/60,' min'
       end if
-
-
 
 !----------------------------------------------------------------------
 ! ... first, fill the buffer:
@@ -196,11 +194,8 @@
 
       if(pri.gt.0.and.myid.gt.0)  write(pri,'(a,i5,3i10,2f9.2,a)') &
        'bufer:',nnbuf, ncbuf,nc1,nc2,(t2-t1)/60,(t3-t2)/60,' min'
-      if(debug.gt.0.and.myid.eq.0) &
-      write(pri,'(a,i5,T30,f9.2,a)') 'bufer:',nnbuf, (t3-t1)/60,' min'
-
-!      if(pri.gt.0)  write(pri,'(a,3f9.2,a)') &
-!       'timing, det_fact,check_det,add_int:',t_det/60,t_check/60,t_add/60,' min'
+      if(myid.eq.0.and.debug.gt.0) &
+      write(pri,'(a,i5,T40,f10.2,a)') 'bufer:',nnbuf, (t3-t1)/60,' min'
 
 ! ... check the data bank again:
 

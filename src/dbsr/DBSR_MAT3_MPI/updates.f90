@@ -12,40 +12,40 @@
       mhm = nch*ms + npert
       kprocs=nprocs-1
 
+      iicc = 0
       if(Allocated(icc)) Deallocate(icc)
       Allocate(icc(nch,nch)); icc = 0; iicc = 0
+      mem_mat = 4.d0*nch*nch
+
       k = 0; i=0
+
+      if(idiag.ge.0) then
       Do ich=1,nch
        k=k+1; if(k.gt.kprocs) k=1; if(nprocs.eq.1) k=0
        if(myid.ne.k) Cycle
        i=i+1; icc(ich,ich) = i; icc(ich,ich) = i
       End do
+      iicc = nch
+      end if
+
+      if(idiag.le.0) then
       Do ich=2,nch; Do jch=1,ich-1
        k=k+1; if(k.gt.kprocs) k=1; if(nprocs.eq.1) k=0
        if(myid.ne.k) Cycle
        i=i+1; icc(ich,jch) = i; icc(jch,ich) = i
       End do; End do
-      iicc=i
+      iicc = i
+      end if
 
       if(Allocated(hch)) Deallocate(hch)
       Allocate(hch(ms,ms,iicc)); hch=0.d0
       if(Allocated(acf)) Deallocate(acf)
       Allocate(acf(iicc ,0:mk)); acf=0.d0
-      if(Allocated(diag)) Deallocate(diag)
-      Allocate (diag(ms,ms,nch)); diag=0.d0
-      mem_mat = 8.d0*ms*ms*iicc + 4.d0*iicc*(mk+1) + 8.d0*ms*ms*nch
 
-      if(allocated(htarg)) Deallocate(htarg)
-      Allocate(htarg((ntarg+1)*ntarg/2)); htarg=0.d0
-      if(allocated(otarg)) Deallocate(otarg)
-      Allocate(otarg((ntarg+1)*ntarg/2)); otarg=0.d0
-      mem_mat = mem_mat + 16.d0*(ntarg*(ntarg+1)/2)
+      mem_mat = mem_mat + 8.d0*ms*ms*iicc + 4.d0*iicc*(mk+1)
 
-      if(.not.allocated(x)) Allocate(x(ms,ms),xx(ms,ms))
-      if(.not.allocated(y)) Allocate(y(ns,ns),yy(ns,ns))
-      mem_mat = mem_mat + 16.d0*(ms*ms+ns*ns)
-
-      if(npert.eq.0) go to 1
+      iicb = 0; iibb = 0
+      if(npert.eq.0.or.idiag.eq.1) go to 1
 
       if(Allocated(hcp)) Deallocate(hcp,icb)
       Allocate(icb(nch,npert)); icb=0
@@ -85,6 +85,7 @@
       Implicit none
       Integer, intent(in) :: ich,jch
       Real(8), intent(in) :: C,d(ms,ms)
+      Real(8) :: xx(ms,ms)
       Integer ::  i
 
       if(ich.lt.0)   Stop 'UPDATE_HX: ich < 0'
@@ -118,6 +119,7 @@
       Implicit none
       Integer, intent(in) :: ich,jch,ii,jj
       Real(8), intent(in) :: d(ns,ns)
+      Real(8) :: y(ns,ns),yy(ns,ns)
       Character, intent(in) :: sym
       Integer ::  i,j, jp, imin,imax, i1=1,i2=1,j1=1,j2=1
 
@@ -188,6 +190,7 @@
       Integer, intent(in) :: ich,jch
       Real(8), intent(in) :: C
       Real(8), intent(in) :: v(ms),w(ms)
+      Real(8) :: x(ms,ms),xx(ms,ms)
       Integer ::  i,j
 
       if(ich.lt.0)   Stop 'UPDATE_HW: ich < 0'
@@ -327,8 +330,6 @@
         write(pri,'(10E15.5)') hp(k)
        End do
       End do
-
-
 
       End Subroutine Print_matrix
 

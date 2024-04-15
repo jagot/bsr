@@ -42,7 +42,7 @@
 !     sym_r -  symmetry for result
 !
 !----------------------------------------------------------------------
-      Use dbsr_mat, xxx => xx
+      Use dbsr_mat
       Use c_data
 
       Implicit none

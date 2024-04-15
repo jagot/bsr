@@ -53,11 +53,11 @@
          htarg(ij) = htarg(ij) + EC
          C = htarg(ij) - Etarg(i)
          if(abs(C).gt.eps_tar)  &
-         write(pri,'(2i5,2f16.6,5x,a)') i,j,htarg(ij),C,AFT(i)
+         write(pri,'(2i5,2f16.6,5x,a)') i,j,htarg(ij),C,trim(AFT(i))
         else
          c = abs(htarg(ij))
          if(abs(C).gt.eps_tar) &
-         write(pri,'(2i5,f16.6,5x,a,5x,a)') i,j,htarg(ij),AFT(i),AFT(j)
+         write(pri,'(2i5,f16.6,5x,a,5x,a)') i,j,htarg(ij),trim(AFT(i)),trim(AFT(j))
         end if
        End do;  End do
       end if
@@ -69,7 +69,8 @@
         if(itarget(ij).eq.0) Cycle
         C = otarg(ij)
         if(i.eq.j) c = c - 1.d0
-        if(abs(C).gt.eps_tar) write(pri,'(2i5,f16.6,5x,a,5x,a)') i,j,C,AFT(i),AFT(j)
+        if(abs(C).gt.eps_tar) &
+         write(pri,'(2i5,f16.6,5x,a,5x,a)') i,j,C,trim(AFT(i)),trim(AFT(j))
        End do; End do
       end if
 

@@ -24,13 +24,13 @@
 
        ! ... apply boundary conditions (delete extra B-splines)
 
-       jj=0;  ishift=(ich-1)*ms
+       ishift=(ich-1)*ms;  jj=0
        Do j=1,ms
         if(iprm(j+ishift).eq.0) Cycle; jj=jj+1
         ii=0
         Do i=1,ms
          if(iprm(i+ishift).eq.0) Cycle; ii=ii+1
-         w(ii)=hch(i,j,k); v(ii)=diag(i,j,ich)
+         w(ii)=hch(i,j,k); v(ii)=diag(i,j,k)
         End do
         ach(1:ii,jj)=w(1:ii); bch(1:ii,jj)=v(1:ii)
        End do
@@ -39,7 +39,7 @@
 
        lwork = 3*ms
        Call DSYGV(1,'V','L',ii,ach,ms,bch,ms,w,WORK,LWORK,INFO)
-       if(info.ne.0) Cycle !Stop 'channel diagonalization failed'
+       if(info.ne.0) Stop 'channel diagonalization failed'
 
        ksol = 0
        Do i=1,ii
@@ -50,16 +50,16 @@
 
         ! ... restore the solutions in original B-spline net:
 
-        v=0.d0; k=0
+        v=0.d0; ii=0
         Do j=1,ms
-         if(iprm(j+ishift).eq.0) Cycle; k=k+1; v(j)=ach(k,i)
+         if(iprm(j+ishift).eq.0) Cycle; ii=ii+1; v(j)=ach(ii,i)
         End do
 
         ipos=maxloc(abs(v))
         if(v(ipos(1)).lt.0.d0) v=-v
 
-        diag( :,ksol,ich) = v(:)
-        diag(ksol,ms,ich) = w(i)
+        diag( :,ksol,k) = v(:)
+        diag(ksol,ns,k) = w(i)
 
        End do
 

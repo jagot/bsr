@@ -21,6 +21,7 @@
 
       Do ich=2,nch
        Do jch=1,ich-1
+!        if(icc(ich,jch).eq.0) Cycle
         if(overlaps(ich,jch).lt.s_ovl) Cycle
         met = met + 1
         ! ... find bigest overlap and put orth.condition
@@ -42,6 +43,7 @@
       Do ich=1,nch
 
        Do ip=1,npert
+!        if(icb(ich,ip).eq.0) Cycle
         if(overlaps(nch+ip,ich).lt.s_ovl) Cycle
         met = met + 1
 
@@ -78,7 +80,7 @@
 
       if(npert.le.1) Return
 
-      Do i=2,npert; Do j=1,i-1
+      Do i=2,npert; Do j=1,i-1                   !; k=ibb(i,j); if(k.eq.0) Cycle
        S = abs(overlaps(i+nch,j+nch))
        if(S.lt.S_ovl) Cycle
        write(nuc,'(f10.5,2i5,a)') S, i,j , ' - suspicious perturber overlap '
@@ -116,6 +118,7 @@
       overlaps(:,jch) = 0.d0
 
       End Subroutine Def_SM
+
 
       End Subroutine Check_mat
 

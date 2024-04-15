@@ -131,14 +131,10 @@
        write(prj,'(/a/)') 'Boundary conditions:'
        write(prj,'(a,i10,T20,a)')  'ilzero =',ilzero,&
                                    '- zero B-splines for large component at r=0'
-       if(jlzero.lt.0) jlzero=ilzero
        write(prj,'(a,i10,T20,a)')  'jlzero =',jlzero,&
                                    '- zero B-splines for small component at r=0'
-!       if(mbloch.gt.0) ibzero = 0
        write(prj,'(a,i10,T20,a)')  'ibzero =',ibzero,&
                                    '- zero B-splines for large component at r=a'
-!       if(mbloch.ge.0) jbzero = 0
-       if(jbzero.lt.0) jbzero=ibzero
        write(prj,'(a,i10,T20,a)')  'jbzero =',jbzero,&
                                    '- zero B-splines for small component at r=a'
 
@@ -151,8 +147,7 @@
        write(prj,'(/a/)') 'All one-channel solutions with &
          &E<Edmin, E>Edmax or abs(E)<Egap will be disregaded.'
 
-       i = ntype_S*(mk+2)*2 + 1
-       if(nblock.lt.i) nblock=i
+       i = ntype_S*(mk+2)*2 + 1;  if(nblock.lt.i) nblock=i
        write(prj,'(/a/)') 'Module cdata parameters:'
        write(prj,'(a,i10,T20,a)') 'mk     =',mk,'- max. multipol index'
        write(prj,'(a,i10,T20,a)') 'mblock =',mblock,'- size of block'

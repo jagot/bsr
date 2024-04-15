@@ -10,9 +10,9 @@
       Use radial_overlaps
 
       Implicit none
-      Integer :: i,j, ich,jch,  k, is,js, it,jt, met, nelc_core
-      Real(8) ::C,CO,t0,t1,t2,memory_conf_jj,memory_DBS_gauss,memory_orb_jj
-      Real(8), allocatable :: biag(:,:,:), CC(:,:), btarg(:)
+      Integer :: i,j, ich,jch,  k, is,js, it, met, nelc_core
+      Real(8) :: C,CO,t0,t1,t2
+      Real(8), allocatable :: btarg(:)
       Integer, external :: Ifind_channel_jj, no_ic_jj
       Integer :: status(MPI_STATUS_SIZE)
 
@@ -50,7 +50,7 @@
 
       t2 = MPI_WTIME()
       if(pri.ne.0) &
-      write(pri,'(/a,T30,f9.2,a)') 'Broadcast:',(t2-t1)/60,' min'
+      write(pri,'(/a,T40,f10.2,a)') 'Broadcast:',(t2-t1)/60,' min'
 
 !-----------------------------------------------------------------------
 ! ... auxiliary arrays:
@@ -75,14 +75,9 @@
 
       t1 = MPI_WTIME()
       if(pri.ne.0) &
-      write(pri,'(/a,T30,f9.2,a)') 'Preparations:',(t1-t0)/60,' min'
+      write(pri,'(/a,T40,f10.2,a)') 'Preparations:',(t1-t0)/60,' min'
 
-!-----------------------------------------------------------------------
-! ... first consider diagonal blocks:
-
-      t1 = MPI_WTIME()
-
-   1  Call Alloc_dbsr_matrix
+! ... memory estimations:
 
       if(pri.gt.0) then
 
@@ -97,41 +92,52 @@
        write(pri,'(a,i8,a)') 'iicc   = ',iicc, '  - number of blocks'
 
        write(pri,'(/a/)') 'Main memory consumings:'
-       write(pri,'(a,T40,f8.1,a)') &
-        'memory of conf_jj module:', memory_conf_jj,' Mb'
-       write(pri,'(a,T40,f8.1,a)') &
-        'memory of orb_jj module:',  memory_orb_jj,' Mb'
-       write(pri,'(a,T40,f8.1,a)') &
-        'memory of DBS_gauss module:', memory_DBS_gauss,' Mb'
-       write(pri,'(a,T40,f8.1,a)') &
-        'memory of DBS_orbitals:', memory_DBS_orbitals,' Mb'
-       write(pri,'(a,T40,f8.1,a)') &
-        'memory of DBS_integrals:', memory_DBS_integrals,' Mb'
-       write(pri,'(a,T40,f8.1,a)') &
-        'memory of OBS_integrals:', 16.d0*mobs/(1024*1024),' Mb'
+       write(pri,'(a,T40,f10.2,a)') 'memory of conf_jj module:', memory_conf_jj,' Mb'
+       write(pri,'(a,T40,f10.2,a)') 'memory of orb_jj module:',  memory_orb_jj,' Mb'
+       write(pri,'(a,T40,f10.2,a)') 'memory of DBS_gauss module:', memory_DBS_gauss,' Mb'
+       write(pri,'(a,T40,f10.2,a)') 'memory of DBS_orbitals:', memory_DBS_orbitals,' Mb'
+       write(pri,'(a,T40,f10.2,a)') 'memory of DBS_integrals:', memory_DBS_integrals,' Mb'
+       write(pri,'(a,T40,f10.2,a)') 'memory of OBS_integrals:', 16.d0*mobs/(1024*1024),' Mb'
+
+       C = 8.d0*ntarg*(ntarg+1)/2/(1024*1024)
+       write(pri,'(a,T40,f10.2,a)') 'memory of htarg/otarg', C,' Mb'
 
        C = 7.0*mblock*nblock + 4.0*nblock + (mk+1.0)*(2+nblock)*ntype_R
        mem_cdata = C * 4.0 / (1024 * 1024)
-       write(pri,'(a,T40,f8.1,a)') 'memory of cdata module:', mem_cdata,' Mb'
+       write(pri,'(a,T40,f10.2,a)') 'memory of cdata module:', mem_cdata,' Mb'
 
-       write(pri,'(a,T40,f8.1,a)') 'memory of bufer:', mem_buffer,' Mb'
-!       Call MPI_REDUCE(mem_mat,C,1,MPI_DOUBLE_PRECISION,MPI_MAX,0,MPI_COMM_WORLD,ierr)
+       write(pri,'(a,T40,f10.2,a)') 'memory of bufer:', mem_buffer,' Mb'
 
-       write(pri,'(a,T40,f8.1,a)') 'matrix memory:', mem_mat,' Mb'
+       mem_mat = 4.d0*nch*nch + 8.d0*nch*(nch-1)/2/nprocs*ms*ms +   &
+                 4.d0*nch*npert + 8*nch*npert*ms/nprocs +           &
+                 4.d0*npert*npert + 8.d0*npert*(npert+1)/2/nprocs + &
+                 8.d0*nch*(nch-1)/2/nprocs*(mk+1)
+       mem_mat = mem_mat/(1024*1024)
+       write(pri,'(a,T40,f10.2,a)') 'matrix memory:', mem_mat,' Mb'
 
        C = memory_DBS_gauss + memory_DBS_orbitals + memory_DBS_integrals + &
            mem_cdata + mem_buffer + mem_mat + memory_conf_jj + 16.d0*mobs/(1024*1024)
-       write(pri,'(/a,T40,f8.1,a)') 'Total_estimations:', C,' Mb'
+       write(pri,'(/a,T40,f10.2,a)') 'Total_estimations:', C,' Mb'
 
       end if
+
+!-----------------------------------------------------------------------
+! ... first consider diagonal blocks:
+
+      t1 = MPI_WTIME()
+
+   1  idiag = 1;   Call Alloc_dbsr_matrix
+
+      if(allocated(htarg)) Deallocate(htarg)
+      Allocate(htarg((ntarg+1)*ntarg/2)); htarg=0.d0
+      if(allocated(otarg)) Deallocate(otarg)
+      Allocate(otarg((ntarg+1)*ntarg/2)); otarg=0.d0
 
 ! ... update <.|p> vectors:
 
       Call Get_v_ch(1)
 
-! ... calculate full overlap matrix:
-
-      idiag = 0
+! ... calculate overlap matrix (diagonal blocks):
 
       icase=0; Call Alloc_c_data(ntype_O,0,0,mblock,nblock,kblock,eps_c)
       Call State_res
@@ -144,27 +150,26 @@
 
 ! ... save overlaps diagonal blocks:
 
-      Do ich = 1,nch; i = icc(ich,ich); if(i.le.0) Cycle
-       diag(:,:,ich) = hch(:,:,i)
-      End do
+      if(myid.ne.0) then
+       if(allocated(diag)) deallocate(diag)
+       Allocate(diag(ms,ms,iicc))
+       diag = hch
+      end if
 
       Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
 
       t2 = MPI_WTIME()
       if(pri.ne.0) &
-       write(pri,'(/a,T30,f9.2,a)') 'Overlaps:',(t2-t1)/60,' min'
+      write(pri,'(/a,T40,f10.2,a)') 'Diag. overlaps:',(t2-t1)/60,' min'
+
 !----------------------------------------------------------------------
 ! ... diagonal part of Hamiltonian matrix:
 
-      idiag = 1
+      t1 = MPI_WTIME()
 
 ! ... core-energy shift in Hamiltonian matrix (diagonal blocks):
 
-      t1 = MPI_WTIME()
-
-      Do ich = 1,nch; i = icc(ich,ich); if(i.le.0) Cycle
-       hch(:,:,i) = hch(:,:,i) * Ecore
-      End do
+      hch= hch * Ecore
 
 ! ... L-integrals:
 
@@ -174,7 +179,7 @@
       Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
       t2 = MPI_WTIME()
       if(pri.ne.0) &
-       write(pri,'(/a,T30,f9.2,a)') 'L-integrals:',(t2-t1)/60,' min'
+      write(pri,'(/a,T40,f10.2,a)') 'Diag. L-integrals:',(t2-t1)/60,' min'
 
 ! ... R-integrals:
 
@@ -186,13 +191,18 @@
       Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
       t2 = MPI_WTIME()
       if(pri.ne.0) &
-       write(pri,'(/a,T30,f9.2,a)') 'R-integrals:',(t2-t1)/60,' min'
+      write(pri,'(/a,T40,f10.2,a)') 'Diag. R-integrals:',(t2-t1)/60,' min'
 
 ! ... S-integrals:
 
       if(mbreit.eq.1) then
+       t1 = MPI_WTIME()
        icase=3; Call Alloc_c_data(ntype_S,0,mk+1,mblock,nblock,kblock,eps_c)
        Call State_res
+       Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
+       t2 = MPI_WTIME()
+       if(pri.ne.0) &
+       write(pri,'(/a,T40,f10.2,a)') 'Diag. S-integrals:',(t2-t1)/60,' min'
       end if
 
 ! ... target energy part:
@@ -208,7 +218,7 @@
       Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
       t2 = MPI_WTIME()
       if(pri.ne.0) &
-       write(pri,'(/a,T30,f9.2,a)') 'Diagonal blocks:',(t2-t0)/60,' min'
+      write(pri,'(/a,T40,f10.2,a)') 'Diagonal blocks:',(t2-t0)/60,' min'
 
 ! ... channel diagonalization:
 
@@ -218,68 +228,101 @@
 
 ! ... collect the results and broadcast them:
 
-      if(myid.eq.0) Allocate(biag(ms,ms,nch)); biag=0.d0
-      Call MPI_REDUCE(diag,biag,ms*ms*nch,MPI_DOUBLE_PRECISION,MPI_SUM, &
-                      0,MPI_COMM_WORLD,ierr)
-      if(myid.eq.0) diag = biag
-      if(myid.eq.0) deallocate(biag)
-      Call MPI_BCAST(diag,ms*ms*nch,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
-
       if(allocated(jpsol)) Deallocate(jpsol); Allocate(jpsol(0:nch))
-      Call MPI_REDUCE(ipsol,jpsol,nch+1,MPI_INTEGER,MPI_MAX, &
-                      0,MPI_COMM_WORLD,ierr)
+      Call MPI_REDUCE(ipsol,jpsol,nch+1,MPI_INTEGER,MPI_MAX,0,MPI_COMM_WORLD,ierr)
       if(myid.eq.0) ipsol=jpsol
       Call MPI_BCAST(ipsol,nch+1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-
-! ... record diagonal solutions:
-
       nsol = SUM(ipsol)
       if(pri.gt.0) &
       write(pri,'( /a,i6,a)') 'nsol =',nsol,'  -  number of channel solutions (new basis)'
 
+      if(myid.eq.0) then; if(allocated(diag)) Deallocate(diag); Allocate(diag(ms,ns,nch)); end if
+
+      Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
+      Do i = 1,nch; k=icc(i,i)
+       if(k.ne.0) &
+        Call MPI_SEND(diag(1:ms,1:ns,k),ms*ns,MPI_DOUBLE_PRECISION, &
+                      0, 0, MPI_COMM_WORLD, ierr)
+       if(myid.eq.0) &
+       Call MPI_RECV(diag(:,:,i),ms*ns,MPI_DOUBLE_PRECISION, MPI_ANY_SOURCE, &
+                     MPI_ANY_TAG, MPI_COMM_WORLD, status, ierr)
+       Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
+      End do
+
+      if(myid.ne.0) Deallocate(diag)
+
+! ... record diagonal solutions:
+
       if(myid.eq.0) then
-      if(allocated(eval)) Deallocate(eval); Allocate(eval(nsol))
-      k = 0
-      Do ich = 1,nch; Do is = 1,ipsol(ich)
-       k=k+1; eval(k) = diag(is,ms,ich)
-      End do; End do
 
-      jpsol = ipsol;    Do i=1,nch; jpsol(i)=jpsol(i-1)+jpsol(i); End do
+       if(allocated(eval)) Deallocate(eval); Allocate(eval(nsol))
+       k = 0
+       Do ich = 1,nch; Do is = 1,ipsol(ich)
+        k=k+1; eval(k) = diag(is,ns,ich)
+       End do; End do
 
-      rewind(nui)
-      write(nui) ns,nch,npert,nsp,nsq
-      write(nui) nsol
-      write(nui) jpsol
-      write(nui) eval
-      write(nui) (((diag(i,js,ich),i=1,ms),js=1,ipsol(ich)),ich=1,nch)
-      end if
+       jpsol = ipsol;    Do i=1,nch; jpsol(i)=jpsol(i-1)+jpsol(i); End do
+
+       rewind(nui)
+       write(nui) ns,nch,npert,nsp,nsq
+       write(nui) nsol
+       write(nui) jpsol
+       write(nui) eval
+       write(nui) (((diag(i,js,ich),i=1,ms),js=1,ipsol(ich)),ich=1,nch)
+
+       Deallocate(eval)
+
+      end if  ! myid=0
 
       Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
       t2 = MPI_WTIME()
       if(pri.ne.0) &
-       write(pri,'(/a,T30,f9.2,a)') 'Diag_channels:',(t2-t1)/60,' min'
+      write(pri,'(/a,T40,f10.2,a)') 'Diag_channels:',(t2-t1)/60,' min'
 
-! ... transform overlap matrix:
+! ... collect diagonal asymptotic coefficients:
+
+      if(myid.eq.0) then
+       if(allocated(bcf)) deallocate(bcf); Allocate(bcf(nch,nch,0:mk)); bcf=0.d0
+      end if
+
+      Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
+      Do i = 1,nch; k=icc(i,i)
+       if(k.ne.0) &
+       Call MPI_SEND(acf(k,:),mk+1,MPI_DOUBLE_PRECISION, 0, 0, MPI_COMM_WORLD, ierr)
+       if(myid.eq.0) &
+       Call MPI_RECV(bcf(i,i,:),mk+1,MPI_DOUBLE_PRECISION, MPI_ANY_SOURCE, &
+                     MPI_ANY_TAG, MPI_COMM_WORLD, status, ierr)
+       Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
+      End do
+
+!-------------------------------------------------------------------------------------
+! ... calculate overlap matrix (non-diagonal blocks):
+
+      idiag = -1;   Call Alloc_dbsr_matrix
+
+      icase=0; Call Alloc_c_data(ntype_O,0,0,mblock,nblock,kblock,eps_c)
+      Call State_res
+
+! ... transform and record overlap matrix:
 
       t1 = MPI_WTIME()
 
-      icase = 0;   Call transform_matrix
+      if(myid.eq.0) then
+       if(allocated(overlaps)) Deallocate(overlaps)
+       Allocate(overlaps(nch+npert,nch+npert)); overlaps = 0.d0
+      end if
+
+      icase = 0;   Call Record_matrix
+
+      if(myid.eq.0) CO = maxval(overlaps)
+
+      Call MPI_BCAST(CO,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
 
       Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
 
-      if(myid.eq.0) Allocate(cc(nch+npert,nch+npert))
-
-      Call MPI_REDUCE(overlaps,CC,(nch+npert)*(nch+npert),MPI_DOUBLE_PRECISION,MPI_MAX, &
-                      0,MPI_COMM_WORLD,ierr)
-      if(myid.eq.0) then
-        overlaps = CC; deallocate(CC); CO = SUM(overlaps)
-
-      end if
-      Call MPI_BCAST(CO,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
-
       t2 = MPI_WTIME()
       if(pri.ne.0) &
-      write(pri,'(/a,T30,f9.2,a)') 'transform_matrix:',(t2-t1)/60,' min'
+      write(pri,'(/a,T40,f10.2,a)') 'Record overlap matrix:',(t2-t1)/60,' min'
 
 ! ... check big overlaps
 
@@ -307,52 +350,19 @@
        go to 1
       end if  ! met > 0
 
-! ... record overlap matric:
-
     2 Continue
-
-      Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
-      t1 = MPI_WTIME()
-
-      Call Record_matrix
-
-      Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
-      t2 = MPI_WTIME()
-
-      if(pri.ne.0) &
-       write(pri,'(/a,T30,f9.2,a/)') 'Record overlaps:',(t2-t1)/60,' min'
+      if(allocated(overlaps)) Deallocate(overlaps)
 
 !----------------------------------------------------------------------
-! ... full Hamiltonian matrix:
+! ... non-diagonal Hamiltonian matrix:
 
       t1 = MPI_WTIME()
 
-      idiag = -1
+! ... core-energy shift:
 
-      if(iicc.gt.0) hch = 0.d0
-      if(iicb.gt.0) hcp = 0.d0
-      if(iibb.gt.0) hp  = 0.d0
-
-! ... recalculate the overlap non-diagonal blocks:
-
-      if(CO.gt.0.d0) then
-
-       Do it=1,ntarg; Do jt=1,it
-        if(it.eq.jt) Cycle; k=it*(it-1)/2+jt; otarg(k)=0.d0
-       End do; End do
-
-       icase=0; Call Alloc_c_data(ntype_O,0,0,mblock,nblock,kblock,eps_c)
-       Call State_res
-
-       ! ... core-energy shift:
-
-       if(iicc.gt.0) hch = hch * Ecore
-       if(iicb.gt.0) hcp = hcp * Ecore
-       if(iibb.gt.0) hp  = hp  * Ecore
-
-      end if
-
-      Deallocate(overlaps)
+      if(iicc.gt.0) hch = hch * Ecore
+      if(iicb.gt.0) hcp = hcp * Ecore
+      if(iibb.gt.0) hp  = hp  * Ecore
 
 ! ... L-integrals:
 
@@ -362,7 +372,7 @@
       Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
       t2 = MPI_WTIME()
       if(pri.ne.0) &
-       write(pri,'(/a,T30,f9.2,a/)') 'L-integrals:',(t2-t1)/60,' min'
+       write(pri,'(/a,T40,f10.2,a)') 'L-integrals:',(t2-t1)/60,' min'
 
 ! ... R-integrals:
 
@@ -374,13 +384,18 @@
       Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
       t2 = MPI_WTIME()
       if(pri.ne.0) &
-       write(pri,'(/a,T30,f9.2,a)') 'R-integrals:',(t2-t1)/60,' min'
+       write(pri,'(/a,T40,f10.2,a)') 'R-integrals:',(t2-t1)/60,' min'
 
 ! ... S-integrals:
 
       if(mbreit.eq.1) then
+       t1 = MPI_WTIME()
        icase=3; Call Alloc_c_data(ntype_S,0,mk+1,mblock,nblock,kblock,eps_c)
        Call State_res
+       Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
+       t2 = MPI_WTIME()
+       if(pri.ne.0) &
+       write(pri,'(/a,T40,f10.2,a)') 'S-integrals:',(t2-t1)/60,' min'
       end if
 
 ! ... orthogonal conditions:
@@ -393,18 +408,18 @@
       t2 = MPI_WTIME()
 
       if(pri.gt.0) &
-      write(pri,'(/a,T20,f10.2,a)') 'non-diagonal blocks:',(t2-t0)/60,' min '
+      write(pri,'(/a,T40,f10.2,a)') 'Non-diagonal blocks:',(t2-t0)/60,' min '
 
 ! ... record interaction matrix:
 
       t1 = MPI_WTIME()
-       Call transform_matrix
-       Call Record_matrix
-       Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
+      Call Record_matrix
+
+      Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
       t2 = MPI_WTIME()
 
       if(pri.gt.0) &
-      write(pri,'(/a,T20,f10.2,a)') 'transform_matrix:',(t2-t1)/60,' min '
+      write(pri,'(/a,T40,f10.2,a)') 'Record matrix:',(t2-t1)/60,' min '
 
       Deallocate(hch); if(npert.gt.0) Deallocate(hcp,icb,hp,ibb)
 
@@ -415,32 +430,29 @@
 
       t1=MPI_WTIME()
 
-      if(myid.eq.0) then;
-       if(allocated(BCF)) Deallocate(BCF); Allocate(BCF(nch,nch,0:mk))
-      end if
-
 ! ... Collect the ACF - matrix:
 
       Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
 
-      Do i = 1,nch
-       Do j = 1,i;  k=icc(i,j)
+      Do i = 1,nch-1
+       Do j = i+1,nch;  k=icc(i,j)
         if(k.ne.0) &
          Call MPI_SEND(ACF(k,:),mk+1,MPI_DOUBLE_PRECISION, &
                        0, 0, MPI_COMM_WORLD, ierr)
         if(myid.eq.0) &
         Call MPI_RECV(BCF(i,j,:),mk+1,MPI_DOUBLE_PRECISION, MPI_ANY_SOURCE, &
                       MPI_ANY_TAG, MPI_COMM_WORLD, status, ierr)
+        BCF(j,i,:) = BCF(i,j,:)
         Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
        End do
       End do
 
-      Deallocate(icc)
+      Deallocate(icc,acf)
 
       t2=MPI_WTIME()
 
       if(pri.ne.0) &
-       write(pri,'(/a,T30,f9.2,a)') 'Collect_ACF:  ',(t2-t1)/60,' min '
+       write(pri,'(/a,T40,f10.2,a)') 'Collect_ACF:  ',(t2-t1)/60,' min '
 
 ! ... asymptotic coefficients:
 
@@ -455,10 +467,9 @@
        End do
       End do
 
-! ... acf = 2 * acf        ????
+! ... check diagonal asymptotic coefficients for k=0
 
       nelc_core=0; Do i=1,nclosed; nelc_core=nelc_core+jbs(i)+1; End do
-
       write(pri,'(/a,i3)') &
       'Derivations from 2*nelc for asymptotic coefficients with k=0:'
       Do i = 1,nch
@@ -498,14 +509,6 @@
        if(myid.eq.0.and.check_target.eq.1) Call Target_print
        if(myid.eq.0.and.iitar.eq.1) Call Target_new1
        if(myid.eq.0.and.iitar.eq.2) Call Target_new2
-      end if
-
-      if(debug.gt.0.and.pri.gt.0) then
-       write(pri,*)
-       write(pri,'(a,T20,f10.2,a)') 'Ldata time:', t_Ldata/60,' min'
-       write(pri,'(a,T20,f10.2,a)') 'Rdata time:', t_Rdata/60,' min'
-       write(pri,'(a,T20,f10.2,a)') 'Sdata time:', t_Sdata/60,' min'
-       write(pri,*)
       end if
 
       End Subroutine SUB1
