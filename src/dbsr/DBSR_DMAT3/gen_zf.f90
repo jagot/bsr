@@ -39,18 +39,18 @@
 
        AF = name1(1:iname1)//'j'
        Call Check_file(AF);  Open(nub1,file=AF)
-       Call Read_ipar(nub1,'ncfg',nc     ) 
+       Call Read_ipar(nub1,'ncfg',nc     )
        if(nc.ne.kdm1) Stop 'dbsr_dmat: nc in j-file <> ncfg1'
-       Call Read_ipar(nub1,'nsol',nstate1) 
+       Call Read_ipar(nub1,'nsol',nstate1)
 
-      elseif(ctype1.eq.'c') then;   
-      
-       nstate1=1; Call Jdef_JPE(nuc1,jot1,parity1,E1) 
+      elseif(ctype1.eq.'c') then;
+
+       nstate1=1; Call Jdef_JPE(nuc1,jot1,parity1,E1)
 
       else;   Stop 'Gen_zf: ctype1 --> ?'
 
       end if
-      par1 = '+'; if(parity1.le.0) par1 = '-' 
+      par1 = '+'; if(parity1.le.0) par1 = '-'
 
 ! ... check the final state:
 
@@ -73,18 +73,18 @@
 
        AF = name2(1:iname2)//'j'
        Call Check_file(AF);  Open(nub2,file=AF)
-       Call Read_ipar(nub2,'ncfg',nc     ) 
+       Call Read_ipar(nub2,'ncfg',nc     )
        if(nc.ne.kdm2) Stop 'dbsr_dmat: nc in j-file <> ncfg2'
-       Call Read_ipar(nub2,'nsol',nstate2) 
+       Call Read_ipar(nub2,'nsol',nstate2)
 
-      elseif(ctype2.eq.'c') then; 
-      
-       nstate2=1; Call Jdef_JPE(nuc2,jot2,parity2,E2)  
+      elseif(ctype2.eq.'c') then;
+
+       nstate2=1; Call Jdef_JPE(nuc2,jot2,parity2,E2)
 
       else;  Stop 'Gen_zf: ctype2 --> ?'
 
       end if
-      par2 = '+'; if(parity2.le.0) par2 = '-' 
+      par2 = '+'; if(parity2.le.0) par2 = '-'
 
       write(pri,'(/a,i5 )') 'nstate1 = ',nstate1
       write(pri,'( a,i5/)') 'nstate2 = ',nstate2
@@ -108,9 +108,9 @@
 ! ... loop over initial set:
 
       if(ctype1.eq.'b') then
-       rewind(nub1);  read(nub1) i 
+       rewind(nub1);  read(nub1) i
       elseif(ctype1.eq.'j') then
-       i=Ifind_position(nub1,'Solutions');  read(nub1,*)  
+       i=Ifind_position(nub1,'Solutions');  read(nub1,*)
       end if
 
       Do j1=1,mstate1
@@ -133,8 +133,8 @@
 
       if(ctype2.eq.'b') then
        rewind(nub2); read(nub2) i
-      elseif(ctype2.eq.'j') then 
-       i=Ifind_position(nub2,'Solutions'); read(nub2,*)  
+      elseif(ctype2.eq.'j') then
+       i=Ifind_position(nub2,'Solutions'); read(nub2,*)
       end if
 
       Do j2=1,mstate2
@@ -151,7 +151,7 @@
        if(istate2.gt.0.and.istate2.ne.j2) Cycle
        if(istate2.gt.0.and.istate2.lt.j2) Exit
 
-! ... angular orthogonality: 
+! ... angular orthogonality:
 
       if(ITRA(jot1,kpol+kpol,jot2).eq.0) Cycle
 
@@ -180,31 +180,31 @@
       dmatL = SL
       dmatV = SV/de*c_au
 
-      SL=dmatL**2 
+      SL=dmatL**2
       SV=dmatV**2
 
       kp = kpol+kpol+1
       S = 1.d0;  Do i = 1,kp,2;  S = S * i;  End do
       S = 2*kp*(kpol+1)/(S*S)/kpol * (de/c_au)**kp
-       
+
       GWL = S*SL; GFL = c_au**3/2*GWL/(de*de)
       GWV = S*SV; GFV = c_au**3/2*GWV/(de*de)
 
       g1 = jot1+1; g2 = jot2+1
- 
-      alfL = 2*dmatL*dmatL/(E2-E1)/(kp*g1); alfaL = alfaL + alfL   
+
+      alfL = 2*dmatL*dmatL/(E2-E1)/(kp*g1); alfaL = alfaL + alfL
       alfV = 2*dmatV*dmatV/(E2-E1)/(kp*g1); alfaV = alfaV + alfV
 
       if(E2.gt.E1) then
        FL = GFL/g1; WL = GWL/g2/time_au
        FV = GFV/g1; WV = GWV/g2/time_au
-       write(nuf,'(/a,i2,f15.8,2x,a)') par1,jot1,E1,trim(Label1) 
-       write(nuf,'( a,i2,f15.8,2x,a)') par2,jot2,E2,trim(Label2) 
+       write(nuf,'(/a,i2,f15.8,2x,a)') par1,jot1,E1,trim(Label1)
+       write(nuf,'( a,i2,f15.8,2x,a)') par2,jot2,E2,trim(Label2)
       else
        FL = GFL/g2; WL = GWL/g1/time_au
        FV = GFV/g2; WV = GWV/g1/time_au
-       write(nuf,'(/a,i2,f15.8,2x,a)') par2,jot2,E2,trim(Label2) 
-       write(nuf,'( a,i2,f15.8,2x,a)') par1,jot1,E1,trim(Label1) 
+       write(nuf,'(/a,i2,f15.8,2x,a)') par2,jot2,E2,trim(Label2)
+       write(nuf,'( a,i2,f15.8,2x,a)') par1,jot1,E1,trim(Label1)
       end if
 
       de = abs(E1-E2) * au_cm
@@ -219,16 +219,16 @@
       if(ialpha.eq.0) then
        write(nuf,'(1x,a1,i1,2x,a4,1PD12.5,3x,a5,D12.5,3x,a6,D12.5)') &
                    ktype,kpol,'S = ',SL,AA,FL,'AKI = ',WL
-       if(SV.ne.0.d0) & 
+       if(SV.ne.0.d0) &
        write(nuf,'(9x,1PD12.5,8x,D12.5,9x,D12.5)') SV,FV,WV
       else
        write(nuf,'(1x,a1,i1,2x,a4,1PD12.5,3x,a5,D12.5,3x,a6,D12.5,a8,d16.8,a8,0P2f10.5)') &
                    ktype,kpol,'S = ',SL,AA,FL,'AKI = ',WL, &
                    '   RME =',dmatL, '  alpha=',alfL,alfaL
-       if(SV.ne.0.d0) & 
+       if(SV.ne.0.d0) &
        write(nuf,'(9x,1PD12.5,8x,D12.5,9x,D12.5,8x,d16.8,8x,0P2f10.5)') &
-                   SV,FV,WV, dmatV, alfV,alfaV 
-      end if      
+                   SV,FV,WV, dmatV, alfV,alfaV
+      end if
 
       End do; End do   !  over solutions
 

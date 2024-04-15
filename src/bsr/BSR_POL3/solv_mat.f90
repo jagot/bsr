@@ -20,15 +20,15 @@
       rewind(nua); Do j=1,nhm; write(nua) a(1:nhm,j); End do
       write(nua) d(1:nhm)
       Do j=1,nhm; write(nua) c(1:nhm,j); End do
-            
+
 ! ... orthogonal constraints:
 
-      write(pri,'(/a/)') 'orthogonal constraints:' 
+      write(pri,'(/a/)') 'orthogonal constraints:'
 
       jj = nhm
       Do ich = 1,nch; i=ipch(ich); ii=(ich-1)*ns
        Do j=1,nbf;
-        if(IBORT(i,j).ne.0) Cycle 
+        if(IBORT(i,j).ne.0) Cycle
         if(lbs(i).ne.lbs(j)) Cycle
         write(pri,'(2a6)') ebs(i),ebs(j)
         jj=jj+1
@@ -53,10 +53,10 @@
       iprm=1
       Do i=1,nch
        j=(i-1)*ns
-       l=lch(i); if(l.gt.ks-2) l=ks-2 
+       l=lch(i); if(l.gt.ks-2) l=ks-2
        if(ilzero.eq.0) l=0
-       iprm(j+1:j+l+1)=0                   
-       iprm(j+ns-ibzero+1:j+ns)=0  
+       iprm(j+1:j+l+1)=0
+       iprm(j+ns-ibzero+1:j+ns)=0
       End do
 
 ! ... delete the extra B-splines:
@@ -70,8 +70,8 @@
         k=k+1; aa(k)=a(i,j); cc(k)=c(i,j)
        End do
        a(1:k,m)=aa(1:k); c(1:k,m)=cc(1:k);  d(m)=d(j)
-      End do 
-      khm=m 
+      End do
+      khm=m
 
       a = a - E0 * c
 
@@ -89,7 +89,7 @@
       d=sol; sol=0.d0; k=0
       Do i=1,nhm
        if(iprm(i).eq.0) Cycle; k=k+1; sol(i)=d(k)
-      End do 
+      End do
 
 ! ... restore the interaction, overlap and dipole matrixes:
 
@@ -147,13 +147,13 @@
 
 ! ... check the orthpgonality:
 
-      write(pri,'(/a/)') 'orthogonality:' 
+      write(pri,'(/a/)') 'orthogonality:'
 
       jj = nhm
       Do ich = 1,nch; i=ipch(ich); ii=(ich-1)*ns
-       Do j=1,nbf; if(IBORT(i,j).ne.0) Cycle 
+       Do j=1,nbf; if(IBORT(i,j).ne.0) Cycle
         if(lbs(i).ne.lbs(j)) Cycle
-        S = SUM(sol(ii+1:ns)*qbs(1:ns,j))
+        S = SUM( sol(ii+1:ii+ns) * qbs(1:ns,j) )
         write(pri,'(2a6,f10.5)') ebs(i),ebs(j),S
        End do
       End do
@@ -164,7 +164,7 @@
         read(nuq) aa(1:nhm)
         S = SUM(sol(1:nhm)*aa(1:nhm))
         write(pri,'(a,i2,f10.5)') '  nortb = ',i,S
-       End do      
+       End do
       end if
 
       End Subroutine Solv_mat

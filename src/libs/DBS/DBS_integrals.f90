@@ -40,11 +40,11 @@
       Integer :: krs1 = -100
       Character(4) :: stype1='aaaa'
 
-      Real(8) :: memory_DBS_integrals = 0.d0              
-      Real(8) :: memory_Rk_integrals  = 0.d0              
-      Real(8) :: memory_Rk_integral   = 0.d0              
-      Real(8) :: memory_Sk_integrals  = 0.d0              
-      Real(8) :: memory_Sk_integral   = 0.d0              
+      Real(8) :: memory_DBS_integrals = 0.d0
+      Real(8) :: memory_Rk_integrals  = 0.d0
+      Real(8) :: memory_Rk_integral   = 0.d0
+      Real(8) :: memory_Sk_integrals  = 0.d0
+      Real(8) :: memory_Sk_integral   = 0.d0
 
       End Module DBS_integrals
 
@@ -65,7 +65,7 @@
       krk=-100
       itype='aaaa'
 
-      if(allocated(irka)) then 
+      if(allocated(irka)) then
        Deallocate (irka,rka)
        ntype = 0
        memory_Rk_integrals = 0.d0
@@ -83,10 +83,10 @@
        Call alloc_DBS_moments
       end if
 
-      memory_DBS_integrals =    memory_Rk_integrals  &  
-                              + memory_Rk_integral   &                              
-                              + memory_Sk_integrals  &                              
-                              + memory_Sk_integral  
+      memory_DBS_integrals =    memory_Rk_integrals  &
+                              + memory_Rk_integral   &
+                              + memory_Sk_integrals  &
+                              + memory_Sk_integral
 
       End Subroutine alloc_Rk_integrals
 
@@ -105,7 +105,7 @@
       if(associated(rkb)) Nullify(rkb)
       krk=-100; itype='aaaa'
 
-      if(ntype1.ne.0) then 
+      if(ntype1.ne.0) then
        Deallocate (rka1)
        krk1 = -100;  ntype1 = 0;  itype1='aaaa'
        memory_Rk_integral = 0.d0
@@ -118,10 +118,10 @@
        Call alloc_DBS_moments
       end if
 
-      memory_DBS_integrals =    memory_Rk_integrals  &  
-                              + memory_Rk_integral   &                              
-                              + memory_Sk_integrals  &                              
-                              + memory_Sk_integral  
+      memory_DBS_integrals =    memory_Rk_integrals  &
+                              + memory_Rk_integral   &
+                              + memory_Sk_integrals  &
+                              + memory_Sk_integral
 
       End Subroutine alloc_Rk_integral
 
@@ -142,7 +142,7 @@
       krk=-100
       itype='aaaa'
 
-      if(allocated(isk)) then 
+      if(allocated(isk)) then
        Deallocate (isk,rks)
        stype = 0
        memory_Sk_integrals = 0.d0
@@ -160,10 +160,10 @@
        Call alloc_DBS_moments
       end if
 
-      memory_DBS_integrals =    memory_Rk_integrals  &  
-                              + memory_Rk_integral   &                              
-                              + memory_Sk_integrals  &                              
-                              + memory_Sk_integral  
+      memory_DBS_integrals =    memory_Rk_integrals  &
+                              + memory_Rk_integral   &
+                              + memory_Sk_integrals  &
+                              + memory_Sk_integral
 
       End Subroutine alloc_Sk_integrals
 
@@ -183,7 +183,7 @@
       if(associated(rkb)) Nullify(rkb)
       krk=-100; itype='aaaa'
 
-      if(jtype1.ne.0) then 
+      if(jtype1.ne.0) then
        Deallocate (rks1)
        krs1 = -100;  jtype1 = 0;  stype1='aaaa'
        memory_Sk_integral = 0.d0
@@ -196,10 +196,10 @@
        Call alloc_DBS_moments
       end if
 
-      memory_DBS_integrals =    memory_Rk_integrals  &  
-                              + memory_Rk_integral   &                              
-                              + memory_Sk_integrals  &                              
-                              + memory_Sk_integral  
+      memory_DBS_integrals =    memory_Rk_integrals  &
+                              + memory_Rk_integral   &
+                              + memory_Sk_integrals  &
+                              + memory_Sk_integral
 
       End Subroutine alloc_Sk_integral
 

@@ -9,24 +9,24 @@
 !
 !     NDET_IDET, IDET_SIMP
 !
-!     DET_list and DEF_list contain the overlap determinants 
-!     and overlap factors for all configuration symmetries, 
+!     DET_list and DEF_list contain the overlap determinants
+!     and overlap factors for all configuration symmetries,
 !     whereas NDET_list and NDEF_list contain the information
-!     only for two configuration under consideration. 
-!     These additional NDET, NDEF lists were introduced in hope 
-!     to reduce the seeking time in large common lists DET and DEF. 
+!     only for two configuration under consideration.
+!     These additional NDET, NDEF lists were introduced in hope
+!     to reduce the seeking time in large common lists DET and DEF.
 !
-!     All four modules DET_list, DEF_list, NDET_list, NDEF_list 
-!     have the identical structure and  differ only by names 
-!     for variables. 
+!     All four modules DET_list, DEF_list, NDET_list, NDEF_list
+!     have the identical structure and  differ only by names
+!     for variables.
 !
 !     The connection between DET,DEF and NDET,NDEF lists is given
 !     by subroutine NDET_IDET.
 !
 !     Each overlap determinant is codded as list of involved orbitals:
 !     i1*base+j1, i2*base+j2, ... , where {i},{j} - pointers to orbitals,
-!     in left and right bra-vectors, respectively.  
-!      
+!     in left and right bra-vectors, respectively.
+!
 !----------------------------------------------------------------------
 
 
@@ -40,19 +40,19 @@
       Implicit none
 
       Integer :: ndet = 0       ! number of determinants
-      Integer :: mdet = 0       ! current dimension for KPD,IPD 
+      Integer :: mdet = 0       ! current dimension for KPD,IPD
       Integer :: idet = 2**15   ! initial dimension
       Integer :: jdet = 2**2    ! average size of one determinant
-      Integer :: kdet = 0       ! current dimension for NPD 
-      Integer :: ldet = 0       ! last filled element in NPD 
+      Integer :: kdet = 0       ! current dimension for NPD
+      Integer :: ldet = 0       ! last filled element in NPD
       Integer :: jmdet = 2**2   ! maximim size of one determinant
 
 
       Integer :: ibd = 2**15    ! overlap determinant packing basis
 
-      Integer, allocatable :: KPD(:),IPD(:),NPD(:),JPD(:)   
+      Integer, allocatable :: KPD(:),IPD(:),NPD(:),JPD(:)
 
-      ! KPD(i) - dimension of i-th determinant 
+      ! KPD(i) - dimension of i-th determinant
       ! IPD(i) - its pointer in the list NPD
       ! JPD(i) - ordering pointer
 
@@ -62,7 +62,7 @@
 !======================================================================
       Subroutine alloc_det(m)
 !======================================================================
-      Use det_list 
+      Use det_list
 
       Implicit none
       Integer, Intent(in) :: m
@@ -72,7 +72,7 @@
        if(allocated(KPD)) Deallocate (KPD,IPD,NPD,JPD)
        mdet=0; kdet=0; ldet=0; ndet=0
        if(m.lt.0) then
-        mdet=idet; kdet = mdet*jdet 
+        mdet=idet; kdet = mdet*jdet
         Allocate(KPD(mdet),IPD(mdet),NPD(kdet),JPD(mdet))
        end if
       elseif(.not.allocated(KPD)) then
@@ -89,18 +89,18 @@
        if(kdet.lt.ldet+10*jdet) kdet=ldet+10*jdet
        Allocate(ARR(ldet))
        ARR(1:ndet)=KPD(1:ndet); Deallocate(KPD)
-       Allocate(KPD(mdet)); KPD(1:ndet)=ARR(1:ndet) 
+       Allocate(KPD(mdet)); KPD(1:ndet)=ARR(1:ndet)
        ARR(1:ndet)=IPD(1:ndet); Deallocate(IPD)
-       Allocate(IPD(mdet)); IPD(1:ndet)=ARR(1:ndet) 
+       Allocate(IPD(mdet)); IPD(1:ndet)=ARR(1:ndet)
        ARR(1:ldet)=NPD(1:ldet); Deallocate(NPD)
-       Allocate(NPD(kdet)); NPD(1:ldet)=ARR(1:ldet) 
+       Allocate(NPD(kdet)); NPD(1:ldet)=ARR(1:ldet)
        ARR(1:ndet)=JPD(1:ndet); Deallocate(JPD)
-       Allocate(JPD(mdet)); JPD(1:ndet)=ARR(1:ndet) 
+       Allocate(JPD(mdet)); JPD(1:ndet)=ARR(1:ndet)
        Deallocate(ARR)
        write(*,*) 'realloc_det : m = ',m,idet
       end if
 
-      End Subroutine alloc_DET 
+      End Subroutine alloc_DET
 
 
 !======================================================================
@@ -108,9 +108,9 @@
 !======================================================================
 !     add new overlap determinant to DET_list
 !----------------------------------------------------------------------
-      Use det_list 
+      Use det_list
 
-      Implicit none 
+      Implicit none
       Integer , Intent(in) :: kd, NP(kd)
       Integer :: i,j,k,m,ip,i1,i2
 
@@ -121,17 +121,17 @@
 
 ! ... check if the same det. is already in the list:
 
-      i1=1; i2=ndet 
-    1 if(i1.gt.i2) go to 2              
+      i1=1; i2=ndet
+    1 if(i1.gt.i2) go to 2
       i=(i1+i2)/2; j=jpd(i)
       if    (kd.lt.kpd(j)) then;  i2 = i - 1
       elseif(kd.gt.kpd(j)) then;  i1 = i + 1
       else
        ip = IPD(j); m = 0
        Do k = 1,kd; ip=ip+1
-        if(NP(k).eq.NPD(ip)) Cycle  
-        if(NP(k).lt.NPD(ip)) then; m = -1; Exit; end if 
-        if(NP(k).gt.NPD(ip)) then; m = +1; Exit; end if 
+        if(NP(k).eq.NPD(ip)) Cycle
+        if(NP(k).lt.NPD(ip)) then; m = -1; Exit; end if
+        if(NP(k).gt.NPD(ip)) then; m = +1; Exit; end if
        End do
        if(m.eq.0) then
         Iadd_det  = j;  Return      ! or i ???
@@ -142,7 +142,7 @@
        end if
       end if
       go to 1
-    2 Continue 
+    2 Continue
 
 ! ... Add new determinant:
 
@@ -156,7 +156,7 @@
       jpd(i1)=ndet
       Iadd_det =ndet     ! or ndet ???
 
-      End Function Iadd_det 
+      End Function Iadd_det
 
 
 !======================================================================
@@ -164,7 +164,7 @@
 !======================================================================
 !     Containes the overlap determinants for all symmetries
 !----------------------------------------------------------------------
-      Use det_list 
+      Use det_list
 
       Implicit none
 
@@ -177,7 +177,7 @@
        write(nu) kpd(i),ipd(i),jpd(i),NPD(ipd(i)+1:ipd(i)+kpd(i))
       End do
 
-      End Subroutine Record_det 
+      End Subroutine Record_det
 
 
 !======================================================================
@@ -185,7 +185,7 @@
 !======================================================================
 !     Containes the overlap determinants for all symmetries
 !----------------------------------------------------------------------
-      Use det_list 
+      Use det_list
 
       Implicit none
       Integer :: nu, i
@@ -201,14 +201,14 @@
        read(nu) kpd(i),ipd(i),jpd(i),NPD(ipd(i)+1:ipd(i)+kpd(i))
       End do
 
-      End Subroutine Read_det 
+      End Subroutine Read_det
 
 !======================================================================
       Subroutine Load_det (nu)
 !======================================================================
 !     Containes the overlap determinants for all symmetries
 !----------------------------------------------------------------------
-      Use det_list 
+      Use det_list
 
       Implicit none
       Integer :: nu
@@ -225,7 +225,7 @@
       read(nu) npd
       read(nu) jpd
 
-      End Subroutine Load_det 
+      End Subroutine Load_det
 
 
 
@@ -234,7 +234,7 @@
 !======================================================================
 !     Containes the overlap determinants for all symmetries
 !----------------------------------------------------------------------
-      Use det_list 
+      Use det_list
 
       Implicit none
       Integer :: nu
@@ -247,15 +247,15 @@
       write(nu) npd(1:ldet)
       write(nu) jpd(1:ndet)
 
-      End Subroutine Write_det 
+      End Subroutine Write_det
 
 
 
 !======================================================================
-      Module DEF_list 
+      Module DEF_list
 !======================================================================
 !     Containes the overlap factors, as the list of the number of
-!     involved overlap determinants and their positions in the 
+!     involved overlap determinants and their positions in the
 !     common det_list.
 !
 !     KPF(i) - number of det.s in i-th overlap factor
@@ -268,23 +268,23 @@
 
       Integer :: ndef = 0       ! number of determinants
       Integer :: mdef = 0       ! current dimentsion of list
-      Integer :: idef = 2**16   ! supposed max. dimentsion  
-      Integer :: jdef = 2**3    ! average number of det.s 
-      Integer :: kdef = 0       ! dimension of all def.s 
-      Integer :: ldef = 0       ! dimension of all def.s 
+      Integer :: idef = 2**16   ! supposed max. dimentsion
+      Integer :: jdef = 2**3    ! average number of det.s
+      Integer :: kdef = 0       ! dimension of all def.s
+      Integer :: ldef = 0       ! dimension of all def.s
       Integer :: jmdef = 2*3    ! maximim size of one determinant
-      
+
       Integer :: ibf = 2**4     ! overlap factors packing basis
 
-      Integer, Allocatable :: KPF(:),IPF(:),NPF(:),JPF(:)   
+      Integer, Allocatable :: KPF(:),IPF(:),NPF(:),JPF(:)
 
-      End Module DEF_list 
+      End Module DEF_list
 
 
 !======================================================================
       Subroutine alloc_def (m)
 !======================================================================
-      Use def_list 
+      Use def_list
 
       Implicit none
       Integer, Intent(in) :: m
@@ -294,7 +294,7 @@
        if(allocated(KPF)) Deallocate(KPF,IPF,NPF,JPF)
        mdef = 0; kdef = 0; ndef =0; ldef = 0
        if(m.lt.0) then
-        mdef=idef; kdef = mdef*jdef 
+        mdef=idef; kdef = mdef*jdef
         Allocate(KPF(mdef),IPF(mdef),NPF(kdef),JPF(mdef))
        end if
       elseif(.not.allocated(KPF)) then
@@ -311,18 +311,18 @@
        if(kdef.lt.ldef+10*jdef) kdef=ldef+10*jdef
        Allocate(ARR(ldef))
        ARR(1:ndef)=KPF(1:ndef); Deallocate(KPF)
-       Allocate(KPF(mdef)); KPF(1:ndef)=ARR(1:ndef) 
+       Allocate(KPF(mdef)); KPF(1:ndef)=ARR(1:ndef)
        ARR(1:ndef)=IPF(1:ndef); Deallocate(IPF)
-       Allocate(IPF(mdef)); IPF(1:ndef)=ARR(1:ndef) 
+       Allocate(IPF(mdef)); IPF(1:ndef)=ARR(1:ndef)
        ARR(1:ndef)=JPF(1:ndef); Deallocate(JPF)
-       Allocate(JPF(mdef)); JPF(1:ndef)=ARR(1:ndef) 
+       Allocate(JPF(mdef)); JPF(1:ndef)=ARR(1:ndef)
        ARR(1:ldef)=NPF(1:ldef); Deallocate(NPF)
-       Allocate(NPF(kdef)); NPF(1:ldef)=ARR(1:ldef) 
+       Allocate(NPF(kdef)); NPF(1:ldef)=ARR(1:ldef)
        Deallocate(ARR)
        write(*,*) 'realloc_def : m = ',m,idef
       end if
 
-      End Subroutine alloc_def 
+      End Subroutine alloc_def
 
 
 !======================================================================
@@ -330,9 +330,9 @@
 !======================================================================
 !     add new overlap determinant to DET_list
 !----------------------------------------------------------------------
-      Use def_list 
+      Use def_list
 
-      Implicit none 
+      Implicit none
       Integer , Intent(in) :: kd, NP(kd)
       Integer :: i,j,k,m,ip,i1,i2
 
@@ -343,17 +343,17 @@
 
 ! ... check if the same det. is already in the list:
 
-      i1=1; i2=ndef 
-    1 if(i1.gt.i2) go to 2              
+      i1=1; i2=ndef
+    1 if(i1.gt.i2) go to 2
       i=(i1+i2)/2; j=jpf(i)
       if    (kd.lt.kpf(j)) then;  i2 = i - 1
       elseif(kd.gt.kpf(j)) then;  i1 = i + 1
       else
        ip = IPF(j); m = 0
        Do k = 1,kd; ip=ip+1
-        if(NP(k).eq.NPF(ip)) Cycle  
-        if(NP(k).lt.NPF(ip)) then; m = -1; Exit; end if 
-        if(NP(k).gt.NPF(ip)) then; m = +1; Exit; end if 
+        if(NP(k).eq.NPF(ip)) Cycle
+        if(NP(k).lt.NPF(ip)) then; m = -1; Exit; end if
+        if(NP(k).gt.NPF(ip)) then; m = +1; Exit; end if
        End do
        if(m.eq.0) then
         Iadd_def  = j; Return      ! or i ???
@@ -364,7 +364,7 @@
        end if
       end if
       go to 1
-    2 Continue 
+    2 Continue
 
 ! ... Add new determinant:
 
@@ -378,7 +378,7 @@
       jpf(i1)=ndef
       Iadd_def =ndef     ! or i1 ???
 
-      End Function Iadd_def 
+      End Function Iadd_def
 
 
 !======================================================================
@@ -386,7 +386,7 @@
 !======================================================================
 !     Containes the overlap determinants for all symmetries
 !----------------------------------------------------------------------
-      Use def_list 
+      Use def_list
 
       Implicit none
       Integer :: nu, i
@@ -398,7 +398,7 @@
        write(nu) kpf(i),ipf(i),jpf(i),npf(ipf(i)+1:ipf(i)+kpf(i))
       End do
 
-      End Subroutine Record_def 
+      End Subroutine Record_def
 
 
 !======================================================================
@@ -406,7 +406,7 @@
 !======================================================================
 !     Containes the overlap determinants for all symmetries
 !----------------------------------------------------------------------
-      Use def_list 
+      Use def_list
 
       Implicit none
       Integer :: nu
@@ -419,7 +419,7 @@
       write(nu) npf(1:ldef)
       write(nu) jpf(1:ndef)
 
-      End Subroutine Write_def 
+      End Subroutine Write_def
 
 
 !======================================================================
@@ -427,7 +427,7 @@
 !======================================================================
 !     Containes the overlap determinants for all symmetries
 !----------------------------------------------------------------------
-      Use def_list 
+      Use def_list
 
       Implicit none
       Integer :: nu
@@ -444,7 +444,7 @@
       read(nu) npf
       read(nu) jpf
 
-      End Subroutine Load_def 
+      End Subroutine Load_def
 
 
 !======================================================================
@@ -452,7 +452,7 @@
 !======================================================================
 !     Containes the overlap determinants for all symmetries
 !----------------------------------------------------------------------
-      Use def_list 
+      Use def_list
 
       Implicit none
 
@@ -469,7 +469,7 @@
        read(nu) kpf(i),ipf(i),jpf(i),npf(ipf(i)+1:ipf(i)+kpf(i))
       End do
 
-      End Subroutine Read_def 
+      End Subroutine Read_def
 
 
 !======================================================================
@@ -480,17 +480,17 @@
       Implicit none
 
       Integer :: ndet = 0       ! number of determinants
-      Integer :: mdet = 0       ! current dimension for KPD,IPD 
+      Integer :: mdet = 0       ! current dimension for KPD,IPD
       Integer :: idet = 2**15   ! initial dimension
       Integer :: jdet = 2**2    ! average size of one determinant
-      Integer :: kdet = 0       ! current dimension for NPD 
-      Integer :: ldet = 0       ! last filled element in NPD 
+      Integer :: kdet = 0       ! current dimension for NPD
+      Integer :: ldet = 0       ! last filled element in NPD
 
       Integer :: ibd = 2**15    ! overlap determinant packing basis
 
-      Integer, allocatable :: KPD(:),IPD(:),NPD(:),JPD(:)   
+      Integer, allocatable :: KPD(:),IPD(:),NPD(:),JPD(:)
 
-      ! KPD(i) - dimension of i-th determinant 
+      ! KPD(i) - dimension of i-th determinant
       ! IPD(i) - its pointer in the list NPD
       ! JPD(i) - ordering pointer
 
@@ -500,7 +500,7 @@
 !======================================================================
       Subroutine alloc_ndet(m)
 !======================================================================
-      Use ndet_list 
+      Use ndet_list
 
       Implicit none
       Integer, Intent(in) :: m
@@ -510,7 +510,7 @@
        if(allocated(KPD)) Deallocate (KPD,IPD,NPD,JPD)
        mdet=0; kdet=0; ldet=0; ndet=0
        if(m.lt.0) then
-        mdet=idet; kdet = mdet*jdet 
+        mdet=idet; kdet = mdet*jdet
         Allocate(KPD(mdet),IPD(mdet),NPD(kdet),JPD(mdet))
        end if
       elseif(.not.allocated(KPD)) then
@@ -527,18 +527,18 @@
        if(kdet.lt.ldet+10*jdet) kdet=ldet+10*jdet
        Allocate(ARR(ldet))
        ARR(1:ndet)=KPD(1:ndet); Deallocate(KPD)
-       Allocate(KPD(mdet)); KPD(1:ndet)=ARR(1:ndet) 
+       Allocate(KPD(mdet)); KPD(1:ndet)=ARR(1:ndet)
        ARR(1:ndet)=IPD(1:ndet); Deallocate(IPD)
-       Allocate(IPD(mdet)); IPD(1:ndet)=ARR(1:ndet) 
+       Allocate(IPD(mdet)); IPD(1:ndet)=ARR(1:ndet)
        ARR(1:ldet)=NPD(1:ldet); Deallocate(NPD)
-       Allocate(NPD(kdet)); NPD(1:ldet)=ARR(1:ldet) 
+       Allocate(NPD(kdet)); NPD(1:ldet)=ARR(1:ldet)
        ARR(1:ndet)=JPD(1:ndet); Deallocate(JPD)
-       Allocate(JPD(mdet)); JPD(1:ndet)=ARR(1:ndet) 
+       Allocate(JPD(mdet)); JPD(1:ndet)=ARR(1:ndet)
        Deallocate(ARR)
        write(*,*) 'realloc_ndet : m = ',m,idet
       end if
 
-      End Subroutine alloc_NDET 
+      End Subroutine alloc_NDET
 
 
 !======================================================================
@@ -546,9 +546,9 @@
 !======================================================================
 !     add new overlap determinant to NDET_list
 !----------------------------------------------------------------------
-      Use ndet_list 
+      Use ndet_list
 
-      Implicit none 
+      Implicit none
       Integer , Intent(in) :: kd, NP(kd)
       Integer :: i,j,k,m,ip,i1,i2
 
@@ -558,17 +558,17 @@
 
 ! ... check if the same det. is already in the list:
 
-      i1=1; i2=ndet 
-    1 if(i1.gt.i2) go to 2              
+      i1=1; i2=ndet
+    1 if(i1.gt.i2) go to 2
       i=(i1+i2)/2; j=jpd(i)
       if    (kd.lt.kpd(j)) then;  i2 = i - 1
       elseif(kd.gt.kpd(j)) then;  i1 = i + 1
       else
        ip = IPD(j); m = 0
        Do k = 1,kd; ip=ip+1
-        if(NP(k).eq.NPD(ip)) Cycle  
-        if(NP(k).lt.NPD(ip)) then; m = -1; Exit; end if 
-        if(NP(k).gt.NPD(ip)) then; m = +1; Exit; end if 
+        if(NP(k).eq.NPD(ip)) Cycle
+        if(NP(k).lt.NPD(ip)) then; m = -1; Exit; end if
+        if(NP(k).gt.NPD(ip)) then; m = +1; Exit; end if
        End do
        if(m.eq.0) then
         Iadd_ndet  = j;  Return      ! or i ???
@@ -579,7 +579,7 @@
        end if
       end if
       go to 1
-    2 Continue 
+    2 Continue
 
 ! ... Add new determinant:
 
@@ -593,14 +593,14 @@
       jpd(i1)=ndet
       Iadd_ndet =ndet     ! or ndet ???
 
-      End Function Iadd_ndet 
+      End Function Iadd_ndet
 
 
 !======================================================================
-      Module NDEF_list 
+      Module NDEF_list
 !======================================================================
 !     Containes the overlap factors, as the list of the number of
-!     involved overlap determinants and their positions in the 
+!     involved overlap determinants and their positions in the
 !     common det_list.
 !
 !     KPF(i) - number of det.s in i-th overlap factor
@@ -613,22 +613,22 @@
 
       Integer :: ndef = 0       ! number of determinants
       Integer :: mdef = 0       ! current dimentsion of list
-      Integer :: idef = 2**16   ! supposed max. dimentsion  
-      Integer :: jdef = 2**3    ! average number of det.s 
-      Integer :: kdef = 0       ! dimension of all def.s 
-      Integer :: ldef = 0       ! dimension of all def.s 
-      
+      Integer :: idef = 2**16   ! supposed max. dimentsion
+      Integer :: jdef = 2**3    ! average number of det.s
+      Integer :: kdef = 0       ! dimension of all def.s
+      Integer :: ldef = 0       ! dimension of all def.s
+
       Integer :: ibf = 2**4     ! overlap factors packing basis
 
-      Integer, Allocatable :: KPF(:),IPF(:),NPF(:),JPF(:)   
+      Integer, Allocatable :: KPF(:),IPF(:),NPF(:),JPF(:)
 
-      End MODULE NDEF_list 
+      End MODULE NDEF_list
 
 
 !======================================================================
       Subroutine alloc_ndef (m)
 !======================================================================
-      Use ndef_list 
+      Use ndef_list
 
       Implicit none
       Integer, Intent(in) :: m
@@ -638,7 +638,7 @@
        if(allocated(KPF)) Deallocate(KPF,IPF,NPF,JPF)
        mdef = 0; kdef = 0; ndef =0; ldef = 0
        if(m.lt.0) then
-        mdef=idef; kdef = mdef*jdef 
+        mdef=idef; kdef = mdef*jdef
         Allocate(KPF(mdef),IPF(mdef),NPF(kdef),JPF(mdef))
        end if
       elseif(.not.allocated(KPF)) then
@@ -655,18 +655,18 @@
        if(kdef.lt.ldef+10*jdef) kdef=ldef+10*jdef
        Allocate(ARR(ldef))
        ARR(1:ndef)=KPF(1:ndef); Deallocate(KPF)
-       Allocate(KPF(mdef)); KPF(1:ndef)=ARR(1:ndef) 
+       Allocate(KPF(mdef)); KPF(1:ndef)=ARR(1:ndef)
        ARR(1:ndef)=IPF(1:ndef); Deallocate(IPF)
-       Allocate(IPF(mdef)); IPF(1:ndef)=ARR(1:ndef) 
+       Allocate(IPF(mdef)); IPF(1:ndef)=ARR(1:ndef)
        ARR(1:ndef)=JPF(1:ndef); Deallocate(JPF)
-       Allocate(JPF(mdef)); JPF(1:ndef)=ARR(1:ndef) 
+       Allocate(JPF(mdef)); JPF(1:ndef)=ARR(1:ndef)
        ARR(1:ldef)=NPF(1:ldef); Deallocate(NPF)
-       Allocate(NPF(kdef)); NPF(1:ldef)=ARR(1:ldef) 
+       Allocate(NPF(kdef)); NPF(1:ldef)=ARR(1:ldef)
        Deallocate(ARR)
        write(*,*) 'realloc_ndef : m = ',m,idef
       end if
 
-      End Subroutine alloc_ndef 
+      End Subroutine alloc_ndef
 
 
 !======================================================================
@@ -674,9 +674,9 @@
 !======================================================================
 !     add new overlap determinant to DET_list
 !----------------------------------------------------------------------
-      Use ndef_list 
+      Use ndef_list
 
-      Implicit none 
+      Implicit none
       Integer , Intent(in) :: kd, NP(kd)
       Integer :: i,j,k,m,ip,i1,i2
 
@@ -686,17 +686,17 @@
 
 ! ... check if the same det. is already in the list:
 
-      i1=1; i2=ndef 
-    1 if(i1.gt.i2) go to 2              
+      i1=1; i2=ndef
+    1 if(i1.gt.i2) go to 2
       i=(i1+i2)/2; j=jpf(i)
       if    (kd.lt.kpf(j)) then;  i2 = i - 1
       elseif(kd.gt.kpf(j)) then;  i1 = i + 1
       else
        ip = IPF(j); m = 0
        Do k = 1,kd; ip=ip+1
-        if(NP(k).eq.NPF(ip)) Cycle  
-        if(NP(k).lt.NPF(ip)) then; m = -1; Exit; end if 
-        if(NP(k).gt.NPF(ip)) then; m = +1; Exit; end if 
+        if(NP(k).eq.NPF(ip)) Cycle
+        if(NP(k).lt.NPF(ip)) then; m = -1; Exit; end if
+        if(NP(k).gt.NPF(ip)) then; m = +1; Exit; end if
        End do
        if(m.eq.0) then
         Iadd_ndef  = j;  Return      ! or i ???
@@ -707,7 +707,7 @@
        end if
       end if
       go to 1
-    2 Continue 
+    2 Continue
 
 ! ... Add new determinant:
 
@@ -719,20 +719,20 @@
 
       Do i=ndef,i1+1,-1; jpf(i)=jpf(i-1); End do
       jpf(i1)=ndef
-      Iadd_ndef =ndef     
+      Iadd_ndef =ndef
 
-      End Function Iadd_ndef 
+      End Function Iadd_ndef
 
 
 !======================================================================
       Subroutine Ndet_Idet
 !======================================================================
-!     Add NDET and NDEF lists to the DET and DEF lists. 
+!     Add NDET and NDEF lists to the DET and DEF lists.
 !     Connection is given in IPF array.
 !     The NDET and NDEF lists are then nulified.
 !----------------------------------------------------------------------
       Use ndet_list
-      Use ndef_list 
+      Use ndef_list
 
       Implicit none
       Integer :: i,j,ip,jp,id,kd,ns
@@ -749,9 +749,9 @@
        kd=KPF(id); ip=IPF(id)
        Do i=ip+1,ip+kd
         j=NPF(i)/ibf; ns=mod(NPF(i),ibf); jp=IPD(j)
-        NPF(i) = jp*ibf + ns 
+        NPF(i) = jp*ibf + ns
        End do
-       i = ISORT (kd,NPF(ip+1))                             
+       i = ISORT (kd,NPF(ip+1))
        IPF(id) = Iadd_def (kd,NPF(ip+1))
       End do
       ndef = 0; ldef = 0
@@ -765,12 +765,12 @@
 !     simplify the determinant kn,N1,N2
 !     accoding the orthogonality conditions for radial w.f.'s
 !     kz - number of needed permutations
-!     IDET_SIMP = 0,1,2 with overlap determinant = 0,1 or some value  
+!     IDET_SIMP = 0,1,2 with overlap determinant = 0,1 or some value
 !----------------------------------------------------------------------
       Implicit none
       Integer, Intent(inout) :: kz,kn
       Integer, Intent(inout) :: N1(*),N2(*)
-      Integer :: i,ii,i1,i2, k,kk,k1,k2, m1,m2 
+      Integer :: i,ii,i1,i2, k,kk,k1,k2, m1,m2
       Integer, external :: IORT
 
       if(kn.le.0) Stop ' IDET_SIMP: kn <= 0'
@@ -778,8 +778,8 @@
       IDET_SIMP=0
 !----------------------------------------------------------------------
 !                       Check for a row with only one non-zero element:
-    1  Do i1=1,kn                
-       k=0                      
+    1  Do i1=1,kn
+       k=0
        Do i2=1,kn
         m1=max(N1(i1),N2(i2)); m2=min(N1(i1),N2(i2)); ii=IORT(m1,m2)
         if(ii.ne.0) then
@@ -793,8 +793,8 @@
 !----------------------------------------------------------------------
 !                   Check for a colum with only one non-zero element:
 
-      Do i2=1,kn                
-       k=0                    
+      Do i2=1,kn
+       k=0
        Do i1=1,kn
          m1=max(N1(i1),N2(i2)); m2=min(N1(i1),N2(i2)); ii=IORT(m1,m2)
         if(ii.ne.0) then
@@ -808,7 +808,7 @@
       go to 3
 !-----------------------------------------------------------------------
 !                                                 the case of <k1|k2>=1:
-    2 kn=kn-1                       
+    2 kn=kn-1
       if(kn.eq.0) then
        IDET_SIMP=1; Return
       end if
@@ -818,7 +818,7 @@
       go to 1
 !-----------------------------------------------------------------------
 !                                                  ordering of elements:
-    3 Continue                     
+    3 Continue
 
       Do i1=1,kn-1
        Do i2=i1+1,kn

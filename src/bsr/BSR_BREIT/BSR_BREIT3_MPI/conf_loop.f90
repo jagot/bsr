@@ -1,7 +1,7 @@
 !=======================================================================
       Subroutine Conf_loop
 !=======================================================================
-!     run loop over configurations 
+!     run loop over configurations
 !-----------------------------------------------------------------------
 
       USE bsr_breit
@@ -12,11 +12,11 @@
       USE coef_list,    only: ntrm
       USE symc_list_LS, only: IC_need, JC_need
 
-      Implicit none 
+      Implicit none
       Integer :: i,j,k1,k2,iis,jjs,it,jt,ij,MLT2,MST2, met,ic,jc, is,js
       Integer, External :: IDEF_cme, DEF_ij
 
-      Real(8) :: t1,t2,t3 
+      Real(8) :: t1,t2,t3
 
       Call CPU_time(t1)
 
@@ -71,41 +71,41 @@
 
        if(MLT.ne.min(ILT1,ILT2).or.MST.ne.min(IST1,IST2)) Cycle ! ???
 
-       ij=DEF_ij(ic,jc);  if(JC_need(ij).eq.0) Cycle      
-              
+       ij=DEF_ij(ic,jc);  if(JC_need(ij).eq.0) Cycle
+
 !----------------------------------------------------------------------
 ! ...  define number of terms:
 
        ntrm = 0
-       Do k1=1,kt1; it=IP_kt1(k1) 
-       Do k2=1,kt2; jt=IP_kt2(k2)  
+       Do k1=1,kt1; it=IP_kt1(k1)
+       Do k2=1,kt2; jt=IP_kt2(k2)
         if(iis.eq.jjs.and.it.gt.jt) Cycle;  ntrm = ntrm + 1
-       End do; End do 
-  
+       End do; End do
+
 !----------------------------------------------------------------------
 ! ...  joper and JT_oper:
 
        if(allocated(JT_oper)) Deallocate(JT_oper,CT_oper)
        Allocate(JT_oper(ntrm,noper),CT_oper(ntrm,noper))
 
-       if(IDEF_cme(iis,jjs).eq.0) Cycle 
+       if(IDEF_cme(iis,jjs).eq.0) Cycle
 
 !----------------------------------------------------------------------
 ! ...  calculations:
 
        met = 0
        Do i=1,nprocs-1
-        if(ip_proc(i).ne.0) Cycle 
+        if(ip_proc(i).ne.0) Cycle
         Call Send_det_exp(i,iis,jjs)
-        met = i 
+        met = i
         ip_proc(i) = 1
         Exit
        End do
 
        if(met.eq.0) then
-        Call Get_res(i,is,js)        
+        Call Get_res(i,is,js)
         Call Add_res(nui,is,js)
-        Call Add_it_oper(is,js)          
+        Call Add_it_oper(is,js)
         Call Send_det_exp(i,iis,jjs)
        end if
 
@@ -113,7 +113,7 @@
 
       End do    ! over jc
 
-      Call CPU_time(t2)                
+      Call CPU_time(t2)
 
       write(*,'(a,4i8,2f10.2,a)') 'ic,ic_total,kt,kdt', iis,ic_case,kt1,kdt1, &
         (t2-t3)/60, (t2-t1)/60, ' min.'
@@ -123,13 +123,13 @@
 !----------------------------------------------------------------------
 ! ... finish the calculations:
 
-       Do 
-        if(sum(ip_proc).eq.0) Exit 
-        Call Get_res(j,is,js)        
+       Do
+        if(sum(ip_proc).eq.0) Exit
+        Call Get_res(j,is,js)
         Call Add_res(nui,is,js)
-        Call Add_it_oper(is,js)          
+        Call Add_it_oper(is,js)
         ip_proc(j) = 0
-        Call CPU_time(t2)                
+        Call CPU_time(t2)
         write(*,'(a,2i5,f10.2,a)') 'proc', j, sum(ip_proc), &
           (t2-t1)/60, ' min.'
        End do
@@ -139,7 +139,7 @@
        Do i=1,nprocs-1
         Call Send_det_exp(i,-1,-1)
        End do
-       Call CPU_time(t2)                
+       Call CPU_time(t2)
        write(*,'(a,f10.2,a)') 'conf_loop is done', (t2-t1)/60, ' min.'
 
       End Subroutine Conf_loop

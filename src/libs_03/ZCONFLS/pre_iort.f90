@@ -14,14 +14,14 @@
 !
 !     IORT=0 - orthogonal
 !     IORT=1 - the same (overlap =1)
-!     iort=2 - non-orthogonal  
+!     iort=2 - non-orthogonal
 !---------------------------------------------------------------------
       Use orb_LS
 
       Implicit none
       Integer, intent(in) :: nu,nmax
       Integer :: i1,i2
-     
+
       Do i1=1,nwf
       Do i2=1,i1
 
@@ -44,10 +44,10 @@
         if(KEF(i1).ne.KEF(i2)) then
          if(KEF(i1)*KEF(i2).eq.0) IORT(i1,i2)=0
         else
-         IORT(i1,i2)=0; if(NEF(i1).eq.NEF(i2)) IORT(i1,i2)=1 
+         IORT(i1,i2)=0; if(NEF(i1).eq.NEF(i2)) IORT(i1,i2)=1
          if(nmax.gt.0) then
-          if(nmax.gt.0.and.NEF(i1).gt.nmax) IORT(i1,i2)=2         
-          if(nmax.gt.0.and.NEF(i2).gt.nmax) IORT(i1,i2)=2         
+          if(nmax.gt.0.and.NEF(i1).gt.nmax) IORT(i1,i2)=2
+          if(nmax.gt.0.and.NEF(i2).gt.nmax) IORT(i1,i2)=2
          end if
         end if
 
@@ -56,8 +56,8 @@
       End do
       End do
 
-! ... additional orthogonality conditions 
+! ... additional orthogonality conditions
 
       if(nu.gt.0) Call R_orth(nu)   ! ???
-      
+
       End Subroutine Pre_iort

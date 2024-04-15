@@ -5,12 +5,10 @@
 !     define input angular symmetries and compare with existing ones
 !     (in file with unit 'nub')
 !----------------------------------------------------------------------
-
-      USE param_jj
-
-      USE conf_jj
-      USE symc_list
-      USE symt_list
+      Use dbsr_breit
+      Use conf_jj
+      Use symc_list
+      Use symt_list
 
       Implicit none
 
@@ -35,7 +33,6 @@
       else
        Call Read_symc(nub)
        Call Read_symt(nub)
-!       IT_conf = - IT_conf                ???
       end if
 
 !---------------------------------------------------------------------
@@ -56,12 +53,11 @@
       iterm = Iadd_symt(iconf,no,Jshell,Vshell,Jintra)
 
       go to 1
-    2 Continue     
+    2 Continue
 
-      write(pri,'(a,i5)') ' number of atomic states   = ',NCFG
-      write(pri,'(a,i5)') ' number of configurations  = ',NSYMC
-      write(pri,'(a,i5)') ' number of ang. symmetries = ',NSYMT
-      write(pri,*)
+      write(pri,'(/a,i5 )') 'number of atomic states   = ',NCFG
+      write(pri,'( a,i5 )') 'number of configurations  = ',NSYMC
+      write(pri,'( a,i5/)') 'number of ang. symmetries = ',NSYMT
 
 !----------------------------------------------------------------------
 ! ... define IP_term and IC_term pointers:
@@ -111,13 +107,13 @@
 
        icalc=.FALSE.; IC_need = 0; JC_need = 0; IT_need = 0
        Do ic = 1,nsymc
-        Call Get_symc(ic,Jtotal1,no1,nn1,kn1,ln1,jn1,iq1,in1) 
+        Call Get_symc(ic,Jtotal1,no1,nn1,kn1,ln1,jn1,iq1,in1)
        Do jc = 1,ic
-        Call Get_symc(jc,Jtotal2,no2,nn2,kn2,ln2,jn2,iq2,in2)      
-         iort_c = Iort_conf_jj(2) 
+        Call Get_symc(jc,Jtotal2,no2,nn2,kn2,ln2,jn2,iq2,in2)
+         iort_c = Iort_conf_jj(2)
          if(Jtotal1.ne.Jtotal2) iort_c = 1
 
-         k = 0 
+         k = 0
          Do ik=IC_term1(ic),IC_term2(ic);  it=JP_term(ik)
          Do jk=IC_term1(jc),IC_term2(jc);  jt=JP_term(jk)
            ij = DEF_ij(it,jt)
@@ -138,18 +134,12 @@
        Do it = 1,nsymt; k = 0
         Do jt = 1,nsymt
          ij=DEF_ij(it,jt); if(IT_done(ij).ne.0) Cycle; k=1; Exit
-        End do         
+        End do
         IT_need(it) = k
        End do
 
       end if
 
-      if(icalc) then
-       write(*,'(/a,a4/)')   'Need of additional calculations --> yes '
-      else
-       write(*,'(/a,a4/)')   'Need of additional calculations --> no '
-      end if
-      
       Deallocate(IT_stat)
 
       End Subroutine read_conf_jj

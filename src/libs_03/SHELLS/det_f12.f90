@@ -3,27 +3,27 @@
 !=======================================================================
 ! determinamt id and corresponding ML,MS for subshell f12
 !-----------------------------------------------------------------------
- 
+
   Implicit none
- 
+
   Integer, intent(in)  :: id
   Integer, intent(out) :: ML,MS,Idet(*)
- 
+
   Integer, parameter :: iq_f12 =  12
   Integer, parameter :: kd_f12 =  91
- 
+
   Integer :: Idet_f12(iq_f12,kd_f12)
- 
+
   Integer :: ML_f12(kd_f12)
   Integer :: MS_f12(kd_f12)
- 
+
   if(id.le.0.or.id.gt.kd_f12) Stop "Det_f12: index id is out of range"
- 
+
   ML = ML_f12(id)
   MS = MS_f12(id)
- 
+
   Idet (1:iq_f12)= Idet_f12(:,id)
- 
+
 
   Data Idet_f12( 1,:)/ &
    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, &
@@ -94,5 +94,5 @@
   1, -1,  1,  1,  3,  1, -1,  1, -1,  1,  1,  3,  1,  3,  1, -1,  1, -1,  1, -1,  1,  1,  3,  1,  3,  1,  3,  1, -1,  1, -1,  1, &
  -1,  1, -1,  1,  1,  3,  1,  3,  1,  3,  1,  3,  1, -1,  1, -1,  1, -1,  1, -1,  1, -1,  1,  1,  3,  1,  3,  1,  3,  1,  3,  1, &
   3,  1, -1,  1, -1,  1, -1,  1, -1,  1, -1,  1, -1,  1,  1,  3,  1,  3,  1,  3,  1,  3,  1,  3,  1,  3,  1  /
- 
+
   End Subroutine Det_f12

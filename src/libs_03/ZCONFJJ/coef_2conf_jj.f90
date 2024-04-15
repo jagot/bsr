@@ -3,24 +3,38 @@
                                no2,nn2,ln2,jn2,iq2,Jshell2,Vshell2,Jintra2,  &
                                mcoef,ncoef,icoefs,coefs)
 !=============================================================================
-!     compute the angular coefficients for 2 different atomic states
+!     compute the angular coefficients between two atomic states
 !-----------------------------------------------------------------------------
-      Implicit none 
+!     Input:
+!
+!      no1,ln1,jn1,iq1,Jshell1,Vshell1,Jintra1 - description of the first state
+!      no2,ln2,jn2,iq2,Jshell2,Vshell2,Jintra2 - description of the second state
+!
+!      mcoef - max. number of angula coefficients
+!
+!     Output:
+!
+!      ncoef - number of angular coefficients
+!      icoefs(1:5,1:ncoef) - description of Slater integrals (k,a,b,a'.b')
+!      coefs(1:ncoef) - corresponding angular coefficients
+!-----------------------------------------------------------------------------
+      Implicit none
 
-! ... input-output:
+! ... input:
 
       Integer, intent(in) :: no1,nn1(no1),ln1(no1),jn1(no1),iq1(no1), &
                              Jshell1(no1),Vshell1(no1),Jintra1(no1),  &
                              no2,nn2(no2),ln2(no2),jn2(no2),iq2(no2), &
                              Jshell2(no2),Vshell2(no2),Jintra2(no2),  &
                              mcoef
+! ... output:
+
       Integer ::  ncoef,icoefs(5,mcoef)
       Real(8) ::  coefs(mcoef)
-      Real(8), allocatable :: coef(:,:,:,:,:)
 
 ! ... determinant expansion:
 
-      Integer :: kdt, kdt1, kdt2 
+      Integer :: kdt, kdt1, kdt2
       Integer, allocatable :: IP_det(:,:), IP_det1(:,:), IP_det2(:,:)
       Real(8), allocatable :: C_det(:), C_det1(:), C_det2(:)
       Real(8) :: CC_det, eps_C = 1.d-7
@@ -31,6 +45,8 @@
       Integer, allocatable :: ip1(:),ip2(:)
       Integer, external    :: mj_value
 
+      Real(8), allocatable :: coef(:,:,:,:,:)
+
 ! ... initialize arrays:
 
       ncoef = 0
@@ -39,7 +55,7 @@
 
 ! ... determinant expansions:
 
-      Call Det_expn_jj (no1,ln1,jn1,iq1,Jshell1,Vshell1,Jintra1)  
+      Call Det_expn_jj (no1,ln1,jn1,iq1,Jshell1,Vshell1,Jintra1)
       kdt1=kdt
 
       Allocate(C_det1(kdt1), IP_det1(ne,kdt1))
@@ -47,7 +63,7 @@
       IP_det1(1:ne,1:kdt1) = IP_det(1:ne,1:kdt1)
 
 
-      Call Det_expn_jj (no2,ln2,jn2,iq2,Jshell2,Vshell2,Jintra2)  
+      Call Det_expn_jj (no2,ln2,jn2,iq2,Jshell2,Vshell2,Jintra2)
       kdt2=kdt
 
       Allocate(C_det2(kdt2), IP_det2(ne,kdt2))
@@ -62,12 +78,12 @@
       k=1; Do i=1,no1; ip1(k:k+iq1(i)-1)=i; k=k+iq1(i); End do
       k=1; Do i=1,no2; ip2(k:k+iq2(i)-1)=i; k=k+iq2(i); End do
 
-! ... calculations:                                  
+! ... calculations:
 
       kmax = (maxval(jn1(1:no1)) + maxval(jn2(1:no2)))/2
 
       if(allocated(coef)) Deallocate(coef)
-      Allocate(coef(no1,no1,no2,no2,-1:kmax)) 
+      Allocate(coef(no1,no1,no2,no2,-1:kmax))
       coef = 0.d0
 
       Do kd1 = 1,kdt1
@@ -75,12 +91,12 @@
         CC_det = C_det1(kd1) * C_det2(kd2);  Call me_det
       End do;  End do
 
-! ... final 
+! ... final
 
       ncoef = 0
       Do i1=1,no1; Do i2=1,no1
       Do j1=1,no2; Do j2=1,no2
-      Do k=0,kmax 
+      Do k=0,kmax
 
        if(abs(coef(i1,i2,j1,j2,k)).lt.eps_c) Cycle
 
@@ -93,9 +109,9 @@
        icoefs(4,ncoef)=j1
        icoefs(5,ncoef)=j2
 
-      End do 
-      End do; End do 
-      End do; End do 
+      End do
+      End do; End do
+      End do; End do
 
 ! ... one-electron integrals:
 
@@ -109,26 +125,26 @@
        icoefs(3,ncoef)=i
        icoefs(4,ncoef)=j
        icoefs(5,ncoef)=j
-      End do; End do 
+      End do; End do
 
 CONTAINS
 
 !======================================================================
-      Subroutine Det_expn_jj(no, ln,jn,iq,Jshell,Vshell,Jintra)  
+      Subroutine Det_expn_jj(no, ln,jn,iq,Jshell,Vshell,Jintra)
 !======================================================================
 !     procedure of exaustion of all possible determinants for given
 !     configurations. The determinants and their coefficients
 !     are recoded on unit 'nua'
 !
-!     Calls: Det_sh_jq, DETC_jq, Clebsh2, Ndets_jq, Jterm, mj_value 
+!     Calls: Det_sh_jq, DETC_jq, Clebsh2, Ndets_jq, Jterm, mj_value
 !----------------------------------------------------------------------
-      Implicit none 
+      Implicit none
 
       Integer, intent(in) :: no,ln(no),jn(no),iq(no), &
                              Jshell(no),Vshell(no),Jintra(no)
 
       Integer :: i,j,k, mkdt, JW,JQ
-      Integer, external :: Ndets_jq, Jterm, mj_value 
+      Integer, external :: Ndets_jq, Jterm, mj_value
       Real(8) :: C
       Real(8), external :: DETC_jq, Clebsh2
 
@@ -157,7 +173,7 @@ CONTAINS
 !--------------------------------------------------------------------
 ! ... exausting all possible determinants:
 
-      kdt=0; i=1; nd(i)=1              
+      kdt=0; i=1; nd(i)=1
     1 Call DET_sh_jq(jn(i),iq(i),nd(i),MJs(i),Idet(ipn(i)))
 
       if(i.eq.1) then
@@ -196,9 +212,9 @@ CONTAINS
 
     3 Continue
 
-      Do k=1,kdt; Do i=1,ne 
+      Do k=1,kdt; Do i=1,ne
        j=IP_det(i,k); IP_det(i,k)=mj_value(j)
-      End do; End do 
+      End do; End do
 
       End Subroutine Det_expn_jj
 
@@ -207,7 +223,7 @@ CONTAINS
       Subroutine me_det
 !======================================================================
 !     find the possible interaction orbitals in two determinants and
-!     call the subroutines to calculate m.e. between possible 
+!     call the subroutines to calculate m.e. between possible
 !     combinations of nj-orbitals (me_ee)
 !----------------------------------------------------------------------
       Implicit none
@@ -224,11 +240,11 @@ CONTAINS
         if(nn1(j1).ne.nn2(j2)) Cycle
         if(ln1(j1).ne.ln2(j2)) Cycle
         if(jn1(j1).ne.jn2(j2)) Cycle
-        if(IP_det1(i1,kd1).ne.IP_det2(i2,kd2)) Cycle 
+        if(IP_det1(i1,kd1).ne.IP_det2(i2,kd2)) Cycle
         ii(i1)=i2; jj(i2)=i1
        End do; End do
 
-       idif = 0;  Do i=1,ne; if(ii(i).eq.0) idif=idif+1; End do 
+       idif = 0;  Do i=1,ne; if(ii(i).eq.0) idif=idif+1; End do
        jdif = 0;  Do i=1,ne; if(jj(i).eq.0) jdif=jdif+1; End do
 
        if(idif.ne.jdif) Stop 'me_det: idif <> jdif'
@@ -246,14 +262,14 @@ CONTAINS
         Do i1=1,ne-1;  j1=ii(i1)
         Do i2=i1+1,ne; j2=ii(i2)
          Call me_ee(i1,i2,min(j1,j2),max(j1,j2))
-        End do; End do      
+        End do; End do
 
        Case(1)
 
         Do i = 1,ne; if(ii(i).ne.0) Cycle; i1=i; Exit; End do
         Do j = 1,ne; if(jj(j).ne.0) Cycle; j1=j; Exit; End do
 
-        i=ip1(i1); j=ip2(j1) 
+        i=ip1(i1); j=ip2(j1)
         if(IP_det1(i1,kd1).eq.IP_det2(j1,kd2).and. &
            jn1(i).eq.jn2(j).and.ln1(i).eq.ln2(j)) then
          coef(i,i,j,j,-1) = coef(i,i,j,j,-1) + CC_det * (-1)**(i1+j1)
@@ -295,7 +311,7 @@ CONTAINS
 
       n1=ip1(i1); n2=ip1(j1); n3=ip2(i2); n4=ip2(j2)
 
-      Call Check_boef(ln1(n1),jn1(n1),IP_det1(i1,kd1), & 
+      Call Check_boef(ln1(n1),jn1(n1),IP_det1(i1,kd1), &
                       ln1(n2),jn1(n2),IP_det1(j1,kd1), &
                       ln2(n3),jn2(n3),IP_det2(i2,kd2), &
                       ln2(n4),jn2(n4),IP_det2(j2,kd2))
@@ -310,7 +326,7 @@ CONTAINS
        else
         k = -k - 1;  if(k.gt.kmax) Cycle
         coef(n1,n2,n4,n3,k) = coef(n1,n2,n4,n3,k) + Boef(ib)*CC_det*kz
-       end if        
+       end if
       End do
 
       End Subroutine me_ee

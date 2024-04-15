@@ -5,7 +5,7 @@
 !       l - angular momentum
 !       z - nuclear charge
 !       k - wave number
-!      We usually need the difference two Coulomb phases, so let define 
+!      We usually need the difference two Coulomb phases, so let define
 !      Coulomb phase shift as difference from sigma(0). Then
 !      sigma(l+1)=sigma(l) + tg^-1( (z/k) / (l+1))  with sigma(0)=0
 !-------------------------------------------------------------------------
@@ -15,13 +15,13 @@
        Integer :: i
        Real(8) :: q,s
 
-       Coulomb_phase = 0.d0 
+       Coulomb_phase = 0.d0
        if(l.le.0) Return
-       if(z.eq.0.d0) Return         
+       if(z.eq.0.d0) Return
        q = z/k
-       Do i=1,l; s=DFLOAT(i)       
+       Do i=1,l; s=DFLOAT(i)
         Coulomb_phase = Coulomb_phase + DATAN2(q,s)
        End do
-       
+
        End Function Coulomb_phase  !  do not checked yet
 

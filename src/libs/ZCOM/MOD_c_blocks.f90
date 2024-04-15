@@ -1,21 +1,21 @@
 !======================================================================
       Module c_blocks
 !======================================================================
-! ... contains a set of coefficients with four identifiers 
+! ... contains a set of coefficients with four identifiers
 ! ... (k1,k2,k3,k4) and one pointer (ipt), devided in blocks;
-! ... each block contain data for given type    
+! ... each block contain data for given type
 !
 ! ... internal procedures: Alloc_c_block   (ntype,...)
 !                          Add_coef_cblock (itype,C,j1,j2,j3,j4)
 !                          Add_c_block     (ip,jp,C,j1,j2,j3,j4)
 !                          Collect_coef    (itype)
 !                          Merge_c_block   (nn, ip, jp, nc)
-! ... external calls:      Do_coef         (itype) 
+! ... external calls:      Do_coef         (itype)
 !----------------------------------------------------------------------
-      Implicit none 
+      Implicit none
 
       Integer :: ncdata = 0             ! number of coefficients
-      Real(8), allocatable :: CDATA(:)  ! coefficient values    
+      Real(8), allocatable :: CDATA(:)  ! coefficient values
 
 ! ... their attributes:
 
@@ -23,7 +23,7 @@
 
 ! ... default dimension limits:
 
-      Integer :: nblock  =   1000         ! number of blocks in c_data       
+      Integer :: nblock  =   1000         ! number of blocks in c_data
       Integer :: mblock  =   2000         ! size of blocks
       Integer :: kblock  =    100         ! max.nb for given type
       Integer :: ntype   =    100         ! number of integral types
@@ -32,22 +32,22 @@
 
 ! ... tolerence parameters:
 
-      Real(8) :: eps_cdata  = 1.d-10      ! tolerance for coefficients	                               
+      Real(8) :: eps_cdata  = 1.d-10      ! tolerance for coefficients
 
-! ... pointer on first(last) element in given block 
+! ... pointer on first(last) element in given block
 
-      Integer, allocatable :: ipblk(:), ipi(:)   
-      Integer, allocatable :: jpblk(:), ipj(:)  
+      Integer, allocatable :: ipblk(:), ipi(:)
+      Integer, allocatable :: jpblk(:), ipj(:)
 
 ! ... current block for given type:
 
-      Integer, allocatable :: iblk(:)    
+      Integer, allocatable :: iblk(:)
 
-! ... number of blocks for given type: 
+! ... number of blocks for given type:
 
       Integer, allocatable :: nblk(:)
-    
-! ... chain ponter for given type:       
+
+! ... chain ponter for given type:
 
       Integer, allocatable :: kblk(:,:)
 
@@ -57,10 +57,10 @@
 !======================================================================
       Subroutine alloc_c_blocks(nt,mb,nb,kb,eps_c)
 !======================================================================
-!     allocate (deallocate) arrays in module c_blocks 
+!     allocate (deallocate) arrays in module c_blocks
 !----------------------------------------------------------------------
       Use c_blocks
-   
+
       Implicit none
       Integer, intent(in) :: nt,mb,nb,kb
       Real(8), intent(in) :: eps_c
@@ -68,7 +68,7 @@
 
       if(allocated(CDATA)) Deallocate(CDATA,K1,K2,K3,K4,IPT, &
                            ipblk,jpblk,ipi,ipj,iblk,nblk,kblk)
-      mem_cdata = 0.0 
+      mem_cdata = 0.0
       if(nt.lt.0)  Return
 
       if(nt .gt. 0) ntype   =  nt
@@ -84,7 +84,7 @@
                iblk(ntype),nblk(ntype), kblk(ntype,nblock) )
 
       m = 7*m + 4*nblock + (2+nblock)*ntype
-      mem_cdata = m * 4.0 / (1024 * 1024) 
+      mem_cdata = m * 4.0 / (1024 * 1024)
 
 ! ... initilize all blocks:
 
@@ -106,10 +106,10 @@
 !======================================================================
       Subroutine realloc_c_blocks(nt)
 !======================================================================
-!     re-allocate  arrays in module c_blocks 
+!     re-allocate  arrays in module c_blocks
 !----------------------------------------------------------------------
       Use c_blocks
-   
+
       Implicit none
       Integer, intent(in) :: nt
       Integer, allocatable :: iar(:), jar(:,:)
@@ -124,10 +124,10 @@
       nblk(1:ntype) = iar
       Deallocate(iar)
 
-      Allocate(jar(ntype,nblock))           
+      Allocate(jar(ntype,nblock))
       jar = kblk; Deallocate(kblk); Allocate(kblk(nt,nblock)); kblk=0
       kblk(1:ntype,:) = jar
-      Deallocate(jar) 
+      Deallocate(jar)
 
 ! ... assign one block to new type:
 
@@ -169,7 +169,7 @@
 
       ntype = nt
       m = 7*mblock*nblock + 4*nblock + (2+nblock)*ntype
-      mem_cdata = m * 4.0 / (1024 * 1024) 
+      mem_cdata = m * 4.0 / (1024 * 1024)
 
       End Subroutine realloc_c_blocks
 
@@ -185,16 +185,16 @@
       Real(8), intent(in) :: C
       Integer, intent(in) :: j1,j2,j3,j4,itype
       Integer :: i,k,m,n,ip,jp,jtype, m1,m2,m3
- 
+
       if(itype.gt.ntype)  Call realloc_c_blocks(ntype+10)
 
-! Call Decode_type(itype,m1,m2,m3) 
+! Call Decode_type(itype,m1,m2,m3)
 ! write(81,*) 'Add_coef_cblock',itype, m1,m2,m3
 
 ! ... add coefficient to list:
 
-      i = iblk(itype); ip = ipblk(i); jp = jpblk(i) 
-      Call Add_c_block(ip,jp,C,j1,j2,j3,j4)                    
+      i = iblk(itype); ip = ipblk(i); jp = jpblk(i)
+      Call Add_c_block(ip,jp,C,j1,j2,j3,j4)
       jpblk(i) = jp
 
 ! ... check if the block full:
@@ -214,7 +214,7 @@
        End do
        if(m.ne.0) Return
       end if
-     
+
 ! ... everything is full - it is time to generate matrix;
 ! ... we do it for type with biggest occupation
 
@@ -233,8 +233,8 @@
        m = 1; Exit
       End do
       if(m.eq.0) Stop ' Add_coef_cblock: problems with new block '
-      
-      End Subroutine Add_coef_cblock 
+
+      End Subroutine Add_coef_cblock
 
 
 
@@ -253,13 +253,13 @@
 
       if(jp.lt.ip) then
        cdata(ip)=C; k1(ip)=j1; k2(ip)=j2; k3(ip)=j3; k4(ip)=j4
-       jp=ip; Return 
-      end if       
+       jp=ip; Return
+      end if
 
 ! ... search position (k) for new integral
 
       k=ip; l=jp;
-    1 if(k.gt.l) go to 2              
+    1 if(k.gt.l) go to 2
       m=(k+l)/2
       if(m.lt.ip.or.m.gt.jp) Stop 'Promlems with m in Add_c_block'
       if    (j1.lt.K1(m)) then;       l = m - 1
@@ -280,7 +280,7 @@
        end if
       end if
       go to 1
-    2 Continue 
+    2 Continue
 
 ! ... shift the rest of data up:
 
@@ -310,7 +310,7 @@
 !     nc    - number of result coeff's
 !     all coefficients < EPS_cdata are ignored
 !----------------------------------------------------------------------
-      Use c_blocks 
+      Use c_blocks
 
       Implicit none
       Integer :: nn,nc
@@ -328,12 +328,12 @@
 ! ...  main loop ...
 
     1 Continue
-                             
+
 ! ...  compare integrals in different blocks and merge the coefficients
 ! ...  in case of equal integrals (nn > 1)
 
-       Do ii=1,nn-1;  if(JP(ii).le.0) Cycle; i=IP(ii) 
-        Do jj=ii+1,nn; if(JP(jj).le.0) Cycle; j=IP(jj) 
+       Do ii=1,nn-1;  if(JP(ii).le.0) Cycle; i=IP(ii)
+        Do jj=ii+1,nn; if(JP(jj).le.0) Cycle; j=IP(jj)
          if(K1(i).ne.K1(j)) Cycle
          if(K2(i).ne.K2(j)) Cycle
          if(K3(i).ne.K3(j)) Cycle
@@ -343,7 +343,7 @@
         End do
        End do
 
-! ...  choose the minimum K1, then K2, then K3, then K4 
+! ...  choose the minimum K1, then K2, then K3, then K4
 
        j=IP(mm)
        Do m=1,nn; if(JP(m).eq.0) Cycle; i=IP(m)
@@ -361,7 +361,7 @@
         end if
        End do
 
-! ...  mark the chosen coefficient 
+! ...  mark the chosen coefficient
 
        if(abs(CDATA(j)).gt.eps_cdata) then; nc=nc+1; IPT(nc)=IP(mm); end if
 
@@ -382,7 +382,7 @@
       Subroutine Collect_coef(itype)
 !======================================================================
 !     merge data and generate the interaction matrix for given type
-!     External call: gen_matrix 
+!     External call: gen_matrix
 !----------------------------------------------------------------------
       Use c_blocks, nc => ncdata
 
@@ -391,29 +391,29 @@
       Integer :: i,j,k,n
 
 ! ... prepare the data:
-       
-      n = nblk(itype)                    ! number of blocks  
+
+      n = nblk(itype)                    ! number of blocks
       i = kblk(itype,1)                  ! first block
-      if(n.eq.1.and.jpblk(i).le.0) n=0   
+      if(n.eq.1.and.jpblk(i).le.0) n=0
 
       if(n.le.0) then                    ! nothing to do
-       nc=0; Return  
+       nc=0; Return
 
       elseif(n.eq.1) then                ! simple case - one block
        nc = jpblk(i)-ipblk(i) + 1
        j = ipblk(i)-1
        Do i = 1,nc;  IPT(i)=j+i;  End do
 
-      else                               ! need merging data from 
+      else                               ! need merging data from
                                          ! different blocks
-       Do i = 1,n               
+       Do i = 1,n
         j = kblk(itype,i)
-        ipi(i) = ipblk(j)  
+        ipi(i) = ipblk(j)
         ipj(i) = jpblk(j)
        End do
        Call Merge_c_block(n, ipi, ipj, nc)
 
-       ! .. release the blocks:       
+       ! .. release the blocks:
 
        Do i=1,n; jpblk(kblk(itype,i))=-1;  End do
 
@@ -434,7 +434,7 @@
       Real(8) Function C_blocks_occupation()      Result(S)
 !======================================================================
       Use c_blocks
-   
+
       Implicit none
       Integer :: i
 
@@ -444,7 +444,7 @@
        S = S + jpblk(i)-ipblk(i)
       End do
 
-      S = S / (mblock*nblock)  
+      S = S / (mblock*nblock)
 
       End Function C_blocks_occupation
 

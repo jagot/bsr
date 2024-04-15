@@ -15,10 +15,10 @@
       write(nuc,'(/a/)') 'Derived orth. conditions:'
 
 ! ... record the orth. conditions with indication of main compensation
-! ... configuration (see pert_comp.nnn for total coefficients)      
+! ... configuration (see pert_comp.nnn for total coefficients)
 
       Do ich=1,nch;  ii = ipch(ich); it = iptar(ich)
-       irec = 0 
+       irec = 0
        Do io = 1,nphys_sub; jj = jp_sub(io)
         if(KEF(ii).ne.KEF(jj)) Cycle
         if(Iort(ii,jj).eq.0) then

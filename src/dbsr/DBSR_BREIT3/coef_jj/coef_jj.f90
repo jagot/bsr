@@ -4,64 +4,64 @@
 !               C O P Y R I G H T -- 2016
 !
 !     Written by:   Oleg Zatsarinny,   email: oleg_zoi@yahoo.com
-!                         
+!
 !======================================================================
-!     print (to file coef_jj.tab) the integral coefficients for two 
+!     print (to file coef_jj.tab) the integral coefficients for two
 !     selected states in cfg.inp according to int_bnk file
 !
 !     coef_jj [name] cfg=  bnk=  tab=  jort=  ic=  jc=  mbreit=
 !----------------------------------------------------------------------
-      Use orb_jj;    Use symc_list;   Use det_list  
-      Use conf_jj;   Use symt_list;   Use def_list  
-                                       
+      Use orb_jj;    Use symc_list;   Use det_list
+      Use conf_jj;   Use symt_list;   Use def_list
+
       Implicit real(8) (A-H,O-Z)
 
       Character(40) :: name = ' '
 
 ! ... c-file:
       Integer :: nuc=1;  Character(40) :: AF_c = 'cfg.inp'
-                         
+
 ! ... data bank:
       Integer :: nub=2;  Character(40) :: AF_b = 'int_bnk'
 
 ! ... output:
       Integer :: nur=7;  Character(40) :: AF_tab = 'coef_jj.tab'
-                         
+
 ! ... scratch files:
       Integer :: nui=11  ! intermediate results
 
 ! ... tolerence for coefficients:
-      Real(8) :: eps_c = 1.d-7      
+      Real(8) :: eps_c = 1.d-7
 
 ! ... Breit interaction:
-      Integer :: mbreit = 0 
+      Integer :: mbreit = 0
 
 !----------------------------------------------------------------------
 !                                                                files:
       Call Read_name(name)
 
       if(name == '?') then
-       write(*,*) 
-       write(*,*) 'Call coef_jj as:' 
-       write(*,*) 
-       write(*,*) 'coef_jj name cfg= bnk= tab=  jort=  ic=  jc= mbreit=' 
-       write(*,*) 
+       write(*,*)
+       write(*,*) 'Call coef_jj as:'
+       write(*,*)
+       write(*,*) 'coef_jj name cfg= bnk= tab=  jort=  ic=  jc= mbreit='
+       write(*,*)
        write(*,*) 'all paramters are optional:'
-       write(*,*) 
-       write(*,*) 'cfg  -  input c-file [cfg.inp] or name.c' 
+       write(*,*)
+       write(*,*) 'cfg  -  input c-file [cfg.inp] or name.c'
        write(*,*) 'bnk  -  input bank-file [int_bnk] or name.bnk'
        write(*,*) 'tab  -  output coef.s [coef_jj.tab] or name.coef'
-       write(*,*) 
+       write(*,*)
        write(*,*) 'if name is given: cfg -> name.c; bnk -> name.bnk; tab -> name.tab '
-       write(*,*) 
+       write(*,*)
        write(*,*) 'ic   -  LHS state [0, all LHS states]'
        write(*,*) 'jc   -  RHS state [0, all RHS states]'
-       write(*,*) 
+       write(*,*)
        write(*,*) 'jort -  orbital orthogonality mode [-1]'
        write(*,*) '        =-1, full orthogonality '
        write(*,*) '        =+1, partial orthogonality '
        write(*,*) '        = 0, full non=orthogonality '
-       write(*,*) 
+       write(*,*)
        write(*,*) 'mbreit[0] - if = 1, Breit integrals are included'
        Stop ' '
       end if
@@ -84,7 +84,7 @@
 
 ! ... output coef.tab file:
       Call Read_aarg('tab',AF_tab)
-      Open(nur,file=AF_tab)       
+      Open(nur,file=AF_tab)
 
 ! ... scratch file:
       Open(nui,form='UNFORMATTED',status='SCRATCH')
@@ -113,7 +113,7 @@
 ! ... done pointer:
       if(allocated(IT_done)) Deallocate(IT_done)
                              Allocate(IT_done(nsymt*(nsymt+1)/2))
-      IT_done=0    
+      IT_done=0
       Call Read_done(nub)
 
 ! ... determinants:
@@ -184,7 +184,7 @@
 
       End do; End do
 
- Contains 
+ Contains
 
 !======================================================================
       Subroutine SUB1
@@ -240,7 +240,7 @@
       j3=IP_orb(i3+ip2); j4=IP_orb(i4+ip2)
 
       Call Jsym_int(icase,j1,j2,j3,j4)
-      int = Iadd_int(icase,kpol,j1,j2,j3,j4) 
+      int = Iadd_int(icase,kpol,j1,j2,j3,j4)
 
 !----------------------------------------------------------------------
 ! ... find determinant overlaps for specific orbitals
@@ -259,14 +259,14 @@
        mm = IDET_SIMP(kz,nd,NP1,NP2,mwf,IORT)
 
        if(mm.eq.1) Cycle; if(mm.eq.0) go to 10
-       MP(1:nd) = NP1(1:nd)*ibd+NP2(1:nd) 
+       MP(1:nd) = NP1(1:nd)*ibd+NP2(1:nd)
        jd = Iadd_ndet(nd,MP)
        md = md + 1; MP1(md) = jd; MP2(md) = iext
 
-      End do 
-    
+      End do
+
        idf = 0
-       if(md.gt.0) then 
+       if(md.gt.0) then
         MP(1:md) = MP1(1:md)*ibf + MP2(1:md)
         idf = Iadd_ndef(md,MP)
        end if
@@ -275,19 +275,19 @@
 !----------------------------------------------------------------------
       C = C * (-1)**kz
 
-      if(icase.le.1) then 
+      if(icase.le.1) then
        Call Iadd_zoef(C,int,idf)
        go to 10
       end if
 
       m = 1
-      l1=lef(j1);l2=lef(j2);l3=lef(j3);l4=lef(j4) 
+      l1=lef(j1);l2=lef(j2);l3=lef(j3);l4=lef(j4)
       if(mod(l1+l3+kpol,2).ne.0) m=0
       if(mod(l2+l4+kpol,2).ne.0) m=0
       if(m.eq.1) Call Iadd_zoef(C,int,idf)
 
       icase = 3
-      k1=kef(j1);k2=kef(j2);k3=kef(j3);k4=kef(j4) 
+      k1=kef(j1);k2=kef(j2);k3=kef(j3);k4=kef(j4)
       Do k = kpol-1,kpol+1
         if(k.lt.0) Cycle
         if(SMU(k1,k2,k3,k4,kpol,k,S).eq.0.d0) Cycle
@@ -300,7 +300,7 @@
         int = Iadd_int(icase,k,j4,j1,j2,j3); Call Iadd_zoef(S(6),int,idf)
         int = Iadd_int(icase,k,j3,j2,j1,j4); Call Iadd_zoef(S(7),int,idf)
         int = Iadd_int(icase,k,j2,j3,j4,j1); Call Iadd_zoef(S(8),int,idf)
-      End do  
+      End do
       go to 10
 
    20 Continue
@@ -315,7 +315,7 @@
 
 
       End ! program COEF_JJ
- 
+
 
 !======================================================================
       Subroutine SORT_int
@@ -391,7 +391,7 @@
       write(nu,'(/70(''=''))')
       write(nu,'(12x,''< state'',i2,'' || (H-E) || state'',i2,''>'')') &
         ic1,ic2
-      write(nu,'(70(''=''))') 
+      write(nu,'(70(''=''))')
       Call Print_conf_jj (nu,ic1,0.d0);  write(nu,'(70(''-''))')
       Call Print_conf_jj (nu,ic2,0.d0);  write(nu,'(70(''-''))')
 
@@ -411,7 +411,7 @@
 
       write(nu,'(/12x,'' One-electron integrals:''/)')
       Do i=1,nzoef; Call Pri_coef1(nu,ipt(i),1,eps_c); End do
-       
+
 ! ... two-electron Coulomb integrals:
 
       write(nu,'(/12x,'' Two-electron integrals:''/)')
@@ -427,7 +427,7 @@
       write(nu,'(70(''-'')/)')
 
       End Subroutine Pri_coef
- 
+
 
 !======================================================================
       Subroutine Pri_coef1 (nu,ii,met,eps_c)
@@ -476,7 +476,7 @@
        write(A(1:29),'(a1,i2,a2,4(a5,a1))') &
              AI(int),k,' (',EL1,',',EL2,';',EL3,',',EL4,')'
        ia=29
- 
+
       Case default
 
        Stop ' Pri_coef1: unknown case'
@@ -489,7 +489,7 @@
       if(idf.gt.0) then
        kd=KPF(idf);  ip=IPF(idf)
        Do i=1,kd
-        ns=mod(NPF(ip+i),ibf); ni=NPF(ip+i)/ibf; 
+        ns=mod(NPF(ip+i),ibf); ni=NPF(ip+i)/ibf;
         nd=KPD(ni); np=IPD(ni)
         ia=ia+1; A(ia:ia)='<'
         Do j=1,nd
@@ -533,7 +533,7 @@
 !     conditions from c-file (unit nu)
 !     iort(i,j) = 0    -  for orthogonal orbitals i,j
 !     iort(i,j) = 2    -  for non-orthogonal orbitals i,j
-!     iort(i,j) = 1    -  for the normalized orbitals 
+!     iort(i,j) = 1    -  for the normalized orbitals
 !     OPTIONS:
 !     JORT<0 - full orthogonality
 !     JORT=0 - full non-orthogonality
@@ -545,21 +545,21 @@
 
       Implicit none
       Integer :: i1,i2
-      
+
       Do i1=1,nwf
       Do i2=1,i1
        if(KEF(i1).ne.KEF(i2)) Cycle
        if(JORT.lt.0) then             ! full orthogonality
         if(i1.eq.i2) Call Iadd_orth(i1,i2,1)
        elseif(JORT.eq.0) then         ! full non-orthogonality
-        Call Iadd_orth(i1,i2,2) 
+        Call Iadd_orth(i1,i2,2)
        elseif(JORT.gt.0) then         ! partial orthogonality
         if(IEF(i1).eq.IEF(i2)) then
-         if(NEF(i1).eq.NEF(i2)) Call Iadd_orth(i1,i2,1)          
+         if(NEF(i1).eq.NEF(i2)) Call Iadd_orth(i1,i2,1)
         elseif(IEF(i1)*IEF(i2).eq.0) then
          Cycle
         else
-         Call Iadd_orth(i1,i2,2) 
+         Call Iadd_orth(i1,i2,2)
         end if
        end if
       End do

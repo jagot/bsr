@@ -11,12 +11,11 @@
 '     santation of radial orbitals.                                     ',&
 '-----------------------------------------------------------------------',&
 '     INPUT:  command-line arguments                                    ',&
-'             name.inp_ci - input parameters (optional)                 ',&
 '             name.c      - list of configurations in the GRASP format  ',&
 '             name.bsw    - radial functions in B-spline representation ',&
 '             name.bnk    - data bank for angular coefficients          ',&
-'                           (after program dbsr_breit)                  ',&
-'     OUTPUT: name.log_ci - running information                         ',&
+'                           (after program DBSR_BREIT)                  ',&
+'     OUTPUT: name.ci     - running information                         ',&
 '             name.j      - expansions and energies for CI solutions    ',&
 '             name.debug  - debug information (optional)                ',&
 '---------------------------------------------------------------------- ',&
@@ -42,7 +41,7 @@
 '     dbsr_ci name jmin=1 jmax=3 mbreit=0 msol=1                        ',&
 '---------------------------------------------------------------------- ',&
 '                                                                       '
-      Stop                          
-                                    
-      End Subroutine inf_dbsr_ci       
-                                     
+      Stop
+
+      End Subroutine inf_dbsr_ci
+

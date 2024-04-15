@@ -1,7 +1,7 @@
 !======================================================================
       Subroutine LAP_DSYGVX(job,UPLO,n,m,A,C,eval,k,info)
 !======================================================================
-!     Call LAPACK procedure DSYGVX to obtain first k eigenvalues 
+!     Call LAPACK procedure DSYGVX to obtain first k eigenvalues
 !     (eval) and eigenvectors (A) for generalized problem  A S = E C S
 !
 !     job = 'N' - compute eigenvalues only
@@ -31,7 +31,7 @@
 
       Call DSYGVX(1,job,'I',UPLO,n,A,m,C,m,VL,VU,1,k,ABSTOL,kk,eval, &
                   Z,n, WORK, LWORK, IWORK, IFAIL, INFO)
-      
+
       if(kk.ne.k) then
        write(*,*) ' DSYGVX(lapack) provides',kk,' eigenvectors'
        write(*,*) ' when we ordered', k

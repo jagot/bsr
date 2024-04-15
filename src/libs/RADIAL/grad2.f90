@@ -4,7 +4,7 @@
 !
 !     computes the dipole integral between i-th and j-th orbitals
 !     in the V-form:  INT{ P_j(r) [r d/dr + f(l)] P_i(r); dr}
-!                     
+!
 !---------------------------------------------------------------------
 
       Use RADIAL, L => lro, MX => mro
@@ -18,7 +18,7 @@
 
       IL = IABS(LI - LJ)
       IF (IL .NE. 0 .AND. IL .NE. 2) Stop 'GRAD2: LI - LJ <> 0,2'
-	  
+
       A1=(LI+LJ+D2)/((LI+D1)*(LJ+D1))
       A2=((LJ+D5)*(LJ+D1)+(LJ+D1+D5)*(LI+D1))/((LI+D1)*(LJ+D1))
       A = A1 - A2*(LI+LJ+D3)/((LI+LJ+D4)*(LJ+D5))

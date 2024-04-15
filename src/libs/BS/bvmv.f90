@@ -2,7 +2,7 @@
       Real(8) Function bvmv(n,k,array,type,x,y)
 !=======================================================================
 !     Returns bvmv = <x,array y> for the band array.
-!  
+!
 !     The original size of array is n*n. The bandwidth of array is 2k-1
 !     for the non-symmetric case, and is k for symmetric case.
 !     The lower-band column storage mode is assumed.
@@ -24,31 +24,31 @@
       Integer, intent(in) :: n, k
       CHARACTER, intent(in) :: type
       Real(8), intent(in) :: array(n,*), x(n), y(n)
-   
+
       ! .. Local variables
-   
+
       Integer :: i,j,jp,kp
-   
+
       bvmv = 0.d0
-   
+
       if ( type /= 'g') then
-   
+
         ! .. symmetric
-   
+
         Do jp = 1,k-1
           Do i = k+1-jp,n
             j = i+jp-k
             bvmv = bvmv + array(i,jp) * (x(i)*y(j) + x(j)*y(i))
           End do
         End do
-   
+
         ! .. make correction for 'a' (almost symmetric)
-   
+
         if (type == 'a')  &
             bvmv = bvmv + x(n-1)*y(n)*(array(1,1)-array(n,k-1))
-   
+
       else
-   
+
         Do jp = 1,k-1
           Do i = k-jp+1,n
             j = i+jp-k
@@ -57,13 +57,12 @@
             bvmv = bvmv + array(j,kp)*x(j)*y(i)
           End do
         End do
-   
+
       end if
-   
+
       ! .. add central diagonal
-   
+
       bvmv = bvmv + SUM(array(:,k)*x(:)*y(:))
-   
+
       End Function bvmv
-   
-   
+

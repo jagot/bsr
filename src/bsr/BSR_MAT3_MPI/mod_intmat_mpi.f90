@@ -49,20 +49,20 @@
       kch=nch; kns=ns; kcp=ncp; kmk=mk; kcfg=ncfg
 
       m = 0
-      if(Allocated(hcc)) Deallocate(hcc,ACF,htarg,otarg,x,icc) 
-      if(Allocated(hcb)) Deallocate(hcb,hbb,icb,ibb) 
+      if(Allocated(hcc)) Deallocate(hcc,ACF,htarg,otarg,x,icc)
+      if(Allocated(hcb)) Deallocate(hcb,hbb,icb,ibb)
       if(kch.eq.0.or.kns.eq.0) Return
 
       Call MPI_COMM_RANK(MPI_COMM_WORLD, myid, ierr)
       Call MPI_COMM_SIZE(MPI_COMM_WORLD, kprocs, ierr)
       kprocs=kprocs-1
-   
+
       Allocate(icc(kch,kch));  icc = 0; iicc = 0
       m=m+kch*kch
       k = 0; i=0
       Do ich=1,kch; Do jch=1,ich
        k=k+1; if(k.gt.kprocs) k=1
-       if(myid.ne.k) Cycle       
+       if(myid.ne.k) Cycle
        i=i+1; icc(ich,jch) = i; icc(jch,ich) = i
       End do; End do
       iicc=i
@@ -72,14 +72,14 @@
       m = m + 2*(kns*kns*iicc + kch*kch*(kmk+1) + 2*ich + kns*kns)
       hcc=0.d0; acf=0.d0; htarg=0.d0; otarg=0.d0
 
-      if(kcp.gt.0) then  
+      if(kcp.gt.0) then
 
       Allocate(icb(kch,kcp));  icb = 0
       m = m + 2 * kch * kch
       k = 0; i=0
       Do ich=1,kch; Do jch=1,kcp
        k=k+1; if(k.gt.kprocs) k=1
-       if(myid.ne.k) Cycle       
+       if(myid.ne.k) Cycle
        i=i+1; icb(ich,jch) = i
       End do; End do
       iicb = i
@@ -90,7 +90,7 @@
       k = 0; i=0
       Do ich=1,kcp; Do jch=1,ich
        k=k+1; if(k.gt.kprocs) k=1
-       if(myid.ne.k) Cycle       
+       if(myid.ne.k) Cycle
        i=i+1; ibb(ich,jch) = i; ibb(jch,ich) = i
       End do; End do
       iibb = i
@@ -136,7 +136,7 @@
 
 !----------------------------------------------------------------------
 !    next routines for updating the matreces;
-!    we have coefficients only for the half of matrix,  
+!    we have coefficients only for the half of matrix,
 !    so then we should h -->  h + h*   for diagonal blocks
 !----------------------------------------------------------------------
 
@@ -144,10 +144,10 @@
 !======================================================================
      Subroutine UPDATE_HX(ich,jch,ns,ks,d,sym)
 !======================================================================
-!    update channel block 
+!    update channel block
 !
 !    sym = 's'  -->  symmetric banded upper-column storage mode
-!    sym = 'n'  -->  non-symmetric band matrix  
+!    sym = 'n'  -->  non-symmetric band matrix
 !    sym = 'x'  -->  non-symmetric full matrix
 !----------------------------------------------------------------------
 
@@ -201,7 +201,7 @@
       if(ich.ge.jch) then
        hcc(:,:,ij) = hcc(:,:,ij) + x
       else
-       hcc(:,:,ij) = hcc(:,:,ij) + TRANSPOSE(x) 
+       hcc(:,:,ij) = hcc(:,:,ij) + TRANSPOSE(x)
       end if
 
      END subroutine UPDATE_HX
@@ -257,7 +257,7 @@
      Integer, intent(in) :: ichm,jchm
      Real(8), intent(in) :: c
      Integer :: ic,jc,ij
-      
+
      ic = ichm; jc = jchm
 
      if(ic.gt.kcp.or.jc.gt.kcp.or.ic.le.0.or.jc.le.0) &
@@ -318,17 +318,17 @@
        write(*,*) 'UPDATE_HW: ich index out of range',ich
        Return
        Call Stop_mpi(0,ich,'UPDATE_HW: ich index out of range')
-     end if      
+     end if
 
      if(jch.lt.1.or.jch.gt.kch) then
        write(*,*) 'UPDATE_HW: jch index out of range',jch
        Return
        Call Stop_mpi(0,jch,'UPDATE_HW: jch index out of range')
-     end if      
+     end if
 
      if(ns.lt.1.or.ns.gt.kns) &
        Call Stop_mpi(0,ns,'UPDATE_HW: B-spline index out of range')
- 
+
       Do i=1,ns;  Do j=1,ns;  x(i,j)=v(i)*w(j);  End do;  End do
 
       ij = icc(ich,jch)
@@ -340,7 +340,7 @@
       if(ich.ge.jch) then
        hcc(:,:,ij) = hcc(:,:,ij) + x
       else
-       hcc(:,:,ij) = hcc(:,:,ij) + TRANSPOSE(x) 
+       hcc(:,:,ij) = hcc(:,:,ij) + TRANSPOSE(x)
       end if
 
 
@@ -374,7 +374,7 @@
 !======================================================================
       Subroutine Target_h(ich,jch,C,CC)
 !======================================================================
-!     update target interaction and overlap matrixes, by considering 
+!     update target interaction and overlap matrixes, by considering
 !     the terms with structure <kl|k'l> <target|H|target'>
 !
 !     It is not pure target states, but the basis states before |kl>,
@@ -456,7 +456,7 @@
 
       Use bsr_mat
       Use bsr_matrix
-      Use conf_LS, only: nclosd 
+      Use conf_LS, only: nclosd
       Use orb_LS, only: LEF
       Use target, only: nelc
 
@@ -487,7 +487,7 @@
        End do
       End do
 
-      if(myid.ne.0) Return  
+      if(myid.ne.0) Return
 
 ! ... Symmetrize the ACF - matrix:
 
@@ -523,9 +523,9 @@
        if(SUM(acf(:,:,k)).eq.0) Cycle
        write(pri,'(a,i2)') 'k = ',k
        ij = 0
-       Do i=1,kch; Do j = 1,i      
+       Do i=1,kch; Do j = 1,i
         if(abs(acf(i,j,k)).lt.eps_acf) Cycle
-        i1=ij*20+1; i2=i1+19 
+        i1=ij*20+1; i2=i1+19
         write(line(i1:i2),'(2i4,E12.3)') j,i,acf(i,j,k)
         ij=ij+1
         if(ij.lt.5) Cycle
@@ -570,7 +570,7 @@
        End do
       End do
 
-      End Subroutine Collect_otarg  
+      End Subroutine Collect_otarg
 
 !======================================================================
       Subroutine Collect_htarg
@@ -603,4 +603,4 @@
        End do
       End do
 
-      End Subroutine Collect_htarg  
+      End Subroutine Collect_htarg

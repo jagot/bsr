@@ -6,7 +6,7 @@
       Use conf_LS
 
       Implicit none
-      Integer :: i,j,k 
+      Integer :: i,j,k
 
       Iort_conf = 0
       np1=iq1; np2=iq2
@@ -26,17 +26,17 @@
 !=======================================================================
       Subroutine Jort_conf(joper)
 !=======================================================================
-! ... orthogonality on l between config.1 and config.2 
+! ... orthogonality on l between config.1 and config.2
 ! ... for different operators
 !-----------------------------------------------------------------------
-      Use conf_LS, only: L1=>Ltotal1, L2=>Ltotal2, S1=>Stotal1, S2=>Stotal2 
+      Use conf_LS, only: L1=>Ltotal1, L2=>Ltotal2, S1=>Stotal1, S2=>Stotal2
 
       Implicit none
       Integer :: joper(7)
-      Integer :: i,j,k     
+      Integer :: i,j,k
       Integer, external :: Iort_conf, ITRI
 
-      joper = 0     
+      joper = 0
       if(Iort_conf().gt.2) then; joper=1; Return; end if
 
       if(Iort_conf().ne.0) then
@@ -67,7 +67,7 @@
       Use conf_LS
 
       Implicit none
-      Integer :: i,j,k 
+      Integer :: i,j,k
 
       np1=iq1; np2=iq2
       Do i=1,no1
@@ -90,8 +90,8 @@
 !----------------------------------------------------------------------
       Implicit none
       Integer, intent(in) :: kpol,L1,S1,P1,L2,S2,P2
-      Character(1) :: ktype 
-      Integer :: k,m  
+      Character(1) :: ktype
+      Integer :: k,m
       Integer, external :: ITRA, ITRI
 
       Iort_dipol = 1
@@ -107,7 +107,7 @@
        end if
 
        if(S1.eq.0) then  !  L = 2J
-        k=kpol+kpol; 
+        k=kpol+kpol;
         if(ITRA (L1,L2,k).eq.0) Return
        else
         k=kpol+kpol+1

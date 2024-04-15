@@ -3,11 +3,11 @@
 !====================================================================
 !     contains a set of character lines
 !--------------------------------------------------------------------
-      Implicit none 
-    
+      Implicit none
+
       Integer :: mlines =  0      !  max. number of lines
       Integer :: nlines =  0      !  current number of lines
-      Integer :: klines = 2**8    !  initial space  
+      Integer :: klines = 2**8    !  initial space
       Integer, parameter :: mlen = 2**7   !  max. length
 
       Character(mlen), allocatable :: aline(:)
@@ -44,7 +44,7 @@
        mlines = m
       end if
 
-      End Subroutine alloc_file 
+      End Subroutine alloc_file
 
 
 !=======================================================================
@@ -73,4 +73,4 @@
       nlines=nlines+1; aline(nlines)=line
       Iadd_line = nlines
 
-      End Function Iadd_line 
+      End Function Iadd_line

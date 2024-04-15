@@ -3,18 +3,18 @@
 !===========================================================================
 !     define scattering channels;
 !     it is just a copy of the module "channels" in case we need to describe
-!     two scattering systems simultaniously 
+!     two scattering systems simultaniously
 !---------------------------------------------------------------------------
       Implicit none
 
-      Integer :: nlsp =  0                !  number of partial waves               
+      Integer :: nlsp =  0                !  number of partial waves
 
       Integer, allocatable :: ispar(:)    !  (2*S+1) for partial waves
-      Integer, allocatable :: lpar(:)     !  total L 
+      Integer, allocatable :: lpar(:)     !  total L
       Integer, allocatable :: ipar(:)     !  parity (+1 | -1)
       Integer, allocatable :: jpar(:)     !  (2*J+1)
       Integer, allocatable :: nch(:)      !  number of one-electron channels
-    
+
       Integer, allocatable :: iptar(:,:)  !  pointer on the target state
       Integer, allocatable :: lch(:,:)    !  small l for given channel
       Integer, allocatable :: ipch(:,:)   !  pointer on the place in the common list of orbitals
@@ -29,18 +29,18 @@
 
       Character(20), allocatable :: AFP(:) ! file-name for perturber
 
-      Integer, allocatable :: ncp(:)  !  number of configurations in perturber	
+      Integer, allocatable :: ncp(:)  !  number of configurations in perturber
       Integer, allocatable :: nwp(:)  !  number of orbitals in perturber
 
       End Module channels_ion
 
 
 
-!=======================================================================    
+!=======================================================================
       Subroutine Allocate_channels_ion
-!=======================================================================    
+!=======================================================================
 !     allocate arrays in the module "channels_ion"
-!-----------------------------------------------------------------------        
+!-----------------------------------------------------------------------
       Use channels_ion
 
       if(nlsp.le.0) Stop ' Allocate_channels: nlsp <= 0 '
@@ -58,30 +58,30 @@
 !======================================================================
       Subroutine R_channels_ion(nut)
 !======================================================================
-!     read from file 'nut' channels information 
+!     read from file 'nut' channels information
 !----------------------------------------------------------------------
       Use channels_ion
-      
+
       Implicit none
       Integer, intent(in) :: nut
       Character(20) :: AF
       Character(80) :: line
       Integer :: i,j,m,Icheck_file, Ifind_position
- 
+
       Call Read_ipar(nut,'max_ch',mch)
       if(mch.le.0) Stop 'R_channel: mch <= 0 '
 
       Call Read_ipar(nut,'nlsp',nlsp); read(nut,*)
       if(nlsp.le.0) Stop 'R_channel: nlsp <= 0 '
 
-      Call Allocate_channels_ion      
+      Call Allocate_channels_ion
 
       Do i = 1,nlsp
        read(nut,'(a)') line
        read(line,*) AF,lpar(i),ispar(i),ipar(i)
-       AFP(i)=' '; ncp(i)=0; nwp(i)=0 
+       AFP(i)=' '; ncp(i)=0; nwp(i)=0
        j = INDEX(line,'pert')
-       if(j.gt.0) read(line(j:),*) AF,ncp(i),nwp(i) 
+       if(j.gt.0) read(line(j:),*) AF,ncp(i),nwp(i)
        j=LEN_TRIM(AF); if(AF(j-1:j).eq.'.c') AF(j-1:j)='  '
        AFP(i)=AF
        jpar(i) = 0; if(ispar(i).eq.0) jpar(i) = lpar(i) + 1

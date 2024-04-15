@@ -42,7 +42,7 @@
 !====================================================================
 !     gives the value of L from spetroscopic symbol "a"
 !--------------------------------------------------------------------
-      Implicit none  
+      Implicit none
       Character, Intent(in) :: a
       Character(21) :: AS, AB
       Integer :: i
@@ -59,12 +59,12 @@
 
 
 !====================================================================
-      Character(4) Function ELF4(n,l,k)     
+      Character(4) Function ELF4(n,l,k)
 !====================================================================
 !     gives the A4 specroscopic notation for electron orbital (n,l,k)
-!     
+!
 !     n must be < 100; if they > 100, we choose 'k' for n=107
-!     or 'n' otherwise                      
+!     or 'n' otherwise
 !
 !     k must be < 61*61; if k<=61 - one character from ASET
 !--------------------------------------------------------------------
@@ -85,7 +85,7 @@
        if(k.le.61) then
         EL(i:i)=ASET(k:k); i=i-1
        elseif(k.le.61*61) then
-        k1=k/61; k2=mod(k,61); 
+        k1=k/61; k2=mod(k,61);
         if(k2.eq.0) then; k1=k1-1; k2=61; end if
 	       EL(i:i)=ASET(k2:k2); i=i-1
 	       EL(i:i)=ASET(k1:k1); i=i-1
@@ -97,9 +97,9 @@
 
       ! l-value
 
-      EL(i:i)=AL(l,1);  i=i-1                   
+      EL(i:i)=AL(l,1);  i=i-1
 
-      ! n-value  
+      ! n-value
 
       if(n.gt.0.and.n.lt.10) then
        write(EL(i:i),'(i1)') n
@@ -117,7 +117,7 @@
 
 
 !====================================================================
-      Character(3) Function ELF3(n,l,k)     
+      Character(3) Function ELF3(n,l,k)
 !====================================================================
 !     gives the A3 specroscopic notation for electron orbital (n,l,k)
 !
@@ -133,7 +133,7 @@
 
       if(k.eq.0) then
        if(n.lt.100) then
-        write(ELF3(1:2),'(i2)') n      
+        write(ELF3(1:2),'(i2)') n
        else
         ELF3(1:1) = ' '
         ELF3(2:2)=CHAR(n)
@@ -141,13 +141,13 @@
        ELF3(3:3)=AL(l,1)
       else
        if(n.lt.10) then
-        write(ELF3(1:1),'(i1)') n      
+        write(ELF3(1:1),'(i1)') n
        else
         ELF3(1:1)=CHAR(n)
        end if
        ELF3(2:2)=AL(l,1)
        ELF3(3:3)=ASET(k:k)
-      end if 
+      end if
 
       End Function ELF3
 
@@ -164,8 +164,8 @@
 !--------------------------------------------------------------------
       Implicit none
       Character(4), intent(in) :: EL
-      Integer, intent(out) :: n,l,k    
-      Integer :: i,j,ic, k1,k2  
+      Integer, intent(out) :: n,l,k
+      Integer :: i,j,ic, k1,k2
       Integer, external :: LA
 
       Character(61) :: ASET = &
@@ -211,7 +211,7 @@
       i=i+1
       if(i.le.4.and.j.le.3) go to 1
       if(n.eq.0.or.l.lt.0) then
-       write(*,*) 'EL4_nlk is fail to decode: ',EL 
+       write(*,*) 'EL4_nlk is fail to decode: ',EL
        Stop ' '
       end if
 
@@ -229,7 +229,7 @@
 !--------------------------------------------------------------------
       Implicit none
       Character(3), intent(in) :: EL
-      Integer, intent(out) :: n,l,k     
+      Integer, intent(out) :: n,l,k
       Integer :: i,j,ic
       Integer, external :: LA
 
@@ -272,7 +272,7 @@
       if(n.eq.0.or.l.lt.0) then
        write(*,*) 'EL3_NLK is fail to decode ',EL
        Stop
-      end if 
+      end if
 
       End Subroutine EL3_NLK
 

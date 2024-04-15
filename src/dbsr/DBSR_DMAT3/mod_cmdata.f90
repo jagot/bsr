@@ -5,47 +5,47 @@
 !  and order pointer (ipt). The data are devided on different types
 !  (ntype, itype) and saved in memory in blocks (nblocks, mblocks).
 !--------------------------------------------------------------------
-      Implicit none 
-    
+      Implicit none
+
 ! ... coefficients:
 
       Real(8), allocatable :: CLDATA(:), CVDATA(:)
-    
+
 ! ... their attributes:
 
       Integer, allocatable :: K1(:),K2(:),K3(:),IPT(:)
 
-! ... number of different structures and current structure 
+! ... number of different structures and current structure
 
-      Integer, parameter :: ntype =  10   
-      Integer :: itype =  0                
+      Integer, parameter :: ntype =  10
+      Integer :: itype =  0
 
 ! ... the data are divided on blocks, with number and size:
 
-      Integer, parameter :: nblocks =  50     
-      Integer, parameter :: mblocks =  2000  
+      Integer, parameter :: nblocks =  50
+      Integer, parameter :: mblocks =  2000
 
 ! ... current block for given type:
 
-      Integer, allocatable :: iblk(:)    
+      Integer, allocatable :: iblk(:)
 
-! ... pointer on first(last) element in given block 
+! ... pointer on first(last) element in given block
 
-      Integer, allocatable :: ipblk(:), ipi(:)   
-      Integer, allocatable :: jpblk(:), ipj(:)  
+      Integer, allocatable :: ipblk(:), ipi(:)
+      Integer, allocatable :: jpblk(:), ipj(:)
 
-! ... number of blocks for given type: 
+! ... number of blocks for given type:
 
       Integer, allocatable :: nblk(:)
-    
-! ... blocks chain pointer for given type:       
 
-      Integer, allocatable :: kblk(:,:)  
+! ... blocks chain pointer for given type:
+
+      Integer, allocatable :: kblk(:,:)
 
 ! ... total number of ordererd coefficients:
 
-      Integer :: ncdata = 0  
-    
+      Integer :: ncdata = 0
+
       End Module cmdata
 
 
@@ -55,7 +55,7 @@
 !     allocate arrays in module "cmdata"
 !----------------------------------------------------------------------
       Use cmdata
-   
+
       Implicit none
       Integer, intent(in) :: k
       Integer :: i,n,m
@@ -100,12 +100,12 @@
       if(jp.lt.ip) then
        cldata(ip) = CL; cvdata(ip) = CV;
        k1(ip)=j1; k2(ip)=j2; k3(ip)=j3; jp=ip; Return
-      end if       
+      end if
 
 ! ... search position for new integral
 
       k=ip; l=jp;
-    1 if(k.gt.l) go to 2              
+    1 if(k.gt.l) go to 2
       m=(k+l)/2
       if(j1.lt.K1(m)) then
        l = m - 1
@@ -130,7 +130,7 @@
       end if
       go to 1
 
-    2 Continue 
+    2 Continue
 
       Do i=jp,k,-1
        ii = i + 1
@@ -156,9 +156,9 @@
       Integer, intent(in) :: j1,j2,j3
 
 ! ... add coefficient to list:
-      
-      i = iblk(itype); ip = ipblk(i); jp = jpblk(i) 
-      Call Add_cdata(ip,jp,CL,CV,j1,j2,j3)                    
+
+      i = iblk(itype); ip = ipblk(i); jp = jpblk(i)
+      Call Add_cdata(ip,jp,CL,CV,j1,j2,j3)
       jpblk(i) = jp
 
 ! ... check if the block full:
@@ -176,7 +176,7 @@
        m = 1; Exit
       End do
       if(m.ne.0) Return
-     
+
 ! ... everything is full - it is time to generate matrix for
 ! ... the current and most extended cases:
 
@@ -189,7 +189,7 @@
       End do
       Call Gen_matrix
 
-      End Subroutine Add_coef 
+      End Subroutine Add_coef
 
 
 !======================================================================
@@ -225,7 +225,7 @@
 ! ...  main loop ...
 
     1 Continue
-                             
+
 ! ... compare integrals in different blocks and merge the coefficients
 ! ... in case of equal integrals
 
@@ -242,7 +242,7 @@
        End do
       End do
 
-! ...  choose the minimum K1, then K2, then K3 
+! ...  choose the minimum K1, then K2, then K3
 
       j=IP(mm)
       Do m=1,nn
@@ -258,7 +258,7 @@
        end if
       End do
 
-! ... mark the chosen coefficient 
+! ... mark the chosen coefficient
 
       i=IP(mm)
       if(abs(CLDATA(i))+abs(CVDATA(i)).gt.EPS_c) then

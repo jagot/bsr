@@ -100,7 +100,7 @@
         write(*,'(/a,a)')  ' Orbital: ', ELF(i1)
         Stop
        end if
-       
+
        if(after(i1,i2).lt.0) then
         write(*,'(/a,i6)') ' TEST_ac: configuration ', ic
         Call Print_conf_jj(0,0,0.d0)
@@ -121,7 +121,7 @@
 !======================================================================
       Subroutine test_aj
 !======================================================================
-!     check the "AFTER" relations between orbitals 
+!     check the "AFTER" relations between orbitals
 !----------------------------------------------------------------------
       Use conf_jj; Use orb_jj
 
@@ -138,7 +138,7 @@
        write(*,'(/a,a)')  ' Orbital: ', ELF(i1)
        Stop
       end if
-      
+
       if(after(i1,i2).lt.0) then
        Call Print_conf_jj(0,0,0.d0)
        write(*,'(/a,2a5)')  &

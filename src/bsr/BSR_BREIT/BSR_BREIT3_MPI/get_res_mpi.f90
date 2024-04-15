@@ -12,7 +12,7 @@
       USE ndef_list
 
       Implicit none
-      
+
       Integer :: id, is,js, status(MPI_STATUS_SIZE)
 
 ! ... coeffs:

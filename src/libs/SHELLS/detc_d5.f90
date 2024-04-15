@@ -1,29 +1,29 @@
 !=======================================================================
   Real(8) Function detc_d5 (id,it)
 !=======================================================================
-! coefficient for determinamt id and term it for subshell d5 
+! coefficient for determinamt id and term it for subshell d5
 !-----------------------------------------------------------------------
- 
+
   Implicit none
- 
+
   Integer, intent(in)  :: id,it
- 
+
   Integer, parameter :: kd_d5 = 252
   Integer, parameter :: nt_d5 =  16
- 
+
   Integer :: INT_d5 (kd_d5,nt_d5)
- 
+
   Integer :: Norm_d5  = 9240
- 
+
   if(id.le.0.or.id.gt.kd_d5) Stop "detc_d5: index id is out of range"
   if(it.le.0.or.it.gt.nt_d5) Stop "detc_d5: index it is out of range"
- 
+
   detc_d5 = dfloat(INT_d5(id,it))/dfloat(Norm_d5)
- 
+
   detc_d5 = dsqrt(dabs(detc_d5))
- 
+
   if(INT_d5(id,it).lt.0) detc_d5=-detc_d5
- 
+
 
   Data INT_d5 (:,   1)/ &
         0,        0,        0,        0,     1056,     1056,        0,        0,        0,        0,        0,        0, &
@@ -392,5 +392,5 @@
      2268,        0,      -70,     -630,    -1120,    -4620,        0,      448,        0,     -448,    -1008,     -112, &
      -112,    -1008,      280,     2268,     1120,      630,       70,        0,    -4620,      112,     1008,     1008, &
       112,     -448,        0,      448,        0,      280,     -540,     -540,     -840,     -840,      280,      280  /
- 
+
   End Function detc_d5

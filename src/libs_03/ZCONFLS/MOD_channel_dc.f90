@@ -8,7 +8,7 @@
 
       Integer :: lpar =  0 !  total L for given patial wave
       Integer :: ispar=  0 !  (2*S+1) for given patial wave
-      Integer :: ipar =  0 !  parity 
+      Integer :: ipar =  0 !  parity
       Integer :: nch  =  0 !  number of channels
       Integer :: nch1 =  0 !  number of one-electron channels
       Integer :: nch2 =  0 !  number of two-electron channels
@@ -18,24 +18,24 @@
       Integer, allocatable :: iptar(:),ipconf(:),lch1(:),lch2(:)
       Integer, allocatable :: chsym(:),chL(:),chS(:)
       CHARACTER(4), allocatable :: ELC1(:),ELC2(:)
- 	
+
       !   iptar -  pointer on the target state
       !   lch   -  small l for given channel
       !   ELC   -  spectroscopic symbol for given channel
       !   ipconf-  pointer on the last configuration for this channel
-	
+
       Integer :: ncp	     !  number of configurations in perturber
       Integer :: nwp        !  number of orbitals in perturber
       CHARACTER(20) :: AFP,BFP !  file-name for perturber
 
       End Module channel_dc
 
-    
-!=======================================================================    
+
+!=======================================================================
       Subroutine Alloc_channel_dc(m)
-!=======================================================================    
+!=======================================================================
 !     allocate arrays in the module "channel_dc"
-!-----------------------------------------------------------------------    
+!-----------------------------------------------------------------------
       Use channel_dc
 
       Implicit none
@@ -86,7 +86,7 @@
        aa=ELC2(1:nch); Deallocate(ELC2)
        Allocate(ELC2(mch)); ELC2(1:nch)=aa
        Deallocate(aa)
-      end if   
+      end if
 
       End subroutine Alloc_channel_dc
 
@@ -94,23 +94,23 @@
 !======================================================================
       Subroutine Read_channel_dc(nut,klsp)
 !======================================================================
-!     read from file 'nut' information for channel klsp 
+!     read from file 'nut' information for channel klsp
 !----------------------------------------------------------------------
       Use channel_dc
-      
+
       Implicit none
       Integer, intent(in) :: nut,klsp
       Character(20) :: AF
       Character(80) :: line
       Integer :: i,j,n,k,m, nlsp
- 
+
       nlsp = 0
       Call Read_ipar(nut,'nlsp',nlsp); read(nut,*)
       if(nlsp.le.0) Stop 'Read_channel_dc: nlsp <= 0 '
       if(klsp.gt.nlsp) Stop 'R_channel_dc: klsp > nlsp '
-      
+
       Do i = 1,klsp
-       read(nut,*) AF,lpar,ispar,ipar,BFP,AFP,ncp,nwp 
+       read(nut,*) AF,lpar,ispar,ipar,BFP,AFP,ncp,nwp
       End do
 
       Call Read_apar(nut,'channels',AF); read(nut,*)

@@ -9,7 +9,7 @@
 !   sym = 'x' - full matrix
 !----------------------------------------------------------------------
     IMPLICIT NONE
-    
+
     INTEGER, INTENT(in) :: ns,ks
     CHARACTER(1), INTENT(in) :: sym
     REAL(8), INTENT(in), DIMENSION(ns,*) :: a,b
@@ -26,9 +26,9 @@
        x = x + a(i,j)*b(i,j)
       End do
      End do
-    
+
     elseif(sym.eq.'s') then
-    
+
      Do j = 1,ks
       Do i = 1,ns-j+1
        x = x + a(i,j)*b(i,j)
@@ -36,15 +36,15 @@
      End do
 
     elseif(sym.eq.'l') then
-    
+
      Do j = 1,ks
       Do i = ks+1-j,ns
        x = x + a(i,j)*b(i,j)
       End do
      End do
-    
+
     elseif(sym.eq.'n') then
-    
+
      Do j = 1,ks+ks-1
       imin=max( 1, 1+ks-j)
       imax=min(ns,ns+ks-j)
@@ -52,7 +52,7 @@
        x = x + a(i,j)*b(i,j)
       End do
      End do
-    
+
     else
 
      Stop ' SUM_AmB:  unknown symmetry '

@@ -8,5 +8,5 @@ add_executable(dbsr_mchf
   read_ang_coef.f90         read_conf_jj.f90          read_pqbs.f90
   rotate.f90                solve_eiv.f90             mchf_matrix.f90
   solve_nr.f90              solve_direct.f90          scf_mchf.f90
-  scf_mchf_all.f90          summry.f90                rk_df.f90)
+  summry.f90                rk_df.f90)
 target_link_libraries(dbsr_mchf dbs zconfjj zcom ${BLAS_LAPACK_LIBRARIES})

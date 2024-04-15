@@ -14,8 +14,8 @@
 !     hl and hl_dir have different representation  !!!
 !
 !     lh_dir = [-1|1] - (not|yes) shows if hl_dir is done or no
-!     (this parameter allows us to compute the hl_dir only once because 
-!      hl and hl_dir does not depend on l) 
+!     (this parameter allows us to compute the hl_dir only once because
+!      hl and hl_dir does not depend on l)
 !
 !     hl_exc(ns,ns) - exchange interaction with core
 !
@@ -31,9 +31,9 @@
 !------------------------------------------------------------------
 
       Implicit none
-    
+
       Integer :: lh_dir, mlh
-   
+
       Real(8), allocatable :: hl(:,:), hl_dir(:,:), hl_exc(:,:),  &
                               hl_core(:,:), hl_full(:,:,:), vc(:,:)
 
@@ -88,7 +88,7 @@
 !======================================================================
       SUBROUTINE Gen_Lval
 !======================================================================
-!     Generate the L-integrals <i|L|j> and vectors <.|L|j> 
+!     Generate the L-integrals <i|L|j> and vectors <.|L|j>
 !----------------------------------------------------------------------
       Use L_core; Use bsr_mat
       Use spline_param; Use spline_atomic; Use spline_orbitals
@@ -102,18 +102,18 @@
       mlh=maxval(lbs(1:nbf))
       Call Alloc_Lcore(ns,ks,nbf)
 
-! ... generate L-data for given l: 
+! ... generate L-data for given l:
 
       Do l=0,mlh
 
-       if(ipointer(nbf,lbs,l).eq.0) Cycle 
+       if(ipointer(nbf,lbs,l).eq.0) Cycle
 
        Call INT_core(l)
 
-       Do i = kclosd+1,nbf;  if(lbs(i).ne.l.or.iech(i).ne.0) Cycle 
-        Do j = i,nbf;        if(lbs(j).ne.l.or.iech(j).ne.0) Cycle 
+       Do i = kclosd+1,nbf;  if(lbs(i).ne.l.or.iech(i).ne.0) Cycle
+        Do j = i,nbf;        if(lbs(j).ne.l.or.iech(j).ne.0) Cycle
 
-         C = 0.d0 
+         C = 0.d0
          do m = 1,ns
           do k = 1,m-1
            C = C + hl_core(m,k)*(pbs(m,i)*pbs(k,j)+pbs(k,i)*pbs(m,j))
@@ -127,45 +127,45 @@
 
          k=0
          if(rel.and.imvc.lt.0) k=1
-         if(nmvc.gt.0.and.nbs(i).gt.nmvc.and.nbs(j).gt.nmvc) k=0 
-         if(k.gt.0)  then 
-           S = BVMV(ns,ks,vc,'s',pbs(1,i),pbs(1,j)) 
-           C = C + S 
+         if(nmvc.gt.0.and.nbs(i).gt.nmvc.and.nbs(j).gt.nmvc) k=0
+         if(k.gt.0)  then
+           S = BVMV(ns,ks,vc,'s',pbs(1,i),pbs(1,j))
+           C = C + S
          end if
 
          L_int(i,j) = C;  L_int(j,i) = C
- 
+
          if(nud.gt.0) Call pri_int(nud,6,0,i,j,i,j,C)
 
         End do
 
         Do m=1,ns; L_vec(m,i)=SUM(hl_core(:,m)*pbs(:,i)); End do
- 
+
 ! ... rel. correction to vector L(.,i):
 
         k=0
         if(rel.and.imvc.eq.-1) k=1
-        if(nmvc.gt.0.and.nbs(i).gt.nmvc) k=0 
+        if(nmvc.gt.0.and.nbs(i).gt.nmvc) k=0
         if(k.gt.0) then
          L_vec(1:ns,i) = L_vec(1:ns,i) + vc(1:ns,ks)*pbs(1:ns,i)
          Do m = 1,ks-1
-          Do ii = ks-m+1,ns           
+          Do ii = ks-m+1,ns
            jj = ii-ks+m
-           L_vec(ii,i) = L_vec(ii,i) + vc(ii,m)*pbs(jj,i)     
-           L_vec(jj,i) = L_vec(jj,i) + vc(ii,m)*pbs(ii,i)     
+           L_vec(ii,i) = L_vec(ii,i) + vc(ii,m)*pbs(jj,i)
+           L_vec(jj,i) = L_vec(jj,i) + vc(ii,m)*pbs(ii,i)
           End do
          End do
 write(nud,*) 'L_vec:  ', ebs(i)
 write(nud,'(10E15.5)') L_vec(:,i)
- C = SUM(L_vec(:,i)*pbs(:,i)) 
+ C = SUM(L_vec(:,i)*pbs(:,i))
 write(nud,'(10f15.10)')  L_int(i,i), C
         end if
 
        End do
 
-       hl_full(:,:,l) = hl_core(:,:)               
+       hl_full(:,:,l) = hl_core(:,:)
 
-      End do 
+      End do
 
       End Subroutine Gen_Lval
 
@@ -190,30 +190,30 @@ write(nud,'(10f15.10)')  L_int(i,i), C
 
       C1=l*(l+1); C2=2*z; hl=db2-C1*rm2+C2*rm1
 
-! ... symmetrize hl by Bloch operator on right boder 
+! ... symmetrize hl by Bloch operator on right boder
 
       C1 = db2(1,1)-db2(ns,ks-1)
       hl(ns,ks-1) = hl(ns,ks-1) + C1
       hl(ns,ks  ) = hl(ns,ks  ) - C1
-      
-! ... symmetrize hl by Bloch operator on left boder 
 
-!      C2 = (ks-1)/(t(ks+1)-t(ks))         
-!      hl(2,ks-1) = hl(2,ks-1) + C2 
+! ... symmetrize hl by Bloch operator on left boder
+
+!      C2 = (ks-1)/(t(ks+1)-t(ks))
+!      hl(2,ks-1) = hl(2,ks-1) + C2
 !      hl(1,ks  ) = hl(1,ks)   - C2
-     
+
 ! ... relativistic shift ...
 
       if(rel) then
        Call mvcv(l,vc); if(imvc.gt.0) hl=hl+vc
       end if
 
-! ... interaction with core ...  
+! ... interaction with core ...
 
       hl_exc = 0.d0
 
       if(kclosd.gt.0) then
-    
+
 ! ... direct interaction ...
 
       if(lh_dir.eq.-1) then
@@ -228,7 +228,7 @@ write(nud,'(10f15.10)')  L_int(i,i), C
       end if
 
 ! ... exchange interaction ...
-      
+
       kmin = 1000; kmax = 0
       Do ip = 1,kclosd
        k = iabs(l-lbs(ip));  if(kmin.gt.k) kmin=k
@@ -242,15 +242,15 @@ write(nud,'(10f15.10)')  L_int(i,i), C
        Do ip = 1,kclosd
         C1 = (4*lbs(ip)+2) * ZCB(l,k,lbs(ip))
         if(C1.eq.0.d0) Cycle
-        Call INT_de (pbs(1,ip),pbs(1,ip),xx,5,3,sym)       
+        Call INT_de (pbs(1,ip),pbs(1,ip),xx,5,3,sym)
         hl_exc(:,:) = hl_exc(:,:) + C1*xx
        End do
-      End do    
+      End do
 
       end if ! kclose > 0
 
 !----------------------------------------------------------------------
-! ... total hl:      
+! ... total hl:
 
       hl_core = hl_exc
 
@@ -271,7 +271,7 @@ write(nud,'(10f15.10)')  L_int(i,i), C
         hl_core(j,i) = hl_core(i,j)
        End do
       End do
-     
+
       end if
 
       End Subroutine INT_core
@@ -299,7 +299,7 @@ write(nud,'(10f15.10)')  L_int(i,i), C
 !
 !--------------------------------------------------------------------
       Use spline_param; Use spline_atomic;  Use spline_grid
-    
+
       Implicit none
       Integer, intent(in) :: l
       Real(8), intent(inout) :: vc(ns,ks)
@@ -369,7 +369,7 @@ write(nud,'(10f15.10)')  L_int(i,i), C
 !
 !--------------------------------------------------------------------
       Use spline_param; Use spline_atomic;  Use spline_grid
-    
+
       Implicit none
       Integer, intent(in) :: l
       Real(8), intent(inout) :: vc(ns,ks)

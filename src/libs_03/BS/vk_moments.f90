@@ -4,21 +4,21 @@
 !
 !   Defines moments for Vk-integrals in the B-spline cells
 !
-!   Calling sequence:          vk_moments             
-!                              ----------             
-!                               /    \\           
-!                           moments vk_pdiag      
-!                                     ||          
-!                                   vk_triang     
-!                                    /   \        
-!                                 gauss  vbsplvb  
-! 
+!   Calling sequence:          vk_moments
+!                              ----------
+!                               /    \\
+!                           moments vk_pdiag
+!                                     ||
+!                                   vk_triang
+!                                    /   \
+!                                 gauss  vbsplvb
+!
 !-------------------------------------------------------------------------
 !
 !   on entry    k  -  multipole index
 !   --------
-!       
-!   on exit     rkd1,rkd2,rkd - off-diagonal and diagonal moments 
+!
+!   on exit     rkd1,rkd2,rkd - off-diagonal and diagonal moments
 !   -------                     (in module spline_moments)
 !
 !-------------------------------------------------------------------------
@@ -105,19 +105,19 @@
 !========================================================================
 !
 !   Returns the two-dimensional array of B-splin Vk-integrals
-!                                  _    
+!                                  _
 !         <B_i B_j| (r<)^k/(r>)^(k+1) |B_i' B_j' r2 >
 !
-!   over the given triangle diagonal cell 
-!                                                           
+!   over the given triangle diagonal cell
+!
 !   Calls:   gauss, vbsplvd
 !
 !   On entry   iv  -  the index of the diagonal cell
 !   --------
 !
-!   On exit    rkd(.,.,iv) - arrays of B-spline Vk-integrals for given 
+!   On exit    rkd(.,.,iv) - arrays of B-spline Vk-integrals for given
 !   --------                 interval iv in the reduced-dimension mode
-!                            (in module spline_moments)      
+!                            (in module spline_moments)
 !----------------------------------------------------------------------
 
     IMPLICIT NONE
@@ -131,7 +131,7 @@
     REAL(8), DIMENSION(ks) :: x,w,gx,gw, bi
     REAL(8), DIMENSION(ks,ks) :: bspTmp,bspdTmp
     REAL(8), DIMENSION(ks,ks,ks) ::Int1,Int2
-    REAL(8), DIMENSION(nv,ks,ks) :: dbiatx 
+    REAL(8), DIMENSION(nv,ks,ks) :: dbiatx
 
     left = iv+ks-1
     xbase = t(left)
@@ -148,20 +148,20 @@
 
 ! .. the bspline values at the new gaussian points
 
-     DO i=1,ks               
+     DO i=1,ks
       Call vbsplvd(t,left,1,gx(i),2,dbiatx)
       bspTmp (i,1:ks) = dbiatx(1,1:ks,1)
       bspdTmp(i,1:ks) = dbiatx(1,1:ks,2) - bspTmp(i,1:ks)/gx(i)
      END DO
 
 ! .. and the corresponding gaussian weights
-      
+
      gw(:) = (gr(iv,m)-xbase)*w(:) * gx(:)**k
 
 !              / r(iv,m)         ___           k
 ! .. Int1  =  |      bsp(iv,:,i) bsp(iv,:,ip) r  dr
 !             / r_iv
- 
+
      c = grm(iv,m)**(k+2) * grw(iv,m)
      DO i=1,ks
       bi(:) = gw(:)*bspTmp(:,i)
@@ -211,7 +211,7 @@
        DO j=1,ks
         DO jp=j,ks
          jj = jj + 1
-         rkd(ii,jj,iv) = rkd(ii,jj,iv) + SUM(gx(:)*Int2(j,jp,:)) 
+         rkd(ii,jj,iv) = rkd(ii,jj,iv) + SUM(gx(:)*Int2(j,jp,:))
        END DO
       END DO
      END DO

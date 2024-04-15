@@ -31,7 +31,7 @@
       Character(64), Allocatable :: AC(:)
       Character(60), Allocatable :: AU(:)
 
-      Integer :: nuc =1       !   name.c         
+      Integer :: nuc =1       !   name.c
       Integer :: nuj =2       !   name.l or name.j
       Integer :: iout=3       !   result.c
 
@@ -40,7 +40,7 @@
       iarg = IARGC()
 
       if(iarg.lt.5) then
-        write(*,'(/a)') 'cfile extracts the solution from l(j)-file in separate c-file' 
+        write(*,'(/a)') 'cfile extracts the solution from l(j)-file in separate c-file'
         write(*,'(/a)') 'Call as:    cfile name.l(j) index 2J name.c eps_c'
         write(*,'(/a)') 'name.l(j) - input file with solutions'
         write(*,'( a)') 'index     - index of the solution in l(j)-file '
@@ -48,7 +48,7 @@
         write(*,'( a)') 'name      - name for output c-file and w-files'
         write(*,'( a)') 'eps_c     - tolerance for weights'
         write(*,'(/a)') 'When eps_c > 0, configurations in result c-file are ordered'
-        write(*,'( a)') 'according to their weights' 
+        write(*,'( a)') 'according to their weights'
         Stop ' '
       else
         Call GETARG(1,AN)
@@ -58,11 +58,11 @@
         Call GETARG(5,AF); read(AF,*) eps_c
       end if
 
-      i=LEN_TRIM(BF); if(i.gt.2.and.BF(i-1:i).ne.'.c')  BF=BF(1:I)//'.c' 
+      i=LEN_TRIM(BF); if(i.gt.2.and.BF(i-1:i).ne.'.c')  BF=BF(1:I)//'.c'
 
 !----------------------------------------------------------------------
 
-      i=LEN_TRIM(AN); if(AN(i:i).eq.'l') jj=-1     
+      i=LEN_TRIM(AN); if(AN(i:i).eq.'l') jj=-1
 
 ! ... read list of configuration:
 
@@ -103,9 +103,9 @@
       End do
 
 ! ... order the configurations according their weights:
- 
+
       Do i=1,ncfg; IP(i)=i; End do
- 
+
       if(eps_c.gt.0.d0) then
       Do i=1,ncfg-1
        m=i
@@ -121,13 +121,13 @@
 ! ... output the c-file:
 
       open(iout,file=BF)
-      if(jj.ge.0) then 
+      if(jj.ge.0) then
        write(iout,'(15x,f16.8,a,i3)') E,'   2*J = ',jj
       else
        write(iout,'(15x,f16.8)') E
       end if
       write(iout,'(a)') Clousd
- 
+
       Do m=1,ncfg
        i=IP(m); if(abs(WT(i)).lt.Eps_c) Exit
        write(iout,'(a64,f11.8)') AC(i),WT(i)
@@ -146,7 +146,7 @@
 
       go to 10
 
-    9 write(*,*) ' No solution for jj,n =', jj,nn  
+    9 write(*,*) ' No solution for jj,n =', jj,nn
    10 Continue
 
       End  ! program cfile
@@ -160,7 +160,7 @@
 !----------------------------------------------------------------------
 
       IMPLICIT NONE
-      
+
       INTEGER, INTENT(in) :: nu
 
       INTEGER :: ncfg

@@ -11,8 +11,8 @@
       USE term_exp
 
       Implicit none
-      
-      Integer :: id,is,js,ic,jc 
+
+      Integer :: id,is,js,ic,jc
 
       Call MPI_SEND(is  ,1,MPI_INTEGER,id,0,MPI_COMM_WORLD,ierr)
       if(is.le.0) Return

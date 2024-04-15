@@ -29,9 +29,9 @@
         if(LI.eq.0.or.LP.eq.0) Cycle
         CN = CB * (LI+LP+k+2)*(LI+LP-k)*(LI-LP+k+1)*(LP-LI+k+1) &
                 / ((k+1)*(k+2))
-        C = C + CN*(NK(I,IP,IP,J,K) + NK(IP,I,J,IP,K))/D2   
+        C = C + CN*(NK(I,IP,IP,J,K) + NK(IP,I,J,IP,K))/D2
        END DO
        HLC_oo = HLC_oo - 2*(4*LP+2)*C
-      END DO     
+      END DO
 
       END FUNCTION HLC_oo

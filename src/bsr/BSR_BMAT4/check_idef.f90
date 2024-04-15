@@ -10,35 +10,35 @@
 
       Select case (icase)
 
-       Case(1,2,3,4,5,8,9,10)  ! Call I_data(jtype,jpol) 
+       Case(1,2,3,4,5,8,9,10)  ! Call I_data(jtype,jpol)
 
-        if(jtype.ne.4) Return 
+        if(jtype.ne.4) Return
         if(coupling.eq.'LS'.and.icase.gt.7) Return
         if(iitar.gt.0.and.ich.ne.jch) Return
         check_idef = 0
 
-       Case(6)                 ! Call L_data(jtype,jpol)  
+       Case(6)                 ! Call L_data(jtype,jpol)
 
         if(jtype.eq.4) then
           if(iitar.gt.0.and.ich.ne.jch) Return
           check_idef = 0
-          Return 
+          Return
         end if
         if(jtype.ge.13.and.jtype.le.16) then
           if(ich.eq.jch.or.iitar.gt.1) Return
           check_idef = 0
-          Return 
+          Return
         end if
 
-       Case(7)                 ! Call Z_data(jtype,jpol)  
+       Case(7)                 ! Call Z_data(jtype,jpol)
 
-        if(jtype.ne.4) Return 
+        if(jtype.ne.4) Return
         if(coupling.eq.'LS') Return
         check_idef = 0
 
        Case(11)                ! Call O_data(jtype,jpol)
 
-        if(jtype.ne.4) Return 
+        if(jtype.ne.4) Return
         if(iitar.gt.1.and.ich.ne.jch) Return
         check_idef = 0
 

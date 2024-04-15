@@ -32,9 +32,9 @@
 
 
     ! .. defines the set of hydrogenic orbitals
-     
+
     Call define_orbitals
-    
+
     fine = 1.d0                  ! test assignment
 
     CALL test_integrals
@@ -71,7 +71,7 @@
 
       Call allocate_bsorb(15)
       nbf = mbf
-     
+
       j=0
       Do nj=1,5
         Do lj=0,nj-1
@@ -150,12 +150,12 @@
 
       if(AS(1:1).eq.'*') go to 2          ! end of data
 
-      if(AS(1:1).eq.'#') then             ! timing block                 
+      if(AS(1:1).eq.'#') then             ! timing block
 !----------------------------------------------------------------------
 
       INT = AS(2:2)
 
-! ... timing for mrk_diff 
+! ... timing for mrk_diff
 
       T1 = RRTC()
       krk=-100
@@ -165,10 +165,10 @@
        if(INT.eq.'M') Call mmk_diff(k)
        if(INT.eq.'T') Call mtk_diff(k)
        if(INT.eq.'V') Call mvk_diff(k)
-      End do                          
+      End do
       T_diff = (RRTC() - T1)/5
 
-! ... timing for mrk_cell 
+! ... timing for mrk_cell
 
       T1 = RRTC()
       krk=-100
@@ -180,7 +180,7 @@
        if(INT.eq.'V') Call mvk_cell(k)
        if(INT.eq.'W') Call mwk_cell(k)
        if(INT.eq.'Q') Call mqk_cell(k)
-      End do                          
+      End do
       T_cell = (RRTC() - T1)/5
 
 ! ... timing for rk_moment
@@ -195,7 +195,7 @@
        if(INT.eq.'V') Call vk_moments(k)
        if(INT.eq.'V') Call wk_moments(k)
        if(INT.eq.'Q') Call qk_moments(k)
-      End do                          
+      End do
       T_moments = (RRTC() - T1)/5
 
 ! ... timing for RKy
@@ -222,7 +222,7 @@
 
 ! ... timing for assembling B-spline integrals
 
-      k = 0; Call mrk_cell(k); ie1 = Ifind_bsorb(3,0,0) 
+      k = 0; Call mrk_cell(k); ie1 = Ifind_bsorb(3,0,0)
 
       T1 = RRTC()
       Do i=1,500
@@ -248,7 +248,7 @@
       End do
       T_m = (RRTC()-T1)/500
 
-! ... timing for convolution routins   
+! ... timing for convolution routins
 
       T1 = RRTC()
       Do i=1,500
@@ -290,7 +290,7 @@
       write(iout,'(/a,a,a/)') &
        ' timing for ', INT, ' integrals (msec) :'
       write(iout,'(a,f10.3)') &
-       ' generating the B-spline integrals  (_DIFF): ', T_diff 
+       ' generating the B-spline integrals  (_DIFF): ', T_diff
       write(iout,'(a,f10.3)') &
        ' generating the B-spline integrals  (_CELL): ', T_cell
       write(iout,'(a,f10.3)') &
@@ -346,25 +346,25 @@
       if(INT.eq.'M') S = MKc (ie1,ie2,ie3,ie4,k)
       if(INT.eq.'T') S = TKc (ie1,ie2,ie3,ie4,k)
       if(INT.eq.'V') S = VKc (ie1,ie2,ie3,ie4,k)
-      if(INT.eq.'W') S = 0.d0                    
-      if(INT.eq.'Q') S = 0.d0                    
+      if(INT.eq.'W') S = 0.d0
+      if(INT.eq.'Q') S = 0.d0
       SS=S; if(SA.ne.0.d0) SS = (S-SA)/SA; AAA = INT// 'Kc'
       write(iout,'(21x,d24.16,d12.3,5x,a)') s,ss,AAA
       write(*   ,'(21x,d24.16,d12.3,5x,a)') s,ss,AAA
 
-      krk = -100 
+      krk = -100
       if(INT.eq.'R') S = RK  (ie1,ie2,ie3,ie4,k,'d')
       if(INT.eq.'N') S = NK  (ie1,ie2,ie3,ie4,k,'d')
       if(INT.eq.'M') S = MK  (ie1,ie2,ie3,ie4,k,'d')
       if(INT.eq.'T') S = TK  (ie1,ie2,ie3,ie4,k,'d')
       if(INT.eq.'V') S = VK  (ie1,ie2,ie3,ie4,k,'d')
-      if(INT.eq.'W') S = 0.d0                       
-      if(INT.eq.'Q') S = 0.d0                       
+      if(INT.eq.'W') S = 0.d0
+      if(INT.eq.'Q') S = 0.d0
       SS=S; if(SA.ne.0.d0) SS = (S-SA)/SA; AAA = INT// 'K_diff'
       write(iout,'(21x,d24.16,d12.3,5x,a)') s,ss,AAA
       write(*   ,'(21x,d24.16,d12.3,5x,a)') s,ss,AAA
 
-      krk = -100 
+      krk = -100
       if(INT.eq.'R') S = RK  (ie1,ie2,ie3,ie4,k,'c')
       if(INT.eq.'N') S = NK  (ie1,ie2,ie3,ie4,k,'c')
       if(INT.eq.'M') S = MK  (ie1,ie2,ie3,ie4,k,'c')
@@ -428,7 +428,7 @@
 
       go to 1    ! go to new integral
 
-    2 Continue   ! end of data 
+    2 Continue   ! end of data
 
       END SUBROUTINE test_integrals
 
@@ -630,7 +630,7 @@
       Do i=1,nbf
 
         A = HNORM(nbs(i),lbs(i),z) * (2.*z/nbs(i))**(lbs(i) + 1)
-        
+
         B = azl(z,h,ks,lbs(i)+1) * pbs(lbs(i)+2,i)
 
         write(iout,'(a,a,3D20.8)') EBS(i),':   ', a, b, (a-b)/a
@@ -734,7 +734,7 @@
        Call mvc(lbs(i))
 
        b = -0.5 * BVMV (ns,ks,vc,'s',pbs(1,i),pbs(1,i))
-        
+
        write(iout,'(a4,3D20.8)') EBS(i), a,b, (a-b)/a
 
       End do
@@ -743,11 +743,11 @@
 
 
     Do l = 0,3
-    
+
      Call HLM(l)
 
      fine = 0.25D0/(137.036D0)**2
-          
+
      Call mvc(l)
      hl = hl + fine*vc
      if(l.eq.0) then
@@ -772,7 +772,7 @@
 
       ns1 = ns  - l - 3
       Call DSYGV(1,'V','U',ns1,hm,ns,C,ns,eval,WORK,LWORK,INFO)
-     
+
       write(iout,'(a,i5)') ' l =  ', l
       write(iout,'(5E12.5)') Eval(1:ns1)
 
@@ -782,13 +782,13 @@
          x = 0.0
          call vbsplvd(t,ks,1,x(1),3,dbiatx)
 
-         write(iout,'(/a,f10.5/)')  't = ', x(1)  
+         write(iout,'(/a,f10.5/)')  't = ', x(1)
          write(iout,'(8E12.3)') dbiatx(1,1:ks,1)
          write(iout,'(8E12.3)') dbiatx(1,1:ks,2)
          write(iout,'(8E12.3)') dbiatx(1,1:ks,3)
 
-         b2s = dbiatx(1,2,2) 
-         b2ss = dbiatx(1,2,3) 
+         b2s = dbiatx(1,2,2)
+         b2ss = dbiatx(1,2,3)
          b3ss = dbiatx(1,3,3)
 
       write(iout,'(/a/)') ' vc - matrix : '
@@ -809,23 +809,23 @@
 
 
       Do i = 1, ks
- 
+
        bcoef(:) = 0.d0
        bcoef(i) = 1.d0
-       
+
        Do j = 1, ks
         x(j) = t(ks+j-1)
         if(j.gt.1) x(j) = x(j) - 1.d-20
-        y (j) = bvalu2 (t, bcoef, ns, ks, x(j), 0) 
-        y1(j) = bvalu2 (t, bcoef, ns, ks, x(j), 1) 
-        y2(j) = bvalu2 (t, bcoef, ns, ks, x(j), 2) 
+        y (j) = bvalu2 (t, bcoef, ns, ks, x(j), 0)
+        y1(j) = bvalu2 (t, bcoef, ns, ks, x(j), 1)
+        y2(j) = bvalu2 (t, bcoef, ns, ks, x(j), 2)
        End do
 
 !       write(iout,'(a,i5)') ' spline ', i
 !       write(iout,'(8E12.3)') y(1:ks)
 !       write(iout,'(8E12.3)') y1(1:ks)
 !       write(iout,'(8E12.3)') y2(1:ks)
-       
+
       End do
 
 
@@ -886,7 +886,7 @@
     RRTC = id*86400 + ih*3600 + im*60 + is
     RRTC = RRTC + ims/1000.d0
     RRTC = ETIME(TIME)
-    RRTC = TIME(1)*1000 
+    RRTC = TIME(1)*1000
 
     End Function RRTC
 
@@ -1111,23 +1111,23 @@
     INTEGER :: icase, int
 
       rkv = 0.d0
-      
+
       Call Mrk_cell(k)
 
-      Call INT_v(i1,j1,i2,j2,k,5,1,v)   
+      Call INT_v(i1,j1,i2,j2,k,5,1,v)
       rkv =  rkv + SUM(v(:)*p(:,i1))
 
-      Call INT_v(i1,j1,i2,j2,k,5,2,v)   
+      Call INT_v(i1,j1,i2,j2,k,5,2,v)
       rkv =  rkv + SUM(v(:)*p(:,j1))
 
-      Call INT_v(i1,j1,i2,j2,k,5,3,v)   
+      Call INT_v(i1,j1,i2,j2,k,5,3,v)
       rkv =  rkv + SUM(v(:)*p(:,i2))
 
-      Call INT_v(i1,j1,i2,j2,k,5,4,v)   
+      Call INT_v(i1,j1,i2,j2,k,5,4,v)
       rkv =  rkv + SUM(v(:)*p(:,j2))
 
       rkv = rkv * fine / 4
-      
+
       END FUNCTION rkv
 
 
@@ -1151,7 +1151,7 @@
     REAL(KIND=8) :: nkd
     Character(1) :: sym
     REAL(8), External :: SUM_amb
-    
+
     nkd = 0.d0
 
     Call Mnk_cell(k)
@@ -1204,7 +1204,7 @@
     Call INT_de (p(1,i1),p(1,j2),a,8,4,sym)
     Call density(ns,ks,b,p(1,i2),p(1,j1),sym)
     nke = nke + SUM_amb(ns,ks,a,b,sym)
-   
+
     nke = nke * fine / 2
 
     END FUNCTION nke
@@ -1233,23 +1233,23 @@
     INTEGER :: icase, int
 
       nkv = 0.d0
-      
+
       Call Mnk_cell(k)
 
-      Call INT_v(i1,j1,i2,j2,k,8,1,v)   
+      Call INT_v(i1,j1,i2,j2,k,8,1,v)
       nkv =  nkv + SUM(v(:)*p(:,i1))
 
-      Call INT_v(i1,j1,i2,j2,k,8,2,v)   
+      Call INT_v(i1,j1,i2,j2,k,8,2,v)
       nkv =  nkv + SUM(v(:)*p(:,j1))
 
-      Call INT_v(i1,j1,i2,j2,k,8,3,v)   
+      Call INT_v(i1,j1,i2,j2,k,8,3,v)
       nkv =  nkv + SUM(v(:)*p(:,i2))
 
-      Call INT_v(i1,j1,i2,j2,k,8,4,v)   
+      Call INT_v(i1,j1,i2,j2,k,8,4,v)
       nkv =  nkv + SUM(v(:)*p(:,j2))
 
       nkv = nkv * fine / 4
-      
+
       END FUNCTION nkv
 
 
@@ -1274,7 +1274,7 @@
     REAL(KIND=8) :: vkd
     Character(1) :: sym
     REAL(8), External :: SUM_amb
-    
+
     vkd = 0.d0
 
     Call Mvk_cell(k)
@@ -1327,7 +1327,7 @@
     Call INT_de (p(1,i1),p(1,j2),a,9,4,sym)
     Call density(ns,ks,b,p(1,i2),p(1,j1),sym)
     vke = vke + SUM_amb(ns,ks,a,b,sym)
-   
+
     vke = vke * fine / 2
 
     END FUNCTION vke
@@ -1356,23 +1356,23 @@
     INTEGER :: icase, int
 
       vkv = 0.d0
-      
+
       Call Mvk_cell(k)
 
-      Call INT_v(i1,j1,i2,j2,k,9,1,v)   
+      Call INT_v(i1,j1,i2,j2,k,9,1,v)
       vkv =  vkv + SUM(v(:)*p(:,i1))
 
-      Call INT_v(i1,j1,i2,j2,k,9,2,v)   
+      Call INT_v(i1,j1,i2,j2,k,9,2,v)
       vkv =  vkv + SUM(v(:)*p(:,j1))
 
-      Call INT_v(i1,j1,i2,j2,k,9,3,v)   
+      Call INT_v(i1,j1,i2,j2,k,9,3,v)
       vkv =  vkv + SUM(v(:)*p(:,i2))
 
-      Call INT_v(i1,j1,i2,j2,k,9,4,v)   
+      Call INT_v(i1,j1,i2,j2,k,9,4,v)
       vkv =  vkv + SUM(v(:)*p(:,j2))
 
       vkv = vkv * fine / 4
-      
+
       END FUNCTION vkv
 
 
@@ -1399,7 +1399,7 @@
     REAL(KIND=8) :: mkd
     Character(1) :: sym
     REAL(8), External :: SUM_amb
-    
+
     mkd = 0.d0
 
     Call Mmk_cell(k)
@@ -1452,7 +1452,7 @@
     Call INT_de (p(1,i1),p(1,j2),a,4,4,sym)
     Call density(ns,ks,b,p(1,i2),p(1,j1),sym)
     mke = mke + SUM_amb(ns,ks,a,b,sym)
-   
+
     mke = mke * fine / 2  /2
 
     END FUNCTION mke
@@ -1481,23 +1481,23 @@
     INTEGER :: icase, int
 
       mkv = 0.d0
-      
+
       Call Mmk_cell(k)
 
-      Call INT_v(i1,j1,i2,j2,k,4,1,v)   
+      Call INT_v(i1,j1,i2,j2,k,4,1,v)
       mkv =  mkv + SUM(v(:)*p(:,i1))
 
-      Call INT_v(i1,j1,i2,j2,k,4,2,v)   
+      Call INT_v(i1,j1,i2,j2,k,4,2,v)
       mkv =  mkv + SUM(v(:)*p(:,j1))
 
-      Call INT_v(i1,j1,i2,j2,k,4,3,v)   
+      Call INT_v(i1,j1,i2,j2,k,4,3,v)
       mkv =  mkv + SUM(v(:)*p(:,i2))
 
-      Call INT_v(i1,j1,i2,j2,k,4,4,v)   
+      Call INT_v(i1,j1,i2,j2,k,4,4,v)
       mkv =  mkv + SUM(v(:)*p(:,j2))
 
       mkv = mkv * fine / 4  /2
-      
+
       END FUNCTION mkv
 
 
@@ -1520,7 +1520,7 @@
     REAL(KIND=8) :: tkd
     Character(1) :: sym
     REAL(8), External :: SUM_amb
-    
+
     tkd = 0.d0
 
     Call Mtk_cell(k)
@@ -1573,7 +1573,7 @@
     Call INT_de (p(1,i1),p(1,j2),a,3,4,sym)
     Call density(ns,ks,b,p(1,i2),p(1,j1),sym)
     tke = tke + SUM_amb(ns,ks,a,b,sym)
-   
+
     tke = tke  / 2
 
     END FUNCTION tke
@@ -1602,23 +1602,23 @@
     INTEGER :: icase, int
 
       tkv = 0.d0
-      
+
       Call Mtk_cell(k)
 
-      Call INT_v(i1,j1,i2,j2,k,3,1,v)   
+      Call INT_v(i1,j1,i2,j2,k,3,1,v)
       tkv =  tkv + SUM(v(:)*p(:,i1))
 
-      Call INT_v(i1,j1,i2,j2,k,3,2,v)   
+      Call INT_v(i1,j1,i2,j2,k,3,2,v)
       tkv =  tkv + SUM(v(:)*p(:,j1))
 
-      Call INT_v(i1,j1,i2,j2,k,3,3,v)   
+      Call INT_v(i1,j1,i2,j2,k,3,3,v)
       tkv =  tkv + SUM(v(:)*p(:,i2))
 
-      Call INT_v(i1,j1,i2,j2,k,3,4,v)   
+      Call INT_v(i1,j1,i2,j2,k,3,4,v)
       tkv =  tkv + SUM(v(:)*p(:,j2))
 
       tkv = tkv  / 4
-      
+
       END FUNCTION tkv
 
 
@@ -1643,7 +1643,7 @@
     REAL(KIND=8) :: qkd
     Character(1) :: sym
     REAL(8), External :: SUM_amb
-    
+
     qkd = 0.d0
 
     Call Mqk_cell(k)
@@ -1696,7 +1696,7 @@
     Call INT_de (p(1,i1),p(1,j2),a,2,4,sym)
     Call density(ns,ks,b,p(1,i2),p(1,j1),sym)
     qke = qke + SUM_amb(ns,ks,a,b,sym)
-   
+
     qke = qke / 2
 
     END FUNCTION qke
@@ -1725,23 +1725,23 @@
     INTEGER :: icase, int
 
       qkv = 0.d0
-      
+
       Call Mqk_cell(k)
 
-      Call INT_v(i1,j1,i2,j2,k,2,1,v)   
+      Call INT_v(i1,j1,i2,j2,k,2,1,v)
       qkv =  qkv + SUM(v(:)*p(:,i1))
 
-      Call INT_v(i1,j1,i2,j2,k,2,2,v)   
+      Call INT_v(i1,j1,i2,j2,k,2,2,v)
       qkv =  qkv + SUM(v(:)*p(:,j1))
 
-      Call INT_v(i1,j1,i2,j2,k,2,3,v)   
+      Call INT_v(i1,j1,i2,j2,k,2,3,v)
       qkv =  qkv + SUM(v(:)*p(:,i2))
 
-      Call INT_v(i1,j1,i2,j2,k,2,4,v)   
+      Call INT_v(i1,j1,i2,j2,k,2,4,v)
       qkv =  qkv + SUM(v(:)*p(:,j2))
 
       qkv = qkv / 4
-      
+
       END FUNCTION qkv
 
 
@@ -1765,7 +1765,7 @@
     REAL(KIND=8) :: wkd
     Character(1) :: sym
     REAL(8), External :: SUM_amb
-    
+
     wkd = 0.d0
 
     Call Mwk_cell(k)
@@ -1818,7 +1818,7 @@
     Call INT_de (p(1,i1),p(1,j2),a,9,4,sym)
     Call density(ns,ks,b,p(1,i2),p(1,j1),sym)
     wke = wke + SUM_amb(ns,ks,a,b,sym)
-   
+
     wke = wke * fine / 2
 
     END FUNCTION wke
@@ -1847,23 +1847,23 @@
     INTEGER :: icase, int
 
       wkv = 0.d0
-      
+
       Call Mwk_cell(k)
 
-      Call INT_v(i1,j1,i2,j2,k,9,1,v)   
+      Call INT_v(i1,j1,i2,j2,k,9,1,v)
       wkv =  wkv + SUM(v(:)*p(:,i1))
 
-      Call INT_v(i1,j1,i2,j2,k,9,2,v)   
+      Call INT_v(i1,j1,i2,j2,k,9,2,v)
       wkv =  wkv + SUM(v(:)*p(:,j1))
 
-      Call INT_v(i1,j1,i2,j2,k,9,3,v)   
+      Call INT_v(i1,j1,i2,j2,k,9,3,v)
       wkv =  wkv + SUM(v(:)*p(:,i2))
 
-      Call INT_v(i1,j1,i2,j2,k,9,4,v)   
+      Call INT_v(i1,j1,i2,j2,k,9,4,v)
       wkv =  wkv + SUM(v(:)*p(:,j2))
 
       wkv = wkv * fine / 4
-      
+
       END FUNCTION wkv
 
 
@@ -1941,35 +1941,35 @@
 !======================================================================
 !               k
 !     Returns  V (i1, j1; i2, j2) - direct summations of moments
-!                                   over cells 
+!                                   over cells
 !----------------------------------------------------------------------
 
       USE spline_param
       USE spline_orbitals, p => pbs
       USE spline_moments
       USE spline_atomic
-   
+
       IMPLICIT NONE
       INTEGER(4), INTENT(IN) :: i1,j1,i2,j2,k
-   
+
       ! .. local variables
-   
-      INTEGER(4) :: i,j, iv, ivi, ivj, ii, ik,jk 
+
+      INTEGER(4) :: i,j, iv, ivi, ivj, ii, ik,jk
       REAL(8), DIMENSION(nv) :: v1, v2, v3, v4
       REAL(8), DIMENSION(ks*ks) ::  a, b
       REAL(8) :: s1, s2
-   
+
       ! .. check the need of calculations
-                  
+
       Call vk_moments(k)
-   
+
       ik = ks*(ks+1)/2
       jk = ks*ks
-   
+
       vkc = 0.d0
-   
+
       Do iv = 1,nv
-      
+
        ii=0
        Do i=1,ks
         ivi=iv+i-1
@@ -1979,7 +1979,7 @@
          a(ii) = p(ivi,i1)*p(ivj,i2)
         End do
        End do
-   
+
        ii=0
        Do i=1,ks
         ivi=iv+i-1
@@ -1993,22 +1993,22 @@
          end if
         End do
        End do
-   
+
        v1(iv) = SUM(rkd3(1:jk,iv)*a)
        v2(iv) = SUM(rkd2(1:ik,iv)*b)
        v3(iv) = SUM(rkd4(1:jk,iv)*a)
        v4(iv) = SUM(rkd1(1:ik,iv)*b)
-       
+
        ! the diagonal cell contribution
-         
+
        Do j = 1,ik
         vkc = vkc + SUM(a(1:jk)*rkd(1:jk,j,iv))*b(j)
        End do
-       
-      End do 
+
+      End do
 
       ! the upper and lower regions
-   
+
       s1 = 0.d0
       s2 = 0.d0
       Do iv =  2,nv
@@ -2016,10 +2016,10 @@
        vkc = vkc + s1*v2(iv)
        s2 = s2 + v4(iv-1)
        vkc = vkc + s2*v3(iv)
-      End do     
-       
+      End do
+
       vkc = vkc * fine
-   
+
       End FUNCTION vkc
 
 
@@ -2039,10 +2039,10 @@
     INTEGER, INTENT(IN) :: i1,j1,i2,j2,k
 
     REAL(8), External :: SUM_amb
-    
+
     Call make_rkd(k,i1,i2)
     Call make_density(j1,j2,'s')
-  
+
     rkdn = SUM_amb(ns,ks,ds,rkbd,'l')
 
     Call make_rkd(k,j1,j2)
@@ -2070,15 +2070,15 @@
     INTEGER, INTENT(IN) :: i1,j1,i2,j2,k
 
     REAL(8), External :: SUM_amb
-    
+
     Call make_rke(k,j1,i2)
     Call make_density(i1,j2,'x')
-  
+
     rken = SUM_amb(ns,ks,dx,rkbe,'x')
 
     Call make_rke(k,i1,j2)
     Call make_density(j1,i2,'x')
-  
+
     rken = rken + SUM_amb(ns,ks,dx,rkbe,'x')
 
     rken = rken / 2.d0
@@ -2096,7 +2096,7 @@
     USE spline_param
     USE spline_densities
     USE spline_Rk_integrals
-    Use spline_orbitals 
+    Use spline_orbitals
 
     IMPLICIT NONE
     INTEGER, INTENT(IN) :: i1,j1,i2,j2,k
@@ -2129,7 +2129,7 @@
     USE spline_param
     USE spline_densities
     USE spline_Rk_integrals
-    Use spline_orbitals 
+    Use spline_orbitals
 
     IMPLICIT NONE
     INTEGER, INTENT(IN) :: i1,j1,i2,j2,k
@@ -2141,32 +2141,32 @@
     Call make_density(j1,j2,'s')
     Do i=1,ns
      d(1:ns,1:ks) = rkb1(i,1:ns,1:ks)
-     v(i) = SUM_amb(ns,ks,ds,d,'l')   
-    End do  
+     v(i) = SUM_amb(ns,ks,ds,d,'l')
+    End do
     rk1n = SUM(pbs(:,i2)*v(:))
 
     Call make_rkb1(k,i2)
     Call make_density(j1,j2,'s')
     Do i=1,ns
      d(1:ns,1:ks) = rkb1(i,1:ns,1:ks)
-     v(i) = SUM_amb(ns,ks,ds,d,'l')   
-    End do  
+     v(i) = SUM_amb(ns,ks,ds,d,'l')
+    End do
     rk1n = rk1n + SUM(pbs(:,i1)*v(:))
 
     Call make_rkb1(k,j1)
     Call make_density(i1,i2,'s')
     Do i=1,ns
      d(1:ns,1:ks) = rkb1(i,1:ns,1:ks)
-     v(i) = SUM_amb(ns,ks,ds,d,'l')   
-    End do  
+     v(i) = SUM_amb(ns,ks,ds,d,'l')
+    End do
     rk1n = rk1n + SUM(pbs(:,j2)*v(:))
 
     Call make_rkb1(k,j2)
     Call make_density(i1,i2,'s')
     Do i=1,ns
      d(1:ns,1:ks) = rkb1(i,1:ns,1:ks)
-     v(i) = SUM_amb(ns,ks,ds,d,'l')   
-    End do  
+     v(i) = SUM_amb(ns,ks,ds,d,'l')
+    End do
     rk1n = rk1n + SUM(pbs(:,j1)*v(:))
 
     rk1n = rk1n / 4.d0
@@ -2245,7 +2245,7 @@
     Call INT_de (p(1,i1),p(1,j2),a,5,4,sym)
     Call density(ns,ks,b,p(1,i2),p(1,j1),sym)
     rke = rke + SUM_amb(ns,ks,a,b,sym)
-   
+
     rke = rke / 2
 
     END FUNCTION rke

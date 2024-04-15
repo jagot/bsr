@@ -1,7 +1,7 @@
 !=====================================================================
       Subroutine solve_HF
 !=====================================================================
-!     Solve the DF equations in turns 
+!     Solve the DF equations in turns
 !---------------------------------------------------------------------
       Use DBS_grid
       Use dbsr_hf
@@ -10,12 +10,11 @@
       Implicit none
       Real(8) :: hfm(ms,ms), v(ms), et
       Real(8), external :: QUADR
-      Integer :: ip, i,j, it
+      Integer :: ip, i,j, it, ita
 
-      Real(8) :: t1,t2,t3,t4 , S1,S2
-      Real(8), external :: RRTC
-    
-      t1 = RRTC()
+      Real(8) :: t1,t2,t3,t4 , S,S1,S2
+
+      Call CPU_time(t1)
 
       et = etotal
       dpm = 0.d0
@@ -23,6 +22,8 @@
        write(log,'(//A,I6/A/)') 'Iteration ',it, &
                                 '----------------'
        write(log,'(2x,a,9x,a,10x,a,9x,a/)')  'nl', 'e(nl)', 'dpm', 'ns'
+
+!       Do ita =1,2
 
 ! ... main iterations other orbitals:
 
@@ -36,41 +37,54 @@
 
         ! .. diagonalize the hf matrix
 
-        Call hf_eiv(i,hfm,v) 
+        Call hf_eiv(i,hfm,v)
 
-
-        dpm(i)=maxval(abs(p(1:ns,1,i)-v(1:ns)))/maxval(abs(p(:,1,i)))
+        S = maxval(abs(p(1:ns,1,i)-v(1:ns)))/maxval(abs(p(:,1,i)))
+!        dpm(i)=maxval(abs(p(1:ns,1,i)-v(1:ns)))/maxval(abs(p(:,1,i)))
         if(ip.eq.1) then
-         if(dpm(i).lt.orb_tol) iord(i)=0
+         if(S.lt.orb_tol) iord(ip)=0
         else
-         if(dpm(i).lt.orb_tol.and.iord(ip-1).eq.0) iord(i)=0
+         if(S.lt.orb_tol.and.iord(ip-1).eq.0) iord(ip)=0
         end if
 
-        write(log,'(A5,f16.8,1PD13.2,I8)')  ebs(i),e(i,i),dpm(i),mbs(i)
+        if(it.gt.1.and.S.gt.dpm(i)) then
+         v(1:ns) = aweight * v(1:ns) + bweight * p(1:ns,1,i)
+         v(ns+1:ms) = aweight * v(ns+1:ms) + bweight * p(1:ns,2,i)
+         S1 = QUADR(v,v,0); S2 = sqrt(S1)
+         v = v / S2
+        end if
 
+         dpm(i)=maxval(abs(p(1:ns,1,i)-v(1:ns)))/maxval(abs(p(:,1,i)))
 
         Call Put_pv(i,v)
 
         Call Check_tails(i)
 
-        t3=RRTC()
+        S=QUADR(p(1,1,i),p(1,1,i),0)
+        p(:,:,i) = p(:,:,i) / S
+
+        write(log,'(A5,f16.8,1PD13.2,I8,2f12.8)')  ebs(i),e(i,i),dpm(i),mbs(i)
+
+        Call CPU_time(t3)
         Call Update_int(i)
-        t4=RRTC()
+        Call CPU_time(t4)
         time_update_int=time_update_int+t4-t3
 
         ! .. remove tail zero
 
         if(debug.gt.0) then
-         Do j = 1,nwf 
-          if(i.eq.j) Cycle 
-          if(e(i,j) < 1.d-10) Cycle      
+         Do j = 1,nwf
+          if(i.eq.j) Cycle
+          if(e(i,j) < 1.d-10) Cycle
           if(kbs(i).ne.kbs(j)) Cycle
-          write(log,'(a,a,a,f16.8)') &
+          write(log,'(a,a,a,f16.10)') &
            'Orthogonality ',ebs(i),ebs(j),QUADR(p(1,1,i),p(1,1,j),0)
          End do
         end if
 
-       End do ! over functions 
+!       End do
+
+       End do ! over functions
 
        Call Energy
        write(log,'(/a,F16.8)') 'Etotal = ',etotal
@@ -83,7 +97,7 @@
        write(log,'(A,T25,1PD10.2)') 'Energy difference     ', scf_diff
        write(scr,'(a,F20.12,i5,1P2E10.2)') &
         'etotal,it,E_diff,orb_diff = ',etotal,it,scf_diff,orb_diff
-       
+
        Call Boundary_conditions
 
        if ( orb_diff < orb_tol .and. scf_diff  < scf_tol ) Exit
@@ -91,11 +105,11 @@
       End do ! over iterations
 
       if(debug.gt.0) &
-      write(scr,'(a,T30,f10.2,a)') 'time_eiv:',time_hf_eiv,'  sec' 
+      write(scr,'(a,T30,f10.2,a)') 'time_eiv:',time_hf_eiv,'  sec'
       if(debug.gt.0) &
-      write(scr,'(a,T30,f10.2,a)') 'time_mat:',time_hf_matrix,'  sec' 
+      write(scr,'(a,T30,f10.2,a)') 'time_mat:',time_hf_matrix,'  sec'
       if(debug.gt.0) &
-      write(scr,'(a,T30,f10.2,a)') 'time_int:',time_update_int,'  sec' 
+      write(scr,'(a,T30,f10.2,a)') 'time_int:',time_update_int,'  sec'
 
       End Subroutine solve_HF
 
@@ -104,7 +118,7 @@
       Subroutine hf_eiv(i,hfm,v)
 !==================================================================
 !     Find the eigenvector v of hfm for the "positive-eneregy"
-!     eigenvalue m=n-l. Each orthogonality condition to the lower 
+!     eigenvalue m=n-l. Each orthogonality condition to the lower
 !     state reduces m - m - 1.  We supposed that nl orbitals are
 !     ordered to their n-values.
 !------------------------------------------------------------------
@@ -122,16 +136,15 @@
       Integer :: j, jp, info, k,kk,m,mm, ipos(1)
 
       Real(8) :: t1,t2
-      Real(8), external :: RRTC
-    
-      t1 = RRTC()
+
+      Call CPU_time(t1)
 
 ! ... apply orthogonality conditions for orbitals
 
       m = nbs(i)-lbs(i)
-      Do j = 1,nwf 
-       if(i.eq.j) Cycle 
-       if(e(i,j) < 1.d-10) Cycle     
+      Do j = 1,nwf
+       if(i.eq.j) Cycle
+       if(e(i,j) < 1.d-10) Cycle
        if(kbs(i).ne.kbs(j)) Cycle
        Call orthogonality(hfm,p(1,1,j))
        if(j.lt.i) m = m - 1
@@ -147,10 +160,10 @@
        k=0
        Do jp=1,ms
         if(iprm(jp,i).eq.0) Cycle
-        k=k+1; a(k)=hfm(jp,j); s(k)=fppqq(jp,j)  
+        k=k+1; a(k)=hfm(jp,j); s(k)=fppqq(jp,j)
        End do
        aa(1:k,kk)=a(1:k); ss(1:k,kk)=s(1:k)
-      End do 
+      End do
 
 ! ... evaluates the eigenvalues and eigenvectors (LAPACK routine):
 
@@ -164,37 +177,17 @@
       Do j=1,kk; mm = j; if(eval(j).gt.zz) Exit; End do
       mm = m + mm - 1
 
-! ... save all solutions if nl > 0:
-
-      if(out_nl.gt.0.and.i.eq.nwf) then 
-       nsol_nl = kk - mm + 1 
-       if(.not.allocated(p_nl)) Allocate(p_nl(ms,nsol_nl),e_nl(nsol_nl))
-       p_nl = 0.d0; e_nl=0.d0
-       Do m=mm,kk
-        a(1:ms) = aa(1:ms,m);  v=0.d0; k=0
-        Do j=1,ms
-         if(iprm(j,i).eq.0) Cycle; k=k+1; v(j)=a(k)
-        End do 
-
-        if (v(ks) < 0.d0) v = -v
-
-        p_nl(:,m-mm+1)=v(:)
-        e_nl(m-mm+1) = eval(m)
-       End do
-      end if
-
 ! ... restore the solutions in original B-spline net:
 
       a(1:ms) = aa(1:ms,mm);  v=0.d0; k=0
       Do j=1,ms
        if(iprm(j,i).eq.0) Cycle; k=k+1; v(j)=a(k)
-      End do 
+      End do
 
       ipos=maxloc(abs(v))
       if(v(ipos(1)).lt.0.d0) v=-v
 
 !      if (v(ks) < 0.d0) v = -v
-
 
       e(i,i) = eval(mm)
 
@@ -203,7 +196,7 @@
        write(log,'(a,2i5,E15.5)') 'we choose m,mm,e =',m,mm,eval(mm)
       end if
 
-      t2 = RRTC()
+      Call CPU_time(t2)
       time_hf_eiv = time_hf_eiv + t2-t1
 
       End Subroutine hf_eiv

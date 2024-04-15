@@ -15,12 +15,12 @@
       Integer :: q,qq, k,kk, k1,k2, kq,kz
       Integer :: KL,KM, KL1,KL2, KM1,KM2, met
       Real(8) :: A1(0:mk+3),A2(0:mk+3),B1(0:mk+3),B2(0:mk+3)
-      Real(8) :: C, C1,C2, CQ, S,SS,S1,S2,A,AB, FS1,FS2 
+      Real(8) :: C, C1,C2, CQ, S,SS,S1,S2,A,AB, FS1,FS2
       Real(8) :: D0 = 0.d0
       Real(8), external :: Z_3jj
 !---------------------------------------------------------------------
 ! ... define the range of multipole indeces and common multipliers:
-    
+
       KL1=IABS(l1-l3);  KL2=IABS(l2-l4);  KL=MAX0(KL1,KL2)
       KM1= l1+l3;       KM2=l2+l4;        KM=MIN0(KM1,KM2)
       if(KM.lt.KL) Return
@@ -30,7 +30,7 @@
       q = m1-m3; kq = (-1)**q
 
 !---------------------------------------------------------------------
-! ... define all relevant 3j-symbols: 
+! ... define all relevant 3j-symbols:
 
       DO kk = 0,KM-KL+3
        k = KL + kk - 1; if(k.gt.mk) Cycle
@@ -48,8 +48,8 @@
 
 !----------------------------------------------------------------------
 ! ... cycle on multypoles:
-  
-      Do kk = 1,km-kl+1,2                         
+
+      Do kk = 1,km-kl+1,2
 
        k = kl + kk - 1; if(k.gt.mk) Cycle
 
@@ -69,19 +69,19 @@
 ! ... o-o interaction (with Uk --> Tk + Tk'):
 
       if(joper(7).ne.0.and.ms1.eq.ms3.and.ms2.eq.ms4) then
- 
+
        C = -AB
-       if(k.gt.0.and.C.ne.D0) then               
+       if(k.gt.0.and.C.ne.D0) then
 
        S1=l1*(l1+1)-l3*(l3+1)-k*(k+1)
        S2=l2*(l2+1)-l4*(l4+1)-k*(k+1)
        SS=S1*S2
- 
+
        met = 3; A = 2*k*(k+1)*C
 
        CALL ADD_ci( A,met,k+1,no1,no2,no3,no4)      ! T[k+1](r,s;r',s')
        CALL ADD_ci(-A,met,k-1,no1,no2,no3,no4)      ! T[k-1](r,s;r',s')
- 
+
 !      for Uk-inegrals, we use the replacement:
 !      U(1,2;3,4) = T(1,2;3,4) + T(3,2;1;4)
 !      [W.Dankwort, J.Phys.B10,L369(1977)]
@@ -91,23 +91,23 @@
        CALL ADD_ci( A,met,k+1,no3,no2,no1,no4)
        CALL ADD_ci(-A,met,k-1,no1,no2,no3,no4)      ! U[k-1](r,s;r',s')
        CALL ADD_ci(-A,met,k-1,no3,no2,no1,no4)
- 
+
        A = S2*C
        CALL ADD_ci( A,met,k+1,no2,no1,no4,no3)      ! U[k+1](s,r;s',r')
-       CALL ADD_ci( A,met,k+1,no4,no1,no2,no3)   
+       CALL ADD_ci( A,met,k+1,no4,no1,no2,no3)
        CALL ADD_ci(-A,met,k-1,no2,no1,no4,no3)      ! U[k-1](s,r;s',r')
-       CALL ADD_ci(-A,met,k-1,no4,no1,no2,no3)   
- 
+       CALL ADD_ci(-A,met,k-1,no4,no1,no2,no3)
+
        met = 4;  A = C*SS*(k-2)/k/(k+k-1)   ! /2 ?
 
        CALL ADD_ci( A,met,k-1,no1,no2,no3,no4)      ! M[k-2](r,s;r',s')
- 
+
        A = -C*SS*(k+3)/(k+1)/(k+k+3)  ! /2 ?
 
        CALL ADD_ci( A,met,k+1,no1,no2,no3,no4)      ! M[k](r,s;r',s')
- 
+
        end if   ! (k>0)
- 
+
        met=4
        C = -A1(kk)*B1(kk+1)*A2(kk)*B2(kk+1)*S*kq
        if(C.ne.D0) then
@@ -139,7 +139,7 @@
       end if
 
 !----------------------------------------------------------------------
-! ... s-o-o interaction :                                   
+! ... s-o-o interaction :
 
       if(joper(5).ne.0.and.ms1.eq.ms3.and.ms2.eq.ms4) then
 
@@ -156,23 +156,23 @@
 
        met=8                                        ! N[k](r,s;r',s')
 
-       if(k*l3.gt.0) then                            
+       if(k*l3.gt.0) then
         C = C/(k+1)/2
-        C1 = l1*(l1+1)-l3*(l3+1)-k*(k+1)      
+        C1 = l1*(l1+1)-l3*(l3+1)-k*(k+1)
         C1 = -C1*C*FS1
         CALL ADD_ci(C1,met,k+1,no1,no2,no3,no4)     ! N[k]
         C1 = -C1*(k+1)/k
         CALL ADD_ci(C1,met,k-1,no2,no1,no4,no3)     ! N[k-2]
        end if
 
-       if(k*l4.gt.0) then                            
-        C2 = l2*(l2+1)-l4*(l4+1)-k*(k+1)   
+       if(k*l4.gt.0) then
+        C2 = l2*(l2+1)-l4*(l4+1)-k*(k+1)
         C2 = C2*C*FS2
         CALL ADD_ci(C2,met,k+1,no2,no1,no4,no3)     ! N[k]
         C2= -C2*(k+1)/k
         CALL ADD_ci(C2,met,k-1,no1,no2,no3,no4)     ! N[k-2]
        end if
- 
+
 !----------------------------------------------------------------------
 
        CQ = D0; if(iabs(q).le.k) CQ = (k+q+1)*(k-q+1)

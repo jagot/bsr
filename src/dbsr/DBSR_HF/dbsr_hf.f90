@@ -10,7 +10,7 @@
 !     case, the program allows also simultaineous calculation of
 !     several configurations in different optimization schemes.
 !     Another possibility - calculation whole Rydberg series in
-!     frozen-core approximation.   
+!     frozen-core approximation.
 !
 !     For short instructions, run dbsr_hf ? and look in name.inp.
 !----------------------------------------------------------------------
@@ -20,7 +20,7 @@
       Implicit none
       Real(8) :: t1,t2,t3,t4
 
-      t1=RRTC()
+      Call CPU_time(t1)
 
 ! ... atomic paramters:
 
@@ -36,21 +36,21 @@
 
 ! ... computing:
 
-      t3=RRTC()
+      Call CPU_time(t3)
 
       Call Get_estimates
 
-      t4=RRTC()
+      Call CPU_time(t4)
       if(debug.gt.0) &
-      write(scr,'(a,T30,f10.2,a)') 'Get_estimates:',t4-t3,'  sec' 
+      write(scr,'(a,T30,f10.2,a)') 'Get_estimates:',t4-t3,'  sec'
 
-      t3=RRTC()
+      Call CPU_time(t3)
 
       Call Solve_HF
 
-      t4=RRTC()
+      Call CPU_time(t4)
       if(debug.gt.0) &
-      write(scr,'(a,T30,f10.2,a)') 'Solve_HF:',t4-t3,'  sec' 
+      write(scr,'(a,T30,f10.2,a)') 'Solve_HF:',t4-t3,'  sec'
 
 ! ... output of results:
 
@@ -62,25 +62,24 @@
        Call gen_jj_states(AF_conf,AF_cfg,jmin,jmax)
       end if
 
-      t3=RRTC()
+      Call CPU_time(t3)
       Call Write_pqbs
       Call Write_nl
       Call Plot_bsw
       Call Grasp_wfn
-      Call Grasp_nl
       Call Summry
-      t4=RRTC()
+      Call CPU_time(t4)
       if(debug.gt.0) &
-      write(scr,'(a,T30,f10.2,a)') 'Summry:',t4-t3,'  sec' 
+      write(scr,'(a,T30,f10.2,a)') 'Summry:',t4-t3,'  sec'
 
-      t2=RRTC()
-      write(scr,'(/a,f10.2,a)') 'time:',t2-t1,'  sec' 
-      write(log,'(/a,f10.2,a)') 'time:',t2-t1,'  sec' 
+      Call CPU_time(t2)
+      write(scr,'(/a,f10.2,a)') 'time:',t2-t1,'  sec'
+      write(log,'(/a,f10.2,a)') 'time:',t2-t1,'  sec'
 
       if(debug.gt.0) &
-      write(scr,'(a,T25,f10.2,a,i10)') 'Convol:',time_convol,'  sec',ic_convol 
+      write(scr,'(a,T25,f10.2,a,i10)') 'Convol:',time_convol,'  sec',ic_convol
       if(debug.gt.0) &
-      write(scr,'(a,T25,f10.2,a,i10)') 'Density:',time_density,'  sec',ic_density 
+      write(scr,'(a,T25,f10.2,a,i10)') 'Density:',time_density,'  sec',ic_density
 
       End ! Program DBSR_HF
 

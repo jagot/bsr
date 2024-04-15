@@ -1,13 +1,13 @@
 !======================================================================
-!     UTILITY      S E C _ T O P  
+!     UTILITY      S E C _ T O P
 !
 !     zarm.omb_par --> zarm.omb_top
 !
 !======================================================================
-!     generate top-up omegas for all included transitions 
+!     generate top-up omegas for all included transitions
 !     (based on the information in 'zarm.omb_par')
 !
-!     Call as:  sec_top  [par= top= ek1= ek2= eps_tail= eps_fail= eps_x=] 
+!     Call as:  sec_top  [par= top= ek1= ek2= eps_tail= eps_fail= eps_x=]
 !---------------------------------------------------------------------
 
       Use target; Use channels
@@ -17,10 +17,10 @@
       Real(8), Allocatable ::  fl(:), om(:), e(:),fail(:),coefa(:),coefb(:)
       Real(8), Allocatable ::  om_sum(:,:), om_top(:,:)
       Real(8), Allocatable ::  fom(:,:,:)
-                                                                                              
+
       Integer, Allocatable ::  iop(:),jop(:), met(:), ic(:), jc(:)
 
-      Integer :: ke = 20000  !  initial number of energies 
+      Integer :: ke = 20000  !  initial number of energies
 
       Real(8) :: eps_tail = 0.001
       Real(8) :: eps_x    = 0.025
@@ -108,8 +108,8 @@
       if(ek1.gt.0.d0.and.e1.lt.ek1) go to 1
       if(ek2.gt.0.d0.and.e1.gt.ek2) go to 1
 
-      if(np.eq.0) np = i1       
-      if(ni.eq.0) ni = i2       
+      if(np.eq.0) np = i1
+      if(ni.eq.0) ni = i2
       if(np.ne.i1) Stop 'diferent np'
       if(ni.ne.i2) Stop 'diferent ni'
 
@@ -124,7 +124,7 @@
        rewind(nua);   write(nua) (e(i),i=1,ne)
        Deallocate(e); me=me+ke; Allocate(e(me))
        rewind(nua);   read(nua) (e(i),i=1,ne)
-      end if       
+      end if
 
       go to 1
     2 write(*,'(/a,i5,a)') 'ne =',ne,' - number of energies'
@@ -142,35 +142,35 @@
 ! ... allocations:
 
       maxl=maxval(lpar)
-      write(*,'(/a,3i10/)') 'maxl = ', maxl 
+      write(*,'(/a,3i10/)') 'maxl = ', maxl
 
-      S = 8.0 * mom * (nlsp+3)  / (1024.0*1024.0);  S = S * ne 
-      write(*,'(/a,f10.2,a/)') 'Memory required:  ', S, ' Mb' 
+      S = 8.0 * mom * (nlsp+3)  / (1024.0*1024.0);  S = S * ne
+      write(*,'(/a,f10.2,a/)') 'Memory required:  ', S, ' Mb'
       if(S.gt.50000.d0) Stop ' > 50 GB'
-      
+
       Allocate(fom(mom,nlsp,ne), fl(0:maxl), iop(ne), jop(ne), om(mom) )
 
       Allocate(om_top(mom,ne), om_sum(mom,ne) )
 
-      fom = 0.d0;  iop = 0;  jop =0; om_top = 0.d0; om_sum = 0.d0; 
+      fom = 0.d0;  iop = 0;  jop =0; om_top = 0.d0; om_sum = 0.d0;
 
       mmm = np*(np+1)/2; if(ion.ne.0) mmm=np*(np-1)/2
 
       if(np.lt.ntarg) mmm = mmm + (ntarg-np)*ni
 
       Allocate( fail(mmm), coefa(mmm), coefb(mmm), met(mmm), ic(mmm), jc(mmm) )
-      fail = 0.d0; coefa = 0.d0; coefb = 0.d0; met = -2; 
-      
+      fail = 0.d0; coefa = 0.d0; coefb = 0.d0; met = -2;
+
       Do itr1 = 1,np
       Do itr2 = itr1,ntarg
-       itr = Index_TR(ion,itr1,itr2,np,ni) 
-       if(itr.eq.0) Cycle         
+       itr = Index_TR(ion,itr1,itr2,np,ni)
+       if(itr.eq.0) Cycle
        ic(itr) = itr1
        jc(itr) = itr2
       End do; End do
-      
+
 !-----------------------------------------------------------------------------------
-! ... check continuation: 
+! ... check continuation:
 
       if(Icheck_file(ccc).gt.0) then
        Open(nuc,file=ccc)
@@ -198,7 +198,7 @@
        write(*,'(i5,f14.6,10i5)') ilsp, e1, ie, k1, iop(ie), IOPEN(ntarg,e1,etarg)
        Stop 'different iop'
 !       iop(ie)=-10
-      end if 
+      end if
 
       if(jop(ie).ne.k2) Stop 'different jop'
 
@@ -221,7 +221,7 @@
       if(len_trim(label).gt.0) oms = trim(oms)//'_'//trim(label)
       Call Read_aarg('oms',oms)
       Open(nuq,file=oms)
-     
+
       if(len_trim(label).gt.0) bad = trim(bad)//'_'//trim(label)
       Open(nub,file=bad)
 
@@ -250,8 +250,8 @@
 
        if(ek.lt.etarg(itr2)) Cycle
 
-       itr = Index_TR(ion,itr1,itr2,np,ni) 
-       if(itr.eq.0) Cycle         
+       itr = Index_TR(ion,itr1,itr2,np,ni)
+       if(itr.eq.0) Cycle
 
        ! ... find met:
 
@@ -287,7 +287,7 @@
        f1=0.d0; f2=0.d0; f3=0.d0
        Do il=0,maxl
         if(fl(il).eq.0.d0) Cycle
-        f1=f2; f2=f3; f3=fl(il)        
+        f1=f2; f2=f3; f3=fl(il)
         if(f2.eq.0.d0) f2=f3
         if(jtr1.ne.0) write(pri,'(i2,a1,D12.4,f10.3)') il,'.',f3,f2/f3-1.d0
        End do
@@ -320,7 +320,7 @@
          if(ek.gt.ekk) then
           fail(itr)=ek
          else
-          write(nub,'(f10.6,2i5)') ek,itr1,itr2; nbad=nbad+1; Cycle;          
+          write(nub,'(f10.6,2i5)') ek,itr1,itr2; nbad=nbad+1; Cycle;
          end if
         end if
 
@@ -341,7 +341,7 @@
       End do         !  over  itr2
       End do         !  over  itr1
 
-      End do        ! over ie  
+      End do        ! over ie
 
 !-----------------------------------------------------------------------
 !... fail information:
@@ -362,13 +362,13 @@
 
       write(nuc,*) 'failed transitions: ',i
       Close(nuc)
- 
+
       write(*,*) 'failed transitions: ',i
-      
+
 !----------------------------------------------------------------------
 ! ... output new 'topped' om:
 
-      Do ie=1,ne 
+      Do ie=1,ne
        if(iop(ie).lt.0) Cycle
 
        ntr1 = iop(ie);  ntr = ntr1*(ntr1+1)/2
@@ -383,17 +383,17 @@
                               '   e(ie),nom,iopen,jopen,np,ni'
        write(nuq,'(5D16.8)') (om_sum(i,ie),i=1,nom)
 
-      End do        ! over ie  
+      End do        ! over ie
 
 !----------------------------------------------------------------------
 
-      write(*,*) 'failed energies: ',nbad 
- 
+      write(*,*) 'failed energies: ',nbad
+
       Call CPU_time(t2)
 
       write(*,'(a,f10.1,a)') 'time = ',(t2-t1)/60,' min'
       write(pri,'(a,f10.1,a)') 'time = ',(t2-t1)/60,' min'
-                                                                 
+
  CONTAINS
 
 !======================================================================
@@ -407,15 +407,15 @@
 
       if(coefa(itr).eq.0.d0) then
         je = ie-1
-        z  = e(je) /(etarg(itr2)-etarg(itr1)) 
+        z  = e(je) /(etarg(itr2)-etarg(itr1))
         a  = om_top(itr,je)/ log(z)
 write(*,'(2E12.5)') e(ie), om_top(itr,ie-1)
 write(*,'(a,2E12.5)') 'z,a',z,a
-        coefa(itr) = a 
-        coefb(itr) = 0.d0 
+        coefa(itr) = a
+        coefb(itr) = 0.d0
       end if
 
-      z  = e(ie) /(etarg(itr2)-etarg(itr1)) 
+      z  = e(ie) /(etarg(itr2)-etarg(itr1))
       a = coefa(itr)
       om_top(itr,ie) = a*log(z)
 
@@ -441,12 +441,12 @@ write(*,'(a,2E12.5)') 'z,a',z,a
          y2 = om_top(itr,je)/(e(je)-etarg(itr1))
          b = (y1*x1-y2*x2)/(y1-y2)
          a = y1*(x1-b)
-         coefa(itr) = a 
+         coefa(itr) = a
          coefb(itr) = b
-        endif 
+        endif
       end if
 
-      x = e(ie);  a=coefa(itr);  b=coefb(itr) 
+      x = e(ie);  a=coefa(itr);  b=coefb(itr)
       om_top(itr,ie) = a/(x-b)*(e(ie)-etarg(itr1))
 
       End  Subroutine Extra2
@@ -462,7 +462,7 @@ write(*,'(a,2E12.5)') 'z,a',z,a
 
       Character :: A=' '
 
-      Call get_command_argument(1,A)  
+      Call get_command_argument(1,A)
       if(A.ne.'?'.and.A.ne.'!') Return
 
       write(*,'(a)') &

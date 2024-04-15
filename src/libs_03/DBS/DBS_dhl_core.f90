@@ -111,7 +111,7 @@
       Do ik=1,nkap; kk=kap_list(ik); ll=l_kappa(kk); jj=j_kappa(kk)
        if(kappa.ne.0.and.kappa.ne.kk) Cycle
       Do i=1,ncore; kc=kbs(i); lc=l_kappa(kc); jc=j_kappa(kc)
-                                                                                           
+
 ! ... direct interaction:
 
        C = dble(jc+1); k=0
@@ -269,7 +269,7 @@
       Real(8) :: vv(ns+ns)
       Integer :: k
       Integer, external :: Ipointer
- 
+
       if(i.eq.iv) then; vv = Lvec; Return; end if
 
       k = Ipointer(nkap,kap_list,kbs(i))
@@ -285,7 +285,7 @@
 !====================================================================
       Real(8) Function Lval(i1,i2)
 !====================================================================
-!     Calculate and store P(i1) * hd(:,:) * P(i2)  
+!     Calculate and store P(i1) * hd(:,:) * P(i2)
 !====================================================================
       Use dhl_core
       Use DBS_grid, only: ns
@@ -296,7 +296,7 @@
       Real(8) :: v1(ns+ns),v2(ns+ns)
       Integer :: k
       Integer, external :: Ipointer
- 
+
       if(i1.eq.iv1.and.i2.eq.iv2) then; Lval = Lvalue; Return; end if
 
       if(kbs(i1).ne.kbs(i2)) then

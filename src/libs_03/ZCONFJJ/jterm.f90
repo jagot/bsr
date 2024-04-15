@@ -1,7 +1,7 @@
 !======================================================================
       Integer Function Jterm (j,q,k,JT,JV,JW,JQ)
 !======================================================================
-!     provides information about possible terms in the j^q subshell 
+!     provides information about possible terms in the j^q subshell
 !     for  j <= 9/2
 !
 !     Options:
@@ -21,7 +21,7 @@
        /1, 5, 2,  3, 3, 0,  3, 9, 0,                               & ! 5/2 ^ 3
         1, 7, 3,  3, 3, 1,  3, 5, 1,  3, 9, 1,  3,11, 1,  3,15, 1, & ! 7/2 ^ 3
         0, 0, 4,  2, 4, 2,  2, 8, 2,  2,12, 2,  4, 4, 0,  4, 8, 0, & ! 7/2 ^ 4
-        4,10, 0,  4,16, 0,                                         & 
+        4,10, 0,  4,16, 0,                                         &
         1, 9, 4,  3, 3, 2,  3, 5, 2,  3, 7, 2,  3, 9, 2,  3,11, 2, & ! 9/2 ^ 3
         3,13, 2,  3,15, 2,  3,17, 2,  3,21, 2,                     &
         0, 0, 5,  2, 4, 3,  2, 8, 3,  2,12, 3,  2,16, 3,  4, 0, 1, & ! 9/2 ^ 4
@@ -39,26 +39,26 @@
       if(j.lt.0.or.mod(j,2).eq.0) then
        write(*,*) 'Jterm: unphysical j-value: j =',j
        Stop  'Stop in Jterm'
-      end if 
+      end if
 
       qm = j + 1
       if(q.lt.0.or.q.gt.qm) then
        write(*,*) 'Jterm: number of electron is out of range: q =',q
        Stop  'Stop in Jterm'
-      end if 
+      end if
 
       if(j.gt.9.and.q.gt.2) then
        write(*,*) 'Jterm: j^q out of scope: j,q =',j,q
        Stop  'Stop in Jterm'
-      end if 
+      end if
 
-      Jterm = 0 
+      Jterm = 0
 
 !----------------------------------------------------------------------
 ! ... the number of terms in j^q subshell:
-      
+
       if(q.le.1.or.q.ge.qm-1) then
-       nterm = 1 
+       nterm = 1
       elseif(q.eq.2.or.q.eq.qm-2) then
        nterm = qm/2
       else
@@ -70,16 +70,16 @@
         Case(904,906);   nterm =18; ip =27    ! 9/2 ^ 4,6
         Case(905);       nterm =20; ip =45    ! 9/2 ^ 5
         Case default;
-         write(*,*) 'Jterm: cannot find j^q subshell for j,q=',j,q 
+         write(*,*) 'Jterm: cannot find j^q subshell for j,q=',j,q
          Stop 'Stop in Jterm'
        End Select
       end if
 
       if(k.lt.0) then; Jterm = nterm; Return; end if
 !----------------------------------------------------------------------
-! ... position of the JT,JV term in the subshell list      
+! ... position of the JT,JV term in the subshell list
 
-      if(k.eq.0) then          
+      if(k.eq.0) then
 
       qq = min0(q,qm-q)
       Select case(qq)
@@ -113,7 +113,7 @@
          Jterm=i; Exit
         End do
       end if
- 
+
       if(Jterm.eq.0) then
        write(*,*) 'Jterm:  incorect term j^q(JV,JT):',j,q,JV,JT
        write(*,*) '2j =',j
@@ -129,7 +129,7 @@
 !----------------------------------------------------------------------
 ! ... k-th term of j^q subshell
 
-      if(k.gt.nterm) then 
+      if(k.gt.nterm) then
        write(*,*) 'Jterm:  incorect input k =',k
        Stop 'Stop in Jterm'
       end if
@@ -140,7 +140,7 @@
       elseif(q.eq.1.or.q.eq.qm-1) then           !  j ^ 1
        JV = 1; JT = j; JQ = qm/2-1
       elseif(q.eq.2.or.q.eq.qm-2) then           !  j ^ 2
-       JV = 0; if(k.gt.1) JV = 2 
+       JV = 0; if(k.gt.1) JV = 2
        JT = (k-1) * 4
        JQ = qm/2; if(k.gt.1) JQ = JQ - 2
       else                                       !  j ^ q

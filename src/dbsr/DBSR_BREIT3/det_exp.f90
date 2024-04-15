@@ -11,7 +11,6 @@
       Integer, allocatable :: IP_kt(:),IP_det(:,:),JTs(:,:),JTi(:,:),IPs(:,:)
       Real(8), allocatable :: C_det(:), CC_det(:,:)
       Integer :: i,j, k,kt,kdt,ktm, it,it1,it2, JW,JQ
-      Real(8) :: S
       Integer, external :: Ndets_jq, Jterm, mj_value
 
       Call Alloc_nljm(ne,msh)
@@ -61,7 +60,7 @@
        rewind(nua)
        Call Det_expn_jj;  if(kdt.eq.0) Stop 'Pre_detexp: kdt = 0'
 
-! ... record results (from 'nua' to 'nud'):
+! ... record results (re-write from 'nua' to 'nud'):
 
        write(nud) ic,kt,kdt
        write(nud) IP_kt(1:kt)

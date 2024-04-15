@@ -5,7 +5,7 @@
 !---------------------------------------------------------------------
       Implicit none
       Character ::  name = ' '
-      
+
       Call Read_name(name)
       if(name.ne.'?') Return
 
@@ -32,8 +32,8 @@
 '  additional arguments LT_min,LT_max, IS_min,IS_max, or JJ_min,JJ_max       ', &
 '  can be used at nlsp=0 for generation of possible partial waves            ', &
 '  (with S -> 2S+1  and J -> 2J representation)                              ', &
-'                                                                       '   
+'                                                                       '
       Stop ' '
-                                                                             
-      End Subroutine bsr_prep_inf                                             
+
+      End Subroutine bsr_prep_inf
 

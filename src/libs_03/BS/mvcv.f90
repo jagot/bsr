@@ -21,7 +21,7 @@
 !--------------------------------------------------------------------
 
     USE spline_param; USE spline_atomic;  USE spline_grid
-    
+
     IMPLICIT NONE
 
     INTEGER(4), INTENT(in) :: l

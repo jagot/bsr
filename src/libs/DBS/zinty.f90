@@ -12,10 +12,10 @@
     Implicit none
     Integer, intent(in)  :: nv,ks,ks1,ks2,mm
     Real(8), intent(in)  :: B1(nv+1,ks,ks1),B2(nv+1,ks,ks2),ygr(nv,ks)
-    Real(8), intent(out) :: ym(mm,mm)       
+    Real(8), intent(out) :: ym(mm,mm)
     Integer :: i,j, iv, ith, jth
 
-    ym = 0.d0                  
+    ym = 0.d0
     Do iv = 1,nv                      ! over intervals
      Do ith = 1,ks1; i = iv+ith-1     ! over B1 splines
      Do jth = 1,ks2; j = iv+jth-1     ! over B2 splines
@@ -40,13 +40,13 @@
     Implicit none
     Integer, intent(in)  :: k,ks1,ks2,mm
     Real(8), intent(in)  :: B1(nv+1,ks,ks1),B2(nv+1,ks,ks2)
-    Real(8), intent(out) :: ym(mm,mm)       
+    Real(8), intent(out) :: ym(mm,mm)
 
     Integer :: i,j, iv, ith,jth
 
-    ym = 0.d0                  
-    Do iv = 1,nv                              
-     gx(:) = grw(iv,:) * gr(iv,:) ** k 
+    ym = 0.d0
+    Do iv = 1,nv
+     gx(:) = grw(iv,:) * gr(iv,:) ** k
      Do ith = 1,ks1; i = iv+ith-1
       gw (:) = gx(:) * b1(iv,:,ith)
      Do jth = 1,ks2; j = iv+jth-1

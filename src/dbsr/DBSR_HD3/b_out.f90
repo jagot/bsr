@@ -45,7 +45,7 @@
        write(nuu) js,LAB
        ich = isol(is)   ! dominant channel
        it=1; if(ich.le.nch) it=iptar(ich)
-       write(nuu) eval(is),Ebind(is),ich,it 
+       write(nuu) eval(is),Ebind(is),ich,it
 
        ! find solution:
 

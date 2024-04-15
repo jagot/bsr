@@ -20,7 +20,7 @@
       Integer :: nuc = 8;  Character(ma) :: AF  ! c-files
       Integer :: nuw = 9;  Character(ma) :: AF_wfn ='target.bsw'
 
-! ... default values for input parameters:    
+! ... default values for input parameters:
 
 ! ... values used in different subroutions:
 
@@ -29,9 +29,9 @@
       Integer :: lcfg_phys, lcfg_targ, lcfg_sct, lcfg_pert, lcfg_comp
       Integer :: nwf_targ, nwf_sct, nwf_pert
 
-      Real(8) :: c_targ = 0.75           
-      Real(8) :: c_conf = 0.20           
-      Real(8) :: c_comp = 1.10        
+      Real(8) :: c_targ = 0.75
+      Real(8) :: c_conf = 0.20
+      Real(8) :: c_comp = 1.10
 
       Integer :: max_ll =-1
       Integer :: min_ll =-1
@@ -53,22 +53,22 @@
 ! ... coupling scheemes:
 
       Integer, parameter :: mshells = 25
-      Integer, parameter :: mcup=2*mshells   
-      Integer, parameter :: mmom=6*mshells   
-      Integer :: ncup    ! number of elementary couplings 
+      Integer, parameter :: mcup=2*mshells
+      Integer, parameter :: mmom=6*mshells
+      Integer :: ncup    ! number of elementary couplings
       Integer :: nmom    ! number of involed momemntums
       Integer :: J1_coupling(3,mcup)
       Integer :: J2_coupling(3,mcup)
       Integer :: moments(mmom)
-      Real(8) :: S_cfp 
-      Real(8) :: S_recup 
-      Integer :: JP_trap 
+      Real(8) :: S_cfp
+      Real(8) :: S_recup
+      Integer :: JP_trap
 
 ! ... additional arrays:
 
-      Integer, allocatable :: ic_targ(:)  
-      Integer, allocatable :: jc_targ(:)  
-      Integer, allocatable :: ic_pert(:)  
+      Integer, allocatable :: ic_targ(:)
+      Integer, allocatable :: jc_targ(:)
+      Integer, allocatable :: ic_pert(:)
       Real(8), allocatable :: WC_pert(:)
 
 ! ... information about channels to delete:

@@ -9,7 +9,7 @@
       Implicit none
       Integer ::  ic,jc, ii
 
-      Do 
+      Do
        read(nui) ic,jc
        if(ic.le.0) Exit
 
@@ -17,7 +17,7 @@
 
        ic=ic-nch; jc=jc-nch; ii = ibb(ic,jc)
        read(nui) hbb(ii)
-        
+
       elseif(ic.gt.nch) then            !  ch-pert
 
        ic=ic-nch; ii = icb(jc,ic)
@@ -28,7 +28,7 @@
        ii = icc(ic,jc)
        read(nui) hcc(:,:,ii)
 
-      end if 
+      end if
 
       End do
 
@@ -45,7 +45,7 @@
       Real(8) :: S, w(ns), ww(ns*ns)
       Integer ::  ic,jc
 
-      Do 
+      Do
        read(nui) ic,jc; if(ic.le.0) Exit
        if(ic.gt.nch.and.jc.gt.nch) then  !  pert-pert
         read(nui) S
@@ -53,7 +53,7 @@
         read(nui) w
        else                              !  ch-ch
         read(nui) ww
-       end if 
+       end if
       End do
 
       End Subroutine skip_matrix

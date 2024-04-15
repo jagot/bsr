@@ -9,7 +9,7 @@
 
       Implicit none
       Integer :: myid,ierr
-      
+
       Call MPI_COMM_RANK(MPI_COMM_WORLD, myid, ierr)
 
 ! ... configuration synnetrs:

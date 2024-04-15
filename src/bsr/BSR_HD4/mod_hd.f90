@@ -1,5 +1,5 @@
 !=====================================================================
-      Module bsr_hd      
+      Module bsr_hd
 !=====================================================================
 !     Contains common variable and arrays for program bsr_hd
 !---------------------------------------------------------------------
@@ -32,7 +32,7 @@
       Real(8) :: Emin = 0.d0       ! max energy
       Real(8) :: Edmax = 0.d0      ! max. energy for diagonalization
       Real(8) :: Edmin = 0.d0      ! min. energy for diagonalization
-      Real(8) :: Egap = 0.001      ! 
+      Real(8) :: Egap = 0.001      !
       Integer :: ilzero = 1        ! more restrictions
       Integer :: ibzero = 1        ! more restrictions
 
@@ -56,9 +56,9 @@
       Real(8), allocatable :: v(:)    ! solution vector
       Real(8), allocatable :: bb(:,:) ! new basis
 
-      Integer, allocatable :: ipsol(:) ! pointer on new basis 
+      Integer, allocatable :: ipsol(:) ! pointer on new basis
       Integer, allocatable :: isol(:)  ! pointer on main configuration
-    
+
       Real(8), allocatable :: WMAT(:,:)  ! surface amplitudes
 
       Real(8), allocatable :: CF(:,:,:)  ! asymptotic coefficients
@@ -70,25 +70,25 @@
 
       Real(8) :: RA  ! R-matrix radius
 
-! ... target exp.energies: 
-    
+! ... target exp.energies:
+
       Integer :: iexp = 0, iiexp = 0
       Real(8), allocatable :: E_exp(:)
       Integer, allocatable :: ip_exp(:)
       Real(8) :: au_eV, au_cm
       Character(2) :: unit = 'au'
 
-! ... perturber exp.energies: 
+! ... perturber exp.energies:
 
       Integer :: iexp_pert = 0, nperts = 0, kpert = 0
       Real(8), allocatable ::  E_pert(:), E_npert(:), E_pert_corr(:)
 
-! ... pointer on the inclusion of mass-velocity term 
+! ... pointer on the inclusion of mass-velocity term
 ! ... in first order
 
       Integer :: jmvc = 0
 
-! ... additonal output: 
+! ... additonal output:
 
       Integer :: iwt = -1    ! print channel weights
       Real(8) :: cwt = -0.01 ! cut of for weights' printing

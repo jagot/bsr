@@ -10,7 +10,7 @@
 
       iarg = command_argument_count()
       Call GET_COMMAND_ARGUMENT(1,AF)
-      
+
       if(iarg.lt.4.or.AF.eq.'?') then
        write(*,*)
        write(*,*) 'BSR_DMAT: number of arguments should be = or > 4:'
@@ -36,9 +36,9 @@
       Call GET_COMMAND_ARGUMENT(4,ctype2)
 
       jout=0; if(ctype2.eq.'p') jout=1
-      if(ctype2.eq.'q') then; jout=2; ctype2='p'; end if       
-      if(ctype2.eq.'d') then; jout=3; ctype2='p'; end if       
-	  
+      if(ctype2.eq.'q') then; jout=2; ctype2='p'; end if
+      if(ctype2.eq.'d') then; jout=3; ctype2='p'; end if
+
       i1 = LEN_TRIM(name1)
       if(name1(i1:i1).eq.'c') then; ilsp1=0
       else; ALS1=name1(i1-2:i1); read(ALS1,'(i3)') ilsp1; end if

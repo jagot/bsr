@@ -55,7 +55,7 @@
       End do
                                          ! initial factorial parameters
                                          ! in the sum
-      Do I=5,8;  J(I)=IZ_min-L(I-4); End do                          
+      Do I=5,8;  J(I)=IZ_min-L(I-4); End do
       Do I=9,11; J(I)=L(I-4)-IZ_min; End do
 
       C=0.0
@@ -86,7 +86,7 @@
         END IF
         IF(mod(K,2).EQ.+1) X=X*SQRT(R)
         IF(mod(K,2).EQ.-1) X=X/SQRT(R)
-       End do 
+       End do
 
        IF(mod(IZ,2).eq.1) X=-X
        C=C+X

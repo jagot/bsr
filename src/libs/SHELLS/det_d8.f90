@@ -1,29 +1,29 @@
 !=======================================================================
   Subroutine Det_d8 (id,ML,MS,Idet)
 !=======================================================================
-! determinamt id and corresponding ML,MS for subshell d8 
+! determinamt id and corresponding ML,MS for subshell d8
 !-----------------------------------------------------------------------
- 
+
   Implicit none
- 
+
   Integer, intent(in)  :: id
   Integer, intent(out) :: ML,MS,Idet(*)
- 
+
   Integer, parameter :: iq_d8 =   8
   Integer, parameter :: kd_d8 =  45
- 
+
   Integer :: Idet_d8 (iq_d8,kd_d8)
- 
+
   Integer :: ML_d8 (kd_d8)
   Integer :: MS_d8 (kd_d8)
- 
+
   if(id.le.0.or.id.gt.kd_d8) Stop "Det_d8: index id is out of range"
- 
+
   ML = ML_d8 (id)
   MS = MS_d8 (id)
- 
+
   Idet (1:iq_d8)= Idet_d8 (:,id)
- 
+
 
   Data Idet_d8 ( 1,:)/ &
    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, &
@@ -64,5 +64,5 @@
   Data MS_d8 / &
   1, -1,  1,  1,  3,  1, -1,  1, -1,  1,  1,  3,  1,  3,  1, -1,  1, -1,  1, -1,  1,  1,  3,  1,  3,  1,  3,  1, -1,  1, -1,  1, &
  -1,  1, -1,  1,  1,  3,  1,  3,  1,  3,  1,  3,  1  /
- 
-  End Subroutine Det_d8 
+
+  End Subroutine Det_d8

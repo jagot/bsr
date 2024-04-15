@@ -21,7 +21,7 @@
 !----------------------------------------------------------------------
 
       USE RADIAL
- 
+
       IMPLICIT REAL (8) (A-H,O-Z)
 
 ! ... open files:
@@ -50,7 +50,7 @@
 
 ! ... test assignment for fine constant:
 
-      fine = 1.d0       
+      fine = 1.d0
 
 ! ... test of integral routines:
 
@@ -101,7 +101,7 @@
         N(i)=nn; L(i)=ll;  KS(i)=0
 
         EL4 = ELF4(N(i),L(i),KS(i))
-        EL(i) = EL4(2:4)       
+        EL(i) = EL4(2:4)
 
         PN = HNORM(N(I),L(I),Z-S)
         DO J=1,NR-2
@@ -367,7 +367,7 @@
         bm2 =  (gr2 - ar2)/ar2
 
         write(iout,'(a,a,a,a,a,4D12.3)') &
-                    '<',EL(i),'| r^2 |',EL(j),'> = ',ar2,gr2,bm2      
+                    '<',EL(i),'| r^2 |',EL(j),'> = ',ar2,gr2,bm2
 
        End do
        End do
@@ -445,10 +445,10 @@
        a = -0.5 * (Z/n(i))**4 * a
 
 
-       b = RLSHFT(i,i)    !       * 2.d0 
-       
+       b = RLSHFT(i,i)    !       * 2.d0
+
        if(l(i).eq.0) b = b - 0.5*Z*AZ(i)*AZ(i)
-       
+
        c = (a - b)/a
 
        write(iout,'(a,a,a,a,a,3D20.8)')  &
@@ -479,11 +479,11 @@
 
       iout = 3;   Open(iout,file='test_deriv')
 
-! ... 1s:    P' = -2*r*exp(-r) 
+! ... 1s:    P' = -2*r*exp(-r)
 
       write(iout,'(/a/)') ' 1s:'
       ii = IWF(1,0,0)
-      
+
       IP = nrf+1
       Call P_derive(II,IP)
 
@@ -494,11 +494,11 @@
       End do
 
 
-! ... 2p:    P' =    r*exp(-r/2)(1-r/2) 
+! ... 2p:    P' =    r*exp(-r/2)(1-r/2)
 
       write(iout,'(/a/)') ' 2p:'
       ii = IWF(2,1,0)
-      
+
       IP = nrf+1
       Call P_derive(II,IP)
 
@@ -509,11 +509,11 @@
        write(iout,'(i5,4E15.5)')  m, x,a,b,(a-b)/a
       End do
 
-! ... 2s:    P' = -(1/sqrt(2))*r*exp(-r/2)(1-r/4) 
+! ... 2s:    P' = -(1/sqrt(2))*r*exp(-r/2)(1-r/4)
 
       write(iout,'(/a/)') ' 2s:'
       ii = IWF(2,0,0)
-      
+
       IP = nrf+1
       Call P_derive(II,IP)
 

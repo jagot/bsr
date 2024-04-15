@@ -5,10 +5,10 @@
 !     obtaned by expansion of total overlap determinants on rows
 !     and columns containing the continuum orbitals.
 !     The determinants with known bound orbitals are estimated
-!     in line, so only their values are recoded 
+!     in line, so only their values are recoded
 !-----------------------------------------------------------------
       Implicit none
-   
+
       Integer :: mndet = 0      !  max.number of new overlaps
       Integer :: nndet = 0      !  curent number of new overlaps
       Integer :: indet = 1000   !  initial suggestion for mndet
@@ -37,17 +37,17 @@
       Real(8), allocatable :: rarr(:)
 
       if(m.le.0) then
-       if(Allocated(ADET)) Deallocate(ADET,IZOD,JZOD) 
+       if(Allocated(ADET)) Deallocate(ADET,IZOD,JZOD)
 	      mndet = 0; nndet = 0
-       if(m.eq.0) Return 
+       if(m.eq.0) Return
        mndet=indet
        Allocate(ADET(mndet),IZOD(mndet),JZOD(mndet))
       elseif(m.gt.mndet) then
        if(nndet.eq.0) then
-        if(Allocated(ADET)) Deallocate(ADET,IZOD,JZOD) 
+        if(Allocated(ADET)) Deallocate(ADET,IZOD,JZOD)
         mndet = m
         Allocate(ADET(mndet),IZOD(mndet),JZOD(mndet))
-	      else 
+	      else
         Allocate(iarr(nndet))
         iarr(1:nndet)=IZOD(1:nndet); Deallocate(IZOD); Allocate(IZOD(m))
         IZOD(1:nndet)=iarr(1:nndet)

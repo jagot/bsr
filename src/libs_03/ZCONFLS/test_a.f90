@@ -3,10 +3,10 @@
 !======================================================================
 !     check the AFTER relations between orbitals for all configurations
 !----------------------------------------------------------------------
-      Use conf_LS; Use orb_LS  
+      Use conf_LS; Use orb_LS
 
       Do ic = 1,ncfg
-      
+
       Call Get_cfg_LS(ic)
       ip = IP_state(ic)
 

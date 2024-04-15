@@ -1,13 +1,12 @@
 !======================================================================
       Subroutine TERM_loop
 !======================================================================
-!     Add to the common list (coef_list) the coeff.s between two 
+!     Add to the common list (coef_list) the coeff.s between two
 !     determinants (zoef_list) weighted with term-dependent factors.
 !     Check also if the specific coefficient is needed to be added
 !     to the bank.
 !----------------------------------------------------------------------
-
-      USE param_jj 
+      USE dbsr_breit
       USE term_exp
       USE zoef_list
       USE coef_list
@@ -23,8 +22,8 @@
        if(IP_kt12(k1,k2).eq.0) Cycle
        k = k + 1
        cdtrm(k) = C_det1(k1,kd1)*C_det2(k2,kd2)
-      End do; End do 
- 
+      End do; End do
+
 ! ... add final coefficients:
 
       Do i=1,nzoef
@@ -32,7 +31,7 @@
        Ctrm = cdtrm * C
        int = IZ_int(i)
        idf = IZ_df(i)
-       Call Add_coef 
+       Call Add_coef
       End do
       nzoef = 0
 

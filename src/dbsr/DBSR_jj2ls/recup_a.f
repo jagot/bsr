@@ -12,7 +12,7 @@
 
 ! ... number of 6j-sysmbols
 
-      Integer, parameter :: mw = 100         
+      Integer, parameter :: mw = 100
       Integer, parameter :: mj = mw + mm
       Integer :: JD(2,mj),Jsign(mj),Jfact(mj),JW(6,mw)
       Integer :: nw,nd

@@ -8,7 +8,6 @@
 
       Implicit none
       Integer :: myid,ierr
-      Real(8) :: memory_conf_jj
 
       Call MPI_COMM_RANK(MPI_COMM_WORLD, myid, ierr)
 

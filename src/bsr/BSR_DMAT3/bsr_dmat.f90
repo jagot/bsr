@@ -7,8 +7,8 @@
 !     email:        oleg_zoi@yahoo.com
 !
 !======================================================================
-!     Provides different multipole-transition matrixes or 
-!     oscillator strengths and transition probabilities   
+!     Provides different multipole-transition matrixes or
+!     oscillator strengths and transition probabilities
 !======================================================================
 !     Multipole index is taken from mult_bnk !!!
 !======================================================================
@@ -17,41 +17,41 @@
 !
 !     first four mandatory position parameters:
 !
-!     1.  name1.c or cfg.nnn - c-file for initial state 
-!     2.  name2.c or cfg.nnn - c-file for final state 
+!     1.  name1.c or cfg.nnn - c-file for initial state
+!     2.  name2.c or cfg.nnn - c-file for final state
 !     3.  structure mode for initial state  (c,l,j,b)
 !     4.  structure mode for final state    (c,l,j,b,p,q,d)
-! 
+!
 !     additonal optional key paramters (as par=value):
 !
-!     istate1 [0] - index of state from 1st set of solutions 
+!     istate1 [0] - index of state from 1st set of solutions
 !                   to be considered, 0 means all solutions
-!     istate2 [0] - index of state from 2nd set of solutions 
+!     istate2 [0] - index of state from 2nd set of solutions
 !                   to be considered, 0 means all solutions
-!     mstate1 [0] - restriction on the number of 1st-set solutions   
+!     mstate1 [0] - restriction on the number of 1st-set solutions
 !                   to be considered, 0 means all solutions
-!     mstate2 [0] - restriction on the number of 2st-set solutions   
+!     mstate2 [0] - restriction on the number of 2st-set solutions
 !                   to be considered, 0 means all solutions
 !     gf      [f] - output f- of gf-values
 !     ialfa   [0] - additional output radial matrix elements and
-!                   polarizabilities (in zf_res) 
+!                   polarizabilities (in zf_res)
 !----------------------------------------------------------------------
 !     Some name conventions are taken from MCHF package of C.F.F.,
 !     1995 CPC version.
 !
 !     ctype = c  -  expantion coefficients are read from c-file
-!     ctype = l  -  expantion coefficients are read from l-file 
-!     ctype = j  -  expantion coefficients are read from j-file 
+!     ctype = l  -  expantion coefficients are read from l-file
+!     ctype = j  -  expantion coefficients are read from j-file
 !
 !     ctype = b  -  expantion coefficients are read from bound.nnn file
 !                   after BSR bound-type calculations
 !
 !     ctype = p  -  2nd set of solutions are supposed to be R-matrix
-!                   solutions in rsol.nnn file after BSR calculations 
+!                   solutions in rsol.nnn file after BSR calculations
 !     ctype = q  -  cfg.nnn is expected for 2nd set but no expansion
-!                   coefficients are required 
+!                   coefficients are required
 !     ctype = d  -  cfg.nnn and cfg.mmm are expected for both 1st and
-!                   2nd set but no expansion coefficients are required  
+!                   2nd set but no expansion coefficients are required
 !----------------------------------------------------------------------
 !
 !     INPUT FILES:
@@ -60,7 +60,7 @@
 !
 !     knot.dat  - B-spline information
 !
-!     name1.c   - c-file for initial state 
+!     name1.c   - c-file for initial state
 !     name1.bsw - initial state wavefunctions in B-spline representation
 !
 !     name2.c   - c-file for final state
@@ -76,7 +76,7 @@
 !     target.bsw    - target wavefunctions in B-spline representation
 !     pert_nnn.bsw  - if any (according to target information)
 !
-!     bound.nnn  - expansions coefficients if ctype=b  
+!     bound.nnn  - expansions coefficients if ctype=b
 !     rsol.nnn   - R-matrix solutions if ctype2=p
 !-----------------------------------------------------------------------
 !
@@ -90,27 +90,27 @@
 !
 !     dv.nnn    - dipole vector for polarizability calc. (ctype2 = q)
 !
-!     d.nnn_mmm - clear dipole matrix without convolution with any 
-!                 initial or final solution expansions   (ctype2 = d) 
+!     d.nnn_mmm - clear dipole matrix without convolution with any
+!                 initial or final solution expansions   (ctype2 = d)
 !-----------------------------------------------------------------------
 !     examples for calling:
 !
-!     bsr_dmat 1.c 2.c c c 
+!     bsr_dmat 1.c 2.c c c
 !     bsr_dmat 1.c 2.c j j  gf=g  ialfa=1
-!     bsr_dmat 1.c cfg.001 c b  mstate2=5 
-!     bsr_dmat 1.c cfg.002 c p  
-!     bsr_dmat cfg.001 cfg.002 b b istate1=2 istate2=5  
-!     bsr_dmat 1.c cfg.002 c p  
-!     bsr_dmat 1.c cfg.002 c q  
-!     bsr_dmat cfg.001 cfg.002 b d  
+!     bsr_dmat 1.c cfg.001 c b  mstate2=5
+!     bsr_dmat 1.c cfg.002 c p
+!     bsr_dmat cfg.001 cfg.002 b b istate1=2 istate2=5
+!     bsr_dmat 1.c cfg.002 c p
+!     bsr_dmat 1.c cfg.002 c q
+!     bsr_dmat cfg.001 cfg.002 b d
 !-----------------------------------------------------------------------
 !     RESTRICTION:  in b->j or j->b calculations, j-file may contain
 !                   data only for one value of J.
 !----------------------------------------------------------------------
-      Use bsr_dmat; Use dmatrix 
+      Use bsr_dmat; Use dmatrix
       Use conf_LS;  Use orb_LS; Use term_LS
       Use channels; Use target
-      Use spline_param; Use spline_atomic; Use spline_orbitals 
+      Use spline_param; Use spline_atomic; Use spline_orbitals
 
       Implicit none
       Real(8) :: t1,t2,AWT
@@ -130,15 +130,15 @@
       if(len_trim(case_label).gt.0) AF_res=trim(AF_res)//'_'//trim(case_label)
       if(len_trim(case_label).gt.0) AF_log=trim(AF_log)//'_'//trim(case_label)
 
-      Call Check_file(name1);  Open(in1,file=name1) 
+      Call Check_file(name1);  Open(in1,file=name1)
       if(name1.eq.name2) then
        in2=in1
       else
-       Call Check_file(name2);  Open(in2,file=name2) 
+       Call Check_file(name2);  Open(in2,file=name2)
       end if
 
       Call Check_file(AF_bnk)
-      Open(nub,file=AF_bnk,form='UNFORMATTED') 
+      Open(nub,file=AF_bnk,form='UNFORMATTED')
       read(nub) ktype,kpol
 
       Open(pri,file=AF_log)
@@ -148,7 +148,7 @@
       write(pri,*)
       write(pri,'(a,a1,i1)') 'multipole mode:  ',ktype,kpol
 
-! ... check mult_bnk: 
+! ... check mult_bnk:
 
       Call Read_conf(in1,in2,nub)
 
@@ -198,13 +198,13 @@
        Stop 'inconsistent J-dependence for initial and final states'
 
 !----------------------------------------------------------------------
-! ... sets up grid points and initializes the values of the spline: 
-    
+! ... sets up grid points and initializes the values of the spline:
+
       CALL read_grid(z);  CALL define_spline
 
 !----------------------------------------------------------------------
 ! ... read B-spline expantions for bound orbitals:
-   
+
       Call Allocate_bsorb(nwf)
       nbf = nwf
       Do i = 1,nbf
@@ -217,19 +217,19 @@
       if(ilsp1.eq.0) then
 
        i=INDEX(name1,'.',BACK=.TRUE.); AF=name1(1:i)//'bsw'
-       Call Check_file(AF)       
+       Call Check_file(AF)
        Open(nuw,file=AF,form='UNFORMATTED')
        Call Read_bsw(nuw,kset1);  Close(nuw)
 
       else
 
-       Call Check_file(AF_bsw)       
+       Call Check_file(AF_bsw)
        Open(nuw,file=AF_bsw,form='UNFORMATTED')
        Call Read_bsw(nuw,kset1);  Close(nuw)
 
        if(nwp(ilsp1).gt.0) then
         i = LEN_TRIM(AFP(ilsp1)); AF = AFP(ilsp1); AF = AF(1:i)//'.bsw'
-        Call Check_file(AF)       
+        Call Check_file(AF)
         Open(nuw,file=AF,form='UNFORMATTED')
         Call Read_bsw(nuw,kset1);  Close(nuw)
        end if
@@ -246,19 +246,19 @@
       if(ilsp2.eq.0) then
 
        i=INDEX(name2,'.',BACK=.TRUE.); AF=name2(1:i)//'bsw'
-       Call Check_file(AF)       
+       Call Check_file(AF)
        Open(nuw,file=AF,form='UNFORMATTED')
        Call Read_bsw(nuw,kset2);  Close(nuw)
 
       else
 
-       Call Check_file(AF_bsw)       
+       Call Check_file(AF_bsw)
        Open(nuw,file=AF_bsw,form='UNFORMATTED')
        Call Read_bsw(nuw,kset2);  Close(nuw)
 
        if(nwp(ilsp2).gt.0) then
         i = LEN_TRIM(AFP(ilsp2)); AF = AFP(ilsp2); AF = AF(1:i)//'.bsw'
-        Call Check_file(AF)       
+        Call Check_file(AF)
         Open(nuw,file=AF,form='UNFORMATTED')
         Call Read_bsw(nuw,kset2);  Close(nuw)
        end if
@@ -270,7 +270,7 @@
 
       end if
 
-! ... check the correspondence between c- and w-files: 
+! ... check the correspondence between c- and w-files:
 
       j = 0
       Do i = 1,nwf
@@ -282,7 +282,7 @@
        end if
       End do
       if(j.gt.0) Stop 'no correspondence between c- and bsw- files'
-     
+
 ! ... IBORT - packing integer for <i|j>
 
       Do i=1,nbf; Do j=i,nbf
@@ -292,7 +292,7 @@
 !----------------------------------------------------------------------
 ! ... expansion coefficients for initial and final terms:
 
-      Allocate(C1(ncfg1))  
+      Allocate(C1(ncfg1))
       Allocate(C2(ncfg2))
 
       C1 = 1.d0; if(ilsp1.gt.0) C1=WC(1:ncfg1)
@@ -306,8 +306,8 @@
 !----------------------------------------------------------------------
 ! ... generate the LSJ-factors in case of fine-structure calculations:
 
-      if(jot1+jot2.gt.0) jmode=1      
-      if(jmode.eq.1.and.(ilsp1.gt.0.or.ilsp2.gt.0)) jmode=2          
+      if(jot1+jot2.gt.0) jmode=1
+      if(jmode.eq.1.and.(ilsp1.gt.0.or.ilsp2.gt.0)) jmode=2
 
 ! ... jmode = 2  =>  DJ factor will be incorporated in ang. coefficients !
 

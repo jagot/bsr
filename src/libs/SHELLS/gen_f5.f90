@@ -2,31 +2,31 @@
   Real(8) Function gen_f5 (ip,id)
 !=======================================================================
 !
-! contains f5-shell cfp coefficients as  sqrt(m1/m2) 
+! contains f5-shell cfp coefficients as  sqrt(m1/m2)
 !
 ! ip - index of parent term
 ! id - index of daughter term
 !
 !-----------------------------------------------------------------------
- 
+
   Implicit none
- 
+
   Integer, parameter :: nd =   73  ! number of daughter terms
   Integer, parameter :: np =   47  ! number of parent terms
   Integer, parameter :: ng = 1205  ! number of non-zero cfp's
- 
+
   Integer(2) :: ind(0:nd)
   Integer(1) :: ipa(ng)
   Integer(4) :: m1(ng)
   Integer(4) :: m2(ng)
- 
+
   Integer :: ip,id,i
- 
+
   if(id.le.0) Stop "gen_f5: id < 0"
   if(ip.le.0) Stop "gen_f5: ip < 0"
   if(id.gt.nd) Stop "gen_f5: id > nd"
   if(ip.gt.np) Stop "gen_f5: ip > np"
- 
+
   gen_f5 = 0.d0
   Do i=ind(id-1)+1,ind(id)
    if(ip.ne.ipa(i)) Cycle
@@ -34,7 +34,7 @@
    if(m1(i).lt.0) gen_f5 = -gen_f5
    Exit
   End Do
- 
+
   Data ind/  &
     0,    3,    8,   12,   15,   24,   33,   52,   68,   82,   96,  107, &
   122,  136,  160,  181,  200,  217,  231,  248,  265,  285,  303,  318, &
@@ -43,8 +43,8 @@
   742,  762,  785,  816,  835,  862,  882,  903,  925,  951,  966,  984, &
  1004, 1024, 1050, 1073, 1088, 1106, 1124, 1143, 1160, 1174, 1182, 1192, &
  1200, 1205  /
- 
- 
+
+
   Data ipa/  &
   2,  3,  4,  1,  2,  3,  4,  5,  2,  3,  4,  5,  3, 11, 12,  2,  3,  4, &
   9, 10, 12, 13, 15, 16,  2,  4,  9, 10, 13, 14, 15, 16, 17,  2,  3,  4, &
@@ -113,8 +113,8 @@
  39, 40, 42, 43, 44, 45, 46, 47, 20, 21, 23, 24, 25, 26, 27, 39, 40, 43, &
  44, 45, 46, 47, 23, 24, 25, 26, 27, 42, 44, 45, 23, 24, 25, 26, 27, 43, &
  44, 45, 46, 47, 24, 25, 26, 27, 44, 45, 46, 47, 26, 27, 45, 46, 47  /
- 
- 
+
+
   Data m1/  &
        -3,       -1,       33,        3,       -2,        2,       -6, &
       -26,       -2,       -1,      -39,       91,        1,       12, &
@@ -289,8 +289,8 @@
        -4,     1012,      -11,       11,       -1,      -23,      -11, &
        -1,       49,       46,       -1,        2,       -1,       -1, &
         6  /
- 
- 
+
+
   Data m2/  &
         7,       10,       70,       35,       21,        5,       35, &
       105,       21,       10,      154,      165,        4,       25, &
@@ -465,5 +465,5 @@
        95,     4845,       80,       85,       16,       85,      240, &
        48,      285,      285,        5,        5,       15,       57, &
        19  /
- 
+
   End Function gen_f5

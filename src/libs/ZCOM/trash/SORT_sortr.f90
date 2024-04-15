@@ -5,8 +5,8 @@
 !--------------------------------------------------------------------
       Implicit none
       Integer, intent(in ) :: n
-      Real(8), intent(in ) :: S(n) 
-      Integer, intent(out) :: IPT(n) 
+      Real(8), intent(in ) :: S(n)
+      Integer, intent(out) :: IPT(n)
       Integer :: i,i1,j1,i2,j2
       Do i=1,n; IPT(i)=i;  End do
       Do i1=1,n-1;    j1=IPT(i1)

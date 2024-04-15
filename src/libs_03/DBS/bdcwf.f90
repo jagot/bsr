@@ -6,7 +6,7 @@
 !
 !   Bases for P and Q may be different.
 !
-!   SUBROUTINE(S) called:  dcwf, gaussj 
+!   SUBROUTINE(S) called:  dcwf, gaussj
 !-----------------------------------------------------------------------
 !   on entry
 !   --------
@@ -52,9 +52,9 @@
     End do; End do
 
     ! .. solve the system of equations for coef
-   
+
     a(1:nsp-1,1:nsp-1)=fpbs(2:nsp,2:nsp)
-    Call gaussj (a,nsp-1,ns,Pcoef(2),1,1)  ! 1->ns  ? 
+    Call gaussj (a,nsp-1,ns,Pcoef(2),1,1)  ! 1->ns  ?
     Pcoef(1)=0.d0
 
     a(1:nsq-1,1:nsq-1)=fqbs(2:nsq,2:nsq)

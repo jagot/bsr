@@ -2,7 +2,7 @@
       Subroutine LAP_DSYEVX(job,UPLO,n,m,A,eval,k,info)
 !======================================================================
 !
-!     Call LAPACK procedure DSYEVX to obtain the selected eigenvalues 
+!     Call LAPACK procedure DSYEVX to obtain the selected eigenvalues
 !     (eval) and eigenvectors (A) for problem A S = E S
 !
 !     used upper UPLO='U' triangle matrix, or lower UPLO='L'
@@ -30,7 +30,7 @@
 
       Call DSYEVX(job,'I',UPLO,n,A,m,VL,VU,1,k,ABSTOL,kk,eval, &
                   Z,n, WORK, LWORK, IWORK, IFAIL, INFO)
-      
+
       if(kk.ne.k) then
        write(*,*) ' DSYEVX(lapack) provides',kk,' eigenvectors'
        write(*,*) ' when we ordered', k,'  ones'

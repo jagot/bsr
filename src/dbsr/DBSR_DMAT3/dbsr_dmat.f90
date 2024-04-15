@@ -7,27 +7,27 @@
 !     email:        oleg_zoi@yahoo.com
 !
 !======================================================================
-!     Generation of the multipole-transition matrix 
+!     Generation of the multipole-transition matrix
 !======================================================================
 !
 !     INPUT ARGUMENTS:
 !
-!   1.  name1.c or cfg.nnn - c-file for initial state 
-!   2.  name2.c or cfg.nnn - c-file for final state 
+!   1.  name1.c or cfg.nnn - c-file for initial state
+!   2.  name2.c or cfg.nnn - c-file for final state
 !   3.  ctype1 - structure mode for initial state  (c,j,b)
 !   4.  ctype2 - structure mode for final state    (c,j,b,p)
 !   5.  if ctype2 = p, pointer on the first state in files j,b,
 !       otherwise the first states will be considered
-! 
+!
 !----------------------------------------------------------------------
 !
 !     INPUT FILES:
 !
-!     mult_bnk_nn - data bank of angular coefficients for multipole 
+!     mult_bnk_nn - data bank of angular coefficients for multipole
 !                   operator (nn -> E1,M1,E2,...)
 !     knot.dat - B-spline information
 !
-!     name1.c  - c-file for initial state 
+!     name1.c  - c-file for initial state
 !     name1.bsw - initial state wavefunctions in B-spline basis
 !
 !     name2.c  - c-file for final state
@@ -55,7 +55,7 @@
 !
 !     RESTRICTIONS:  in b->j or j->b calculations, j-file can contain
 !                    data only for one value of j.
-! 
+!
 !----------------------------------------------------------------------
       Use dbsr_dmat
 

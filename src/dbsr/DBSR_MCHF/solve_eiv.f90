@@ -1,7 +1,7 @@
 !==================================================================
       Subroutine Solve_eiv(i,hfm,v,rhs)
 !==================================================================
-!     Find the eigenvector of hfm for the m'th eigenvalue after 
+!     Find the eigenvector of hfm for the m'th eigenvalue after
 !     orthogonality has been applied
 !------------------------------------------------------------------
       Use dbsr_mchf
@@ -15,23 +15,23 @@
       Real(8) :: aa(ms,ms), ss(ms,ms), w(3*ms)
       Real(8) :: eval(ms), a(ms), s(ms), rh(ms), zz,eii,C
       Integer :: j, jp, info, k,ii,m,mm, ipos(1)
-    
+
       if(srhs.gt.0.d0.and.method.eq.1) then
        Call solve_direct (i,hfm,v,rhs); Return
       end if
 
-      if(debug.eq.1) write(log,'(a)') 'method - solve_eiv'
+      write(amethod,'(a)') 'diagonalization MCHF matrix'
 
       eii = e(i)
 
-! ... apply orthogonality conditions for orbitals through projection: 
+! ... apply orthogonality conditions for orbitals through projection:
 
       m = nbs(i)-lbs(i)
-      Do j = 1, nbf; if(i.eq.j) Cycle  ! i-1  ???               
+      Do j = 1, nbf; if(i.eq.j) Cycle  ! i-1  ???
        if(i.le.ncore.and.j.ge.i) Cycle
        if(kbs(i).ne.kbs(j)) Cycle
        Call apply_orthogonality(hfm,p(1,1,j))
-       if(m.gt.1) m = m - 1   
+       if(m.gt.1) m = m - 1
       End do
 
       if(iphys(i).eq.0) m=1
@@ -44,17 +44,17 @@
        k=0
        Do jp=1,ms
         if(iprm(jp,i).eq.0) Cycle
-        k=k+1; a(k)=hfm(jp,j); s(k)=fppqq(jp,j)  
+        k=k+1; a(k)=hfm(jp,j); s(k)=fppqq(jp,j)
        End do
        aa(1:k,ii)=a(1:k); ss(1:k,ii)=s(1:k); rh(ii) = rhs(j)
-      End do 
+      End do
 
 ! ... evaluates the eigenvalues and eigenvectors (LAPACK routine):
 
       Call dsygv(1,'V','L',ii,aa,ms,ss,ms,eval,w,3*ms,INFO)
       if (info /= 0) then
        WRITE(scr,'(a,i6)') 'scf_eiv: error in eigenvalue routine, dsygv', info
-       Stop 
+       Stop
       end if
 
 ! ... choose the solution if no rhs:
@@ -68,14 +68,14 @@
       if(debug.gt.0) write(log,'(a,5E15.5)') 'eval =',eval(k:k+4)
 
 !----------------------------------------------------------------------
-      if (srhs.eq.0.d0) then    ! without rhs 
+      if (srhs.eq.0.d0) then    ! without rhs
 
       ! restore the solutions in original B-spline net:
 
       a(1:ms) = aa(1:ms,mm);  v=0.d0; k=0
       Do j=1,ms
        if(iprm(j,i).eq.0) Cycle; k=k+1; v(j)=a(k)
-      End do 
+      End do
 
       ipos=maxloc(abs(v))
       if(v(ipos(1)).lt.0.d0) v=-v
@@ -83,11 +83,11 @@
       e(i) = eval(mm)
 
 !-----------------------------------------------------------------------
-! ... Use inverse iteration in case of rhs: 
+! ... Use inverse iteration in case of rhs:
 
       else   !  with rhs
 
-      if(debug.eq.1) write(log,'(a)') 'method - inverse iterations'
+      write(amethod,'(a)') 'diagonalization MCHF matrix with rhs'
 
        a = 0.d0
        Do j = 1,ii
@@ -102,7 +102,7 @@
        v = 0.d0; k=0
        Do j=1,ms
         if(iprm(j,i).eq.0) Cycle; k=k+1; v(j)=a(k)
-       End do 
+       End do
 
        a = Matmul(fppqq,v)
        v = v/sqrt(Dot_Product(v,a))
@@ -113,5 +113,5 @@
       if(v(ipos(1)).lt.0.d0) v=-v
 
       end if
-      
+
       End Subroutine  Solve_eiv

@@ -37,7 +37,7 @@
       bpq(1:ns,1,m) = MATMUL(fpbs, pq(:,1,m))
       bpq(1:ns,2,m) = MATMUL(fqbs, pq(:,2,m))
 
-      S = QUADR_00(m,m); pq(:,:,m)=pq(:,:,m)/sqrt(S) 
+      S = QUADR_00(m,m); pq(:,:,m)=pq(:,:,m)/sqrt(S)
 
       bpq(1:ns,1,m) = MATMUL(fpbs, pq(:,1,m))
       bpq(1:ns,2,m) = MATMUL(fqbs, pq(:,2,m))

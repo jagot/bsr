@@ -4,7 +4,7 @@
     Use MPI
 
     Integer, intent(in)      :: pri, info
-    Character(*), intent(in) :: msg   
+    Character(*), intent(in) :: msg
     Integer :: myid, ierr
 
     Call MPI_COMM_RANK(MPI_COMM_WORLD, myid, ierr)

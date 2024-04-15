@@ -58,7 +58,7 @@
 
       if(itype.lt.0.and.cwt.le.0) cwt=0.01
       if(ktarg.le.0) ktarg = ntarg
-      
+
 ! ... set the range of partial waves under consideration:
 
       if(klsp.gt.0) then

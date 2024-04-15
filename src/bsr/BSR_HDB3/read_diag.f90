@@ -6,7 +6,7 @@
 !
 !     Main results are placed in arrays:
 !
-!     bb(ns,ns*kch) - new bases 
+!     bb(ns,ns*kch) - new bases
 !     bval (ns*kch) - diagonal energies
 !     ipsol(0:kch ) - pointer on channel blocks in new basis
 !----------------------------------------------------------------------
@@ -27,11 +27,11 @@
 
 ! ... diagonal overlap blocs:
 
-      Do ich=1,kch; read(nui) bd(:,:,ich); End do 
+      Do ich=1,kch; read(nui) bd(:,:,ich); End do
 
 ! ... skip other overlaps:
 
-      Do 
+      Do
        read(nui) ic,jc
        if(ic.le.0) Exit
        idim=1; if(ic.le.kch) idim=ns
@@ -42,12 +42,12 @@
 
 ! ... diagonal interaction blocks:
 
-      Do ich=1,kch; read(nui) ad(:,:,ich); End do 
+      Do ich=1,kch; read(nui) ad(:,:,ich); End do
 
-      if(diag_ovl.eq.0) & 
-       write(pri,'(/a/)') 'It is a GENERALIZED eigenvalue problem' 
-      if(diag_ovl.ne.0) & 
-       write(pri,'(/a/)') 'It is reduced to a STANDARD eigenvalue problem' 
+      if(diag_ovl.eq.0) &
+       write(pri,'(/a/)') 'It is a GENERALIZED eigenvalue problem'
+      if(diag_ovl.ne.0) &
+       write(pri,'(/a/)') 'It is reduced to a STANDARD eigenvalue problem'
 
 !----------------------------------------------------------------------
 ! ... find eigensolutions for each channel (new basis):
@@ -57,11 +57,11 @@
       Do ich = 1,kch
        l=lch(ich); if(l.gt.ks-2) l=ks-2; if(ilzero.eq.0) l=0; i1=l+2
        i2=ns; if(itype.eq.-1) i2=ns-ibzero
-       nsol=i2-i1+1 
+       nsol=i2-i1+1
        aa(1:nsol,1:nsol) = ad(i1:i2,i1:i2,ich)
        dd(1:nsol,1:nsol) = bd(i1:i2,i1:i2,ich)
 
-       Call LAP_DSYGV ('V','U',nsol,ns,aa,dd,dval,info) 
+       Call LAP_DSYGV ('V','U',nsol,ns,aa,dd,dval,info)
 
        if(info.ne.0) then
         write(pri,*) 'channel diagonalization failed, channel = ',ich
@@ -69,7 +69,7 @@
         fail=1; Return
        end if
        if(debug.gt.0) write(pri,'(/a,a,i5,a,i5/)') elc(ich), &
-         '   ich =',ich,' nsol =',nsol  
+         '   ich =',ich,' nsol =',nsol
        if(debug.gt.0) write(pri,'(5f15.7)') dval(1:nsol)
        Do i=1,nsol
         if(Edmin.ne.0.d0.and.dval(i).lt.Edmin) Cycle
@@ -81,7 +81,7 @@
        End do
        ipsol(ich) = ksol
       End do
-      khm = ksol + kcp 
+      khm = ksol + kcp
       write(pri,'(/a,i6/)') 'New basis: khm =', khm
 
       End Subroutine read_diag

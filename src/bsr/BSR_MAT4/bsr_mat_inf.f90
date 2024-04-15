@@ -8,7 +8,7 @@
 
       iarg = command_argument_count();  if(iarg.eq.0) Return
       Call GET_COMMAND_ARGUMENT(1,A);   if(A.ne.'?') Return
-      open(nu,file=AF) 
+      open(nu,file=AF)
 
       write(nu,'(a)') &
 '                                                                            ',&
@@ -82,8 +82,8 @@
 'eps_c   = 1d-10 - tolerance for integral coefficients                       ',&
 'eps_det = 1d-10 - tolerance for total overlap factors                       ',&
 '                                                                            ',&
-'s_ovl   = 0.75  - channel overlap limit for additional orth. conditions     ',&                                          
-'s_pert  = 0.5   - channel-pertuber limit                                    ',&                                        
+'s_ovl   = 0.75  - channel overlap limit for additional orth. conditions     ',&
+'s_pert  = 0.5   - channel-pertuber limit                                    ',&
 '                                                                            ',&
 'eps_tar = 1d-6  - tolerance for target energies and overlaps                ',&
 'eps_acf = 1D-5  - tolerance for asymptotic coefficients                     ',&
@@ -102,12 +102,12 @@
 '                                                                            ',&
 'for more detailed description of optional input arguments,                  ',&
 'see file "bsr_mat_inf", created after this call                             ',&
-'(also check bsr_mat.log and mat_log.nnn files for details and warnings)     ',&                                                              
+'(also check bsr_mat.log and mat_log.nnn files for details and warnings)     ',&
 '                                                                            '
-      Call Stop_mpi (0,0,'Read the bsr_mat_inf')                                                               
-                                                                            
-      End Subroutine bsr_mat_inf                                          
-                                                                            
+      Call Stop_mpi (0,0,'Read the bsr_mat_inf')
+
+      End Subroutine bsr_mat_inf
+
 
 
 

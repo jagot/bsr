@@ -1,7 +1,7 @@
 !=======================================================================
       Subroutine Conf_loop
 !=======================================================================
-!     run loop over configurations 
+!     run loop over configurations
 !-----------------------------------------------------------------------
       Use MPI
 
@@ -13,13 +13,13 @@
       Use symc_list_LS, only: IC_need, JC_need
       Use c_blocks,     only: ntype
 
-      Implicit none 
+      Implicit none
       Integer :: i,j,k1,k2,iis,jjs,it,jt, met,ic,jc, is,js, &
                  itype,irec
       Integer, external :: IDEF_cme
       Integer(8) :: ij
       Integer(8), external :: DEF_ij8
-      Character(80) :: conf_ic, conf_jc 
+      Character(80) :: conf_ic, conf_jc
 
       t1=MPI_WTIME()
 
@@ -71,43 +71,43 @@
        read(nud) NNsym2(1:ne)
        read(nud) Lsym2(1:ne)
 
-       if(MLT2.ne.MLT.or.MST2.ne.MST) Cycle      
+       if(MLT2.ne.MLT.or.MST2.ne.MST) Cycle
 
-       if(MLT.ne.min(ILT1,ILT2).or.MST.ne.min(IST1,IST2)) Cycle 
+       if(MLT.ne.min(ILT1,ILT2).or.MST.ne.min(IST1,IST2)) Cycle
 
-       ij=DEF_ij8(iis,jjs);  if(IS_need(ij).eq.0) Cycle      
-              
+       ij=DEF_ij8(iis,jjs);  if(IS_need(ij).eq.0) Cycle
+
 !----------------------------------------------------------------------
 ! ...  define number of terms:
 
        ntrm = 0
-       Do k1=1,kt1; it=IP_kt1(k1) 
-       Do k2=1,kt2; jt=IP_kt2(k2)  
+       Do k1=1,kt1; it=IP_kt1(k1)
+       Do k2=1,kt2; jt=IP_kt2(k2)
         if(iis.eq.jjs.and.it.gt.jt) Cycle;  ntrm = ntrm + 1
-       End do; End do 
-  
+       End do; End do
+
 !----------------------------------------------------------------------
 ! ...  joper and JT_oper:
 
        if(allocated(JT_oper)) Deallocate(JT_oper,CT_oper)
        Allocate(JT_oper(ntrm,noper),CT_oper(ntrm,noper))
 
-       if(IDEF_cme(iis,jjs).eq.0) Cycle 
+       if(IDEF_cme(iis,jjs).eq.0) Cycle
 
 !----------------------------------------------------------------------
 ! ...  calculations:
 
        met = 0
        Do i=1,nprocs-1
-        if(ip_proc(i).ne.0) Cycle 
+        if(ip_proc(i).ne.0) Cycle
         Call Send_det_exp(i,iis,jjs,ic,jc)
-        met = i 
+        met = i
         ip_proc(i) = 1
         Exit
        End do
 
        if(met.eq.0) then
-        Call Get_res(i,is,js)        
+        Call Get_res(i,is,js)
         if(is.gt.0) then
           ij=DEF_ij8(is,js); IS_need(ij) = 0; Call Record_ic(is,js)
         else
@@ -118,12 +118,12 @@
 
       End do    ! over jc, jjs
 
-      t2 = MPI_WTIME()                
+      t2 = MPI_WTIME()
 
       write(*,'(a,4i8,2f10.2,a,5x,a)') 'ic,ic_total,kt,kdt', iis,ic_case,kt1,kdt1, &
         (t2-t3)/60, (t2-t0)/60, ' min.',trim(conf_ic)
 
-      if( time_limit.gt.0.d0 .and. (t2-t0)/60.gt.time_limit) Exit      
+      if( time_limit.gt.0.d0 .and. (t2-t0)/60.gt.time_limit) Exit
 
       End do    ! over ic, iis
 
@@ -134,9 +134,9 @@
        if(ip_proc(i).eq.0) Call Send_det_exp(i,-1,-1,-1,-1)
       End do
 
-      Do 
-       if(sum(ip_proc).eq.0) Exit 
-       Call Get_res(j,is,js)        
+      Do
+       if(sum(ip_proc).eq.0) Exit
+       Call Get_res(j,is,js)
 
        if(is.gt.0) then
          ij=DEF_ij8(is,js); IS_need(ij) = 0; Call Record_ic(is,js)
@@ -147,7 +147,7 @@
        Call Send_det_exp(j,-1,-1,-1,-1)
 
        ip_proc(j) = 0
-       t2=MPI_WTIME()                
+       t2=MPI_WTIME()
        write(*,'(3i5,f10.2,a)') sum(ip_proc),is,js,(t2-t1)/60, ' min.'
       End do
 
@@ -160,7 +160,7 @@
 !=======================================================================
       Subroutine Record_ic(is,js)
 !=======================================================================
-!     add results from the givem case 
+!     add results from the givem case
 !-----------------------------------------------------------------------
       Use bsr_breit
 

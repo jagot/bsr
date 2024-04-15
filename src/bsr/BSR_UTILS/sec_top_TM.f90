@@ -1,13 +1,13 @@
 !======================================================================
-!     UTILITY      S E C _ T O P _TM  
+!     UTILITY      S E C _ T O P _TM
 !
 !     zarm.tma (zarm.tmb) --> zarm.oma_top (zarm.tmb_top)
 !
 !======================================================================
-!     genearte top-up omegas for all included transitions 
+!     genearte top-up omegas for all included transitions
 !     (based on the information in 'zarm.tmb)
 !
-!     Call as:  sec_top  [tmb= top= ek1= ek2= tail= x= method= ...] 
+!     Call as:  sec_top  [tmb= top= ek1= ek2= tail= x= method= ...]
 !---------------------------------------------------------------------
 
       Use target; Use channels
@@ -17,10 +17,10 @@
       Real(8), allocatable ::  fl(:), om(:), e(:), fail(:),coefa(:),coefb(:)
       Real(8), allocatable ::  om_sum(:,:), om_top(:,:), fll(:,:)
       Real(8), allocatable ::  fom(:,:,:), tmatr(:), tmati(:), OS(:,:)
-                                                                                              
+
       Integer, allocatable ::  iop(:,:,:), met(:), ic(:), jc(:)
 
-      Integer :: ke = 20000  !  initial number of energies 
+      Integer :: ke = 20000  !  initial number of energies
 
       Real(8) :: eps_tail = 0.001
       Real(8) :: eps_x    = 0.025
@@ -109,10 +109,10 @@
 !-----------------------------------------------------------------------
 ! ... get s-values:
 
-      open(nus,file=AF_OS) 
-      read(nus,*) nsvalues     
+      open(nus,file=AF_OS)
+      read(nus,*) nsvalues
       Allocate(OS(ntarg,ntarg)); OS =0.d0; mem = mem + 2*ntarg*ntarg
-      
+
       Do n=1,nsvalues
        read(nus,*) i,j,OS(i,j); OS(j,i) = OS(i,j)
       End do
@@ -164,7 +164,7 @@
        rewind(nua);   write(nua) (e(i),i=1,ne)
        Deallocate(e); me=me+ke; Allocate(e(me))
        rewind(nua);   read(nua) (e(i),i=1,ne)
-      end if       
+      end if
 
       go to 1
     2 write(*,'(/a,i5,a)')    'ne    = ',ne,' - number of energies'
@@ -185,16 +185,16 @@
 !debug
       print *,'before maxl'
       maxl=maxval(lpar)
-      write(*,'(/a,i10)') 'max_Lpar = ', maxl 
+      write(*,'(/a,i10)') 'max_Lpar = ', maxl
       print *,'maxl = ',maxl
-     
-      print *,'mom,nlsp,ne:',mom,nlsp,ne
-     
-      Allocate(fom(mom,nlsp,ne), fl(0:maxl), iop(nlsp,ne,3), om(mom), tmatr(mom), tmati(mom) )
-     
-      STOP 
 
-      fom = 0.d0;  iop = 0;  jop =0; om_top = 0.d0; om_sum = 0.d0;  
+      print *,'mom,nlsp,ne:',mom,nlsp,ne
+
+      Allocate(fom(mom,nlsp,ne), fl(0:maxl), iop(nlsp,ne,3), om(mom), tmatr(mom), tmati(mom) )
+
+      STOP
+
+      fom = 0.d0;  iop = 0;  jop =0; om_top = 0.d0; om_sum = 0.d0;
       mem = mem + 2*mom*nlsp*ne + 2*maxl + nlsp*ne*3 + 6*mom
 
       mtr = np*(np+1)/2; if(ion.ne.0) mtr=np*(np-1)/2
@@ -202,36 +202,36 @@
       if(np.lt.ntarg) mtr = mtr + (ntarg-np)*ni
 
       Allocate( fail(mtr), coefa(mtr), coefb(mtr), met(mtr), ic(mtr), jc(mtr) )
-      fail = 0.d0; coefa = 0.d0; coefb = 0.d0; met = -2; 
+      fail = 0.d0; coefa = 0.d0; coefb = 0.d0; met = -2;
       mem =  mem + 18*mtr
 
       Allocate(om_top(mtr,ne), om_sum(mtr,ne) )
       om_top = 0.d0; om_sum = 0.d0;
       mem =  mem + 4*mtr*ne
-      
+
       Do itr1 = 1,np
       Do itr2 = itr1,ntarg
-       itr = Index_TR(ion,itr1,itr2,np,ni) 
-       if(itr.eq.0) Cycle         
+       itr = Index_TR(ion,itr1,itr2,np,ni)
+       if(itr.eq.0) Cycle
        ic(itr) = itr1
        jc(itr) = itr2
       End do; End do
-      
-      write(*,'(/a,i5,a)') 'mtr   = ', mtr,' - number of transitions' 
+
+      write(*,'(/a,i5,a)') 'mtr   = ', mtr,' - number of transitions'
 
       maxll = maxval(lch)
-      write(*,'(/a,i3,a)') 'max l = ', maxll 
+      write(*,'(/a,i3,a)') 'max l = ', maxll
 
       Allocate(fll(0:maxll,2))
       mem =  mem + 4*maxll
 
-      S = mem / (256.0*1024.0) 
-      write(*,'(/a,f10.2,a)') 'Memory required:  ', S, ' Mb' 
+      S = mem / (256.0*1024.0)
+      write(*,'(/a,f10.2,a)') 'Memory required:  ', S, ' Mb'
 
       if(S.gt.50000.d0) Stop ' > 50 GB'
 
 !-----------------------------------------------------------------------------------
-! ... check continuation: 
+! ... check continuation:
 
       if(Icheck_file(ccc).gt.0) then
        Open(nuc,file=ccc)
@@ -269,7 +269,7 @@
 
       g = (2*lpar(ilsp)+1) * iabs(ispar(ilsp)) / 2.d0
       if(ispar(ilsp).eq.0) g = (lpar(ilsp)+1)/2.d0
-      
+
       om=0.d0
       Do i=1,kopen
        Do j=1,i
@@ -283,14 +283,14 @@
       if(ktr.gt.0) then
 
        Do i=kopen+1,nopen
-        Do j=1,nj;       
+        Do j=1,nj;
          ij=nom+(i-kopen-1)*nj+j
          om(ij) = (tmatr(ij)*tmatr(ij)+tmati(ij)*tmati(ij))*g
         End do
        End do
-       nom = nom + nj * (nopen-kopen) 
+       nom = nom + nj * (nopen-kopen)
 
-      end if  
+      end if
 
       Do i=1,nom; fom(i,ilsp,ie) = om(i); End do
 
@@ -311,7 +311,7 @@
       if(len_trim(label).gt.0) oms = trim(oms)//'_'//trim(label)
       Call Read_aarg('oms',oms)
       Open(nuq,file=oms)
-     
+
       if(len_trim(label).gt.0) bad = trim(bad)//'_'//trim(label)
       Open(nub,file=bad)
 
@@ -321,7 +321,7 @@
       nbad = 0
       Do  ie=1,ne
        ek = e(ie)
-       
+
 !-----------------------------------------------------------------------
 ! ... cycle over transitions:
 
@@ -336,8 +336,8 @@
 
        if(ek.lt.etarg(itr2)) Cycle
 
-       itr = Index_TR(ion,itr1,itr2,np,ni) 
-       if(itr.eq.0) Cycle         
+       itr = Index_TR(ion,itr1,itr2,np,ni)
+       if(itr.eq.0) Cycle
 
        ! ... find met: type of transition
 
@@ -388,7 +388,7 @@
       End do         !  over  itr2
       End do         !  over  itr1
 
-      End do         !  over ie  
+      End do         !  over ie
 
 !-----------------------------------------------------------------------
 !... fail information:
@@ -409,13 +409,13 @@
 
       write(nuc,*) 'failed transitions: ',i
       Close(nuc)
- 
+
       write(*,*) 'failed transitions: ',i
-      
+
 !----------------------------------------------------------------------
 ! ... output new 'topped' om:
 
-      Do ie=1,ne 
+      Do ie=1,ne
 
       mtr = np*(np+1)/2; if(ion.ne.0) mtr=np*(np-1)/2
 
@@ -442,17 +442,17 @@
                               '   e(ie),nom,iopen,jopen,np,ni'
        write(nuq,'(5D16.8)') (om_sum(i,ie),i=1,nom)
 
-      End do        ! over ie  
+      End do        ! over ie
 
 !----------------------------------------------------------------------
 
-      write(*,*) 'failed energies: ',nbad 
- 
+      write(*,*) 'failed energies: ',nbad
+
       Call CPU_time(t2)
 
       write(  *,'(/a,f10.1,a)') 'time = ',(t2-t1)/60,' min'
       write(pri,'(/a,f10.1,a)') 'time = ',(t2-t1)/60,' min'
-                                                                 
+
  CONTAINS
 
 !======================================================================
@@ -466,16 +466,16 @@
         x1 = e(je-2)
         y1 = om_top(itr,je-2)/(e(je-2)-etarg(i1))
         x2 = E(je)
-        y2 = om_top(itr,je)/(e(je)-etarg(i1)) 
+        y2 = om_top(itr,je)/(e(je)-etarg(i1))
         y1 = y1/ log(x1)
         y2 = y2/ log(x2)
         b = (y1*x1-y2*x2)/(y2-y1)
         a = y1*(x1+b)
-        coefa(itr) = a 
-        coefb(itr) = b 
+        coefa(itr) = a
+        coefb(itr) = b
        end if
 
-      x = e(ie);  a=coefa(itr); b=coefb(itr) 
+      x = e(ie);  a=coefa(itr); b=coefb(itr)
       om_top(itr,ie) = a*log(x)/(x+b)*(e(ie)-etarg(i1))
 
       End  Subroutine Extra1
@@ -490,7 +490,7 @@
       if(coefa(itr).eq.0.d0) then
         i1 = max(1,ie-3)
         i2 = ie-1; if(ie.le.1) i2=ie
-        coefa(itr) = sum(om_top(itr,i1:i2))/(i2-i1+1) 
+        coefa(itr) = sum(om_top(itr,i1:i2))/(i2-i1+1)
         coefb(itr) = 0.d0
       end if
       om_top(itr,ie) = coefa(itr)
@@ -511,11 +511,11 @@
         y2 = om_top(itr,je)/(e(je)-etarg(i1))
         b = (y1*x1-y2*x2)/(y1-y2)
         a = y1*(x1-b)
-        coefa(itr) = a 
-        coefb(itr) = b 
+        coefa(itr) = a
+        coefb(itr) = b
       end if
 
-      x = e(ie);  a=coefa(itr);  b=coefb(itr) 
+      x = e(ie);  a=coefa(itr);  b=coefb(itr)
       om_top(itr,ie) = a/(x-b)*(e(ie)-etarg(i1))
 
       End  Subroutine Extra2_old
@@ -534,7 +534,7 @@
       f1=0.d0; f2=0.d0; f3=0.d0
       Do il=0,maxl
        if(fl(il).eq.0.d0) Cycle
-       f1=f2; f2=f3; f3=fl(il); C = f2/f3; if(C.lt.1) C=1.d0        
+       f1=f2; f2=f3; f3=fl(il); C = f2/f3; if(C.lt.1) C=1.d0
        if(jtr1.ne.0) write(pri,'(i2,a1,E15.5,f10.3)') il,'.',f3,C-1.d0
       End do
 
@@ -559,7 +559,7 @@
       f1=0.d0; f2=0.d0; f3=0.d0
       Do il=0,maxl
        if(fl(il).eq.0.d0) Cycle
-       f1=f2; f2=f3; f3=fl(il); C = f2/f3; if(C.lt.1) C=1.d0; if(C.gt.10) C=1.d0        
+       f1=f2; f2=f3; f3=fl(il); C = f2/f3; if(C.lt.1) C=1.d0; if(C.gt.10) C=1.d0
        if(jtr1.ne.0) write(pri,'(i2,a1,E15.5,f10.3)') il,'.',f3,C-1.d0
       End do
 
@@ -572,7 +572,7 @@
        write(pri,'(a3,E15.5,a)') 'TOP',om_top(itr,ie), ' -  extrapolated'
       elseif(S*eps_tail.gt.f1+f2+f3) then
        write(pri,'(a3,E15.5,a)') 'TOP',S, ' -  small correction, no top-up'
-      else 
+      else
 
        x1=f1/f2-1.d0; x2=f2/f3-1.d0; xx=(x1+x2)/2
        xe=(EK-Etarg(itr1))/(EK-Etarg(itr2)) - 1.d0
@@ -581,7 +581,7 @@
         if(ek.gt.ekk) then
          fail(itr)=ek
         else
-         write(nub,'(f10.6,2i5)') ek,itr1,itr2; nbad=nbad+1; Return          
+         write(nub,'(f10.6,2i5)') ek,itr1,itr2; nbad=nbad+1; Return
         end if
        end if
 
@@ -617,7 +617,7 @@
       f1=0.d0; f2=0.d0; f3=0.d0
       Do il=0,maxl
        if(fl(il).eq.0.d0) Cycle
-       f1=f2; f2=f3; f3=fl(il); C = f2/f3; if(C.lt.1.d0) C=1.d0        
+       f1=f2; f2=f3; f3=fl(il); C = f2/f3; if(C.lt.1.d0) C=1.d0
        if(jtr1.ne.0) write(pri,'(i2,a1,E15.5,f12.3)') il,'.',f3,C-1.d0
       End do
 
@@ -634,7 +634,7 @@
 
        write(pri,'(a3,E15.5,a)') 'TOP',S, ' -  small correction, no top-up'
 
-      else 
+      else
 
        x1=f1/f2-1.d0; x2=f2/f3-1.d0; xx=(x1+x2)/2
        xe=(EK-Etarg(itr1))/(EK-Etarg(itr2)) - 1.d0
@@ -643,7 +643,7 @@
         if(ek.gt.ekk) then
          fail(itr)=ek
         else
-         write(nub,'(f10.6,2i5)') ek,itr1,itr2; nbad=nbad+1          
+         write(nub,'(f10.6,2i5)') ek,itr1,itr2; nbad=nbad+1
         end if
        end if
 
@@ -707,7 +707,7 @@
 !         S = S + C; om_top(itr,ie) = S
 !         write(pri,'(a3,E15.5,a,i3)') 'TOP',S,' - CBE approximation failed'
 !        else
-!         write(nub,'(f10.6,2i5)') ek,itr1,itr2; nbad=nbad+1; Return          
+!         write(nub,'(f10.6,2i5)') ek,itr1,itr2; nbad=nbad+1; Return
 !        end if
 !      end if
 
@@ -743,7 +743,7 @@
 
       lamda = ll_max
       C = (1+lamda**2*e2)*om1 - (1+lamda**2*e1)*om2
-      C = C /lamda**2 / (e1-e2) 
+      C = C /lamda**2 / (e1-e2)
 
       S = S + C;  om_top(itr,ie) = S
 
@@ -752,7 +752,7 @@
 
       End Subroutine TOP_dipole3
 
-  
+
 !======================================================================
       Subroutine GET_fl
 !======================================================================
@@ -769,20 +769,20 @@
           fl(l) = fl(l) +  s
          End do
         End do
-      
-        if(nopen.gt.kopen) then 
-   
+
+        if(nopen.gt.kopen) then
+
          nj = iop(ilsp,ie,3)
          ntr = kopen*(kopen+1)/2
          Do i=kopen+1,nopen;  if(iptar(ilsp,i).ne.itr2) Cycle
           Do j=1,nj;          if(iptar(ilsp,j).ne.itr1) Cycle
-           ij=ntr+(i-kopen-1)*nj+j                                          
+           ij=ntr+(i-kopen-1)*nj+j
            s = fom(ij,ilsp,ie)
            if(itr1.eq.itr2.and.i.ne.j) s = s + s
            fl(l) = fl(l) +  s
           End do
          End do
-   
+
         end if
 
       End do  ! over ilsp
@@ -796,31 +796,31 @@
 
       fll = 0.d0
       Do ilsp = 1,nlsp;  nopen = iop(ilsp,ie,1);  kopen = iop(ilsp,ie,2)
-  
+
         Do i=1,kopen;   if(iptar(ilsp,i).ne.itr2) Cycle; l1=lch(ilsp,i)
          Do j=1,i;      if(iptar(ilsp,j).ne.itr1) Cycle; l2=lch(ilsp,j)
           ij=(i-1)*i/2+j
           s = fom(ij,ilsp,ie)
           if(itr1.eq.itr2.and.i.ne.j) s = s + s
-          if(l1.gt.l2) fll(l1,1) = fll(l1,1) + s 
-          if(l2.gt.l1) fll(l2,2) = fll(l2,2) + s 
+          if(l1.gt.l2) fll(l1,1) = fll(l1,1) + s
+          if(l2.gt.l1) fll(l2,2) = fll(l2,2) + s
          End do
         End do
-      
-        if(nopen.gt.kopen) then 
-   
+
+        if(nopen.gt.kopen) then
+
          nj = iop(ilsp,ie,3)
          ntr = kopen*(kopen+1)/2
          Do i=kopen+1,nopen;  if(iptar(ilsp,i).ne.itr2) Cycle; l1=lch(ilsp,i)
           Do j=1,nj;          if(iptar(ilsp,j).ne.itr1) Cycle; l2=lch(ilsp,j)
-           ij=ntr+(i-kopen-1)*nj+j                                          
+           ij=ntr+(i-kopen-1)*nj+j
            s = fom(ij,ilsp,ie)
            if(itr1.eq.itr2.and.i.ne.j) s = s + s
-           if(l1.gt.l2) fll(l1,1) = fll(l1,1) + s 
-           if(l2.gt.l1) fll(l2,2) = fll(l2,2) + s 
+           if(l1.gt.l2) fll(l1,1) = fll(l1,1) + s
+           if(l2.gt.l1) fll(l2,2) = fll(l2,2) + s
           End do
          End do
-   
+
         end if
 
       End do  ! over ilsp
@@ -837,7 +837,7 @@
 !----------------------------------------------------------------------
       Character(80) :: A
 
-      Call get_command_argument(1,A)  
+      Call get_command_argument(1,A)
       if(A.ne.'?') Return
 
       write(*,'(a)') &
@@ -855,7 +855,7 @@
 '           ek1, ek2 - energy interval in Ry                       ',&
 '           tail - tolerence for top-up contribution  [0.001]      ',&
 '           x    - tolerence for geom. series parameter [0.05]     ',&
-'           method [1] - if =2, CBE is used for dipole transitions ',&   
+'           method [1] - if =2, CBE is used for dipole transitions ',&
 '                                                                  '
       Stop ' '
 

@@ -15,3 +15,4 @@ add_library(shells
   gen_f3.f90               gen_f4.f90               gen_f5.f90
   gen_f6.f90               gen_f7.f90               ML_id.f90
   zgen.f90)
+set_target_properties(shells PROPERTIES Fortran_MODULE_DIRECTORY ${GLOBAL_Fortran_MODULE_DIRECTORY})

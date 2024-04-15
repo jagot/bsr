@@ -2,18 +2,18 @@
       Module rk_data
 !====================================================================
 !     contains a set of coefficients ordering accordint to
-!     four pointers (packed with nine parameters) 
+!     four pointers (packed with nine parameters)
 !--------------------------------------------------------------------
-      Implicit none 
-    
+      Implicit none
+
       Integer :: nrk = 0       ! current number of coefficients
       Integer :: mrk = 0       ! maximum dimension
       Integer :: irk = 2**10   ! initial dimension
 
 ! ... coefficients:
 
-      Real(8), allocatable :: crk(:)   
-    
+      Real(8), allocatable :: crk(:)
+
 ! ... their attributes:
 
       Integer, allocatable :: kr1(:),kr2(:),kr3(:),kr4(:)
@@ -22,17 +22,17 @@
 
       Integer ::  ibr=2**15, ibk=2**20, ibi=2**27, ibc=2**15
 
-! ... kr1 = ic*(ic-1)/2+jc 
+! ... kr1 = ic*(ic-1)/2+jc
 ! ... kr2 = int*ibi+k*ibk+idf
 ! ... kr3 = i1*ibr+i2
 ! ... kr4 = i3*ibr+i4
 
 ! ... ic,jc, i1,i2,i3,i4 < 2**15
-! ... int <  8 
+! ... int <  8
 ! ... k < 2**7 = 128
- 
+
       Real(8), parameter :: eps_C = 1.d-12
-	  
+
       End Module rk_data
 
 
@@ -50,7 +50,7 @@
 
       if(m.le.0) then
        if(allocated(crk)) Deallocate (crk,kr1,kr2,kr3,kr4)
-       nrk = 0; mrk = 0 
+       nrk = 0; mrk = 0
       elseif(.not.allocated(crk)) then
        mrk = m; nrk = 0
        Allocate(crk(mrk),kr1(mrk),kr2(mrk),kr3(mrk),kr4(mrk))
@@ -86,7 +86,7 @@
 !======================================================================
       Subroutine Add_rk_data(ic,jc,int,kr,idf,i1,i2,i3,i4,C)
 !======================================================================
-!     add new data to the list 
+!     add new data to the list
 !----------------------------------------------------------------------
       USE rk_data
 
@@ -106,12 +106,12 @@
 
       k2=int*ibi+kr*ibk+idf
       k3=i1*ibr+i3
-      k4=i2*ibr+i4 
+      k4=i2*ibr+i4
 
 ! ... search position (k) for new integral
 
       k=1; l=nrk
-    1 if(k.gt.l) go to 2              
+    1 if(k.gt.l) go to 2
       m=(k+l)/2
       if    (k1.lt.kr1(m)) then;       l = m - 1
       elseif(k1.gt.kr1(m)) then;       k = m + 1
@@ -132,7 +132,7 @@
        end if
       end if
       go to 1
-    2 Continue 
+    2 Continue
 
 ! ... shift the rest data up:
 
@@ -145,7 +145,7 @@
 ! ... add new integral:
 
       crk(k)=C; kr1(k)=k1; kr2(k)=k2; kr3(k)=k3; kr4(k)=k4; nrk=nrk+1
-      if(nrk.eq.mrk) Call alloc_rk_data(mrk+irk) 
+      if(nrk.eq.mrk) Call alloc_rk_data(mrk+irk)
 
       End Subroutine Add_rk_data
 

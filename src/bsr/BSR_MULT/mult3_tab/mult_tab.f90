@@ -6,9 +6,9 @@
 !     Written by:   Oleg Zatsarinny
 !                   free shooter
 !                   email: oleg_zoi@yahoo.com
-!                         
+!
 !======================================================================
-!     print,  to file mult.tab, the angular coefficients for two 
+!     print,  to file mult.tab, the angular coefficients for two
 !     selected states in input c-files according to MULT.BNK file
 !----------------------------------------------------------------------
       Use mult_tab
@@ -16,6 +16,7 @@
       Use orb_LS
       Use det_list
       Use def_list
+      Use rk4_data
 
       Implicit real(8) (A-H,O-Z)
 
@@ -24,17 +25,17 @@
 
       Integer, dimension(me) :: IPN1,IPN2, MP,MP1,MP2
 
-      Integer, external :: IDET_SIMP, Iadd_int, Nadd_det, Nadd_def 
+      Integer, external :: IDET_SIMP, Iadd_int, Nadd_det, Nadd_def
 
-      Character(26) ::  AI1, AI2  
-      Character(40) ::  BI1, BI2 
+      Character(26) ::  AI1, AI2
+      Character(40) ::  BI1, BI2
       Character(80) ::  AS
 
 !----------------------------------------------------------------------
 ! ... read arguments from command line:
 
       iarg = IARGC()
-      
+
       if(iarg.lt.2) then
        write(*,*)
        write(*,*) 'mult_tab prints the angular coefficients for '
@@ -54,23 +55,24 @@
        write(*,*) '    +1  - partial orthogonality, default'
        write(*,*)
        write(*,*) 'example: mult_tab 1.c 2.c - all dipole transitions'
-       Stop 
+       Stop
       end if
 
       Call Read_aarg('c1',AF1);      Call Check_file(AF1)
       Call Read_aarg('c2',AF2);      Call Check_file(AF2)
       Call Read_aarg('bnk',AF_bnk);  Call Check_file(AF_bnk)
       Call Read_aarg('tab',AF_tab)
-      Call Read_iarg('ic',ic)
-      Call Read_iarg('jc',jc)
+      icc=0; Call Read_iarg('ic',icc)
+      jcc=0; Call Read_iarg('jc',jcc)
       Call Read_iarg('jort',jort)
+      Call Read_iarg('ovl',ovl)
 
-      Open(nub,file=AF_bnk,form='UNFORMATTED') 
+      Open(nub,file=AF_bnk,form='UNFORMATTED')
       read(nub) ktype,kpol
 
-      Open(out,file=AF_tab) 
-      Open(in1,file=AF1) 
-      Open(in2,file=AF2) 
+      Open(out,file=AF_tab)
+      Open(in1,file=AF1)
+      Open(in2,file=AF2)
 
 ! ... define configurations:
 
@@ -90,22 +92,25 @@
 ! ... Cycle over configurations:
 
       Do is = 1,ncfg1
-       if(ic.gt.0.and.ic.ne.is) Cycle
+       if(icc.gt.0.and.icc.ne.is) Cycle
        it = IC_term(is)
        Call Get_cfg_LS(is)
-       write(out,'(71(''-''))')
-       Call Prj_conf_LS (out,0.d0)
+       Call Incode_c
+       CONFIG1 = CONFIG
+       COUPLe1 = COUPLE
        Call Save_cfg_LS(1)
        ips = IP_state(is)
-      Do js = ncfg1+1,ncfg2 
-       if(jc.gt.0.and.jc.ne.js) Cycle
+      Do js = ncfg1+1,ncfg2
+       if(jcc.gt.0.and.jcc.ne.js) Cycle
        jt = IC_term(js)
        Call Get_cfg_LS(js)
-       Call Prj_conf_LS (out,0.d0)
-       write(out,'(71(''-''))')
-       write(out,*)
+       Call Incode_c
+       CONFIG2 = CONFIG
+       COUPLE2 = COUPLE
        Call Save_cfg_LS(2)
        jps = IP_state(js)
+
+       Call alloc_rk4_data(m)
 
 ! ... read the bank:
 
@@ -121,8 +126,7 @@
       Call Alloc_ndef(-1)
 
    10 read(nub,end=20) C,ijt,int,idf
-
-      ik=ijt/ibc; jk = mod(ijt,ibc)
+      ik = ijt/ibc; jk = mod(ijt,ibc)
 
       m = 0
       if(it.eq.ik.and.jt.eq.jk) m=1
@@ -160,14 +164,14 @@
        mm = JDET_SIMP(kz,nd,NP1,NP2)
        if(mm.eq.1) Cycle; if(mm.eq.0) go to 10
 
-       MP(1:nd) = NP1(1:nd)*ibd+NP2(1:nd) 
+       MP(1:nd) = NP1(1:nd)*ibd+NP2(1:nd)
        jd = Iadd_ndet(nd,MP)
        md = md + 1; MP1(md) = jd; MP2(md) = iext
 
-      End do 
-    
+      End do
+
       idf = 0
-      if(md.gt.0) then 
+      if(md.gt.0) then
        MP(1:md) = MP1(1:md)*ibf + MP2(1:md)
        idf = Iadd_ndef(md,MP)
       end if
@@ -176,16 +180,29 @@
 
       C = C * (-1)**kz
 
-      Call PRI_MULT(out,C,itype,kpol,j1,j2,idf)
-
-      write(out,*)
+      Call Add_rk4_data(itype,j1,j2,idf,C)
 
       go to 10
    20 Continue
+
+      if(nrk.eq.0) Cycle
+
+      write(out,'(80("-"))')
+      write(out,'(a,T70,i5)') trim(CONFIG1),is
+      write(out,'(a)') trim(COUPLE1)
+      write(out,'(a,T70,i5)') trim(CONFIG2),js-ncfg1
+      write(out,'(a)') trim(COUPLE2)
+      write(out,'(80("-"))')
+
+      Do i=1,nrk
+       Call PRI_MULT(out,kpol,kr1(i),kr2(i),kr3(i),kr4(i),crk(i))
+      End do
+
+      write(out,*)
 
       End do;  End do  ! is,js
 
 
       End ! program MULT_TAB
- 
+
 

@@ -1,4 +1,4 @@
-!======================================================================      
+!======================================================================
       Subroutine Check_perturber
 !======================================================================
 !     read the perturber configurations, substitute physical orbitals
@@ -8,15 +8,15 @@
       Use dbsr_conf
 
       Implicit none
-      Integer :: i,j,ii,jj,is,ic,ip,jp  
+      Integer :: i,j,ii,jj,is,ic,ip,jp
       Real(8) :: W
-      Integer, external :: Ifind_jjorb, Iadd_cfg_jj, Ifind_position 
+      Integer, external :: Ifind_jjorb, Iadd_cfg_jj, Ifind_position
 
 ! ... read substitution orbitals for pertuber:
 
       Call Read_sub_pert_jj(nuo,ilsp)
 
-! ... find substitution pointers for perturber orbitals:    
+! ... find substitution pointers for perturber orbitals:
 
       if(nwf_pert.gt.nwf_targ) then
       ipef(nwf_targ+1:nwf_pert)=0
@@ -84,7 +84,7 @@
        write(pri,'(/a,i5)') &
         'Check the double pertubers for given partial wave'
         Stop 'Check the double pertubers'
-      end if       
+      end if
 
       write(pri,'(/a,T40,i8)') 'Number of perturber configurations:', ncp
       write(pri,'( a,T40,i8)') 'Number of physical perturbers:', &

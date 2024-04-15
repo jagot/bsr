@@ -17,11 +17,11 @@
       Integer :: nsymc = 0       ! number of symmmetries
       Integer :: msymc = 0       ! current dimension of the list
       Integer :: isymc = 2**12   ! initial dimension
-      Integer :: jsymc = 2*3     ! average size of one symc. 
-      Integer :: ksymc = 0       ! max.dimension of all symc.s 
-      Integer :: lsymc = 0       ! last element 
-      
-      Integer, allocatable :: LT_conf(:), ST_conf(:)  ! total terms   
+      Integer :: jsymc = 2*3     ! average size of one symc.
+      Integer :: ksymc = 0       ! max.dimension of all symc.s
+      Integer :: lsymc = 0       ! last element
+
+      Integer, allocatable :: LT_conf(:), ST_conf(:)  ! total terms
       Integer, allocatable :: no_conf(:)              ! number of shells
                                                       ! (we can avoid this array)
       Integer, allocatable :: ip_conf(:)              ! pointer for the given config.
@@ -29,9 +29,9 @@
       Integer, allocatable :: iq_conf(:)              ! occupation numbers
       Integer, allocatable :: ln_conf(:)              ! l-values
 
-! ... IC_term1(ic), IC_term2(ic) - gives, for the configuration 'ic', 
+! ... IC_term1(ic), IC_term2(ic) - gives, for the configuration 'ic',
 ! ... the range of related terms in the ordered list of terms
-                                                                          
+
       Integer, allocatable :: IC_term1(:), IC_term2(:)
 
 ! ... IC_need(:) - define the need of calc. for two given config.s
@@ -103,7 +103,7 @@
 !----------------------------------------------------------------------
       Use symc_list_LS
 
-      Implicit none 
+      Implicit none
       Integer :: no, LT,ST,  i,j,ip
       Integer, Dimension(no) :: iq,ln
 
@@ -147,14 +147,14 @@
 !======================================================================
       Subroutine Get_symc_LS(ic,LT,ST,no,nn,ln,iq,kn)
 !======================================================================
-!     extract configuration 'ic'                   
+!     extract configuration 'ic'
 !----------------------------------------------------------------------
       Use symc_list_LS
 
-      Implicit none 
+      Implicit none
       Integer :: ic,LT,ST,no,i,ip
       Integer :: nn(*),ln(*),iq(*),kn(*)
-      
+
       if(ic.le.0.or.ic.gt.nsymc) Stop 'Get_symc: <ic> is out of range'
 
       LT = LT_conf(ic)
@@ -166,7 +166,7 @@
        ln(i) = ln_conf(ip)
        nn(i) = i
        kn(i) = 0
-      End do 
+      End do
 
       End Subroutine Get_symc_LS
 
@@ -174,7 +174,7 @@
 !======================================================================
       Subroutine read_symc_LS(nu)
 !======================================================================
-      Use symc_list_LS 
+      Use symc_list_LS
 
       Implicit none
       Integer :: nu,i
@@ -184,12 +184,12 @@
       Deallocate (LT_conf,ST_conf,no_conf,ip_conf,iq_conf,ln_conf)
       Allocate(LT_conf(nsymc),ST_conf(lsymc),no_conf(nsymc),ip_conf(nsymc), &
                iq_conf(lsymc),ln_conf(lsymc))
-      read(nu) (LT_conf(i),i=1,nsymc) 
-      read(nu) (ST_conf(i),i=1,nsymc) 
-      read(nu) (no_conf(i),i=1,nsymc) 
-      read(nu) (ip_conf(i),i=1,nsymc) 
-      read(nu) (iq_conf(i),i=1,lsymc) 
-      read(nu) (ln_conf(i),i=1,lsymc) 
+      read(nu) (LT_conf(i),i=1,nsymc)
+      read(nu) (ST_conf(i),i=1,nsymc)
+      read(nu) (no_conf(i),i=1,nsymc)
+      read(nu) (ip_conf(i),i=1,nsymc)
+      read(nu) (iq_conf(i),i=1,lsymc)
+      read(nu) (ln_conf(i),i=1,lsymc)
       msymc = nsymc; jsymc = lsymc/nsymc + 1; ksymc = lsymc
 
       End Subroutine read_symc_LS
@@ -198,18 +198,18 @@
 !======================================================================
       Subroutine write_symc_LS (nu)
 !======================================================================
-      Use symc_list_LS 
+      Use symc_list_LS
 
       Implicit none
       Integer :: nu,i
 
       write(nu) nsymc,lsymc
-      write(nu) (LT_conf(i),i=1,nsymc) 
-      write(nu) (ST_conf(i),i=1,nsymc) 
-      write(nu) (no_conf(i),i=1,nsymc) 
-      write(nu) (ip_conf(i),i=1,nsymc) 
-      write(nu) (iq_conf(i),i=1,lsymc) 
-      write(nu) (ln_conf(i),i=1,lsymc) 
+      write(nu) (LT_conf(i),i=1,nsymc)
+      write(nu) (ST_conf(i),i=1,nsymc)
+      write(nu) (no_conf(i),i=1,nsymc)
+      write(nu) (ip_conf(i),i=1,nsymc)
+      write(nu) (iq_conf(i),i=1,lsymc)
+      write(nu) (ln_conf(i),i=1,lsymc)
       Deallocate (LT_conf,ST_conf,no_conf,ip_conf,iq_conf,ln_conf)
       msymc = 0; jsymc = lsymc/nsymc + 1; ksymc = 0; lsymc=0
 
@@ -219,7 +219,7 @@
 !======================================================================
       Subroutine Def_maxl(l)
 !======================================================================
-      Use symc_list_LS 
+      Use symc_list_LS
 
       Implicit none
       Integer :: l,i
@@ -232,11 +232,11 @@
 !======================================================================
       Integer Function no_conf_LS (ic)
 !======================================================================
-!     number of shells in state 'iconf'                   
+!     number of shells in state 'iconf'
 !----------------------------------------------------------------------
       Use symc_list_LS
 
-      Implicit none 
+      Implicit none
       Integer :: ic
 
       no_conf_LS = no_conf(ic)

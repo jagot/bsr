@@ -8,10 +8,10 @@
       Use df_orbitals
 
       Implicit none
-      Integer :: i,j,ic,io,is,k,iset
+      Integer :: i,ic,io,is,k
       Integer, external :: Jdef_ncfg, Ifind_position, Ifind_orb, &
                            Iadd_cfg_jj
-      Character(5), external :: Eli 
+      Character(5), external :: Eli
 
 ! ... check c-file:
 
@@ -79,12 +79,12 @@
       if(eal.eq.1) weight = 1.d0
 
       Allocate(iqconf(nconf,nwf)); iqconf = 0
-      Do i=1,ncore;  iqconf(:,i) = qsum(i); End do
+      Do i=1,ncore;  iqconf(:,i) = NINT(qsum(i)); End do
 
       i=Ifind_position(nuc,'CSF(s):')
 
       ic = 0
-      Do 
+      Do
        read(nuc,'(a)') CONFIG
 
        if(CONFIG(6:6).ne.'(') Cycle

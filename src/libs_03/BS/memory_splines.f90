@@ -33,7 +33,7 @@
 
 ! ... spline_integrals:
 
-      m = m + 2 * (ns*ks*ns*ks + ns*ns*ks + ns*ks + ns*ns + ns) 
+      m = m + 2 * (ns*ks*ns*ks + ns*ns*ks + ns*ks + ns*ns + ns)
 
 ! ... spline_slater:
 
@@ -44,7 +44,7 @@
       m = m + 2 * (5*ks + ks*ks + ks*ks*(ks+nv) + ks*ks*(ks+1)*(ks+1)/4 ) + 18
 
       End function Memory_splines
-  
+
 
 
 

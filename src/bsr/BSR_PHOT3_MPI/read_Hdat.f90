@@ -3,7 +3,7 @@
 !----------------------------------------------------------------------
 !     read H.DAT file (unit nu) and find the information for partial
 !     wave IS,IL,IP
-!----------------------------------------------------------------------      
+!----------------------------------------------------------------------
 
       Use bsr_phot
 
@@ -19,17 +19,17 @@
 
       READ(nuh) nelc,nz,lm,km,ntarg,RA,RB
       ion = nz - nelc
- 
+
       Allocate(Etarg(ntarg),Ltarg(ntarg),IStarg(ntarg),IPtarg(ntarg))
 
       READ (nuh) Etarg
       READ (nuh) Ltarg
       READ (nuh) IStarg  !,IPtarg
- 
+
       E1  = Etarg(1)
       DO i = 1,ntarg;  Etarg(i)  = 2.d0 * (Etarg(i)-E1); END DO
-     
-      WRITE (pri,'(/a/)')   'H.DAT file information:' 
+
+      WRITE (pri,'(/a/)')   'H.DAT file information:'
       WRITE (pri,'(a,i4)')  'nuclear charge             =',NZ
       WRITE (pri,'(a,i4)')  'number of target electrons =',NELC
       WRITE (pri,'(a,i4)')  'number of target states    =',NTARG
@@ -39,9 +39,9 @@
       WRITE (pri,'(a,i4   )') 'Max. small l    =',LM-1
 
 ! ... skip BUTTLE CORRECTION    ( don't use here! )
- 
+
       READ (nuh) ((C,i=1,3),j=1,LM)
- 
+
 ! ... look for the required partial wave
 
       iend = 0
@@ -50,7 +50,7 @@
       if(IL2.eq.IL.and.IS2.eq.IS.and.IP2.eq.IP) iend=1
 
       if(iend.eq.0) then           ! skip information
-                                                   
+
         READ (nuh) (j,i=1,ntarg)
         READ (nuh) (j,i=1,NCH)
         READ (nuh) (((C,i=1,NCH),j=1,NCH),k=1,KM)
@@ -62,9 +62,9 @@
          Stop
         end if
         go to 1
- 
+
       else                        ! read information
-                       
+
        Allocate(NCONAT(ntarg),LCH(nch),CF(nch,nch,km),VALUE(nhm), &
                 WMAT(nch,nhm))
 
@@ -75,9 +75,9 @@
        READ (nuh) (VALUE(i),i=1,nhm)
        READ (nuh) ((WMAT(i,j),i=1,nch),j=1,nhm)
        DO i = 1,NHM;   VALUE(i) = 2.0D0* (VALUE(i)-E1); END DO
-  
+
       end if
- 
+
       write(pri,'(/a,3i5)') 'LSP =',IL2,IS2,IP2
       write(pri,'(/a,i5 )') 'Number of channels =',nch
       write(pri,'(/a,i5/)') 'Hamiltonian matrix =',nhm
@@ -85,15 +85,15 @@
       End Subroutine Read_HDAT
 
 
-!====================================================================== 
-      Subroutine Br_Hdat 
-!====================================================================== 
+!======================================================================
+      Subroutine Br_Hdat
+!======================================================================
 
-      USE MPI 
-      USE bsr_phot 
+      USE MPI
+      USE bsr_phot
 
-      Implicit none 
- 
+      Implicit none
+
       Call MPI_BCAST(nelc, 1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
       Call MPI_BCAST(nz,   1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
       Call MPI_BCAST(km,   1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)

@@ -24,9 +24,9 @@
       End do
 
       if(k.gt.0) dav = dav / k
-      if(dmx.gt.1.d-15) dmx = LOG10(dmx/2.d0) 
-      if(dmn.gt.1.d-15) dmn = LOG10(dmn/2.d0) 
-      if(dav.gt.1.d-15) dav = LOG10(dav/2.d0) 
+      if(dmx.gt.1.d-15) dmx = LOG10(dmx/2.d0)
+      if(dmn.gt.1.d-15) dmn = LOG10(dmn/2.d0)
+      if(dav.gt.1.d-15) dav = LOG10(dav/2.d0)
 
       Do i = 1,n-1
        Do j = i+1,n

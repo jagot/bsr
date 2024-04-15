@@ -1,7 +1,7 @@
 !=====================================================================
-      Module bsr_hd      
+      Module bsr_hd
 !=====================================================================
-!     Contains common variable and arrays 
+!     Contains common variable and arrays
 !---------------------------------------------------------------------
       use blacs, only: dlen_
 
@@ -47,28 +47,28 @@
       Integer :: khm               ! number of solutions
       Integer :: kch               ! number of channels
       Integer :: kcp               ! # configurations in perturber
-      Integer :: ksol = 0          ! # channel eigenvalues 
+      Integer :: ksol = 0          ! # channel eigenvalues
       Integer :: diag_ovl          ! flag for nonzero ovl.blocks
 
 ! ... main global arrays:
 
       Real(8), allocatable :: a(:,:)      ! interaction matrix
-      Integer              :: desca(dlen_) 
+      Integer              :: desca(dlen_)
       Real(8), allocatable :: b(:,:)      ! overlap matrices
-      Integer              :: descb(dlen_) 
-      Real(8), allocatable :: z(:,:)      ! solutions        
-      Integer              :: descz(dlen_) 
+      Integer              :: descb(dlen_)
+      Real(8), allocatable :: z(:,:)      ! solutions
+      Integer              :: descz(dlen_)
       Real(8), allocatable :: v(:)        ! solution vector
-      Integer              :: descv(dlen_) 
+      Integer              :: descv(dlen_)
 
       Real(8), allocatable :: eval(:)     ! eigenvalues
 
       Real(8), allocatable :: bb(:,:)     ! new basis
       Real(8), allocatable :: bval(:)     ! basis eigenvalues
-      Integer, allocatable :: ipsol(:)    ! pointer on channel blocks 
-                                          ! in new basis 
+      Integer, allocatable :: ipsol(:)    ! pointer on channel blocks
+                                          ! in new basis
       Integer, allocatable :: isol(:)     ! pointer on main configuration
-    
+
       Real(8), allocatable :: WMAT(:,:)   ! surface amplitudes
 
       Real(8), allocatable :: CF(:,:,:)   ! asymptotic coefficients
@@ -79,30 +79,30 @@
 ! ... working arrays
 
       Real(8), allocatable :: add(:,:)
-      Integer              :: descadd(dlen_) 
+      Integer              :: descadd(dlen_)
       Real(8), allocatable :: adp(:,:)
-      Integer              :: descadp(dlen_) 
+      Integer              :: descadp(dlen_)
       Real(8), allocatable :: adv(:)
-      Integer              :: descadv(dlen_) 
+      Integer              :: descadv(dlen_)
 
       Real(8), allocatable :: cc(:,:),w(:)
       Integer              :: parms(5)
 
-! ... exp.energies: 
-    
-      Logical :: EXP 
+! ... exp.energies:
+
+      Logical :: EXP
       Integer :: iexp = 0, iiexp = 0
       Real(8), Allocatable :: E_exp(:)
       Integer, Allocatable :: ip_exp(:)
       Real(8) :: au_eV, au_cm
       Character(2) :: unit = 'au'
 
-! ... pointer on the inclusion of mass-velocity term 
+! ... pointer on the inclusion of mass-velocity term
 ! ... in first order
 
       Integer :: jmvc = 0
 
-! ... additonal output: 
+! ... additonal output:
 
       Integer :: iwt = -1       ! print channel weights
       Real(8) :: cwt = -0.01d0  ! cut of for weights' printing
@@ -116,7 +116,7 @@
 
 ! ... debug and timing:
 
-      Integer :: debug = 0   
+      Integer :: debug = 0
       Real(8) :: t0, t1
 
       End module bsr_hd

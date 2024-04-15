@@ -58,7 +58,7 @@
 
       if(itype.lt.0.and.cwt.le.0) cwt=0.01
       if(ktarg.le.0) ktarg = ntarg
-      
+
 ! ... set the range of partial waves under consideration:
 
       if(klsp.gt.0) then
@@ -87,8 +87,8 @@
        iiexp=0
        Do i=1,ntarg; if(ip_exp(i).ne.i) iiexp=1; End do
 
-       write(*,*) 'unit = ', unit, au_cm,au_eV
-       write(*,*) 'iiexp =',iiexp
+       write(*,*) 'unit = ', unit, au_cm,au_eV, '    iiexp =',iiexp
+       Do i=1,ntarg; write(*,*) i,ip_exp(i); End do
 
       end if
 

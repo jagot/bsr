@@ -2,11 +2,11 @@
     Program print_bs
 !======================================================================
 !   This utilty prints B-splines (in separate files bs_###)
-!   for given "knot.dat" 
+!   for given "knot.dat"
 !----------------------------------------------------------------------
     Use spline_atomic
     Use spline_param
-    Use spline_grid    
+    Use spline_grid
 
     Implicit real(8) (A-H,O-Z)
     Character(20) :: AF
@@ -23,7 +23,7 @@
     CALL define_spline
 
     ! .. print B-splines in separate files:
-     
+
     Allocate(c(ns))
 
     n = 100;  Call Read_iarg('n',n)

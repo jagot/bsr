@@ -1,5 +1,5 @@
 !======================================================================
-      Subroutine  L_data(jtype,l) 
+      Subroutine  L_data(jtype,l)
 !======================================================================
 !     processing of L-integrals in the module cmdata
 !----------------------------------------------------------------------
@@ -30,13 +30,13 @@
       Use channel
       Use cmdata
       Use L_core
-      
+
       Implicit none
       Integer, Intent(in) :: jtype,l
       Integer :: i,j, i1,i2, j1,j2, ich,jch, ic,jc, io,jo
       Real(8) :: c, v(ns), w(ns)
 
-      hl_core(:,:) = hl_full(:,:,l) 
+      hl_core(:,:) = hl_full(:,:,l)
 
 !write(pri,*) 'L_data: jtype =',jtype,ncdata
 
@@ -44,7 +44,7 @@
 
 !----------------------------------------------------------------------
 !                                                            L ( . . ):
-      Case(1)                                
+      Case(1)
 
        Do j=1,ncdata;  i=IPT(j)
 
@@ -52,7 +52,7 @@
 
         i1=k1(i)/ibi; i2=mod(k1(i),ibi);  C=L_int(i1,i2)*cdata(i)
         ic=-k3(i); jc=-k4(i)
-       
+
          if(ic.gt.0.and.jc.gt.0) then                 !  L(..) (ic,jc)
 
           Call Update_HB(ic,jc,C)
@@ -60,10 +60,10 @@
          elseif(ic.lt.0.and.jc.gt.0) then             !  L(..) <i|.> ic
 
           io = -ic;  i1=io/ibo; i2=mod(io,ibo)
-          Call GET_V(i1,i2,v)  
+          Call GET_V(i1,i2,v)
           ich=iech(i1); ic = jc
           Call UPDATE_HV(ich,ic,ns,v,C)
- 
+
          elseif(ic.lt.0.and.jc.lt.0) then            !  L(..) <i|.> <.|j>
 
           io = -ic;  i1=io/ibo; i2=mod(io,ibo)
@@ -72,10 +72,10 @@
           Call GET_V(j1,j2,w)
           ich = iech(i1); jch = iech(j1)
           v = v * C
-          Call UPDATE_HW(ich,jch,ns,v,w)         
+          Call UPDATE_HW(ich,jch,ns,v,w)
 
-         elseif(ic.lt.0.and.jc.eq.0) then            !  L(..) <i|j>   
-                                                
+         elseif(ic.lt.0.and.jc.eq.0) then            !  L(..) <i|j>
+
           io = -ic;  i1=io/ibo; i2=mod(io,ibo)
           ich = iech(i1); jch = iech(i2)
 
@@ -94,13 +94,13 @@
 
 !----------------------------------------------------------------------
 !                                                       !  L ( . i ):
-      Case(2,3,4,5)                                   
+      Case(2,3,4,5)
 
-       Do j=1,ncdata; i=IPT(j); C=cdata(i)  
+       Do j=1,ncdata; i=IPT(j); C=cdata(i)
 
          if(abs(C).lt.Eps_C) Cycle
 
-         v=L_vec(:,k2(i)); ich=k3(i); io=k4(i) 
+         v=L_vec(:,k2(i)); ich=k3(i); io=k4(i)
 
 !write(pri,*) 'L(.i) ', ebs(k2(i))
 
@@ -110,20 +110,20 @@
           w=C*w
           Call UPDATE_HW(ich,jch,ns,v,w)
 
-!write(pri,*) '<> ', ebs(j1), ebs(j2), ich,jch 
+!write(pri,*) '<> ', ebs(j1), ebs(j2), ich,jch
 
-         elseif(io.lt.0) then                           !  L(.i)  ic 
+         elseif(io.lt.0) then                           !  L(.i)  ic
           ic=-io
           Call UPDATE_HV(ich,ic,ns,v,C)
          else
           Stop ' L_data: uknown structure for itype 2-5 '
          end if
 
-       End do     
+       End do
 
 !----------------------------------------------------------------------
 !                                                            L ( i j ):
-      Case(6,7,8,9)                         
+      Case(6,7,8,9)
 
        Do j=1,ncdata;  i=IPT(j); C=cdata(i)
 

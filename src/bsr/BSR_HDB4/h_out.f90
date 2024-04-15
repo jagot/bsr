@@ -1,5 +1,5 @@
 !======================================================================
-      Subroutine H_OUT 
+      Subroutine H_OUT
 !======================================================================
 !     Output results in H.DAT file according to
 !     the BELFAST R-matrix code format
@@ -7,7 +7,7 @@
       USE bsr_hd
       USE target
       USE channel,  only: lch,iptar, lpar,ispar,ipar,jpar
-      
+
       Implicit none
       Integer :: NCONAT(ntarg)
       Integer :: i,j,k,ich,it,NCHAN,LRANG2,NAST,LRGL,NSPN,NPTY,MNP2,MORE
@@ -20,7 +20,7 @@
 
 ! ... basic parameters:
 
-      nchan = kch 
+      nchan = kch
       LRANG2=0
       Do ich=1,nchan; if(lch(ich).gt.LRANG2) LRANG2=lch(ich); End do
       LRANG2=LRANG2+1              ! max. (l+1)
@@ -28,7 +28,7 @@
       NAST = ntarg                 ! number of target states
       BSTO = 0.d0                  ! boundary logarithmic derivative,
                                    ! always zero in BSR
-                                   
+
       write(nuh) NELC,NZ,LRANG2,LAMAX,NAST,RA,BSTO
       write(nuh) E_exp(1:ntarg)
       if(jtarg(1).gt.0) then
@@ -69,7 +69,7 @@
       write(nuh) (((CF(i,j,k),i=1,nchan),j=1,nchan),k=2,lamax+1)
 
 ! ... R_matrix poles:
- 
+
       write(nuh) (eval(i),i=khm,1,-1)
 
 ! ... surface amplitudes:
@@ -86,7 +86,7 @@
 
 
 !======================================================================
-      Subroutine H_OUT1 
+      Subroutine H_OUT1
 !======================================================================
 !     Output results in H.DAT file according to
 !     the BELFAST R-matrix code format
@@ -94,7 +94,7 @@
       USE bsr_hd
       USE target
       USE channel
-      
+
       Implicit none
       Integer :: NCONAT(ntarg), npch(kch)
       Integer :: i,j,k,ich,it,NCHAN,LRANG2,NAST,LRGL,NSPN,NPTY,MNP2,MORE
@@ -107,7 +107,7 @@
 
 ! ... basic parameters:
 
-      nchan = kch 
+      nchan = kch
       LRANG2=0
       Do ich=1,nchan
        if(lch(ich).gt.LRANG2) LRANG2 = lch(ich)
@@ -117,13 +117,13 @@
       NAST = ntarg                 ! number of target states
       BSTO = 0.d0                  ! boundary logarithmic derivative,
                                    ! always zero in BSR
-                                   
+
       write(nuh) NELC,NZ,LRANG2,LAMAX,NAST,RA,BSTO
       write(nuh) (E_exp(ip_exp(i)),i=1,ntarg)
       if(jtarg(1).gt.0) then
        ltarg(1:ntarg)=jtarg(1:ntarg)-1; istarg(1:ntarg)=0
       end if
-      write(nuh) (ltarg (ip_exp(i)),i=1,ntarg) 
+      write(nuh) (ltarg (ip_exp(i)),i=1,ntarg)
       write(nuh) (istarg(ip_exp(i)),i=1,ntarg), &
                  (iptarg(ip_exp(i)),i=1,ntarg)
 
@@ -145,7 +145,7 @@
 ! ... number of channels, coupled to each target state:
 
       NCONAT=0
-      Do i=1,ntarg; it=ip_exp(i)      
+      Do i=1,ntarg; it=ip_exp(i)
        Do ich=1,nchan; if(iptar(ich).ne.it) Cycle
         NCONAT(i) = NCONAT(i) + 1
        End do
@@ -155,7 +155,7 @@
 ! ... new channel order:
 
       k = 0
-      Do i=1,ntarg; it=ip_exp(i)      
+      Do i=1,ntarg; it=ip_exp(i)
        Do ich=1,nchan; if(iptar(ich).ne.it) Cycle
         k=k+1; npch(k)=ich
        End do
@@ -171,7 +171,7 @@
       write(nuh) (((CF(npch(i),npch(j),k),i=1,nchan),j=1,nchan),k=2,lamax+1)
 
 ! ... R_matrix poles:
- 
+
       write(nuh) (eval(i),i=khm,1,-1)
 
 ! ... surface amplitudes:

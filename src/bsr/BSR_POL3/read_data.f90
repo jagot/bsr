@@ -9,15 +9,15 @@
       Use spline_param,      only: ns,ks
       Use spline_atomic,     only: z
       Use spline_galerkin,   only: sb
-      Use spline_orbitals   
+      Use spline_orbitals
 
       Implicit none
       Integer :: i,j, nc,lc,kc, ich
       Integer, external :: Ifind_nlk
 
 ! ... set up B-splines:
- 
-      CALL define_grid(z); Call define_spline   
+
+      CALL define_grid(z); Call define_spline
 
 ! ... read arguments:
 
@@ -90,7 +90,7 @@
 
 !----------------------------------------------------------------------
 ! ... read B-spline expantions for bound orbitals:
-   
+
       Call Allocate_bsorb(nwf)
       nbf = nwf
       Do i = 1,nbf
@@ -108,14 +108,14 @@
 ! ... perturber radial functions:
 
       if(nwp.gt.0) then
-       i=Index(AFP,'.'); AFP(i+1:i+3)='bsw'
+       i=len_trim(AFP); AFP(i+1:i+4)='.bsw'
        Call Check_file(AFP)
        Open(nuw, file=AFP, form='UNFORMATTED')
        Call Read_bsw(nuw)
        Close(nuw)
       end if
 
-! ... check the correspondence between c- and bsw-files: 
+! ... check the correspondence between c- and bsw-files:
 
       j = 0
       Do i = 1,nwf
@@ -126,7 +126,7 @@
        end if
       End do
       if(j.gt.0) Stop 'no correspondence between c- and w- files'
-      
+
 ! ... the < B | p > values (convolution with B matrix)
 
       Do i=1,nbf
@@ -138,11 +138,11 @@
 
       Do i=1,nwf; Do j=1,i
        IORT(j,i)=IORT(i,j); IBORT(i,j)=IORT(i,j); IBORT(j,i)=IORT(i,j)
-      End do; End do     
+      End do; End do
 
       nort = 0
       Do ich=1,nch; i=ipch(ich)
-       Do j=1,nwf; if(ief(i).eq.0) Cycle       
+       Do j=1,nwf; if(ief(i).eq.0) Cycle
         if(lbs(i).ne.lbs(j)) Cycle
         if(IORT(i,j).ne.0) Cycle
         nort=nort+1
@@ -156,5 +156,5 @@
       write(pri,*)
 
       End Subroutine Read_data
-    
+
 

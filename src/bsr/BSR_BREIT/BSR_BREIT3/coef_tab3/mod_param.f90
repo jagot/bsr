@@ -2,11 +2,11 @@
       MODULE  param_br
 !======================================================================
 
-      Use symt_list_LS, only: noper, it_oper 
+      Use symt_list_LS, only: noper, it_oper
 
       Implicit none
 
-!      Integer, parameter :: noper = 7 
+!      Integer, parameter :: noper = 7
 
       Character(7) :: oper = '1110000'
       Integer(1) ioper(noper)/1,1,1,0,0,0,0/, joper(noper)
@@ -23,7 +23,7 @@
 
 ! ... tolerence for coefficients:
 
-      Real(8) :: Eps_c = 1.d-5      
+      Real(8) :: Eps_c = 1.d-5
 
       Integer :: is_soo = 0  !  Vk -> V'k
 

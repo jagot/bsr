@@ -1,17 +1,17 @@
 !======================================================================
       Module tm_LS
 !======================================================================
-!     Containes the allocatable set of records with three real and five 
+!     Containes the allocatable set of records with three real and five
 !     integer  parameters
 !     Used to save T-matrix elements (for one transition):
-!     STpar  -  total spin of the given partial wave 
-!     LTpar  -  total orbital momemtum of the given partial wave 
+!     STpar  -  total spin of the given partial wave
+!     LTpar  -  total orbital momemtum of the given partial wave
 !     l1, l2 -  l-values for ingoing and outgoing electron
-!     ip     -  
+!     ip     -
 !     EK     -  electron energy
 !     TR, TI -  real and imaginary parts of T-matrix element
 !     jp     -
-!     kcase  -  
+!     kcase  -
 !----------------------------------------------------------------------
       Implicit none
 
@@ -24,7 +24,7 @@
       Real(8), allocatable :: EK(:),TR(:),TI(:)
 
       Integer, allocatable :: jp(:,:)
- 
+
       Integer :: kcase
 
       End Module tm_LS
@@ -81,7 +81,7 @@
 !=======================================================================
       Subroutine Add_tm_LS(e,ar,ai,L,S,m1,m2,ii)
 !=======================================================================
-!     add (or substitude) data to the list 
+!     add (or substitude) data to the list
 !-----------------------------------------------------------------------
       Use tm_LS
 
@@ -99,7 +99,7 @@
        if(ii.ne.ip(i)) Cycle
        if(m1.ne.l1(i)) Cycle
        if(m2.ne.l2(i)) Cycle
-       if(e.ne.EK(i)) Cycle             
+       if(e.ne.EK(i)) Cycle
        TR(i)=ar
        TI(i)=ai
        Return
@@ -109,7 +109,7 @@
 
       if(ndata.eq.mdata) Call Alloc_tm_LS(mdata+idata)
 
-      ndata = ndata+1 
+      ndata = ndata+1
       LTpar(ndata) = L
       STpar(ndata) = S
       ip(ndata) = ii
@@ -124,9 +124,9 @@
 
 !======================================================================
       Subroutine Sort_tm_LS
-!====================================================================== 
-!     sortin data in tm_LS 
-!---------------------------------------------------------------------- 
+!======================================================================
+!     sortin data in tm_LS
+!----------------------------------------------------------------------
       Use tm_LS
 
       Implicit none
@@ -159,7 +159,7 @@
 
 !=======================================================================
       Subroutine Change_tm_LS(i,j)
-!======================================================================= 
+!=======================================================================
 !     exchange two records "i" and "j" in tmat_lis
 !------------------------------------------------------------------------
       Use tm_LS

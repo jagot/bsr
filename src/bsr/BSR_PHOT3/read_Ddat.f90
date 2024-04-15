@@ -1,8 +1,8 @@
 !======================================================================
       Subroutine Read_Ddat (nu,ipri)
 !----------------------------------------------------------------------
-!     read D.DAT file (unit nu) 
-!----------------------------------------------------------------------      
+!     read D.DAT file (unit nu)
+!----------------------------------------------------------------------
       Use bsr_phot
 
       Implicit none
@@ -15,7 +15,7 @@
 
       Allocate (DKL(ndm),DKV(ndm))
       read(nu) (DKL(i),DKV(i),i=1,ndm)         ! dipole / velocity
-      Close(nu)      
+      Close(nu)
 
       if(ipri.gt.0) then
       write(ipri,'(/a/)') 'D.dat data:'

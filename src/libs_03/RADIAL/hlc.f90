@@ -29,11 +29,11 @@
 
        DO K = IABS(LI-LP),LI+LP,2
         C = C -ZCB(LI,K,LP)*RK(I,IP,IP,J,K)/D2
-       End do  
+       End do
 
        HLC = HLC - 2*(4*LP+2)*C
 
-      END DO    
+      END DO
 
 ! ... correction for orbit-orbit interaction:
 

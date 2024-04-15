@@ -21,10 +21,10 @@
 
        if(io_processor) then
         it=iptar(ich);  l=lch(ich);  Call mvcv(l,vc)
-        i1=ipsol(ich-1)+1; i2=ipsol(ich); ii = ipsol(ich-1) 
+        i1=ipsol(ich-1)+1; i2=ipsol(ich); ii = ipsol(ich-1)
         add = zero
-        Do i=i1,i2; if(i-i1.gt.jmvc) Cycle; ! if(bval(i).gt.Etarg(it)) Cycle 
-        Do j=i1,i; if(j-i1.gt.jmvc) Cycle;  ! if(bval(j).gt.Etarg(it)) Cycle 
+        Do i=i1,i2; if(i-i1.gt.jmvc) Cycle; ! if(bval(i).gt.Etarg(it)) Cycle
+        Do j=i1,i; if(j-i1.gt.jmvc) Cycle;  ! if(bval(j).gt.Etarg(it)) Cycle
           S =  - 0.5*BVMV(ns,ks,vc,'s',bb(:,i),bb(:,j))
           add(i-ii,j-ii) = S
           add(j-ii,i-ii) = S
@@ -38,7 +38,7 @@
                       one,    a, i1, i1, desca  )
       End do
 
-      if(io_processor) then           
+      if(io_processor) then
        Call CPU_time(t1)
        write (pri,'(/a,T30,f10.2,a)') 'Add_mvc:,', (t1-t0)/60, ' min.'
        write (*  ,'(/a,T30,f10.2,a)') 'Add_mvc:,', (t1-t0)/60, ' min.'

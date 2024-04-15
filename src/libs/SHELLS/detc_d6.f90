@@ -1,29 +1,29 @@
 !=======================================================================
   Real(8) Function detc_d6 (id,it)
 !=======================================================================
-! coefficient for determinamt id and term it for subshell d6 
+! coefficient for determinamt id and term it for subshell d6
 !-----------------------------------------------------------------------
- 
+
   Implicit none
- 
+
   Integer, intent(in)  :: id,it
- 
+
   Integer, parameter :: kd_d6 = 210
   Integer, parameter :: nt_d6 =  16
- 
+
   Integer :: INT_d6 (kd_d6,nt_d6)
- 
+
   Integer :: Norm_d6  = 9240
- 
+
   if(id.le.0.or.id.gt.kd_d6) Stop "detc_d6: index id is out of range"
   if(it.le.0.or.it.gt.nt_d6) Stop "detc_d6: index it is out of range"
- 
+
   detc_d6 = dfloat(INT_d6(id,it))/dfloat(Norm_d6)
- 
+
   detc_d6 = dsqrt(dabs(detc_d6))
- 
+
   if(INT_d6(id,it).lt.0) detc_d6=-detc_d6
- 
+
 
   Data INT_d6 (:,   1)/ &
       924,        0,        0,        0,        0,        0,        0,        0,        0,        0,        0,        0, &
@@ -344,5 +344,5 @@
      1120,        0,    -5040,        0,     -360,      360,        0,    -5040,        0,    -1512,        0,      420, &
      1512,        0,     -420,        0,     -672,        0,      420,        0,    -1512,        0,     -360,     -420, &
         0,     1512,        0,      360,        0,     -672  /
- 
+
   End Function detc_d6

@@ -4,11 +4,11 @@
       Use zconst, only: c_au
 
       Implicit real(8) (A-H,O-Z)
-      
+
       Integer, allocatable :: ist(:), jst(:), ilsp(:), IPT(:), &
                               JT(:), JP(:), ich_state(:), it_state(:)
       Real(8), allocatable :: E(:), Ebind(:)
-      
+
       Character(64) :: label1
       Character(64), allocatable :: Label(:)
       Character(40) :: AF, name
@@ -23,11 +23,11 @@
       Call Read_name(name)
 
       if(name == '?') then
-       write(*,*) 
+       write(*,*)
        write(*,*) 'create list of states (dbound_tab) containing in dbound.nnn files'
-       write(*,*) 
-       write(*,*) 'see possible parameters in the end of the dbound_tab file' 
-       write(*,*) 
+       write(*,*)
+       write(*,*) 'see possible parameters in the end of the dbound_tab file'
+       write(*,*)
        Stop ' '
       end if
 
@@ -40,7 +40,7 @@
       Z    =  0.d0;  Call Read_rpar(nu,'Z'  ,Z  )
       AWT  =  0.d0;  Call Read_rpar(nu,'AWT',AWT)
       E0   =  0.d0;  Call Read_rpar(nu,'E0' ,E0 )
-      Emin =  0.d0;  Call Read_rpar(nu,'Emin',Emin) 
+      Emin =  0.d0;  Call Read_rpar(nu,'Emin',Emin)
       Emax =  0.d0;  Call Read_rpar(nu,'Emax',Emax)
 
       if(Z.eq.0.d0) Z = 1.d0
@@ -53,14 +53,14 @@
       klsp = 0;  Call Read_iarg('klsp',klsp)
       if(klsp.ne.0) then; klsp1=klsp; klsp2=klsp; end if
 
-      Call Conv_au (Z,AWT,au_cm,au_eV,0)       
+      Call Conv_au (Z,AWT,au_cm,au_eV,0)
 
       if(klsp.ne.0) write(AF_res,'(a,i3.3)') 'dbound_tab_',klsp
       Open(nu,file=AF_res)
 
 !--------------------------------------------------------------------
 ! ... define the number of states in all bound.nnn files:
-                                                         
+
       nstate=0; nterm=0; ia = Len_trim(AF_inp)-3
       Do klsp=klsp1,klsp2,klsp3
        write(AF_inp(ia+1:ia+3),'(i3.3)') klsp
@@ -69,7 +69,7 @@
        nterm=nterm+1
        read(in) ib,kch,kpert,ns,jot,iparity,nbound
        nstate = nstate+nbound
-      End do  
+      End do
 
       write(*,*) ' nstate =', nstate, '   nterm = ',nterm
 
@@ -80,7 +80,7 @@
                ich_state(nstate), it_state(nstate), Ebind(nstate))
 
 !--------------------------------------------------------------------
-! ... read states information:              
+! ... read states information:
 
       iterm=0; istate=0
       Do klsp=klsp1,klsp2,klsp3
@@ -111,7 +111,7 @@
 
 !--------------------------------------------------------------------
 ! ... find space for label:
-    
+
       imax=0
       Do i = 1,nstate
        ii = LEN_TRIM(Label(i)); if(ii.gt.imax) imax=ii
@@ -119,9 +119,9 @@
 
 !--------------------------------------------------------------------
 ! ... find reference energy and excitation (or bindinfg) energies:
-    
+
       if(E0.eq.0.d0) E0 = E(IPT(1))
-      
+
       rewind(nu) ; isf=0
 
       Do j = 1,nstate;  i=IPT(j)
@@ -129,20 +129,20 @@
        if(E(i).gt.Emax) Cycle
        if(E(i).lt.Emin) Cycle
 
-       ee = E(i) - E0;     
+       ee = E(i) - E0;
        e_eV = ee * au_eV
        e_cm = ee * au_cm
-       
+
        label1 = Label(i)
 
        js = jst(i); is = ist(i)
- 
+
        write(nu,'(2i5,3x,a,2i3,f10.5,F15.5,f12.1,f20.8,f15.5,2i6)') &
         ilsp(is),js,label1(1:imax),JT(is),JP(is), &
-        ee,e_eV,e_cm,E(i), Ebind(i), it_state(i), ich_state(i) 
-       isf = isf + 1 
-      
-      End do 
+        ee,e_eV,e_cm,E(i), Ebind(i), it_state(i), ich_state(i)
+       isf = isf + 1
+
+      End do
 
       write(nu,'(a)') '*'
       write(nu,*)
@@ -163,7 +163,6 @@
       write(nu,*)
       write(nu,'(a,i5)')    'nstate = ',isf
 
-      
+
       End  !  program dbound_tab
 
-      

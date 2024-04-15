@@ -2,15 +2,15 @@
       Module  mult_par
 !======================================================================
 ! ... contains main parmeters and arrays for the mult progtm
-!----------------------------------------------------------------------    
+!----------------------------------------------------------------------
       Implicit none
 
 ! ... main files:
 
       Integer, parameter :: ma=80
       Integer :: pri=66;   Character(ma) :: AF_pri = 'mult.log'
-      Integer :: in1=1;    Character(ma) :: AF1 
-      Integer :: in2=2;    Character(ma) :: AF2 
+      Integer :: in1=1;    Character(ma) :: AF1
+      Integer :: in2=2;    Character(ma) :: AF2
       Integer :: nub=3;    Character(ma) :: AF_b = 'mult_bnk'
       Integer :: nur=4;    Character(ma) :: AF_r = 'mult_res'
       Character(ma) :: label = ' '
@@ -18,7 +18,7 @@
 ! ... scratch files:
 
       Integer :: nui = 10  ! for intermediate results
-      Integer :: nus = 11  ! for re-allocations   
+      Integer :: nus = 11  ! for re-allocations
       Integer :: nud = 12  ! for det.expansions
       Integer :: nua = 13  ! for accumulation of data
 
@@ -29,7 +29,7 @@
 
 ! ... tolerence for coefficients:
 
-      Real(8) :: Eps_c = 1.d-7      
+      Real(8) :: Eps_c = 1.d-7
 
 ! ... initial (supposed) number of coef.s:
 
@@ -40,19 +40,19 @@
 
 ! ... switch to MLTPOL representation:
 
-      Integer :: mltpol = 0 
+      Integer :: mltpol = 0
 
 !      Character(5) :: move = 'move '   !  for WINDOWS
       Character(5) :: move = 'mv   '   !  for INIX
 
 ! ...  multipole transition under consideration:
 
-      Integer :: kpol = 1, qpol, mpol, spol
+      Integer :: kpol = 1, qpol, mpol, spol, ovl=1
       Character(1) :: ktype = 'E'
 
 ! ... configurations under consideration:
 
-      Integer :: ic,jc   
+      Integer :: ic,jc
 
 ! ... normalization constants:
 
@@ -67,7 +67,7 @@
 
 ! ... packing basis for configurations:
 
-      Integer, parameter :: ibc = 2**15 
+      Integer, parameter :: ibc = 2**15
 
       End MODULE mult_par
 

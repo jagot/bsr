@@ -7,7 +7,7 @@
 
       Implicit none
 
-! ... files: 
+! ... files:
 
 !     AF  -  standard (default) names
 !     BF  -  names with indication of partial wave number
@@ -15,7 +15,7 @@
       Integer, parameter :: ma=80
 
       Integer :: iname=0; Character(ma) :: name = ' '
-     
+
       Integer :: pri=10;  Character(ma) :: AF_p = 'bsr_breit.log'
       Integer :: nuc=11;  Character(ma) :: AF_c = 'cfg.inp'
                           Character(ma) :: BF_c = 'cfg.nnn'
@@ -30,12 +30,12 @@
 ! ... main parameters:
 !----------------------------------------------------------------------
 
-      Real(8) :: eps_c = 1.d-8          ! tolerence for coefficients   
-      Real(8) :: eps_soo = 1.d-8         ! tolerence for coefficients   
+      Real(8) :: eps_c = 1.d-8          ! tolerence for coefficients
+      Real(8) :: eps_soo = 1.d-8         ! tolerence for coefficients
 
       Integer :: mk = 7                 ! maximum multipole index
 
-      Integer :: new        ! pointer on the previous calculation  
+      Integer :: new        ! pointer on the previous calculation
       Integer :: icalc      ! pointer to the need of new calculations
 
 !      Integer :: mc = 10000000
@@ -52,7 +52,7 @@
 ! ... information data:
 
       Integer(8) :: nc_new = 0
-      Real(8) :: adet,adef       
+      Real(8) :: adet,adef
       Real(8) :: t0,t1,t2,t3,t4, time_limit = 0.d0
 
 ! ... bufer:
@@ -60,7 +60,7 @@
       Integer :: mbuf=1000000, nbuf
       Integer, allocatable :: ibuf1(:),ibuf2(:),ibuf3(:),ibuf4(:)
       Real(8), allocatable :: Cbuf(:)
-      
+
 ! ... MPI insert:
 
       Integer :: nprocs, myid, ierr

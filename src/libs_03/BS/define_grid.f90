@@ -1,8 +1,8 @@
 !=========================================================================
       Subroutine read_grid(z)
 !=========================================================================
-!     gets input data for the grid and sets up the spline knots 
-!     Requires file  'knot.dat' with grid parameters 
+!     gets input data for the grid and sets up the spline knots
+!     Requires file  'knot.dat' with grid parameters
 ! -------------------------------------------------------------------------
       Use spline_param
       Use spline_grid
@@ -13,10 +13,10 @@
       Open(nug,file=AF_grid)
 
       grid_type = 0
-      Call Read_ipar(nug,'grid_type',grid_type)      
+      Call Read_ipar(nug,'grid_type',grid_type)
 
       Select case(grid_type)
-       
+
        Case(0)
 
         rewind(nug)
@@ -31,12 +31,12 @@
 
        Case(1)
 
-        Call Read_ipar(nug,'ks',ks)      
-        Call Read_ipar(nug,'ns',ns)      
-        Call Read_rpar(nug,'z' ,z)      
-        Call Read_rpar(nug,'h' ,h)      
-        Call Read_rpar(nug,'hmax',hmax)      
-        Call Read_rpar(nug,'rmax',rmax)      
+        Call Read_ipar(nug,'ks',ks)
+        Call Read_ipar(nug,'ns',ns)
+        Call Read_rpar(nug,'z' ,z)
+        Call Read_rpar(nug,'h' ,h)
+        Call Read_rpar(nug,'hmax',hmax)
+        Call Read_rpar(nug,'rmax',rmax)
 
         Call mkgrid1(z)
 
@@ -51,8 +51,8 @@
 !=========================================================================
       Subroutine define_grid(z)
 !=========================================================================
-!     gets input data for the grid and sets up the spline knots 
-!     Requires file  'knot.dat' with grid parameters 
+!     gets input data for the grid and sets up the spline knots
+!     Requires file  'knot.dat' with grid parameters
 ! -------------------------------------------------------------------------
       Use spline_param
       Use spline_grid
@@ -69,17 +69,17 @@
        Open(nug,file=AF_grid)
        Call Print_grid_01(z)
        Stop 'check knot.dat file for splines parameters ...'
-      End if 
+      End if
 
       Open(nug,file=AF_grid); Rewind(nug)
 
       grid_type = 0
-      Call Read_ipar(nug,'grid_type',grid_type)      
+      Call Read_ipar(nug,'grid_type',grid_type)
 
       Select case(grid_type)
-       
-       Case(0);  Call define_grid_00(z) 
-       Case(1);  Call define_grid_01(z) 
+
+       Case(0);  Call define_grid_00(z)
+       Case(1);  Call define_grid_01(z)
        Case default; Stop ' Unknown grid_type '
 
       End Select
@@ -212,12 +212,12 @@
       Implicit none
       Real(8) :: z
 
-      Call Read_ipar(nug,'ks',ks)      
-      Call Read_ipar(nug,'ns',ns)      
-      Call Read_rpar(nug,'z' ,z)      
-      Call Read_rpar(nug,'h' ,h)      
-      Call Read_rpar(nug,'hmax',hmax)      
-      Call Read_rpar(nug,'rmax',rmax)      
+      Call Read_ipar(nug,'ks',ks)
+      Call Read_ipar(nug,'ns',ns)
+      Call Read_rpar(nug,'z' ,z)
+      Call Read_rpar(nug,'h' ,h)
+      Call Read_rpar(nug,'hmax',hmax)
+      Call Read_rpar(nug,'rmax',rmax)
 
 ! ... set up the knots for spline
 
@@ -269,7 +269,7 @@
 
       Implicit none
       Integer:: i,nt
-      Real(8) :: z 
+      Real(8) :: z
 
       rmax = rmax * z
       hmax = hmax * z
@@ -278,31 +278,31 @@
       Allocate (t(nt))
       t = 0.d0
       ns = ks
-	  
+
 ! ... determine ml, the number of intervals from 0 to 1
 ! ... first make sure that h = 1/n as recomEnded
 
       ml = 1.d0/h + 0.5;  h = 1.d0/ml
-      Do i=1,ml 
+      Do i=1,ml
        ns = ns + 1; t(ns) = t(ns-1) + h
       End do
 
 ! ... determine me, the number of intervals in "exponential" grid
 
       if(hmax.lt.h) hmax = h
-      me = 0 
-      Do 
+      me = 0
+      Do
        t(ns+1) = t(ns)*(1.d0+h)
        if(t(ns+1)-t(ns).gt.hmax) Exit
        ns = ns + 1
        if(t(ns).gt.rmax) Exit
        me = me + 1
       End do
-        
+
 ! ... rest of interval with step = hmax
 
       if(t(ns).lt.rmax) then
-       Do 
+       Do
         t(ns+1) = t(ns) + hmax
         ns = ns + 1
         if(t(ns).ge.rmax) Exit

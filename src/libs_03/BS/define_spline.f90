@@ -6,7 +6,7 @@
 
       Implicit none
 
-      CALL define_grid(z); Call define_spline   
+      CALL define_grid(z); Call define_spline
 
       End Subroutine DEF_BS
 
@@ -50,11 +50,11 @@
     CALL gauss(ks,gx,gw)
 
     ! .. initializes the values of the spline and its derivatives
-    
+
     CALL allocate_grid
-    
+
     CALL initvb
-    
+
     ! .. initializes the spline array (operators in spline basis)
 
     Call allocate_galerkin
@@ -100,7 +100,7 @@
     IMPLICIT NONE
     REAL(8), Allocatable, DIMENSION(:,:,:) :: dbiatx
     INTEGER :: m, i
-    Allocate(dbiatx(nv,ks,ks)); dbiatx = 0.d0 
+    Allocate(dbiatx(nv,ks,ks)); dbiatx = 0.d0
 
     Do m=1,ks
       gr(1:nv,m)=(t(1+ks:nv+ks)-t(ks:nv+ks-1))*gx(m)+t(ks:nv+ks-1)
@@ -124,7 +124,7 @@
     bspd(nv+1,1,1:ks,2) = dbiatx(1,1:ks,3)
     bsq(nv+1,1,1:ks)    = bspd(nv+1,1,1:ks,1)-bsp(nv+1,1,1:ks)/t(ns+1)
 
-    Deallocate(dbiatx) 
+    Deallocate(dbiatx)
 
     END SUBROUTINE initvb
 
@@ -161,7 +161,7 @@
 
     CALL mrm(0, sb)              ! .. sets sb  ---  <B_i,B_j>
 
-    Call Full_mat_sym(ns,ks,sb,bb,'l') 
+    Call Full_mat_sym(ns,ks,sb,bb,'l')
 
     CALL facsb                   ! .. factorizes sb
 

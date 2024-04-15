@@ -42,7 +42,7 @@
 
       rewind(nuc)
       ic = 0;  parity=0
-      Do 
+      Do
        read(nuc,'(a)') AS
        read(AS,'(a)') CONFIG
        if(CONFIG(1:1).eq.'*') Exit
@@ -56,7 +56,7 @@
 
        iconf = Iadd_symc_LS(Ltotal,Stotal,no,iq,ln)
        iterm = Iadd_symt_LS(iconf,no,LS)
-       IT_stat(iterm) = 1  
+       IT_stat(iterm) = 1
        IC_term(ic) = iterm
 
       End do  ! on ic

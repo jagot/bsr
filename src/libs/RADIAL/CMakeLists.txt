@@ -8,3 +8,4 @@ add_library(radial
   rk_oo.f90                rlshft.f90               rw_wfn.f90
   tk.f90                   uk.f90                   vk.f90
   xk.f90                   zeta.f90                 zint.f90)
+set_target_properties(radial PROPERTIES Fortran_MODULE_DIRECTORY ${GLOBAL_Fortran_MODULE_DIRECTORY})

@@ -1,6 +1,6 @@
 !======================================================================
       Subroutine Def_phys_targ
-!======================================================================     
+!======================================================================
 !     define the physical configurations for target expansions
 !     and record them in the end of targ_nnn.c.
 !----------------------------------------------------------------------
@@ -9,7 +9,7 @@
 
       Implicit none
       Character(80) :: AS
-      Integer :: i,j,it,ii,jj,ic,ic1,ic2     
+      Integer :: i,j,it,ii,jj,ic,ic1,ic2
       Real(8) :: W, S, SS
       Integer, external :: Jfind_cfg_LS, Iadd_cfg_LS, Ifind_nlk, &
                            Ifind_position, Ipointer
@@ -20,7 +20,7 @@
       Open(nuo,file=AF_orb)
       Call Read_sub_orb_LS(nuo,ntarg)
 
-! ... find substitution pointers:    
+! ... find substitution pointers:
 
       IEF=0
       Do i=1,nphys_orb; ii=ip_phy(i); jj=ip_sub(i)
@@ -42,10 +42,10 @@
 !------------------------------------------------------------------------------
 ! ... find and record main target configurations
 
-      if(allocated(jc_targ)) Deallocate(jc_targ) 
-      Allocate(jc_targ(0:ntarg));  jc_targ = 0      
-      if(allocated(ic_targ)) Deallocate(ic_targ) 
-      Allocate(ic_targ(0:ntarg));  ic_targ = 0      
+      if(allocated(jc_targ)) Deallocate(jc_targ)
+      Allocate(jc_targ(0:ntarg));  jc_targ = 0
+      if(allocated(ic_targ)) Deallocate(ic_targ)
+      Allocate(ic_targ(0:ntarg));  ic_targ = 0
 
       Call alloc_cfg_LS(0)
 
@@ -76,9 +76,9 @@
 
       i = Iadd_cfg_LS();  jc_targ(it) = i; WC(i) = sqrt(W)
 
-      SS = SS + W 
+      SS = SS + W
 
-      if(SS.lt.C_phys) go to 1 
+      if(SS.lt.C_phys) go to 1
 
     2 Continue
 
@@ -127,7 +127,7 @@
       read(nuc,'(a)') COUPLE
       Call Decode_c
       i=Iadd_cfg_LS()
-      WC(i) = W 
+      WC(i) = W
    20 Continue
       jc_targ(it) = ncfg
 
@@ -135,7 +135,7 @@
 !-------------------------------------------------------------------------
 
    30 Continue
-      ncfg_phys = ncfg;  lcfg_phys = lcfg  
+      ncfg_phys = ncfg;  lcfg_phys = lcfg
       write(pri,'(/a,T33,i8)') &
        'number of phys. target config.s:',ncfg_phys
 

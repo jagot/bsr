@@ -3,7 +3,7 @@
 !====================================================================
 !     contains the spline representation of Dirac hamiltonian
 !      <P|V_nucl|P>     c<P|-d/dr+k/r|Q>
-!     c<Q|d/dr+k/r|P>   <Q|V_nucl-2c^2|Q> 
+!     c<Q|d/dr+k/r|P>   <Q|V_nucl-2c^2|Q>
 !--------------------------------------------------------------------
       Implicit none
 
@@ -12,7 +12,7 @@
 
 ! ... Bloch operator:
 
-      Integer :: mbloch  =   1    !  flag to include  
+      Integer :: mbloch  =   1    !  flag to include
       Real(8) :: RA = 0.d0        !  boder radius (=tmax)
       Real(8) :: RB = 0.d0        !  Bloch b-parameter
       Real(8) :: RN = 0.d0        !  Q(a)/P(a)
@@ -71,16 +71,16 @@
 
       k_dhl = k
 
-! ... symmetrize dhl by Bloch operator: 
+! ... symmetrize dhl by Bloch operator:
 
       if(mbloch.eq.1) then
        RA = tmax
        RN = (RB+k)/(2.d0*RA*c_au)
        i = nsp; j = ns + nsq
        dhl(i,i) = dhl(i,i) - pnu*c_au*RN
-       dhl(i,j) = dhl(i,j) + pnu*c_au  
+       dhl(i,j) = dhl(i,j) + pnu*c_au
        dhl(j,i) = dhl(j,i) + (pnu-1.d0)*c_au
-       dhl(j,j) = dhl(j,j) - (pnu-1.d0)*c_au/RN 
+       dhl(j,j) = dhl(j,j) - (pnu-1.d0)*c_au/RN
       end if
 
       End Subroutine MAT_dhl_pq

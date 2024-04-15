@@ -1,6 +1,7 @@
-!=======================================================================
-    Subroutine COULFG(XX,ETA1,XLMIN,XLMAX,FC,GC,FCP,GCP,MODE1,KFN,IFAIL)                                
-!=======================================================================
+C=======================================================================
+      Subroutine COULFG(XX,ETA1,XLMIN,XLMAX,FC,GC,FCP,GCP,
+     *                  MODE1,KFN,IFAIL)                                
+C=======================================================================
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C                                                                      C
 C  REVISED COULOMB WAVEFUNCTION PROGRAM USING STEED'S METHOD           C
@@ -243,33 +244,33 @@ C ***    XL   = XLM HERE  AND RL = ONE , EL = ZERO FOR BESSELS
    12 FC(L+1)     = W* FC(L+1)                                          
       RETURN                                                            
  1000 FORMAT(/' CF1 ACCURACY LOSS: D,DF,ACCH,K,ETA/K,ETA,X = ',1P7D9.2/)
-C                                                                       
-C ***    ERROR MESSAGES                                                 
-C                                                                       
-  100 IFAIL = -1                                                        
-      WRITE(6,2000) XX,ACCH                                             
- 2000 FORMAT(' FOR XX = ',1PD12.3,' TRY SMALL-X  SOLUTIONS',            
-     *' OR X NEGATIVE'/ ,' SQUARE ROOT ACCURACY PARAMETER =  ',D12.3/)  
-      RETURN                                                            
-  105 IFAIL = -2                                                        
-      WRITE (6,2005) XLMAX,XLMIN,XLM                                    
- 2005 FORMAT(/' PROBLEM WITH INPUT ORDER VALUES:XLMAX,XLMIN,XLM = ',    
-     *1P3D15.6/)                                                        
-      RETURN                                                            
-  110 IFAIL =  1                                                        
-      WRITE (6,2010) ABORT,F ,DF,PK,PX,ACC                              
- 2010 FORMAT(' CF1 HAS FAILED TO CONVERGE AFTER ',F10.0,' ITERATIONS',/ 
-     *' F,DF,PK,PX,ACCUR =  ',1P5D12.3//)                               
-      RETURN                                                            
-  120 IFAIL =  2                                                        
-      WRITE (6,2020) ABORT,P,Q,DP,DQ,ACC                                
- 2020 FORMAT(' CF2 HAS FAILED TO CONVERGE AFTER ',F7.0,' ITERATIONS',/  
-     *' P,Q,DP,DQ,ACCUR =  ',1P4D17.7,D12.3//)                          
-      RETURN                                                            
-  130 IFAIL =  3                                                        
-      WRITE (6,2030) P,Q,ACC,DELL,LXTRA,M1                              
- 2030 FORMAT(' FINAL Q.LE.DABS(P)*ACC*10**4 , P,Q,ACC = ',1P3D12.3,4X,  
-     *' DELL,LXTRA,M1 = ',D12.3,2I5 /)                                  
-      RETURN                                                            
- 2040 FORMAT(' XLMAX - XLMIN = DELL NOT AN INTEGER ',1P3D20.10/)        
-      END                                                               
+C
+C ***    ERROR MESSAGES
+C
+  100 IFAIL = -1
+      WRITE(6,2000) XX,ACCH
+ 2000 FORMAT(' FOR XX = ',1PD12.3,' TRY SMALL-X  SOLUTIONS',
+     *' OR X NEGATIVE'/ ,' SQUARE ROOT ACCURACY PARAMETER =  ',D12.3/)
+      RETURN
+  105 IFAIL = -2
+      WRITE (6,2005) XLMAX,XLMIN,XLM
+ 2005 FORMAT(/' PROBLEM WITH INPUT ORDER VALUES:XLMAX,XLMIN,XLM = ',
+     *1P3D15.6/)
+      RETURN
+  110 IFAIL =  1
+      WRITE (6,2010) ABORT,F ,DF,PK,PX,ACC
+ 2010 FORMAT(' CF1 HAS FAILED TO CONVERGE AFTER ',F10.0,' ITERATIONS',/
+     *' F,DF,PK,PX,ACCUR =  ',1P5D12.3//)
+      RETURN
+  120 IFAIL =  2
+      WRITE (6,2020) ABORT,P,Q,DP,DQ,ACC
+ 2020 FORMAT(' CF2 HAS FAILED TO CONVERGE AFTER ',F7.0,' ITERATIONS',/
+     *' P,Q,DP,DQ,ACCUR =  ',1P4D17.7,D12.3//)
+      RETURN
+  130 IFAIL =  3
+      WRITE (6,2030) P,Q,ACC,DELL,LXTRA,M1
+ 2030 FORMAT(' FINAL Q.LE.DABS(P)*ACC*10**4 , P,Q,ACC = ',1P3D12.3,4X,
+     *' DELL,LXTRA,M1 = ',D12.3,2I5 /)
+      RETURN
+ 2040 FORMAT(' XLMAX - XLMIN = DELL NOT AN INTEGER ',1P3D20.10/)
+      END

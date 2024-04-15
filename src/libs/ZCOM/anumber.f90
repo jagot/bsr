@@ -15,7 +15,7 @@
       Do i = na,1,-1
        k = 10**(i-1)
        j = ii/k
-       if(j.gt.9) Stop 'Anumber: number too large'     
+       if(j.gt.9) Stop 'Anumber: number too large'
        ii = ii - j*k
        m = na-i+1
        write(A(m:m),'(i1)') j

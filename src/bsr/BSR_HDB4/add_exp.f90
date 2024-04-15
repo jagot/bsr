@@ -14,11 +14,11 @@
 
       Call CPU_time(t0)
 
-      if(io_processor.and.debug.gt.0) & 
-       write(pri,'(/a/)') 'Experimental energies:'  
+      if(io_processor.and.debug.gt.0) &
+       write(pri,'(/a/)') 'Experimental energies:'
 
       Do ich = 1,kch
-        
+
       add = zero
       idim=ipsol(ich)-ipsol(ich-1)
 
@@ -40,7 +40,7 @@
                       one,    a, i1, i1, desca    )
       End do
 
-      if(io_processor) then           
+      if(io_processor) then
        Call CPU_time(t1)
        write (pri,'(/a,T30,f10.2,a)') 'Add_exp:,', (t1-t0)/60, ' min.'
        write (*  ,'(/a,T30,f10.2,a)') 'Add_exp:,', (t1-t0)/60, ' min.'

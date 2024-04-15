@@ -15,7 +15,7 @@
 
       g = (2*lpar(ilsp)+1) * iabs(ispar(ilsp)) / 2.d0
       if(ispar(ilsp).eq.0) g = (lpar(ilsp)+1)/2.d0
-      
+
       i=iptar(ilsp,nopen);  nom=(i+1)*i/2; om(1:nom)=0.d0
 
       Do i=1,nopen; itr1=iptar(ilsp,i)

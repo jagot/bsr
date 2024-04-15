@@ -7,7 +7,7 @@
       Use target; Use channel; Use conf_LS;; Use orb_LS; Use phys_orb_LS
 
       Implicit none
-      Integer :: i,j, ich,it,ii,ie,ic,ic1,ic2, io 
+      Integer :: i,j, ich,it,ii,ie,ic,ic1,ic2, io
 
       if(debug.gt.0) &
       write(pri,'(/a/)') 'Define orth.conditions:'
@@ -25,18 +25,18 @@
 
         Do ic = ic1,ic2
 
-         Do io=1,nphys_sub; ie=jp_sub(io); ie_comp=ie   ! comp.orbital        
+         Do io=1,nphys_sub; ie=jp_sub(io); ie_comp=ie   ! comp.orbital
                             jt_comp = jp_tar(io)
 
-          i = max(ii,ie); j=min(ii,ie); 
+          i = max(ii,ie); j=min(ii,ie);
 
           if(IORT(i,j).le.0) Cycle
 
           if(debug.gt.0) &
-          write(pri,'(a,i4,2x,2a6)')  'it=',it,ELF(ii),ELF(ie) 
+          write(pri,'(a,i4,2x,2a6)')  'it=',it,ELF(ii),ELF(ie)
 
           Call Get_cfg_LS(ic)
-          WC_comp = WC(ic)*WC(ic)     
+          WC_comp = WC(ic)*WC(ic)
 
           if(debug.gt.0) Call Pri_conf (pri,ic,WC_comp)
 
@@ -45,14 +45,14 @@
           if(igen_conf.eq.0) IORT(i,j)=0
 
           if(debug.gt.0) write(pri,'(32x,a,i2)') 'IORT = ',IORT(i,j)
-          
+
          End do
-        End do ! ic, over configurations 
+        End do ! ic, over configurations
 
       End do  ! ich, over channels
 
       ncfg_comp = ncfg;  lcfg_comp=lcfg
-      if(debug.gt.0) &   
+      if(debug.gt.0) &
         write(pri,'(/a,T40,i8)') &
        'Number of compensation configurations:', ncfg_comp-ncfg_pert
 
@@ -62,14 +62,14 @@
       write(AF,'(a,i3.3,a)') 'pert_comp.',ilsp
       Open(nuc,file=AF)
       write(nuc,'(12x,a3,f16.8)') Tpar,Etarg(1)
-      write(nuc,'(a60)') CLOSED 
+      write(nuc,'(a60)') CLOSED
       Do ic=ncfg_pert+1,ncfg_comp
        Call Get_cfg_LS(ic)
        Call Incode_c
        write(nuc,'(a64,F10.3)') CONFIG,WC(ic)
        write(nuc,'(a)') trim(COUPLE)
       End do
-      write(nuc,'(a)') '*' 
+      write(nuc,'(a)') '*'
       Close(nuc)
 
       End Subroutine Def_orth_cond

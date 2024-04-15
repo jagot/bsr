@@ -138,12 +138,12 @@
 !     returns position of given CAS in the list
 !     job  =  'add'     -  just add
 !          =  'detect'  -  return -ic if exist
-!          =   others   -  add if not exist 
+!          =   others   -  add if not exist
 !----------------------------------------------------------------------
       Use conf_jj
 
       Implicit none
-      Character(*), intent(in) :: job 
+      Character(*), intent(in) :: job
       Integer :: i,ic,ip
       Integer, external :: Ifind_jjorb, Iadd_symc, Iadd_symt
 
@@ -162,7 +162,7 @@
       if(job.ne.'add') then
       Do ic = 1,ncfg
        if(IS_term(ic).ne.iterm) Cycle
-       ip = ip_state(ic); Iadd_cfg_jj = ic; if(job.eq.'detect') Iadd_cfg_jj=-ic 
+       ip = ip_state(ic); Iadd_cfg_jj = ic; if(job.eq.'detect') Iadd_cfg_jj=-ic
        Do i = 1,no; ip=ip+1
         if(np(i).ne.IP_orb(ip)) then; Iadd_cfg_jj=0; Exit; end if
        End do
@@ -190,7 +190,7 @@
       Implicit none
       Integer :: ic, i,j,ip, ii
 
-      iterm=IS_term(ic)                                      
+      iterm=IS_term(ic)
       Call Get_symt(iterm,iconf,no,Jshell,Vshell,Jintra)
       Call Get_symc(iconf,JTOTAL,no,nn,kn,ln,jn,iq,in)
       ip = ip_state(ic)
@@ -206,7 +206,7 @@
       Integer Function Iort_conf_jj(kk)
 !=======================================================================
 !     define "strong" orthogonality between config.1 and config.2
-!     based on the difference in kappa-values  
+!     based on the difference in kappa-values
 !----------------------------------------------------------------------
       Use conf_jj
 
@@ -240,7 +240,7 @@
 !     JTp   -  parity of the block
 !
 !     remark: don't be confused - JJc and Jncfg first used as auxiliary
-!             arrays to save the memory (re-write ?) 
+!             arrays to save the memory (re-write ?)
 !----------------------------------------------------------------------
       Use conf_jj
 

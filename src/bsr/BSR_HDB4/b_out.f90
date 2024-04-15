@@ -1,5 +1,5 @@
 !=======================================================================
-      Subroutine b_out 
+      Subroutine b_out
 !=======================================================================
 !     output the bound solutions
 !-----------------------------------------------------------------------
@@ -9,7 +9,7 @@
       USE channel
       USE conf_LS
       USE spline_param, only: ns
-      
+
       Implicit none
       Character(64) ::  Labl
       Real(8), Allocatable :: Ebind(:), eff_n(:), vb(:)
@@ -17,9 +17,9 @@
       Integer, Allocatable :: n_eff(:)
       Integer :: i,j,i1,i2,j1,j2,ich,is,js,it,nbound,ms
 
-      Call CPU_time(t0)     
+      Call CPU_time(t0)
 
-      if(io_processor) then 
+      if(io_processor) then
 
 ! ... output file:
 
@@ -46,22 +46,22 @@
        if(eval(is).lt.E1.and.E1.ne.0.d0) Cycle
        ich = isol(is); it = 0
        if(ich.le.kch) then
-        it=iptar(ich); Ebind(is)=eval(is)-Etarg(it)  
+        it=iptar(ich); Ebind(is)=eval(is)-Etarg(it)
 
-        ! ... define 'n' for outer electron: 
+        ! ... define 'n' for outer electron:
 
         if(Ebind(is).gt.0.d0) then
          n_eff(is) = ICHAR('k')-ICHAR('1')+1
-         eff_n(is) = sqrt(2*Ebind(is)) 
+         eff_n(is) = sqrt(2*Ebind(is))
         else
          n_eff(is) = ICHAR('n')-ICHAR('1')+1
-         eff_n(is) = zion/sqrt(abs(2*Ebind(is))) 
+         eff_n(is) = zion/sqrt(abs(2*Ebind(is)))
         end if
        else  ! perturber
         n_eff(is) = -2
        end if
        nbound = nbound + 1
-      End do        
+      End do
 
       end if  ! io_processor
 
@@ -74,7 +74,7 @@
       else
        if(allocated(n_eff)) deallocate(n_eff); allocate(n_eff(khm) )
        Call igebr2d (ctxt, 'all', ' ', khm, 1, n_eff, khm, rsrc, csrc)
-      end if    
+      end if
 
 !----------------------------------------------------------------------
 !                                                  store the solutions:
@@ -92,13 +92,13 @@
                                         zero, v, 1, 1, descv)
         call BLACS_BARRIER (ctxt, 'all')
 
-        if(.not.io_processor) Cycle      
+        if(.not.io_processor) Cycle
 
         vb = 0.d0
         Do ich = 1,kch; i1=(ich-1)*ns+1; i2=ich*ns
          j1 = ipsol(ich-1)+1; j2=ipsol(ich)
          Do j=j1,j2
-          vb(i1:i2) = vb(i1:i2) + v(j)*bb(1:ns,j)     
+          vb(i1:i2) = vb(i1:i2) + v(j)*bb(1:ns,j)
          End do
         End do
         if(kcp.gt.0) vb(kch*ns+1:nhm)=v(ksol+1:khm)
@@ -112,7 +112,7 @@
         write(nub,'(i5,2x,a)') js,trim(LABL)
         write(nub,'(E20.10,f15.5,f10.2,T74,a)') &
              eval(is),Ebind(is)*au_eV,eff_n(is), &
-             '=> E(au), E_bind(eV), n_effective '          
+             '=> E(au), E_bind(eV), n_effective '
 
         write(nub,'(5D15.8)') vb(1:nhm)
 
@@ -138,7 +138,7 @@
 
        end if
 
-       if(io_processor) then           
+       if(io_processor) then
         Call CPU_time(t1)
         write (pri,'(/a,T30,f10.2,a)') 'B_out:,', (t1-t0)/60, ' min.'
         write (*  ,'(/a,T30,f10.2,a)') 'B_out:,', (t1-t0)/60, ' min.'

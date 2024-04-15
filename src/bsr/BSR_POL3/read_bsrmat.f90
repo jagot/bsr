@@ -6,7 +6,7 @@
       Use bsr_pol
       Use spline_param, only: ns
       Use channel,      only: nch,ncp
-      
+
       Implicit none
       Integer :: i, i1,i2,i3
 
@@ -22,7 +22,7 @@
       if(i1.ne.ns ) Stop ' BSR_POL: different ns  in BSR_MAT file'
       if(i2.ne.nch) Stop ' BSR_POL: different kch in BSR_MAT file'
       if(i3.ne.ncp) Stop ' BSR_POL: different kcp in BSR_MAT file'
-      
+
       nhm = nch*ns + ncp
       mhm = nhm + nort + nortb
 
@@ -39,7 +39,7 @@
       if(allocated(a)) Deallocate(a); Allocate(a(mhm,mhm))
       Call Read_bsr_matrix(nui,mhm,ns,nch,a)
 
-      End Subroutine Read_bsrmat 
+      End Subroutine Read_bsrmat
 
 
 
@@ -53,7 +53,7 @@
       Integer, intent(in) :: nui,mhm,ns,kch
       Integer :: i,i1,i2, j,j1,j2, ic,jc, k
       Real(8) :: a(mhm,mhm)
-       
+
       a = 0.d0;  k = ns*kch-kch
 
 ! ... diagonal blocks:
@@ -64,7 +64,7 @@
 
 ! ... other elements if any:
 
-      Do 
+      Do
        read(nui) ic,jc;  if(ic.le.0) Exit
        if(ic.gt.kch.and.jc.gt.kch) then            !  pert-pert
         read(nui) a(ic+k,jc+k)

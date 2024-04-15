@@ -1,5 +1,5 @@
 !======================================================================
-      Subroutine Read_arg 
+      Subroutine Read_arg
 !======================================================================
 !     read arguments from command line and check default settings
 !======================================================================
@@ -7,7 +7,7 @@
       Use bsr_mat
 
       Implicit none
-      Character(7) :: oper='1110000'	
+      Character(7) :: oper='1110000'
 
 ! ... read arguments in command line:
 
@@ -38,7 +38,7 @@
       Call Read_iarg('klsp'  ,klsp  )
       Call Read_iarg('klsp1' ,klsp1 )
       Call Read_iarg('klsp2' ,klsp2 )
-      if(klsp.gt.0) then;  klsp1=klsp; klsp2=klsp; end if 
+      if(klsp.gt.0) then;  klsp1=klsp; klsp2=klsp; end if
 !-----------------------------------------------------------------
 ! ... bsr_mat parameters:
 
@@ -58,7 +58,7 @@
 
 ! ... print the used parameters:
 
-      write(pri,*) 
+      write(pri,*)
       write(pri,'(a,1PE11.1,a)') 'eps_c   =',eps_c, &
        '  -  tolerance for integral coefficients'
       write(pri,'(a,1PE11.1,a)') 'eps_det =',eps_det, &
@@ -72,7 +72,7 @@
       write(pri,'(a,i4,a)') 'mlso    =',mlso, &
        ' -  max. l for spin-orbit interaction'
 
-      write(pri,*) 
+      write(pri,*)
       write(pri,'(a,i7,a)')        'nb      =',nb, &
        ' - number of blocks in module c_blocks'
       write(pri,'(a,i7,a)')        'kb      =',kb, &
@@ -92,7 +92,7 @@
 !      write(pri,'(/a,i2,a)') 'check_target =',check_target, &
 !       ' - target coefficients are included'
 
-      if(time_limit.gt.0.d0) &  
+      if(time_limit.gt.0.d0) &
       write(pri,'(/a,f8.1,a)') 'time_limit   =',time_limit, &
        ' - time_limit for calculations (min)'
 

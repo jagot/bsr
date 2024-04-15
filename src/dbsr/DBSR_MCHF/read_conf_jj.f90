@@ -33,7 +33,7 @@
       elseif(Icheck_file(BF_bnk).ne.0) then
        AF_bnk = BF_bnk
        Open(nub,file=AF_bnk,form='UNFORMATTED')
-      else 
+      else
        write(scr,'(/a/)') 'angular-coef-bank file is absent'
        write(log,'(/a/)') 'angular-coef-bank file is absent'
        Stop 'DBSR_MCHF: stop in Read_conf_jj routine'
@@ -72,7 +72,7 @@
       i = Iadd_cfg_jj('detect')
       if(i.lt.0) Stop 'R_confj: repeated states in c-file?'
       go to 1
-    2 Continue     
+    2 Continue
 
       if(nsymt.gt.nsymt0.or.nsymc.gt.nsymc0) &
        Stop 'bnk-file is not complete - run dbsr_breit first!'
@@ -89,7 +89,7 @@
 
       Do i=1,ncfg
        it=IS_term(IS_order(i))
-       if(IT_state1(it).eq.0) IT_state1(it)=i; IT_state2(it)=i 
+       if(IT_state1(it).eq.0) IT_state1(it)=i; IT_state2(it)=i
       End do
 
 !----------------------------------------------------------------------

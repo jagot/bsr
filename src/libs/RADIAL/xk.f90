@@ -11,7 +11,7 @@
       USE RADIAL, MX => mro
 
       IMPLICIT NONE
-      Integer(4), Intent(in) :: i1,i2,i3,i4 
+      Integer(4), Intent(in) :: i1,i2,i3,i4
       Integer(4) :: i,m
       Real(8) :: A,B,ZR,DEN
 

@@ -9,14 +9,14 @@
 
       Implicit none
       Integer :: myid,ierr
-      
+
       Call MPI_COMM_RANK(MPI_COMM_WORLD, myid, ierr)
 
       Call MPI_BCAST(nbf,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
       if(nbf.eq.0) Return
 
       if(myid.ne.0) then
-       if(Allocated(nbs)) & 
+       if(Allocated(nbs)) &
         Deallocate (nbs,lbs,kbs,mbs,iech,ebs,PBS,QBS)
        mbf = nbf
        Allocate(nbs(mbf),lbs(mbf),kbs(mbf),ebs(mbf),mbs(1:mbf), &

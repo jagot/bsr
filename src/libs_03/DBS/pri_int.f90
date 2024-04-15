@@ -11,12 +11,12 @@
       Character AINT(0:3)/'O','L','R','S'/
 
       if(icase.eq.1) then
-       write(nu,'(a,a,a,a,a,a,2D20.8)') &        
-        AINT(icase),' (',EBS(i1),',',EBS(i2),') = ',S,SS  
+       write(nu,'(a,a,a,a,a,a,2D20.8)') &
+        AINT(icase),' (',EBS(i1),',',EBS(i2),') = ',S,SS
       else
        write(nu,'(a,i2,a,a,a,a,a,a,a,a,a,D20.8,D15.5)') &
-        AINT(icase),k,' (',EBS(i1),',',EBS(i2),';', &    
-        EBS(i3),',',EBS(i4),') = ',S,SS  
+        AINT(icase),k,' (',EBS(i1),',',EBS(i2),';', &
+        EBS(i3),',',EBS(i4),') = ',S,SS
       end if
 
       End Subroutine pri_int
@@ -36,30 +36,30 @@
       Character(1) :: P1,P2,P3,P4
 
       if(icase.eq.1) then
-       write(nu,'(a,a,a,a,a,a,2D20.10)') &        
-        AINT(icase),' (',EBS(i1),',',EBS(i2),') = ',S,SS  
+       write(nu,'(a,a,a,a,a,a,2D20.10)') &
+        AINT(icase),' (',EBS(i1),',',EBS(i2),') = ',S,SS
 
       elseif(icase.eq.2) then
         Select case(atype)
-         Case(0);  P1='P'; P2='P'; P3='P'; P4='P'  
-         Case(1);  P1='Q'; P2='Q'; P3='Q'; P4='Q'  
-         Case(2);  P1='P'; P2='Q'; P3='P'; P4='Q'  
-         Case(3);  P1='Q'; P2='P'; P3='Q'; P4='P'  
+         Case(0);  P1='P'; P2='P'; P3='P'; P4='P'
+         Case(1);  P1='Q'; P2='Q'; P3='Q'; P4='Q'
+         Case(2);  P1='P'; P2='Q'; P3='P'; P4='Q'
+         Case(3);  P1='Q'; P2='P'; P3='Q'; P4='P'
         End Select
-       
+
        write(nu,'(T14,a,i2,13a,E15.7)') &
-        AINT(icase),k,' (',P1,ebs(i1),',',P2,ebs(i2),';', &    
-        P3,EBS(i3),',',P4,EBS(i4),') = ',S  
+        AINT(icase),k,' (',P1,ebs(i1),',',P2,ebs(i2),';', &
+        P3,EBS(i3),',',P4,EBS(i4),') = ',S
 
       elseif(icase.eq.3) then
         Select case(atype)
-         Case(0);  P1='P'; P2='P'; P3='Q'; P4='Q'  
-         Case(1);  P1='P'; P2='Q'; P3='Q'; P4='P'  
+         Case(0);  P1='P'; P2='P'; P3='Q'; P4='Q'
+         Case(1);  P1='P'; P2='Q'; P3='Q'; P4='P'
         End Select
-       
+
        write(nu,'(a,i2,13a,2F10.5,2i6)') &
-        AINT(icase),k,' (',P1,ebs(i1),',',P2,ebs(i2),';', &    
-        P3,EBS(i3),',',P4,EBS(i4),') = ',S,SS,ic,jc  
+        AINT(icase),k,' (',P1,ebs(i1),',',P2,ebs(i2),';', &
+        P3,EBS(i3),',',P4,EBS(i4),') = ',S,SS,ic,jc
       end if
 
       End Subroutine prj_int

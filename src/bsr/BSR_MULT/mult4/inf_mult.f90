@@ -72,12 +72,12 @@
 'for more detailed description of optional input arguments,            ',&
 'see file "mult_inf", created after this call                          ',&
 '                                                                      '
-      Stop                                                               
-                                                                            
-      End Subroutine inf_mult                                          
-                                                                            
-                                                                            
-                                                                            
+      Stop
+
+      End Subroutine inf_mult
+
+
+
 
 
 

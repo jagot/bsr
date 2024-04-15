@@ -11,7 +11,7 @@
 !                Read_symt_LS   (nu)
 !                Write_oper_LS  (nu)
 !                Read_oper_LS   (nu)
-!                no_term_LS     (ic)      
+!                no_term_LS     (ic)
 !----------------------------------------------------------------------
       Use param_LS
 
@@ -20,13 +20,13 @@
       Integer :: nsymt = 0       ! number of symt.s
       Integer :: msymt = 0       ! current dimension of the list
       Integer :: isymt = 2**12   ! initial dimension
-      Integer :: jsymt = 2*3     ! average size of one symt. 
-      Integer :: ksymt = 0       ! dimension of all symt.s 
-      Integer :: lsymt = 0       ! last element 
-      
+      Integer :: jsymt = 2*3     ! average size of one symt.
+      Integer :: ksymt = 0       ! dimension of all symt.s
+      Integer :: lsymt = 0       ! last element
+
       Integer, allocatable :: IT_conf(:)   ! configuration pointer
       Integer, allocatable :: ip_term(:)   ! position pointer
-      Integer, allocatable :: LS_term(:,:) ! main array of LS terms  
+      Integer, allocatable :: LS_term(:,:) ! main array of LS terms
 
 ! ... IT_stat     - additonal index
 
@@ -98,7 +98,7 @@
        Deallocate(ib)
       end if
 
-      mem_symt = (3.*msymt + 5.*ksymt)*4/(1024*1024) 
+      mem_symt = (3.*msymt + 5.*ksymt)*4/(1024*1024)
       m_symt = 3*msymt + 5*ksymt
 
       End Subroutine alloc_symt_LS
@@ -113,7 +113,7 @@
       Integer, intent(in) :: m
 
       if(allocated(it_oper)) Deallocate(it_oper)
-      mem_oper=0.d0       
+      mem_oper=0.d0
       if(m.le.0) Return
 
       ij = nsymt; ij_oper =  ij*(ij+1)/2
@@ -131,7 +131,7 @@
 !----------------------------------------------------------------------
       Use symt_list_LS
 
-      Implicit none 
+      Implicit none
       Integer :: iconf,no, i,j,ip,jp
       Integer :: LS(msh,5)
       Integer, external :: no_conf_LS
@@ -173,21 +173,21 @@
 !======================================================================
       Subroutine Get_symt_LS(it,iconf,no,LS)
 !======================================================================
-!     extrats term symetry 'it'                  
+!     extrats term symetry 'it'
 !----------------------------------------------------------------------
       Use symt_list_LS
 
-      Implicit none 
+      Implicit none
       Integer :: it,iconf, no, i,j,ip
       Integer :: LS(msh,5)
       Integer, external :: no_conf_LS
-      
+
       if(it.le.0.or.it.gt.nsymt) Stop 'Get_symt_LS: <it> is out of range'
 
       iconf = IT_conf(it)
       no = no_conf_LS(iconf)
       ip = ip_term(it)
-      Do i=1,no; ip=ip+1;  LS(i,:) = LS_term(ip,:);  End do 
+      Do i=1,no; ip=ip+1;  LS(i,:) = LS_term(ip,:);  End do
 
       End Subroutine Get_symt_LS
 
@@ -195,7 +195,7 @@
 !======================================================================
       Subroutine Read_symt_LS(nu)
 !======================================================================
-      Use symt_list_LS 
+      Use symt_list_LS
 
       Implicit none
       Integer :: nu,i
@@ -209,7 +209,7 @@
       read(nu) (LS_term(i,:),i=1,lsymt)
       IT_stat = 0
 
-      mem_symt = (3.*msymt + 5.*ksymt)*4/(1024*1024) 
+      mem_symt = (3.*msymt + 5.*ksymt)*4/(1024*1024)
 
       End Subroutine Read_symt_LS
 
@@ -217,7 +217,7 @@
 !======================================================================
       Subroutine Write_symt_LS(nu)
 !======================================================================
-      Use symt_list_LS 
+      Use symt_list_LS
 
       Implicit none
       Integer :: nu,i
@@ -234,7 +234,7 @@
 !======================================================================
       Subroutine Write_oper_LS(nu)
 !======================================================================
-      Use symt_list_LS 
+      Use symt_list_LS
 
       Implicit none
       Integer :: nu,i,j,n
@@ -245,7 +245,7 @@
        Do j=1,noper
         if(IT_oper(j,i).eq. 0) IT_oper(j,i)=1
         if(IT_oper(j,i).eq.-1) IT_oper(j,i)=0
-       End do 
+       End do
        write(nu) IT_oper(:,i)
       End do
 
@@ -255,7 +255,7 @@
 !======================================================================
       Subroutine Record_oper_LS(nu)
 !======================================================================
-      Use symt_list_LS 
+      Use symt_list_LS
 
       Implicit none
       Integer, intent(in) :: nu
@@ -266,7 +266,7 @@
        Do j=1,noper
         if(IT_oper(j,ij).eq. 0) IT_oper(j,ij)=1
         if(IT_oper(j,ij).eq.-1) IT_oper(j,ij)=0
-       End do 
+       End do
       End do
       write(nu) IT_oper
 
@@ -276,14 +276,14 @@
 !======================================================================
       Subroutine Load_oper_LS(nu)
 !======================================================================
-      Use symt_list_LS 
+      Use symt_list_LS
 
       Implicit none
       Integer, intent(in) :: nu
       Integer(8) :: i,j
 
       read(nu) ij
-      if(ij_oper.lt.ij) Stop 'Read_oper_LS: nsymt too small' 
+      if(ij_oper.lt.ij) Stop 'Read_oper_LS: nsymt too small'
       read(nu) ((IT_oper(i,j),i=1,noper),j=1,ij)
 
       End Subroutine Load_oper_LS
@@ -292,13 +292,13 @@
 !======================================================================
       Subroutine Read_oper_LS(nu)
 !======================================================================
-      Use symt_list_LS 
+      Use symt_list_LS
 
       Implicit none
       Integer :: nu,i,n
 
       read(nu) n
-      if(nsymt*(nsymt+1)/2.lt.n) Stop 'Read_oper_LS: nsymt too small' 
+      if(nsymt*(nsymt+1)/2.lt.n) Stop 'Read_oper_LS: nsymt too small'
       if(.not.Allocated(IT_oper)) Allocate(IT_oper(noper,n))
       IT_oper=0
       Do i = 1,n; read(nu) IT_oper(:,i); End do
@@ -309,7 +309,7 @@
 !======================================================================
       Subroutine Write_done_LS(nu)
 !======================================================================
-      Use symt_list_LS, only: nsymt, IT_done 
+      Use symt_list_LS, only: nsymt, IT_done
 
       Implicit none
       Integer :: nu,i,i1,i2,n
@@ -327,7 +327,7 @@
 !======================================================================
       Subroutine Read_done_LS(nu)
 !======================================================================
-      Use symt_list_LS, only: IT_done 
+      Use symt_list_LS, only: IT_done
 
       Implicit none
       Integer :: nu,i,i1,i2,n
@@ -340,7 +340,7 @@
         i=SIZE(IT_done)
         if(i.lt.n) then
          Deallocate(IT_done); Allocate(IT_done(n))
-        end if 
+        end if
       end if
 
       i1=1; i2=m; if(i2.gt.n) i2=n
@@ -354,11 +354,11 @@
 !======================================================================
       Integer Function no_term_LS (it)
 !======================================================================
-!     number of shells in state 'iconf'                   
+!     number of shells in state 'iconf'
 !----------------------------------------------------------------------
       Use symt_list_LS
 
-      Implicit none 
+      Implicit none
       Integer :: it
       Integer, External :: no_conf_LS
 

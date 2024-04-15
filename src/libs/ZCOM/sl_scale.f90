@@ -2,7 +2,7 @@
       Subroutine SL_scale(N,ro1,h,A,B,R,RT,acc)
 !======================================================================
 !     Semi-logarithmic scale:   ro = b*ln(r) + a*r
-!     ro is defined at N points:  ro1 + (i-1)*h,  i=1,N 
+!     ro is defined at N points:  ro1 + (i-1)*h,  i=1,N
 !     RT - initial estimation
 !     acc - accuracy for Newton method
 !----------------------------------------------------------------------

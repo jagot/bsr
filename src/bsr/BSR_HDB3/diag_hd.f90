@@ -10,7 +10,7 @@
 !     4. Form a Cholesky factorization of the overlap matrix.
 !     5. Transform problem to standard eigenvalue problem.
 !     6. Transform to experimental thresholds energies if any.
-!     7. Solve standard eigenvalue problem. 
+!     7. Solve standard eigenvalue problem.
 !     8. Call w_out for weights if required.
 !     9. Backtransform eigenvectors to the original problem.
 !        Solutions are still in new basis!!!
@@ -35,7 +35,7 @@
 
       Call br_ipar(fail); if(fail.ne.0) Return
 
-      if(io_processor) then           
+      if(io_processor) then
        Call CPU_time(t1)
        write (pri,'(/a,T30,f10.2,a)') 'B_out:,', (t1-t0)/60, ' min.'
        write (*  ,'(/a,T30,f10.2,a)') 'B_out:,', (t1-t0)/60, ' min.'
@@ -54,7 +54,7 @@
       else
        if(allocated(ipsol)) deallocate(ipsol); allocate(ipsol(0:kch) )
        Call igebr2d (ictxt, 'all', ' ', kch+1, 1, ipsol, kch+1, rsrc, csrc)
-      end if    
+      end if
 
 !--------------------------------------------------------------------
 ! ... allocate working arrays for distributions:
@@ -80,7 +80,7 @@
 
       call p_error(info,'descv descriptor error in diag_hd')
 
-      if(allocated(v)) deallocate(v); allocate(v(khm))     
+      if(allocated(v)) deallocate(v); allocate(v(khm))
 
 ! ... local dimensions:
 
@@ -92,7 +92,7 @@
 ! ... transform the overlap and interaction matrixes to new basis:
 
       Call Transform_ovl
-        
+
       Call BLACS_BARRIER (ctxt, 'all')
 
       Call Transform_mat
@@ -106,12 +106,12 @@
 ! ... diagonalize using the SCALAPACK routines:
 !----------------------------------------------------------------------
 ! ... default parameters:
- 
+
       ibtype =  1    ! A * x = lambda * B * x generalized eigenproblem
       range  = 'A'   ! compute all eigenvalues
       job    = 'V'   ! compute both eigenvalues and eigenvectors
       uplo   = 'L'   ! use lower triangles of A and B matrices
-      trans  = 'T'   ! 
+      trans  = 'T'   !
 
 !----------------------------------------------------------------------
 ! ... Form a Cholesky factorization of the overlap matrix:
@@ -135,7 +135,7 @@
 ! ...    A ->  inv(L)*A*inv(L^T),  uplo = 'L'
 ! ....   A ->  inv(U^T)*A*inv(U),  uplo = 'U'
 
-      lwork = 2 
+      lwork = 2
       allocate (work(lwork), stat=status)
       call p_error (status, 'error memory allocation of work array')
 
@@ -150,10 +150,10 @@
                    &  scale, work, lwork, info)
 
       call p_error (info, 'pdsyngst error')
-      
+
       deallocate(work)
-      
-      if(io_processor) then           
+
+      if(io_processor) then
        Call CPU_time(t1)
        write (pri,'(/a,T30,f10.2,a)') 'Cholesky factorization:,', (t1-t0)/60, ' min.'
        write (*  ,'(/a,T30,f10.2,a)') 'Cholesky factorization:,', (t1-t0)/60, ' min.'
@@ -167,7 +167,7 @@
       if(iexp.ne.0) Call Add_exp
 
 !-----------------------------------------------------------------------
-! ... Solve standard eigenvalue problem 
+! ... Solve standard eigenvalue problem
 ! ... (note:  divide and concer algorith requires much more space)
 
       Call CPU_time(t0)
@@ -201,7 +201,7 @@
                     work, lwork, info)
       call p_error (info, 'pdsyev error')
 
-      if(io_processor) then           
+      if(io_processor) then
        Call CPU_time(t1)
        write (pri,'(/a,T30,f10.2,a)') 'Diagonalization:,', (t1-t0)/60, ' min.'
        write (*  ,'(/a,T30,f10.2,a)') 'Diagonalization:,', (t1-t0)/60, ' min.'
@@ -215,7 +215,7 @@
 !-----------------------------------------------------------------------
 !...  define weights:
 
-      if(cwt.gt.0.d0)  Call W_out 
+      if(cwt.gt.0.d0)  Call W_out
 
       if(fail.ne.0) Return
 
@@ -231,8 +231,8 @@
        Call PDTRSM ('Left', uplo, trans, 'Non-unit', khm, khm, one, &
                     b, 1,1, descb, z, 1,1, descz)
        if (scale /= one) call DSCAL(khm, scale, eval, 1)
- 
-       if(io_processor) then           
+
+       if(io_processor) then
         Call CPU_time(t1)
         write (pri,'(/a,T30,f10.2,a)') 'Back_transform:,', (t1-t0)/60, ' min.'
         write (*  ,'(/a,T30,f10.2,a)') 'Back_transform:,', (t1-t0)/60, ' min.'

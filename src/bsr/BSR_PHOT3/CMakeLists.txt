@@ -1,3 +1,4 @@
+set_source_files_properties(crees.f PROPERTIES COMPILE_OPTIONS "-std=legacy")
 add_executable(bsr_phot3
   mod_phot.f90
   ak_coef.f90

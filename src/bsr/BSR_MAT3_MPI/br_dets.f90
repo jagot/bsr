@@ -1,13 +1,13 @@
 !=======================================================================
       Subroutine br_dets
 !=======================================================================
-!     read the overlap determinants from INT_BNK (unit nub)  
+!     read the overlap determinants from INT_BNK (unit nub)
 !-----------------------------------------------------------------------
       Use mpi
       Use dets
 
       Integer :: myid,ierr
-      
+
       Call MPI_COMM_RANK(MPI_COMM_WORLD, myid, ierr)
 
       Call MPI_BCAST(ndet,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)

@@ -5,7 +5,7 @@
       Use bsr_mat;  USE spline_atomic; Use target
 
       Implicit none
-      
+
       Call MPI_BCAST(klsp,  1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
       Call MPI_BCAST(klsp1, 1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
       Call MPI_BCAST(klsp2, 1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
@@ -37,4 +37,4 @@
 
       End Subroutine br_arg
 
- 
+

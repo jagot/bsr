@@ -48,7 +48,7 @@
        write(pri,'(a)') '(zero value of any parameter means no restrictions)'
        write(pri,*)
        write(pri,'(a,i5,a)') 'msol   =',msol,  '  -  max. number of solutions'
-       write(pri,'(a,e15.8)')'Emin   =',Emin  
+       write(pri,'(a,e15.8)')'Emin   =',Emin
        write(pri,'(a,e15.8)')'Emax   =',Emax
        write(pri,*)
       end if

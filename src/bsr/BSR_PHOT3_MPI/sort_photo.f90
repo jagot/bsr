@@ -18,21 +18,21 @@
 
       rewind(nu)
       me = 0
-      Do 
+      Do
        read(nu,'(a)',end=2) AS
-       read(AS,*,err=1) E1,EV1,C1,SL1,SV1,P1,D1 
+       read(AS,*,err=1) E1,EV1,C1,SL1,SV1,P1,D1
        me=me+1
     1  Continue
       End do
     2 write(pri,*) ' me =',me
-      if(me.eq.0) Return 
+      if(me.eq.0) Return
       Allocate(E(me),EV(me),C(me),SL(me),SV(me),P(me),D(me),IP(me))
 
       rewind(nu)
       ne = 0
-      Do 
+      Do
        read(nu,'(a)',end=20) AS
-       read(AS,*,err=10) E1,EV1,C1,SL1,SV1,P1,D1 
+       read(AS,*,err=10) E1,EV1,C1,SL1,SV1,P1,D1
        ie=0
        Do i=1,ne; if(e1.ne.e(i)) Cycle; ie=i; Exit;  End do
        if(ie.eq.0) then; ne=ne+1; ie=ne;  end if
@@ -52,7 +52,7 @@
 
     3 PP = P(i) + 1.d0
       a1=abs(P(i)-P(i1))
-      a2=abs(PP  -P(i1)) 
+      a2=abs(PP  -P(i1))
       if(a2.lt.a1) then
        P(i) = PP
        go to 3
@@ -75,10 +75,10 @@
 
       rewind(nu)
       Do j=1,ne; i=ip(j)
-       write(nu,'(f14.8,f14.7,f12.2,2f15.5,f12.6,f8.3)') & 
-         E(i),EV(i),C(i),SL(i),SV(i),P(i),D(i) 
+       write(nu,'(f14.8,f14.7,f12.2,2f15.5,f12.6,f8.3)') &
+         E(i),EV(i),C(i),SL(i),SV(i),P(i),D(i)
        write(pri,'(f14.8,f14.7,f12.2,2f15.5,f12.6,f8.3)') &
-         E(i),EV(i),C(i),SL(i),SV(i),P(i),D(i) 
+         E(i),EV(i),C(i),SL(i),SV(i),P(i),D(i)
       End do
 
       Deallocate(E,EV,C,SL,SV,P,D,IP)

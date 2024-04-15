@@ -64,7 +64,7 @@
 !     in lower-band storage mode,  and v, y are vectors.
 !     (used for L-integrals)
 !-----------------------------------------------------------------------
-      Implicit none 
+      Implicit none
       Integer, intent(in)  :: n,k
       Real(8), intent(in)  :: v(n),b(n,k)
       Real(8), intent(out) :: y(n)

@@ -29,7 +29,7 @@
       Integer :: i,j, ip,jp, imin,imax, jmin,jmax, ii,jj
       Real(8) :: c,t1,t2
 
-      t1 = RRTC()
+      Call CPU_time(t1)
 
       if(icase.le.2) a(1:ns,1:ks)=0.d0
       if(icase.gt.2) a(1:ns,1:ns)=0.d0
@@ -265,7 +265,7 @@
 
       End Select
 
-      t2 = RRTC()
+      Call CPU_time(t2)
       ic_convol = ic_convol + 1
       if(icase.le.2) time_convol=time_convol + (t2-t1)
 

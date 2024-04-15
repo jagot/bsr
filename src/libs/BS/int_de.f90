@@ -1,7 +1,7 @@
 !=======================================================================
       Subroutine INT_de (p1,p2,x,int,icase,sym_x)
 !=======================================================================
-!     Contribution to channel-channel interaction matrix from 
+!     Contribution to channel-channel interaction matrix from
 !     the two-electron integrals:
 !
 !     icase = 1 -->  INT( . p1; . p2)
@@ -51,12 +51,12 @@
        Stop ' INT_d:  unknown type of integral '
       end if
 
-      sym_d = 'x' 
+      sym_d = 'x'
       if(icase.eq.1) sym_d = sym_j
       if(icase.eq.2) sym_d = sym_i
-      
+
       Call Density (ns,ks,d,p1,p2,sym_d)
-      
+
       Call Convol  (ns,ks,x,d,icase,sym_i,sym_j)
 
       sym_x = 'x'

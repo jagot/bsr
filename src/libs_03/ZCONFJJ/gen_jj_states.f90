@@ -11,7 +11,7 @@
 
 ! ... Check the files:
 
-      if(Icheck_file(AF_inp).eq.0) Return 
+      if(Icheck_file(AF_inp).eq.0) Return
       Call Find_free_unit(nu1)
       open(nu1,file=AF_inp); rewind(nu1)
       Call Find_free_unit(nu2)
@@ -27,7 +27,7 @@
 ! ... check jmin and jmax:
 
       if(jmin.eq.-1.or.jmax.eq.-1) then
-       Do 
+       Do
         read(nu1,'(a)',end=10) AS
         if(AS(6:6).eq.'(') Exit
        End do
@@ -110,7 +110,7 @@
       else
          CALL Sum_Iterm
       end if
-                                         
+
     2 nt(i)=nt(i)+1
       if(nt(i).gt.mt(i)) then
         if(i.eq.i1) go to 3
@@ -129,7 +129,7 @@
 !     exhaustion of intermediate terms
 !----------------------------------------------------------------------
       USE conf_jj; Use orb_jj
- 
+
       Integer :: js_min(msh),js_max(msh)
 
       Jintra(1)=Jshell(1)
@@ -145,7 +145,7 @@
     1 j1=i-1; j2=i
 
       js_min(i)=IABS(Jintra(j1)-Jshell(j2))
-      js_max(i)=     Jintra(j1)+Jshell(j2) 
+      js_max(i)=     Jintra(j1)+Jshell(j2)
       Jintra(i)=js_min(i)
 
     2 if(i.lt.i2) then
@@ -165,7 +165,7 @@
       end if
 
     4 Continue
-       
+
       End  Subroutine Sum_Iterm
 
 

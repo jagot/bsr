@@ -21,10 +21,10 @@
 
       Integer, external :: Icheck_file
 
-      iarg = command_argument_count() 
+      iarg = command_argument_count()
       if(iarg.gt.0) Call GET_COMMAND_ARGUMENT(1,AF)
       if(AF.eq.'?') then
-      write(*,*) 
+      write(*,*)
       write(*,*) 'genjconf prepares the list of possible configurations (conf.inp)'
       write(*,*) 'from the list of electron occupations and allowed excitations (nlj.inp)'
       write(*,*)
@@ -38,7 +38,7 @@
 !      write(*,*) 'according to "non-relativistic" projections '
 !      write(*,*)
       write(*,*) 'Parameter "atom"  provides  nlj.inp for the given atom (as example) '
-      Stop 
+      Stop
       end if
 
       Call Read_aarg('inp',AF_inp)
@@ -48,7 +48,7 @@
       AF = ' '; Call Read_aarg('atom',AF)
       if(Icheck_file(AF_inp).eq.0.or.len_trim(AF).ne.0) then
        Open(nu1,file=AF_inp)
-       Call Write_nlj(nu1) 
+       Call Write_nlj(nu1)
        write(*,'(/a/)') 'nlj.inp - use this file to correct your case '
       end if
 
@@ -57,13 +57,13 @@
       open(nu1,file=AF_inp,status='OLD')
       open(nu2,file=AF_out)
 
-      Call Read_ipar(nu1,'n_orbitals' ,nwf)   
-      Call Read_ipar(nu1,'n_electrons',ne)    
+      Call Read_ipar(nu1,'n_orbitals' ,nwf)
+      Call Read_ipar(nu1,'n_electrons',ne)
       Call Read_ipar(nu1,'parity'     ,parity)
-      Call Read_ipar(nu1,'k_ref'      ,k_ref) 
-      Call Read_ipar(nu1,'k_min'      ,k_min) 
+      Call Read_ipar(nu1,'k_ref'      ,k_ref)
+      Call Read_ipar(nu1,'k_min'      ,k_min)
 
-      Call Read_ipar(nu1,'k_max'      ,k_max) 
+      Call Read_ipar(nu1,'k_max'      ,k_max)
 
 
 ! ... read and write HEADER  and CLOSED
@@ -119,7 +119,7 @@
 
       Integer(4) :: iq_min(*),iq_max(*),k_ref,k_min,k_max,nu
 
-      i1=1; i2=nwf; ipef=0 
+      i1=1; i2=nwf; ipef=0
 
       i=1;  ipef(i)=iq_max(i)
 
@@ -186,7 +186,7 @@
        m = m + 9
       End do
       write(nu,'(a)') CONFIG(1:m)
-   
+
       ncfg=ncfg+1
 
       End ! Subroutine Gen_conf
@@ -199,7 +199,7 @@
 !----------------------------------------------------------------------
       Use conf_jj, ic => IT_state1, ip => IT_state2
       Use orb_jj
-      
+
       Implicit none
       Integer :: nuc, k, i1,i2
       Integer, External :: Icomp_config
@@ -209,7 +209,7 @@
       Allocate(ic(ncfg),ip(ncfg))
       ic = 0; k = 0
       Do i1=1,ncfg
-       if(ic(i1).ne.0) Cycle        
+       if(ic(i1).ne.0) Cycle
        k=k+1; ic(i1)=k
        Do i2=i1+1,ncfg
          if(ic(i2).ne.0) Cycle
@@ -265,7 +265,7 @@
 
 
 !======================================================================
-      Subroutine Write_nlj(nu) 
+      Subroutine Write_nlj(nu)
 !======================================================================
 !     create example of "nlj.inp" file
 !----------------------------------------------------------------------

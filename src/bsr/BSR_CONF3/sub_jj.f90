@@ -1,6 +1,6 @@
-!======================================================================      
+!======================================================================
       Subroutine SUB_JJ
-!====================================================================== 
+!======================================================================
 !     define channels orbitals in JJ case
 !----------------------------------------------------------------------
       Use bsr_conf
@@ -14,7 +14,7 @@
 
       Character(4), external :: ELF4
       Integer, external :: NEW_INDEX, Iadd_cfg_LS, Ifind_nlk, Icheck_del,ITRI
-      Real(8), external :: T_LS_jj      
+      Real(8), external :: T_LS_jj
 
       Do it=1,ntarg
 
@@ -54,9 +54,9 @@
           Call Get_cfg_LS(ic)
           IL = LS(no,4); IS = LS(no,5); no=no+1
           CT = CT + WC(ic)**2
-          
+
 ! ... possible total LS ...
- 
+
           ISTmin = iabs(IS-2)+1; ILTmin = iabs(IL-ll)+1
           ISTmax = iabs(IS+2)-1; ILTmax = iabs(IL+ll)-1
 
@@ -85,7 +85,7 @@
 !         if(abs(CT-1.d0).gt.c_norm) &
 !         write(pri,'(i5,2x,a4,3x,2a20,3x,a,f8.5,a)') &
 !          nch,ELC(nch),AFT(it),BFT(it),'norm =',CT,' - check the normalization'
-  
+
         End do     ! over small l
        End do      ! over small j
       End do       ! over targets

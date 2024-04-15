@@ -1,13 +1,13 @@
 !======================================================================
       Subroutine TERM_loop(is,js)
 !======================================================================
-!     Add to the common list (coef_list) the coeff.s between two 
+!     Add to the common list (coef_list) the coeff.s between two
 !     determinants (zoef_list) weighted with term-dependent factors.
 !     Check also if the specific coefficient is needed to be added
 !     to the bank.
 !----------------------------------------------------------------------
       Use bsr_breit
-      Use zoef_list, only: nzoef, zoef, iz_int, iz_df 
+      Use zoef_list, only: nzoef, zoef, iz_int, iz_df
       Use coef_list, only: ntrm,ctrm,int,idf
       Use term_exp
 
@@ -18,23 +18,23 @@
       if(nzoef.le.0) Return
 
         k = 0
-        Do k1=1,kt1; it=IP_kt1(k1) 
-        Do k2=1,kt2; jt=IP_kt2(k2)  
+        Do k1=1,kt1; it=IP_kt1(k1)
+        Do k2=1,kt2; jt=IP_kt2(k2)
          if(is.eq.js.and.it.gt.jt) Cycle
          k = k + 1;  ctrm(k) = C_det1(k1,kd1)*C_det2(k2,kd2)
-!         if(is.eq.js.and.kd2.ne.kd1) ctrm(k) = ctrm(k) + C_det1(k2,kd1)*C_det2(k1,kd2)       ??? 
-        End do; End do 
+!         if(is.eq.js.and.kd2.ne.kd1) ctrm(k) = ctrm(k) + C_det1(k2,kd1)*C_det2(k1,kd2)       ???
+        End do; End do
 
- 
+
         CT_oper = 0.d0
         Do i = 1,noper
          if(joper(i).eq.0) Cycle
          Do k = 1,ntrm
-          CT_oper(k,i) = coper(i)*JT_oper(k,i)*ctrm(k)        
+          CT_oper(k,i) = coper(i)*JT_oper(k,i)*ctrm(k)
          End do
         End do
 
-      
+
       Do i=1,nzoef
        C = Zoef(i); if(abs(C).lt.EPS_c) Cycle
        int = IZ_int(i); idf = IZ_df(i);  Call Decode_met(m,int)
@@ -48,7 +48,7 @@
         Case(11);  if(joper(1).eq.0) Cycle; Ctrm(1:ntrm)=C*CT_oper(:,1)
         Case Default;  Stop ' Term_loop: unknown integral '
        End select
-       Call Add_coef 
+       Call Add_coef
       End do
 
       nzoef = 0

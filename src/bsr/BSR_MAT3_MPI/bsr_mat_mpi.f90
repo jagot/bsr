@@ -1,9 +1,9 @@
 !======================================================================
-!     PROGRAM       B S R _ M A T _ M P I           
+!     PROGRAM       B S R _ M A T _ M P I
 !
 !               C O P Y R I G H T -- 2011
 !
-!     Written by:   Oleg Zatsarinny 
+!     Written by:   Oleg Zatsarinny
 !     email:        oleg_zoi@yahoo.com
 !
 !======================================================================
@@ -14,7 +14,7 @@
 !
 !     klsp1, klsp2   -  range of partial wave under consideration
 !
-!   INPUT FILES: 
+!   INPUT FILES:
 !
 !     knot.dat       -  B-spline grid
 !     bsr_par        -  description of target states and channels
@@ -65,7 +65,7 @@
 
       if(myid.eq.0) Call define_grid(z)
       Call br_grid
-      Call define_spline        
+      Call define_spline
 
 ! ... target:
 
@@ -82,7 +82,7 @@
        Open(nuc,file=AF_cfg,status='OLD')
        Call R_closed(nuc)
        Close(nuc)
-       kclosd=nclosd    
+       kclosd=nclosd
        Call Allocate_bsorb(nwf)
        Open(nuw,file=AF_bsw,STATUS='OLD',form='UNFORMATTED')
        Call Read_bsw(nuw)
@@ -100,7 +100,7 @@
 ! ... loop over partial waves:
 
       Do klsp = klsp1,klsp2
- 
+
        if(myid.eq.0)  write(*,'(/a,i3/)') 'BSR_MAT:  klsp =', klsp
 
        t2 =  MPI_WTIME();   Call SUB1;   t3 =  MPI_WTIME()

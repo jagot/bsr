@@ -1,5 +1,5 @@
 !======================================================================
-      Subroutine Record_is_done 
+      Subroutine Record_is_done
 !======================================================================
       Use bsr_breit
       Use term_exp
@@ -8,10 +8,10 @@
       write(nur) ic_case
       write(nur) IS_NEED
 
-      End Subroutine Record_is_done 
-           
+      End Subroutine Record_is_done
+
 !======================================================================
-      Subroutine Read_is_done 
+      Subroutine Read_is_done
 !======================================================================
       Use bsr_breit
       Use term_exp
@@ -37,16 +37,16 @@
       Do i=1,ic_case
        Do j=1,i
         ij = DEF_ij(i,j)
-        if(IS_NEED(ij).eq.0) Cycle 
+        if(IS_NEED(ij).eq.0) Cycle
         JS_NEED(i)=1; Exit
        End do
       End do
 
-      End Subroutine Read_is_done 
+      End Subroutine Read_is_done
 
-           
+
 !======================================================================
-      Subroutine Define_is_done 
+      Subroutine Define_is_done
 !======================================================================
       Use bsr_breit
       Use term_exp
@@ -58,10 +58,10 @@
       Integer, allocatable :: icase(:)
       Integer, external :: DEF_ij
       Real(8) :: C
- 
+
       Allocate(icase(ic_case))
       rewind(nud)
-      Do jc = 1,ic_case  
+      Do jc = 1,ic_case
        read(nud) ic
        read(nud) j
        read(nud) C
@@ -80,7 +80,7 @@
        Do j=1,i; jc=icase(j)
         ijc = DEF_ij(ic,jc)
         ij = DEF_ij(i,j)
-        if(JC_NEED(ijc).ne.0) IS_NEED(ij) = 1 
+        if(JC_NEED(ijc).ne.0) IS_NEED(ij) = 1
        End do
       End do
       Deallocate(icase)
@@ -91,7 +91,7 @@
       Do i=1,ic_case
        Do j=1,ic_case
         ij = DEF_ij(i,j)
-        if(IS_NEED(ij).eq.0) Cycle 
+        if(IS_NEED(ij).eq.0) Cycle
         JS_NEED(i)=1; Exit
        End do
       End do

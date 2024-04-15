@@ -1,5 +1,5 @@
 !======================================================================
-      Subroutine Read_arg 
+      Subroutine Read_arg
 !======================================================================
 !     read arguments from command line and check default settings
 !======================================================================
@@ -13,7 +13,7 @@
       Call Read_iarg('klsp'  ,klsp  )
       Call Read_iarg('klsp1' ,klsp1 )
       Call Read_iarg('klsp2' ,klsp2 )
-      if(klsp.gt.0) then;  klsp1=klsp; klsp2=klsp; end if 
+      if(klsp.gt.0) then;  klsp1=klsp; klsp2=klsp; end if
       Call Read_iarg('pri_AC',pri_AC)
       Call Read_iarg('debug' ,debug )
 

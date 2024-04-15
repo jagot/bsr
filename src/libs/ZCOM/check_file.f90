@@ -10,7 +10,7 @@
        write(*,*) ' can not find file  ',AF;  Stop
       end if
       End Subroutine Check_file
-       
+
 
 !======================================================================
       Integer Function Icheck_file(AF)
@@ -24,12 +24,12 @@
       if(.not.EX) Icheck_file = 0
       End Function Icheck_file
 
-       
+
 !======================================================================
       Subroutine Find_free_unit(nu)
 !======================================================================
 !     provide free unit to open new file
-!----------------------------------------------------------------------	        
+!----------------------------------------------------------------------
       Implicit none
       Integer :: nu,i
       Logical :: connected

@@ -16,7 +16,7 @@
     1 read(nu,'(a)',end=2) AS
       if(AS(6:6).ne.'(') go to 1
       ic=ic+1
-      if(ic.gt.ncfg) then 
+      if(ic.gt.ncfg) then
         write(*,*) 'ic = ',ic
         write(*,*) 'ncfg = ',ncfg
         Stop ' read_expn_jj:  ic > ncfg'

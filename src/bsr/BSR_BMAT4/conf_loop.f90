@@ -1,7 +1,7 @@
 !=======================================================================
       Subroutine Conf_loop
 !=======================================================================
-!     run loop over configurations 
+!     run loop over configurations
 !-----------------------------------------------------------------------
       Use bsr_breit
       Use spin_orbitals, only: Lsym1,Msym1,Ssym1,NNsym1, &
@@ -14,17 +14,17 @@
       Use zoef_list,     only: nzoef
       Use c_blocks,      only: ntype
 
-      Implicit none 
+      Implicit none
       Integer :: k1,k2, it,jt, i,m,k, is,js,ic,jc, itype
-      Real(8) :: C_ee,C_so,C_ss, zero=0.d0, one=1.d0, tt1, tt2, tt3, tt4, tt5  
+      Real(8) :: C_ee,C_so,C_ss, zero=0.d0, one=1.d0, tt1, tt2, tt3, tt4, tt5
       Integer, external :: IDEF_cme
       Real(8), external :: Z_3j
       Integer(8) :: ij
       Integer(8), external :: DEF_ij8
       Character(80) :: conf, confi, confj, AF
 
-      Call Alloc_boef(-1)   
-      Call Alloc_blk (-1)   
+      Call Alloc_boef(-1)
+      Call Alloc_blk (-1)
 
 !----------------------------------------------------------------------
 ! ... cycle 1 over configurations:
@@ -82,7 +82,7 @@
        if(MLT2.ne.MLT.or.MST2.ne.MST) Cycle
        if(MLT.ne.min(ILT1,ILT2).or.MST.ne.min(IST1,IST2)) Cycle
 
-       ij=DEF_ij8(is,js);  if(IS_need(ij).eq.0) Cycle      
+       ij=DEF_ij8(is,js);  if(IS_need(ij).eq.0) Cycle
 
        Call Symc_conf(jc,confj)
 
@@ -93,17 +93,17 @@
 ! ...  define number of terms:
 
        ntrm = 0
-       Do k1=1,kt1; it=IP_kt1(k1) 
-       Do k2=1,kt2; jt=IP_kt2(k2)  
+       Do k1=1,kt1; it=IP_kt1(k1)
+       Do k2=1,kt2; jt=IP_kt2(k2)
         if(is.eq.js.and.it.gt.jt) Cycle;  ntrm = ntrm + 1
-       End do; End do 
+       End do; End do
 
 !----------------------------------------------------------------------
 ! ...  joper and JT_oper:
 
        if(allocated(JT_oper)) Deallocate(JT_oper,CT_oper)
        Allocate(JT_oper(ntrm,noper),CT_oper(ntrm,noper))
-       if(IDEF_cme(is,js).eq.0) Cycle 
+       if(IDEF_cme(is,js).eq.0) Cycle
 
 !----------------------------------------------------------------------
 ! ... define the normalization constants for different operators:
@@ -139,7 +139,7 @@
 ! ...  initial allocations:
 
        Call Alloc_coef(-1)
-       Call Alloc_ndet(-1)     
+       Call Alloc_ndet(-1)
        Call Alloc_ndef(-1)
 
 !----------------------------------------------------------------------
@@ -151,7 +151,7 @@
         Ssym1(1:ne)=IS_det1(1:ne,kd1)
 
         Call Det_orbitals1
- 
+
        Do kd2 = 1,kdt2
 
         if(is.eq.js.and.kd2.lt.kd1) Cycle
@@ -160,12 +160,12 @@
         Ssym2(1:ne)=IS_det2(1:ne,kd2)
 
         nzoef = 0;      Call Det_orbitals2
-        if(nzoef.gt.0)  Call Term_loop(is,js,ic,jc) 
+        if(nzoef.gt.0)  Call Term_loop(is,js,ic,jc)
 
        End do ! kd1
 
         if(mod(kd1,1000).eq.0) then
-         Call CPU_TIME(tt4)    
+         Call CPU_TIME(tt4)
          if( time_limit.gt.0.d0 .and. (tt4-t0)/60.gt.time_limit*1.1) then
           write(*,*) 'failed at kd1 = ',kd1,kdt1,kdt2, is,js
           Return
@@ -187,7 +187,7 @@
 !--------------------------------------------------------------------
 ! ... store results for given config.s:
 
-      Call Add_res(is,js) 
+      Call Add_res(is,js)
 
       if(fail.eq.0) then
         ij=DEF_ij8(is,js); IS_need(ij) = 0; Call Record_ic(is,js)
@@ -216,7 +216,7 @@
         ' is=',is,'/',ic_case,'  nterm=',kt1,'  ndet=', kdt1, &
           (tt2-tt1)/60,(tt2-t0)/60,' min.',trim(confi)
 
-      if( time_limit.gt.0.d0 .and. (tt2-t0)/60.gt.time_limit) Exit        
+      if( time_limit.gt.0.d0 .and. (tt2-t0)/60.gt.time_limit) Exit
 
       End do    ! over is
 
@@ -226,7 +226,7 @@
 !=======================================================================
       Subroutine Record_ic(is,js)
 !=======================================================================
-!     add results from the givem case 
+!     add results from the givem case
 !-----------------------------------------------------------------------
       Use bsr_breit
 

@@ -4,7 +4,7 @@
 !     simplify the determinant kn,N1,N2
 !     accoding the orthogonality conditions for radial w.f.'s
 !     kz - number of needed permutations (added !!!)
-!     JDET_SIMP = 0,1,2 with overlap determinant = 0,1 or some value  
+!     JDET_SIMP = 0,1,2 with overlap determinant = 0,1 or some value
 !----------------------------------------------------------------------
 
       Use orb_LS, ONLY: nwf,IORT
@@ -13,20 +13,20 @@
 
       Integer :: kz,kn
       Integer, Dimension(kn) :: N1(kn),N2(kn)
-      Integer :: i,j,ii,i1,i2, k,kk,k1,k2, m1,m2 
+      Integer :: i,j,ii,i1,i2, k,kk,k1,k2, m1,m2
 
       if(kn.le.0) Stop ' JDET_SIMP: kn <= 0'
       i = minval(N1); j=minval(N2)
-      if(min(i,j).lt.1) Stop 'JDET_SIMPL: orbital index < 0' 
+      if(min(i,j).lt.1) Stop 'JDET_SIMPL: orbital index < 0'
       i = maxval(N1); j=maxval(N2)
-      if(max(i,j).gt.nwf) Stop 'JDET_SIMPL: orbital index > nwf' 
+      if(max(i,j).gt.nwf) Stop 'JDET_SIMPL: orbital index > nwf'
 
       JDET_SIMP=0
 
 !----------------------------------------------------------------------
 !                       Check for a row with only one non-zero element:
-    1  Do i1=1,kn                
-       k=0                      
+    1  Do i1=1,kn
+       k=0
        Do i2=1,kn
         m1=max(N1(i1),N2(i2)); m2=min(N1(i1),N2(i2)); ii=IORT(m1,m2)
         if(ii.ne.0) then
@@ -40,8 +40,8 @@
 !----------------------------------------------------------------------
 !                   Check for a coulomb with only one non-zero element:
 
-      Do i2=1,kn                
-       k=0                    
+      Do i2=1,kn
+       k=0
        Do i1=1,kn
          m1=max(N1(i1),N2(i2)); m2=min(N1(i1),N2(i2)); ii=IORT(m1,m2)
         if(ii.ne.0) then
@@ -55,7 +55,7 @@
       go to 3
 !-----------------------------------------------------------------------
 !                                                 the case of <k1|k2>=1:
-    2 kn=kn-1                       
+    2 kn=kn-1
       if(kn.eq.0) then
        JDET_SIMP=1; Return
       end if
@@ -65,7 +65,7 @@
       go to 1
 !-----------------------------------------------------------------------
 !                                                  ordering of elements:
-    3 Continue                     
+    3 Continue
 
       Do i1=1,kn-1
        Do i2=i1+1,kn

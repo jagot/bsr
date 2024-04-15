@@ -1,5 +1,5 @@
 !======================================================================
-      Subroutine pre_det_expn(nud,mkt,mkdt,pri) 
+      Subroutine pre_det_expn(nud,mkt,mkdt,pri)
 !======================================================================
 !     define the det. expansions and write the information
 !     in file 'nud'. ' Expansions are given for max. ML and MS,
@@ -12,7 +12,7 @@
                               LT_conf, ST_conf
       Use symt_list_LS, only: IT_sort, IT_need
 
-      Implicit none 
+      Implicit none
 
       Integer, intent(in) :: nud,mkt,mkdt,pri
       Integer :: i,j,k,kk,kt,ktn,ktm,kdt,kdtn,kti,it,it1,it2,ic,jc, MLTi,MSTi, m,mm
@@ -25,7 +25,7 @@
       Integer(8) :: ij
       Integer(8), external :: DEF_ij8
 
-      Integer :: max_kt, max_kdt 
+      Integer :: max_kt, max_kdt
       Real(8) :: S, SS, SM
       Character(80) :: conf
 
@@ -33,7 +33,7 @@
       Open(nua,form='UNFORMATTED',status='SCRATCH')
       Call Find_free_unit(nub)
       Open(nub,form='UNFORMATTED',status='SCRATCH')
-      
+
       SM = 0
       max_kt = 0
       max_kdt = 0
@@ -67,12 +67,12 @@
         kt = kt + 1; IP_kt(kt) = it
         Call Get_symt_LS(it,ic,no,LS)
         Do i=1,no
-         LS(i,1)=Iterm_LS(ln(i),iq(i),0,LS(i,1),LS(i,2),LS(i,3))  
+         LS(i,1)=Iterm_LS(ln(i),iq(i),0,LS(i,1),LS(i,2),LS(i,3))
         End do
         LSI(:,:,kt)=LS
        End do
 
-       if(kt.eq.0) then; IC_need(ic)=0; Cycle; end if   
+       if(kt.eq.0) then; IC_need(ic)=0; Cycle; end if
 
        Do i=1,no
        Do k=1,5
@@ -80,23 +80,23 @@
        End do
        End do
 
-!----------------------------------------------------------------------       
+!----------------------------------------------------------------------
 ! ... cycle over all config. symmetries:
-   
-      IPT_jc = 1   
-      Do jc = 1,nsymc; if(IC_need(jc).eq.0) Cycle 
 
-       if(IPT_jc(jc).eq.0) Cycle    
-       ij=DEF_ij8(ic,jc); if(JC_need(ij).eq.0) Cycle      
- 
+      IPT_jc = 1
+      Do jc = 1,nsymc; if(IC_need(jc).eq.0) Cycle
+
+       if(IPT_jc(jc).eq.0) Cycle
+       ij=DEF_ij8(ic,jc); if(JC_need(ij).eq.0) Cycle
+
 ! ... define the det. expansion:
 
-       MLT = min(Ltotal,LT_conf(jc))     
+       MLT = min(Ltotal,LT_conf(jc))
        MST = min(Stotal,ST_conf(jc))
 
        rewind(nua)
        Call Det_expn (nua,kt,kdt,MLT,MST)
-       rewind(nua)      
+       rewind(nua)
 
        if(kdt.eq.0) Stop 'Pre_detexp: kdt = 0'
 
@@ -114,9 +114,9 @@
         read(nua) CC_det(:,i),IM_det(:,i),IS_det(:,i)
        End do
 
-       Do k = 1,kt,mkt 
+       Do k = 1,kt,mkt
          kk = k+mkt-1; if(kk.gt.kt) kk=kt; ktn=kk-k+1
-        Do m = 1,kdt,mkdt 
+        Do m = 1,kdt,mkdt
           mm = m+mkdt-1; if(mm.gt.kdt) mm=kdt; kdtn=mm-m+1
 
         ic_case=ic_case+1
@@ -128,26 +128,26 @@
         write(nud) Msym(1:ne)
         write(nud) Lsym(1:ne)
 
-        write(nub) ic 
+        write(nub) ic
 
         if(pri.gt.0) then
-         S = 4.0*ktn + 8.0*ktn*kdtn + 8.0*ne*kdtn + 8.0*ne + 7*4 
+         S = 4.0*ktn + 8.0*ktn*kdtn + 8.0*ne*kdtn + 8.0*ne + 7*4
          S = S / (1024*1024)
          it = count(CC_det(k:kk,m:mm).ne.0.d0)
-         SS = 1.d0*it/(ktn*kdtn) 
+         SS = 1.d0*it/(ktn*kdtn)
          write(pri,'(a,2i5,i6,i10,f10.3,f10.2,a,5x,a,f10.3)')  &
            'ic_case,ic,kt,kdt',ic_case,ic,ktn,kdtn,SS,S,' Mb',trim(conf)
          if(S.gt.SM) SM=S
          if(kt.gt.max_kt) max_kt=kt
          if(kdt.gt.max_kdt) max_kdt=kdt
-        end if      
+        end if
 
         End do
        End do
 
        Deallocate(CC_det,IM_det,IS_det,JM_det,JS_det)
 
-! ... mark the configurations with the same term:   
+! ... mark the configurations with the same term:
 
        Do i = jc,nsymc
         MLTi = min(Ltotal,LT_conf(i))
@@ -169,36 +169,36 @@
       write(nud) ic_case
 
       if(pri.gt.0) then
-       write(pri,'(/a,i10)') 'max_kt  =',max_kt 
-       write(pri,'( a,i10)') 'max_kdt =',max_kdt 
-       write(pri,'( a,F10.1)') 'max_mem =',SM 
+       write(pri,'(/a,i10)') 'max_kt  =',max_kt
+       write(pri,'( a,i10)') 'max_kdt =',max_kdt
+       write(pri,'( a,F10.1)') 'max_mem =',SM
       end if
 
-      End Subroutine pre_det_expn 
+      End Subroutine pre_det_expn
 
 
 !======================================================================
-      Subroutine Det_expn (nua,kt,kdt,MLT,MST) 
+      Subroutine Det_expn (nua,kt,kdt,MLT,MST)
 !======================================================================
 !     determined all possible determinants and their coefficients
 !     for given set of terms (kt). Results are recorded to unit 'nua'
 !----------------------------------------------------------------------
 
       USE conf_LS,       only: ne,no,ln,iq,LS,LS1,LSI
-      USE spin_orbitals, only: in,md,Msym,Ssym,MS_orb,ML_orb 
+      USE spin_orbitals, only: in,md,Msym,Ssym,MS_orb,ML_orb
 
       Implicit none
 
       Integer :: nua,kt,kdt,MLT,MST, kd,i,j,k,m,ii
-      Integer :: nd(ne),idet(ne),ML(ne),MS(ne),MLp(ne),MSp(ne)  
+      Integer :: nd(ne),idet(ne),ML(ne),MS(ne),MLp(ne),MSp(ne)
       Real(8) :: Cdet(kt)
       Real(8) :: C
       Real(8), External :: Clebsh, DETC_sh
 
-      kd=0; kdt=0; i=1; nd(i)=1              
+      kd=0; kdt=0; i=1; nd(i)=1
     1 kd = kd + 1
       ii = in(i)
-      Call DET_sh(ln(i),iq(i),nd(i),ML(i),MS(i),Idet(ii)) 
+      Call DET_sh(ln(i),iq(i),nd(i),ML(i),MS(i),Idet(ii))
 
       m = iabs(ML(i)); if(ML(i).lt.0) m=m+2
       if(m.gt.LS1(i,2)) go to 2

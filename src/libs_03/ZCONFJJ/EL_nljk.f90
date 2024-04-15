@@ -12,8 +12,8 @@
 
       Implicit none
       Character(5), intent(in) :: EL
-      Integer, intent(out) :: n,l,j,k,kappa    
-      Integer :: jj, k1,k2, n1,n2  
+      Integer, intent(out) :: n,l,j,k,kappa
+      Integer :: jj, k1,k2, n1,n2
       Integer, external :: LA, kappa_lj
 
       jj=0
@@ -76,7 +76,7 @@
 
 
 !=======================================================================
-      Character(5) Function ELi(n,kappa,k)     
+      Character(5) Function ELi(n,kappa,k)
 !=======================================================================
 !     provides the spectroscopic notation for electron orbital (n,l,j,k)
 !     set index k must be < 61*61 (see ASET for incoding k)
@@ -89,7 +89,7 @@
       Character(1), external :: AL
       Integer, external :: l_kappa, j_kappa
 
-      l = l_kappa(kappa) 
+      l = l_kappa(kappa)
       j = j_kappa(kappa)
 
       if(n.le.0.or.l.lt.0.or.j.le.0.or.k.lt.0) then
@@ -105,7 +105,7 @@
        if(k.le.kset) then
         EL(i:i)=ASET(k:k); i=i-1
        else
-        k1=k/kset; k2=mod(k,kset); 
+        k1=k/kset; k2=mod(k,kset);
         if(k2.eq.0) then; k1=k1-1; k2=kset; end if
         if(k1.gt.kset) Stop 'ELi: set index too big'
         EL(i:i)=ASET(k2:k2); i=i-1
@@ -114,7 +114,7 @@
       end if
 
       if(j.eq.l+l-1) EL(i:i) = '-'; i=i-1
-      
+
       EL(i:i)=AL(l,1);  i=i-1
 
       if(n.lt.0) Stop 'ELi: n < 0'
@@ -128,7 +128,7 @@
         write(EL(i-1:i),'(i2)') n
       else
         EL(i:i)='k'
-      end if       
+      end if
 
       ELi = EL
 
@@ -136,7 +136,7 @@
 
 
 !=======================================================================
-      Character(5) Function ELj(n,l,j,k)     
+      Character(5) Function ELj(n,l,j,k)
 !=======================================================================
 !     provides the spectroscopic notation for electron orbital (n,l,j,k)
 !     set index k must be < 61*61 (see ASET for incoding k)
@@ -161,7 +161,7 @@
        if(k.le.kset) then
         EL(i:i)=ASET(k:k); i=i-1
        else
-        k1=k/kset; k2=mod(k,kset); 
+        k1=k/kset; k2=mod(k,kset);
         if(k2.eq.0) then; k1=k1-1; k2=kset; end if
         if(k1.gt.kset) Stop 'ELi: set index too big'
         EL(i:i)=ASET(k2:k2); i=i-1
@@ -170,7 +170,7 @@
       end if
 
       if(j.eq.l+l-1) EL(i:i) = '-'; i=i-1
-      
+
       EL(i:i)=AL(l,1);  i=i-1
 
       if(n.lt.0) Stop 'ELi: n < 0'
@@ -184,59 +184,8 @@
         write(EL(i-1:i),'(i2)') n
       else
         EL(i:i)='k'
-      end if       
+      end if
 
       ELj = EL
 
       End Function ELj
-
-
-
-!====================================================================
-      Character FUNCTION AL(L,k)
-!====================================================================
-!     provides spectroscopic symbols for L values ( L <= 153 )
-!     k=1 - small letters; k=2 - capital letters
-!--------------------------------------------------------------------
-      Implicit none
-      Integer, intent(in) :: L,K
-      Integer :: I
-      Character(21) :: AS, AB
-
-      DATA AS/'spdfghiklmnoqrtuvwxyz'/
-      DATA AB/'SPDFGHIKLMNOQRTUVWXYZ'/
-
-      i = L+1; IF(k.eq.5.or.k.eq.6) i=(L-1)/2+1
-      if(i.ge.1.and.i.le.21) then
-       if(k.eq.1.or.k.eq.5) AL=AS(I:I)
-       if(k.eq.2.or.k.eq.6) AL=AB(I:I)
-      elseif(i.ge.22.and.i.le.153) then
-       AL=CHAR(i+101)  ! from '{' and futher
-      else
-       write(*,*) 'L,k=',L,k
-       Stop ' AL: L is out of range'
-      end if
-
-      End FUNCTION AL
-
-
-!====================================================================
-      Integer FUNCTION LA(a)
-!====================================================================
-!     gives the value of L from spetroscopic symbol "a"
-!--------------------------------------------------------------------
-      Implicit none  
-      Character, Intent(in) :: a
-      Character(21) :: AS, AB
-      Integer :: i
-
-      DATA AS/'spdfghiklmnoqrtuvwxyz'/
-      DATA AB/'SPDFGHIKLMNOQRTUVWXYZ'/
-
-      i = INDEX (AS,a)
-      if(i.eq.0) i = INDEX (AB,a)
-      if(i.eq.0) i = ICHAR(a)-101
-      LA = i-1
-
-      End FUNCTION LA
-

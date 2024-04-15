@@ -11,12 +11,12 @@
       Character AINT(11)/'F','G','T','S','R','L','Z','N','V','N','O'/
 
       if(icase.eq.6.or.icase.eq.7) then
-       write(nu,'(a,a,a,a,a,a,D14.7,f12.1)') &        
-        AINT(icase),'(',EBS(i1),',',EBS(i2),')=',S,S*219474   
+       write(nu,'(a,a,a,a,a,a,D14.7,f12.1)') &
+        AINT(icase),'(',EBS(i1),',',EBS(i2),')=',S,S*219474
       else
        write(nu,'(a,i2,a,a,a,a,a,a,a,a,a,D14.7,f12.1)') &
-        AINT(icase),k,'(',EBS(i1),',',EBS(i2),';', &    
-        EBS(i3),',',EBS(i4),')=',S,S*219474  
+        AINT(icase),k,'(',EBS(i1),',',EBS(i2),';', &
+        EBS(i3),',',EBS(i4),')=',S,S*219474
       end if
 
       End Subroutine pri_int

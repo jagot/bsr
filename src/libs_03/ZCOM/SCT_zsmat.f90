@@ -2,12 +2,12 @@
       Subroutine ZSMAT (nch,nopen,KMAT,SMAT)
 !======================================================================
 !     Convert K-matrix to S-matrix  by solving the equation:   AS = B
-!     where  A=(1-iK)  and   B=(1+iK)     
+!     where  A=(1-iK)  and   B=(1+iK)
 !----------------------------------------------------------------------
       Implicit none
       Integer, intent(in) :: nch,nopen
-      Real(8), intent(in) :: KMAT(nch,nch) 
-      Complex(8), intent(out) :: SMAT(nopen,nopen) 
+      Real(8), intent(in) :: KMAT(nch,nch)
+      Complex(8), intent(out) :: SMAT(nopen,nopen)
       Integer :: i,j,info
       Complex(8) :: Ident(nopen,nopen), A(nopen,nopen), B(nopen,nopen)
       Complex(8) :: zero = (0.d0,0.d0), one = (1.d0,0d0), &

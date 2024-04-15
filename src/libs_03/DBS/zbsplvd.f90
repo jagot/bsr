@@ -9,7 +9,7 @@
 !  This routine is a vector version of bsplvd written by C. de Boor,
 !  ``A Practical Guide to Splines".
 !
-!  subroutine contained: vbsplvb
+!  subroutine contained: zbsplvb
 !
 !-----------------------------------------------------------------------
 !  on entry

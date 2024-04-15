@@ -40,7 +40,7 @@
         write(nu) hcb(:,ich,ip)
         idiag = 0
        End do; End do
-       
+
        Do ip = 1,kcp; Do jp = 1,ip
         ib = ip*(ip-1)/2+jp
         if(hbb(ib).eq.0.d0) Cycle

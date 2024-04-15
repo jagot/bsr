@@ -4,21 +4,21 @@
 !     simplify the determinant kn,N1,N2
 !     accoding the orthogonality conditions for radial w.f.'s
 !     kz - number of needed permutations
-!     IDET_SIMP1 = 0,1,2 with overlap determinant = 0,1 or some value  
+!     IDET_SIMP1 = 0,1,2 with overlap determinant = 0,1 or some value
 !----------------------------------------------------------------------
       Implicit none
       Integer, Intent(inout) :: kz,kn
       Integer, Intent(in) :: mwf, IORT(mwf,mwf)
       Integer, Intent(inout) :: N1(*),N2(*)
-      Integer :: i,ii,i1,i2, k,kk,k1,k2, m1,m2 
+      Integer :: i,ii,i1,i2, k,kk,k1,k2, m1,m2
 
       if(kn.le.0) Stop ' IDET_SIMP1: kn <= 0'
 
       IDET_SIMP1=0
 !----------------------------------------------------------------------
 !                       Check for a row with only one non-zero element:
-    1  Do i1=1,kn                
-       k=0                      
+    1  Do i1=1,kn
+       k=0
        Do i2=1,kn
         m1=max(N1(i1),N2(i2)); m2=min(N1(i1),N2(i2)); ii=IORT(m1,m2)
         if(ii.ne.0) then
@@ -32,8 +32,8 @@
 !----------------------------------------------------------------------
 !                   Check for a colum with only one non-zero element:
 
-      Do i2=1,kn                
-       k=0                    
+      Do i2=1,kn
+       k=0
        Do i1=1,kn
          m1=max(N1(i1),N2(i2)); m2=min(N1(i1),N2(i2)); ii=IORT(m1,m2)
         if(ii.ne.0) then
@@ -47,7 +47,7 @@
       go to 3
 !-----------------------------------------------------------------------
 !                                                 the case of <k1|k2>=1:
-    2 kn=kn-1                       
+    2 kn=kn-1
       if(kn.eq.0) then
        IDET_SIMP1=1; Return
       end if
@@ -57,7 +57,7 @@
       go to 1
 !-----------------------------------------------------------------------
 !                                                  ordering of elements:
-    3 Continue                     
+    3 Continue
 
       Do i1=1,kn-1
        Do i2=i1+1,kn

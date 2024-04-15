@@ -1,7 +1,7 @@
 !=======================================================================
       Subroutine Conf_calc
 !=======================================================================
-!     calculations for given <ic|H|jc> and waiting to other case if any 
+!     calculations for given <ic|H|jc> and waiting to other case if any
 !-----------------------------------------------------------------------
       Use MPI
 
@@ -12,9 +12,9 @@
       Use zoef_list, only: nzoef
       Use coef_list, only: ntrm, ctrm, ncoef
 
-      Implicit none 
+      Implicit none
       Integer :: i,m,k,k1,k2,it,jt,ic,jc
-      Real(8) :: C_ee,C_so,C_ss, zero=0.d0, one=1.d0  
+      Real(8) :: C_ee,C_so,C_ss, zero=0.d0, one=1.d0
       Real(8), external :: Z_3j
 
       Call Alloc_boef(-1)
@@ -22,7 +22,7 @@
 
 ! ... get the job:
 
-    1 Call Get_det_exp(ic,jc)  
+    1 Call Get_det_exp(ic,jc)
 
       if(ic.le.0) Return
 
@@ -59,7 +59,7 @@
        if(joper(7).gt.0) coper(7) = C_ee
 
 
-! ...  initial allocations:        
+! ...  initial allocations:
 
        Call Alloc_coef(-1)
        Call Alloc_ndet(-1)
@@ -68,7 +68,7 @@
 ! ...  calculations:
 
        Do kd1 = 1,kdt1
- 
+
         Msym1(1:ne)=IM_det1(1:ne,kd1)
         Ssym1(1:ne)=IS_det1(1:ne,kd1)
 
@@ -83,11 +83,11 @@
         Ssym2(1:ne)=IS_det2(1:ne,kd2)
 
         nzoef = 0;      Call Det_orbitals2
-        if(nzoef.gt.0)  Call Term_loop(ic,jc) 
+        if(nzoef.gt.0)  Call Term_loop(ic,jc)
 
        End do
 
-        t3=MPI_WTIME()                
+        t3=MPI_WTIME()
         if(time_limit.gt.0.d0.and.(t3-t0)/60.gt.time_limit*1.1) then
          ncoef=0; ic = -ic
          Call Send_res(ic,jc)

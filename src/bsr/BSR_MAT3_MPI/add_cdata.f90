@@ -13,12 +13,12 @@
       if(jp.lt.ip) then
        cdata(ip)=C; k1(ip)=j1; k2(ip)=j2; k3(ip)=j3; k4(ip)=j4
        jp=ip; Return
-      end if       
+      end if
 
 ! ... search position (k) for new integral
 
       k=ip; l=jp;
-    1 if(k.gt.l) go to 2              
+    1 if(k.gt.l) go to 2
       m=(k+l)/2
       if    (j1.lt.K1(m)) then;       l = m - 1
       elseif(j1.gt.K1(m)) then;       k = m + 1
@@ -38,7 +38,7 @@
        end if
       end if
       go to 1
-    2 Continue 
+    2 Continue
 
 ! ... shift up the rest of data:
 

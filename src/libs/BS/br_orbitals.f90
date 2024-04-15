@@ -1,22 +1,22 @@
 !======================================================================
-      Subroutine br_bsorb 
+      Subroutine br_bsorb
 !======================================================================
 !     broadcast data from  module spline_orbitals
 !======================================================================
-      Use MPI  
-      Use spline_orbitals 
-      Use spline_param, only: ns 
+      Use MPI
+      Use spline_orbitals
+      Use spline_param, only: ns
 
       Implicit none
       Integer :: myid,ierr
-      
+
       Call MPI_COMM_RANK(MPI_COMM_WORLD, myid, ierr)
 
       Call MPI_BCAST(nbf,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
       if(nbf.eq.0) Return
 
       if(myid.ne.0) then
-       if(Allocated(nbs)) & 
+       if(Allocated(nbs)) &
           Deallocate (nbs,lbs,kbs,mbs,iech,ebs,IBORT,PBS,QBS,OBS)
        mbf = nbf
        Allocate(nbs(mbf),lbs(mbf),kbs(mbf),ebs(mbf),mbs(1:mbf), &

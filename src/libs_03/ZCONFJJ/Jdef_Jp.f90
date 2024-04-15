@@ -14,7 +14,7 @@
     1 Read(nu,'(a)') CONFIG; if(CONFIG(6:6).ne.'(') go to 1
       Read(nu,'(a)') SHELLJ
       Read(nu,'(5x,a)') INTRAJ
-      Call Decode_cj 
+      Call Decode_cj
       P=SUM(ln(1:no)*iq(1:no)); P=(-1)**P
       J=Jintra(no)
 
@@ -40,7 +40,7 @@
     1 Read(nu,'(a)') CONFIG; if(CONFIG(6:6).ne.'(') go to 1
       Read(nu,'(a)') SHELLJ
       Read(nu,'(5x,a)') INTRAJ
-      Call Decode_cj 
+      Call Decode_cj
       P=SUM(ln(1:no)*iq(1:no)); P=(-1)**P
       J=Jintra(no)
       end if

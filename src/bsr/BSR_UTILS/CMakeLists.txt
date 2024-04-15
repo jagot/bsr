@@ -31,29 +31,29 @@ target_link_libraries(bsw_w bs zcom ${BLAS_LAPACK_LIBRARIES})
 add_executable(collect_rsol collect_rsol.f90)
 target_link_libraries(collect_rsol zcom)
 
-# # target, threshoulds -> target.exp
-# add_executable(convert_target convert_target.f90)
-# target_link_libraries(convert_target zconfls zcom)
+# target, thresholds -> target.exp
+add_executable(convert_target convert_target.f90)
+target_link_libraries(convert_target zconfls zcom)
 
-# # H.DAT  -->  f-values
-# add_executable(f_values f_values.f90)
-# target_link_libraries(f_values zconfls zcom)
+# H.DAT  -->  f-values
+add_executable(f_values f_values.f90)
+target_link_libraries(f_values zconfls zcom)
 
 # different photoionization paramters
 add_executable(photo_collect photo_collect.f90)
 target_link_libraries(photo_collect zcom)
 
-# # different photoionization paramters
-# add_executable(photo_tab_new photo_tab_new.f90)
-# target_link_libraries(photo_tab_new zconfls zcom)
+# different photoionization paramters
+add_executable(photo_tab photo_tab.f90)
+target_link_libraries(photo_tab zconfls zcom)
 
 # prints B-splines in separate files:
 add_executable(print_bs print_bs.f90)
 target_link_libraries(print_bs bs zcom ${BLAS_LAPACK_LIBRARIES})
 
-# # H.DAT --> dipole matrix elements
-# add_executable(s_values s_values.f90)
-# target_link_libraries(s_values zconfls zcom)
+# H.DAT --> dipole matrix elements
+add_executable(s_values s_values.f90)
+target_link_libraries(s_values zconfls zcom)
 
 # target states information
 add_executable(target_states target_states.f90)
@@ -127,4 +127,29 @@ target_link_libraries(add_stgfb zconfls zcom)
 add_executable(sec_om sec_om.f90)
 target_link_libraries(sec_om zconfls zcom)
 
+add_executable(ak_tab_jj ak_tab_jj.f90)
+target_link_libraries(ak_tab_jj zconfjj zcom)
 
+add_executable(cm_j cm_j.f90)
+target_link_libraries(cm_j zconfjj zcom)
+
+add_executable(genjconf genjconf.f90)
+target_link_libraries(genjconf zconfjj zcom)
+
+add_executable(genjterm genjterm.f90)
+target_link_libraries(genjterm zconfjj zcom)
+
+add_executable(jcfile jcfile.f90)
+target_link_libraries(jcfile zconfjj zcom)
+
+add_executable(jfile jfile.f90)
+target_link_libraries(jfile zconfjj zcom)
+
+add_executable(jj_list jj_list.f90)
+target_link_libraries(jj_list zconfjj zcom)
+
+add_executable(mix_c mix_c.f90)
+target_link_libraries(mix_c zconfjj zcom)
+
+add_executable(order_jj order_jj.f90)
+target_link_libraries(order_jj zconfjj zcom)

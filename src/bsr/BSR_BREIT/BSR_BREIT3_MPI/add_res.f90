@@ -12,11 +12,11 @@
       Integer, intent(in) :: nu
       Integer :: i,j, it,jt, is,js, k,k1,k2, nd, iihm(ktrm)
 
-      if(ncoef.le.0) Return 
-       
-! ... convert det.factors from ndef_list to common list: 
+      if(ncoef.le.0) Return
 
-      nd = 0; Do i=1,ncoef; nd=nd+idfc(i); End do 
+! ... convert det.factors from ndef_list to common list:
+
+      nd = 0; Do i=1,ncoef; nd=nd+idfc(i); End do
       if(nd.gt.0) then
        Call Ndet_Idet
        Do i=1,ncoef
@@ -25,21 +25,21 @@
        End do
       end if
 
-! ... define the term poiners: 
+! ... define the term poiners:
 
       k = 0
-      Do k1=1,jt1; it=JP_kt1(k1) 
-      Do k2=1,jt2; jt=JP_kt2(k2)  
+      Do k1=1,jt1; it=JP_kt1(k1)
+      Do k2=1,jt2; jt=JP_kt2(k2)
        if(is.eq.js.and.it.gt.jt) Cycle
        k = k + 1;  iihm(k) = it*ibc+jt
-      End do; End do 
-      
-      if(k.ne.ktrm) Stop 'Add_res: ij <> ktrm' 
+      End do; End do
+
+      if(k.ne.ktrm) Stop 'Add_res: ij <> ktrm'
 
 ! ... record the coef.s:
 
       Do j = 1,ncoef
-       Do i = 1,ktrm 
+       Do i = 1,ktrm
         if(abs(coef(i,j)).lt.Eps_C) Cycle
         write(nu) coef(i,j),iihm(i),intc(j),idfc(j)
         nc_new = nc_new + 1

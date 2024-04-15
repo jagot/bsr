@@ -1,7 +1,7 @@
 !=======================================================================
       Subroutine br_dets
 !=======================================================================
-!     broadcast the overlap determinants and factors  
+!     broadcast the overlap determinants and factors
 !-----------------------------------------------------------------------
       Use mpi
       Use det_list; Use def_list

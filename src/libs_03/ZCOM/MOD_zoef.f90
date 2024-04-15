@@ -1,9 +1,9 @@
 !======================================================================
       Module zoef_list
 !======================================================================
-!     Containes the list of coefficients, Zoef, with two identifiers: 
+!     Containes the list of coefficients, Zoef, with two identifiers:
 !                        iz_int and iz_df
-!     the pointers to integral and overlap factors, respectively. 
+!     the pointers to integral and overlap factors, respectively.
 !----------------------------------------------------------------------
       Implicit none
 
@@ -11,7 +11,7 @@
       Integer :: mzoef = 0       ! current dimentsion of the list
       Integer :: izoef = 2**10   ! initial dimension
 
-      Integer, allocatable :: IZ_int(:),IZ_df(:)   
+      Integer, allocatable :: IZ_int(:),IZ_df(:)
       Real(8), allocatable :: Zoef(:)
 
       Real(8) :: eps_z = 1.d-7
@@ -49,13 +49,13 @@
        mzoef = m
        Allocate(ia(nzoef))
        ia=IZ_int(1:nzoef); Deallocate(IZ_int)
-       Allocate(IZ_int(mzoef)); IZ_int(1:nzoef)=ia 
+       Allocate(IZ_int(mzoef)); IZ_int(1:nzoef)=ia
        ia=IZ_df(1:nzoef); Deallocate(IZ_df)
-       Allocate(IZ_df(mzoef)); IZ_df(1:nzoef)=ia 
+       Allocate(IZ_df(mzoef)); IZ_df(1:nzoef)=ia
        Deallocate(ia)
        Allocate(ra(nzoef))
        ra=Zoef(1:nzoef); Deallocate(Zoef)
-       Allocate(Zoef(mzoef)); Zoef(1:nzoef)=ra 
+       Allocate(Zoef(mzoef)); Zoef(1:nzoef)=ra
        Deallocate(ra)
        write(*,*) ' realloc_zoef: m = ', m
       end if
@@ -88,7 +88,7 @@
 ! ... add new integral:
 
       if(nzoef.eq.mzoef) Call Alloc_zoef(mzoef+izoef)
-      nzoef = nzoef+1 
+      nzoef = nzoef+1
       Zoef(nzoef)=C; IZ_int(nzoef)=int; IZ_DF(nzoef)=idf
 
       End Subroutine Iadd_zoef

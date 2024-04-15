@@ -4,19 +4,19 @@
 !     define scattering channels for one partial wave
 !---------------------------------------------------------------------------
       Implicit none
-     
+
       Integer :: lpar =  0  ! total L for given patial wave
       Integer :: ispar=  0  ! (2*S+1) for given patial wave
-      Integer :: ipar =  0  ! parity 
+      Integer :: ipar =  0  ! parity
       Integer :: jpar =  0  ! (2*J+1)
       Integer :: nch  =  0  ! number of one-electron channels
       Integer :: mch  =  0  ! max. number of channels
       Integer :: imch =256  ! initial prediction of mch
-      Integer :: jmch =256  ! increment for mch   
+      Integer :: jmch =256  ! increment for mch
 
-      Integer :: nLS  =  0  ! current dimension for LS arrays   
-      Integer :: mLS  =  0  ! max. dimension for LS-arrays   
-     
+      Integer :: nLS  =  0  ! current dimension for LS arrays
+      Integer :: mLS  =  0  ! max. dimension for LS-arrays
+
       Integer, allocatable :: iptar(:)  ! target pointer
       Integer, allocatable :: lch(:)    ! small l for given channel
       Integer, allocatable :: ipch(:)   ! place in the common list of orbitals
@@ -31,33 +31,33 @@
       Real(8), allocatable :: CT_LS(:)  ! pointer to the last configuration
 
       Character(4), allocatable :: ELC(:) ! spectroscopic symbol
-     
+
       Integer :: ncp	  ! number of configurations in perturber
       Integer :: nwp        ! number of orbitals in perturber
       Character(20) :: AFP  ! file-name for perturber
-     
+
       Integer :: npert=0    ! number of configurations in perturber
       Integer :: mpert=0
       Integer :: ipert=640
       Integer, allocatable :: ippert(:)  ! pointer to the last configuration
-                         
+
       Character(3) :: Tpar
-     
+
       End Module channel
 
 
-!=======================================================================    
+!=======================================================================
       Subroutine Allocate_channel(m)
-!=======================================================================    
+!=======================================================================
 !     allocate arrays in module "channel"
-!-----------------------------------------------------------------------    
+!-----------------------------------------------------------------------
       Use channel
-   
+
       Implicit none
       Integer, intent(in) :: m
       Integer, allocatable :: ia(:)
       Character(4), allocatable :: aa(:)
-   
+
       if(m.le.0) then
        if(Allocated(iptar)) Deallocate(iptar,lch,ipch,ELC,ipconf,jkch,ip_LS)
        mch = 0; nch=0
@@ -88,14 +88,14 @@
        aa=ELC(1:nch); Deallocate(ELC)
        Allocate(ELC(mch)); ELC(1:nch)=aa
        Deallocate(aa)
-      end if   
-      
-      End Subroutine Allocate_channel
-      
+      end if
 
-!=======================================================================    
+      End Subroutine Allocate_channel
+
+
+!=======================================================================
       Subroutine Allocate_LS_arrays(m)
-!=======================================================================    
+!=======================================================================
       Use channel
 
       Implicit none
@@ -127,22 +127,22 @@
        ra=CT_LS(1:nLS); Deallocate(CT_LS)
        Allocate(CT_LS(mLS)); CT_LS(1:nLS)=ra
        Deallocate(ra)
-      end if   
+      end if
 
       End Subroutine Allocate_LS_arrays
 
 
-!=======================================================================    
+!=======================================================================
       Subroutine Allocate_pert(m)
-!=======================================================================    
+!=======================================================================
 !     allocate "pertuber" arrays in module "channel"
-!-----------------------------------------------------------------------    
+!-----------------------------------------------------------------------
       Use channel
 
       Implicit none
       Integer, intent(in) :: m
       Integer, allocatable :: ia(:)
-   
+
       if(m.le.0) then
        if(Allocated(ippert)) Deallocate(ippert)
        mpert = 0; npert=0
@@ -157,18 +157,18 @@
        ia=ippert(0:npert); Deallocate(ippert)
        Allocate(ippert(0:mpert)); ippert(0:npert)=ia(0:npert)
        Deallocate(ia)
-      end if   
-      
+      end if
+
       End Subroutine Allocate_pert
 
 
 !======================================================================
       Subroutine R_channel(nut,klsp)
 !======================================================================
-!     read from file 'nut' information for channel klsp 
+!     read from file 'nut' information for channel klsp
 !----------------------------------------------------------------------
       Use channel
-      
+
       Implicit none
       Integer, intent(in) :: nut,klsp
       Character(20) :: AF
@@ -178,13 +178,13 @@
       Call Read_ipar(nut,'nlsp',nlsp); read(nut,*)
       if(nlsp.le.0) Stop 'R_channel: nlsp <= 0 '
       if(klsp.gt.nlsp) Stop 'R_channel: klsp > nlsp '
-      
+
       Do i = 1,klsp
        read(nut,'(a)') line
        read(line,*) AF,lpar,ispar,ipar
-       AFP=' '; ncp=0; nwp=0 
+       AFP=' '; ncp=0; nwp=0
        j = INDEX(line,'pert')
-       if(j.gt.0) read(line(j:),*) AFP,ncp,nwp 
+       if(j.gt.0) read(line(j:),*) AFP,ncp,nwp
        jpar = -1; if(ispar.eq.0) jpar = lpar + 1
       End do
 
@@ -194,7 +194,7 @@
 
       Call Allocate_channel(0)
       Do
-       read(nut,'(a)') line; 
+       read(nut,'(a)') line;
        if(line(4:4).ne.'.') Cycle
        read(line(1:3),*) i;  if(i.ne.klsp) Cycle
        read(line,*) AF,AF,AF,AF,nch,AF,AF,ncfg,ncp
@@ -220,17 +220,17 @@
 !======================================================================
       Subroutine R_pert(nu)
 !======================================================================
-!     read from unit 'nu' information about perturbers 
+!     read from unit 'nu' information about perturbers
 !----------------------------------------------------------------------
       Use channel
-      
+
       Implicit none
       Integer, Intent(in) :: nu
       Integer :: i
- 
+
       Call Allocate_pert(0)
       Call Read_ipar(nu,'npert',npert)
-      if(npert.gt.0) then      
+      if(npert.gt.0) then
        Call Allocate_pert(ipert+npert)
        read(nu,*) ippert(1:npert)
       elseif(ncp.gt.0) then
@@ -257,13 +257,13 @@
       Ifind_channel = 1
       Do ich = 1,nch
        if(ic.gt.ipconf(ich)) Ifind_channel=ich+1
-      End do 
+      End do
 
       if(Ifind_channel.le.nch) Return
 
       Do ich = 1,npert
-       if(ic.gt.ippert(ich)) Ifind_channel=nch+ich+1  
-      End do 
+       if(ic.gt.ippert(ich)) Ifind_channel=nch+ich+1
+      End do
 
       if(Ifind_channel.gt.nch+npert) then
        write(*,*) 'npert=',npert
@@ -277,7 +277,7 @@
 !======================================================================
       Subroutine Find_channel_ic(ich,ic1,ic2)
 !======================================================================
-!     find configurations for given channel (or perturber) 
+!     find configurations for given channel (or perturber)
 !----------------------------------------------------------------------
       Use channel
 

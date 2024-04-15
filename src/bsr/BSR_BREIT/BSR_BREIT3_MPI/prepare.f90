@@ -1,5 +1,5 @@
 !======================================================================
-      Subroutine pre_det_exp 
+      Subroutine pre_det_exp
 !======================================================================
 !     define the det. expansions and write the information
 !     in scratch file 'nud'. 'nua' is just used for temporally storing.
@@ -16,7 +16,7 @@
                               LT_conf, ST_conf
       USE symt_list_LS, only: IT_sort, IT_need
 
-      Implicit none 
+      Implicit none
 
       Integer :: i,j,ij,k,kk,kt,ktm,kdt,kdtn,kti,it,it1,it2,ic,jc, MLTi,MSTi
       Integer, Allocatable :: IP_kt(:)
@@ -66,15 +66,15 @@
        End do
        End do
 
-!----------------------------------------------------------------------       
+!----------------------------------------------------------------------
 ! ... cycle over all config. symmetries:
-   
-      IPT_jc = 1   
-      Do jc = 1,nsymc; if(IC_need(jc).eq.0) Cycle 
 
-       if(IPT_jc(jc).eq.0) Cycle    
-       ij=DEF_ij(ic,jc); if(JC_need(ij).eq.0) Cycle      
- 
+      IPT_jc = 1
+      Do jc = 1,nsymc; if(IC_need(jc).eq.0) Cycle
+
+       if(IPT_jc(jc).eq.0) Cycle
+       ij=DEF_ij(ic,jc); if(JC_need(ij).eq.0) Cycle
+
 ! ... define the det. expansion:
 
        MLT = min(Ltotal,LT_conf(jc))     !  ???
@@ -82,7 +82,7 @@
 
        rewind(nua)
 	       Call Det_expn (nua,kt,kdt,MLT,MST)
-       rewind(nua)      
+       rewind(nua)
 
        if(kdt.eq.0) Stop 'Pre_detexp: kdt = 0'
 
@@ -105,7 +105,7 @@
        Do i=1,kdt
         read(nua) CC_det(:,i),IM_det(:,i),IS_det(:,i)
        End do
-       
+
 
        ktm = sqrt(mktkdt/kdt+1.d0); if(ktm.gt.kt) ktm=kt
        if(ktm.eq.kt) then
@@ -119,7 +119,7 @@
         write(nud) Lsym(1:ne)
 !        write(*,*) 'i_case, kt,kdt',ic_case,kt,kdt
        else
-        Do k = 1,kt,ktm 
+        Do k = 1,kt,ktm
          kk = k+ktm-1; if(kk.gt.kt) kk=kt
          JM_det = IM_det; JS_det = IS_det
 
@@ -127,8 +127,8 @@
 
          j = 0
          Do i=1,kdt
-          if(SUM(abs(CC_det(k:kk,i))).eq.0.d0) Cycle 
-          j = j + 1; if(i.eq.j) Cycle 
+          if(SUM(abs(CC_det(k:kk,i))).eq.0.d0) Cycle
+          j = j + 1; if(i.eq.j) Cycle
           CC_det(k:kk,j) = CC_det(k:kk,i)
           JM_det(:,j)=IM_det(:,i)
           JS_det(:,j)=IS_det(:,i)
@@ -163,32 +163,32 @@
 
       if(Allocated(IP_kt)) Deallocate(IP_kt)
 
-      End Subroutine pre_det_exp 
+      End Subroutine pre_det_exp
 
 
 
 !======================================================================
-      Subroutine Det_expn (nua,kt,kdt,MLT,MST) 
+      Subroutine Det_expn (nua,kt,kdt,MLT,MST)
 !======================================================================
 !     determined all possible determinants and their coefficients
 !     for given set of terms (kt). Results are recorded to unit 'nua'
 !----------------------------------------------------------------------
 
       USE conf_LS,       only: ne,no,ln,iq,LS,LS1,LSI
-      USE spin_orbitals, only: in,md,Msym,Ssym,MS_orb,ML_orb 
+      USE spin_orbitals, only: in,md,Msym,Ssym,MS_orb,ML_orb
 
       Implicit none
 
       Integer :: nua,kt,kdt,MLT,MST, kd,i,j,k,m,ii
-      Integer :: nd(ne),idet(ne),ML(ne),MS(ne),MLp(ne),MSp(ne)  
+      Integer :: nd(ne),idet(ne),ML(ne),MS(ne),MLp(ne),MSp(ne)
       Real(8) :: Cdet(kt)
       Real(8) :: C
       Real(8), External :: Clebsh, DETC_sh
 
-      kd=0; kdt=0; i=1; nd(i)=1              
+      kd=0; kdt=0; i=1; nd(i)=1
     1 kd = kd + 1
       ii = in(i)
-      Call DET_sh(ln(i),iq(i),nd(i),ML(i),MS(i),Idet(ii)) 
+      Call DET_sh(ln(i),iq(i),nd(i),ML(i),MS(i),Idet(ii))
 
       m = iabs(ML(i)); if(ML(i).lt.0) m=m+2
       if(m.gt.LS1(i,2)) go to 2

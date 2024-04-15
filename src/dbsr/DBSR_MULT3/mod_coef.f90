@@ -4,10 +4,10 @@
 !     Contains a set of coefficients with two identifiers (intc,idfc)
 !     The list of ordered according the pointer 'ipcoef'
 !--------------------------------------------------------------------
-      Implicit none 
-    
+      Implicit none
+
       Integer :: ncoef = 0                    ! number of coefficients
-      Integer :: mcoef = 0  
+      Integer :: mcoef = 0
       Integer :: icoef = 2**15
       Integer :: ntrm  = 0                    ! number of terms
 
@@ -72,28 +72,28 @@
        Allocate(coef(ntrm,mc),intc(mc),idfc(mc),ipcoef(mc))
        mcoef=mc
       else
-       Open(nus,status='scratch',form='UNFORMATTED') 
-       rewind(nus) 
+       Open(nus,status='scratch',form='UNFORMATTED')
+       rewind(nus)
        Do i = 1,ncoef
         write(nus) coef(1:ntrm,i),intc(i),idfc(i),ipcoef(i)
        End do
        Deallocate(coef,intc,idfc,ipcoef)
        Allocate(coef(ntrm,mc),intc(mc),idfc(mc),ipcoef(mc))
-       rewind(nus) 
+       rewind(nus)
        Do i = 1,mcoef
         read(nus) coef(1:ntrm,i),intc(i),idfc(i),ipcoef(i)
        End do
        mcoef=mc
        write(*,*) ' realloc_coef: mcoef = ', mcoef
       end if
-	        
+
       End Subroutine Alloc_coef
 
 
 !======================================================================
       Subroutine Add_coef
 !======================================================================
-!     add new coefficient to the list 
+!     add new coefficient to the list
 !----------------------------------------------------------------------
       Use coef_list
 
@@ -102,9 +102,9 @@
 
 ! ... look for the same integral in the list
 
-      k=1; l=ncoef 
+      k=1; l=ncoef
 
-    1 if(k.gt.l) go to 2              
+    1 if(k.gt.l) go to 2
       m=(k+l)/2; ip=ipcoef(m)
 
       if    (int.lt.intc(ip)) then;  l = m - 1
@@ -121,24 +121,24 @@
       end if; end if
 
       go to 1
-    2 Continue 
+    2 Continue
 
 ! ... new coefficient:
 
-      ncoef = ncoef + 1  
-      coef(1:ntrm,ncoef)=ctrm(1:ntrm); intc(ncoef)=int; idfc(ncoef)=idf 
-      
+      ncoef = ncoef + 1
+      coef(1:ntrm,ncoef)=ctrm(1:ntrm); intc(ncoef)=int; idfc(ncoef)=idf
+
       if(k.eq.ncoef) then
        ipcoef(k)=ncoef
       else
        Do m=ncoef,k+1,-1;  ipcoef(m)=ipcoef(m-1);  End do
        ipcoef(k)=ncoef
-      end if        
+      end if
 
 ! ... it is time for relocation:
 
       if(ncoef.eq.mcoef) Call Alloc_coef (mcoef+icoef)
- 
+
       End Subroutine Add_coef
 
 

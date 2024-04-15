@@ -3,15 +3,15 @@
 !--------------------------------------------------------------------
 
       Implicit real(8) (A-H,O-Z)
-      
+
       Integer, allocatable :: jst(:), ilsp(:), IPT(:)
       Integer, allocatable :: ISS(:), ILS(:), IPS(:)
-      
+
       Real(8), allocatable :: E(:)
-      
+
       Character(64) :: label1
       Character(64), Allocatable :: Label(:)
-      
+
       Integer :: in=2;   Character(40) :: AF
       Character(40), Allocatable :: BF(:)
 
@@ -20,7 +20,7 @@
 
       Call inf_bound_tab
 !--------------------------------------------------------------------
-!                                                 input/output files:      
+!                                                 input/output files:
       nu = 11;   Open(nu,file='target')
 
       klsp1=1; klsp2=1; klsp3=1;  Call Read_ipar(nu,'nlsp',klsp2)
@@ -51,7 +51,7 @@
       Call Read_iarg('klsp3',klsp3)
       Call Read_iarg('mstate',mstate)
 
-      Call Conv_au (Z,AWT,au_cm,au_eV,0)      
+      Call Conv_au (Z,AWT,au_cm,au_eV,0)
 
       klsp=0;  Call Read_iarg('klsp',klsp)
       if(klsp.ne.0) then; klsp1=klsp; klsp2=klsp; end if
@@ -66,10 +66,10 @@
        if(Icheck_file(AF).eq.0) Cycle
        Open(in,file=AF,status='OLD'); rewind(in)
        nterm=nterm+1
-       read(in,*) ns,nch,ncp,khm,nbound 
+       read(in,*) ns,nch,ncp,khm,nbound
        if(mstate.gt.0.and.nbound.gt.mstate) nbound=mstate
        nstate=nstate+nbound
-      End do  
+      End do
 
       if(nstate.eq.0) Stop 'nstate = 0'
 
@@ -77,14 +77,14 @@
       Allocate(BF(nterm),ISS(nterm),ILS(nterm),IPS(nterm),ilsp(nterm))
 
 !--------------------------------------------------------------------
-!                                                      read energies:              
+!                                                      read energies:
       ii=0; is=0
       Do klsp=klsp1,klsp2,klsp3
        write(AF,'(a6,i3.3)') 'bound.',klsp
        if(Icheck_file(AF).eq.0) Cycle
        Open(in,file=AF,status='OLD'); rewind(in)
        is=is+1;  BF(is)=AF
-       read(in,*) ns,nch,ncp,khm,nbound,ISS(is),ILS(is),IPS(is)   
+       read(in,*) ns,nch,ncp,khm,nbound,ISS(is),ILS(is),IPS(is)
        if(mstate.gt.0.and.nbound.gt.mstate) nbound=mstate
        ilsp(is) = klsp
        Do i = 1,nbound
@@ -95,7 +95,7 @@
         jst(ii) = js+10000*is
        End do
       End do
-      
+
       Call SortR(nstate,E,ipt)
 
 !--------------------------------------------------------------------
@@ -106,7 +106,7 @@
       End do
 
       if(E0.eq.0.d0) E0 = E(IPT(1))
-      
+
       rewind(nu) ; isf=0
 
       BS = ' '
@@ -122,7 +122,7 @@
        ee = E(i) - E0;     if(EM.ne.0.d0.and.E(i).gt.EM) Cycle
        e_eV = ee * au_eV
        e_cm = ee * au_cm
-       
+
        label1 = Label(i)
 
        js = mod(jst(i),10000); is=jst(i)/10000
@@ -134,13 +134,13 @@
 !  read(Label1(4:4),*) n
 !  if(n.gt.5) Cycle
 !end if
-       
-       write(nu,'(2i5,3x,a,3i3,f14.6,F14.5,f16.1,F16.8)') & 
+
+       write(nu,'(2i5,3x,a,3i3,f14.6,F14.5,f16.1,F16.8)') &
         ilsp(is),js,label1(1:imax),ISS(is),ILS(is),IPS(is), &
-        ee,e_eV,e_cm,E(i) 
-       isf = isf + 1 
-      
-      End do 
+        ee,e_eV,e_cm,E(i)
+       isf = isf + 1
+
+      End do
 
       write(nu,'(a)') '*'
 
@@ -159,7 +159,7 @@
       write(nu,*)
       write(nu,'(a,i5)') 'nstate = ',isf
       write(nu,'(a,i5)') 'mstate = ',mstate
-      
+
       End  !  program bound_tab
 
 
@@ -168,11 +168,11 @@
 !======================================================================
 !     provide screen information about bound_tab utility
 !----------------------------------------------------------------------
-       
+
       Implicit real(8) (a-h,o-z)
       Character(80) :: A
 
-      Call get_command_argument(1,A)  
+      Call get_command_argument(1,A)
       if(A.ne.'?') Return
 
       write(*,'(a)') &
@@ -196,7 +196,7 @@
 '                bound_tab  klsp=5                                                 ',&
 '                bound_tab  Z=14  mstate=20  klsp1=1  klsp2=12  E0=...             ',&
 '                                                                                  '
-      Stop ' '                                                                    
-                                                                                   
-      End Subroutine inf_bound_tab                                                 
+      Stop ' '
+
+      End Subroutine inf_bound_tab
 

@@ -2,7 +2,7 @@
 !     UTILITY  tma_tmb
 !======================================================================
 !
-!     zarm.tma  --> zarm.tmb  
+!     zarm.tma  --> zarm.tmb
 !
 !     provide new (reduced) format for t-matrix file
 !
@@ -22,15 +22,15 @@
       Character(80) :: targ  = 'target';     Integer :: nut = 1
       Character(80) :: tma   = 'zarm.tma';   Integer :: nu1 = 2
       Character(80) :: tmb   = 'zarm.tmb';   Integer :: nu2 = 3
-      
+
       Integer :: np = 0,  ni = 0
 
       Character(80) :: A
 
-      Call get_command_argument(1,A)  
-      if(A.eq.'?'.or. A.eq.'!') then 
+      Call get_command_argument(1,A)
+      if(A.eq.'?'.or. A.eq.'!') then
 
-      write(*,'(a)') & 
+      write(*,'(a)') &
 '                                                                          ',&
 '     zarm.tma  --> zarm.tmb                                               ',&
 '                                                                          ',&
@@ -50,7 +50,7 @@
 ! ... target information:
 
       Call Check_file(targ)
-      Open(nut,file=targ) 
+      Open(nut,file=targ)
       Call R_target(nut)
       Call R_channels(nut)
 
@@ -62,14 +62,14 @@
       mdim=mch*(mch+1)/2
       Allocate(tmar(mdim),tmai(mdim))
 
-! ... re-define input-output files if needed:  
+! ... re-define input-output files if needed:
 
       Call Read_aarg('tma',tma)
       Call Read_aarg('tmb',tmb)
 
       write(*,'(/a,a)')  'tma =',tma
       write(*,'( a,a)')  'tmb =',tmb
-      
+
       write(*,'(/a)') 'read the T-matrix from tma-file and added to tmb-file (in new style)'
 
 !----------------------------------------------------------------------
@@ -81,7 +81,7 @@
       write(*,'(/a,i5,a)')  'np =',np,' - number of physical states'
       write(*,'( a,i5,a)')  'ni =',ni,' - number of ionized states'
 
-!----------------------------------------------------------------------         
+!----------------------------------------------------------------------
 
       Call Check_file(tma)
       open(nu1,file=tma)
@@ -107,10 +107,10 @@
        if(iptar(ilsp,ich).le.ni) nj=ich
       End do
 
-      if(kp.eq.0) go to 1 
+      if(kp.eq.0) go to 1
 
-      if(kp.gt.nopen) kp=nopen 
-      
+      if(kp.gt.nopen) kp=nopen
+
       write(nu2,'(F10.6,6i6,a)') ee,nopen,kp,ilsp,np,ni,nj ,'   ee,nopen,kp,ilsp,np,ni,nj'
 
       write(nu2,'(6D16.8)') &
@@ -118,7 +118,7 @@
 
       if(nopen.gt.kp.and.nj.gt.0)   write(nu2,'(6D16.8)') &
          ((tmar(i*(i-1)/2+j),tmai(i*(i-1)/2+j),j=1,nj),i=kp+1,nopen)
-      
+
       go to 1
     2 Continue
 
@@ -128,8 +128,8 @@
       End  !   tma_tmb
 
 
-   
-     
+
+
 
 
 

@@ -3,7 +3,7 @@
 !
 !     target, zarm.om (zarm.omb, zarm.omb_top)  -> tr_###_###
 !
-! Call as   sec_omn  itr1=.. itr2=.. jtr1=.. jtr2=..  [label]  
+! Call as   sec_omn  itr1=.. itr2=.. jtr1=.. jtr2=..  [label]
 !
 ! lavel - additional information in the outout names
 !----------------------------------------------------------------------
@@ -29,7 +29,7 @@
                           Character(20) :: omegt  = 'zarm.omb_top'
 
       Integer :: out=9;   Character(80) :: AF_tr  = 'tr_nnn_nnn'
-                                                  
+
       Call inf_sec_omn
 !----------------------------------------------------------------------
 ! ... target information:
@@ -61,9 +61,9 @@
 !-----------------------------------------------------------------------
 ! ... define transition under consideration:
 
-      i11 = 1; Call Read_iarg('itr1',i11)  
+      i11 = 1; Call Read_iarg('itr1',i11)
       i12 = 0; Call Read_iarg('itr2',i12);  if(i12.eq.0) i12=ntarg
-      i21 = 1; Call Read_iarg('jtr1',i21)  
+      i21 = 1; Call Read_iarg('jtr1',i21)
       i22 = 0; Call Read_iarg('jtr2',i22);  if(i22.eq.0) i22=ntarg
 
       if(i12.gt.np) i12=np
@@ -77,7 +77,7 @@
       elseif(Icheck_file(omega).eq.1) then
        AF = omega
       end if
-      Call Read_aarg('om',AF) 
+      Call Read_aarg('om',AF)
       write(*,'(a,a)') 'Used  ',trim(AF)
       Call Check_file(AF)
       open(nut,file=AF)
@@ -88,7 +88,7 @@
       mdim = ntarg*(ntarg+1)/2;  Allocate(matr(mdim))
 
       ip = 0; me = 0
-    1 read(nut,*,end=2) ek,ns 
+    1 read(nut,*,end=2) ek,ns
       read(nut,*) (matr(i),i=1,ns)
       me = me +1
       ip = ip + ns
@@ -102,7 +102,7 @@
 
       ip = 0; ne=0; iom=0
       rewind(nut)
-    3 read(nut,*,end=4) ek,ns 
+    3 read(nut,*,end=4) ek,ns
       read(nut,*) (matr(i),i=1,ns)
       ne = ne + 1
       jp = ip + 1
@@ -126,10 +126,10 @@
        if(itr1.gt.itr2) Cycle
 
        jtr1=itr1; jtr2=itr2
-      
+
 ! ...  extract omega:
 
-       itr = itr2*(itr2-1)/2 + itr1 
+       itr = itr2*(itr2-1)/2 + itr1
        if(ion.ne.0) itr = itr - itr2 + 1
 
        om = 0.d0;  e(0) = etarg(itr2);  om(0)=0;  ne=0
@@ -175,21 +175,21 @@
 
       if(ion.eq.0.and.i1.ne.i2) &
        write(out,'(f14.8,e16.8,f12.6,e16.8)') &
-        etarg(i2)*Ry,0.d0,etarg(i2),0.d0  
+        etarg(i2)*Ry,0.d0,etarg(i2),0.d0
 
       Do ie=1,ne;   if(om(ie).eq.0.d0) Cycle
        es=e(ie)-etarg(i1)
-                                                
+
        s=om(ie)/g/es                                 ! in [pi ao^2]
        if(i16.eq.0) s = s * 3.1415926                ! in ao^2
        if(i16.gt.0) s = s * 0.28003 * 3.1415926 * 10**(i16-16)   ! in 10^-16
 
        if(ion.eq.0) then
         write(out,'(f14.8,e16.8,f12.6,e16.8,f12.6)') &
-                          e(ie)*Ry,s,e(ie),om(ie)    
+                          e(ie)*Ry,s,e(ie),om(ie)
        else
         write(out,'(f14.8,e16.8,f12.6,e16.8,f12.6)') &
-                          e(ie)*Ry,s,e(ie),om(ie),e(ie)/zion   
+                          e(ie)*Ry,s,e(ie),om(ie),e(ie)/zion
        end if
 
       End do
@@ -206,12 +206,12 @@
 !======================================================================
 !     provide screen information about sec_omn utility
 !----------------------------------------------------------------------
-       
+
       Character :: A
 
       iarg = command_argument_count()
       if(iarg.eq.0) Return
-      Call GET_COMMAND_ARGUMENT(1,A)        
+      Call GET_COMMAND_ARGUMENT(1,A)
       if(A.ne.'?'.and.A.ne.'!') Return
 
       write(*,'(a)') &
@@ -234,7 +234,7 @@
 '                                                                              ',&
 '                lavel - additional information in the outout names            ',&
 '                                                                              ',&
-'     Call as:   sec_omn itr1=.. itr2=.. jtr1=.. jtr2=.. [i16=.. label=..]     ',&     
+'     Call as:   sec_omn itr1=.. itr2=.. jtr1=.. jtr2=.. [i16=.. label=..]     ',&
 '                                                                              ',&
 '     Results:   tr_###_###, where ### stand for transition indexes            ',&
 '                                                                              '

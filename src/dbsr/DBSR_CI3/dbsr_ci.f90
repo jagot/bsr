@@ -6,14 +6,14 @@
 !     Written by:   Oleg Zatsarinny
 !                   email: oleg_zoi@yahoo.com
 !======================================================================
-!     A CONFIGURATION INTERACTION program in the DIRAC-COULOMB-BREIT 
+!     A CONFIGURATION INTERACTION program in the DIRAC-COULOMB-BREIT
 !     approach including the case of NON-ORTHOGONAL radial orbitals.
 !     It is a part of the DBSR project, where B-spline is used for
 !     represantation of radial orbitals.
 !----------------------------------------------------------------------
-!     INPUT:  command-line arguments 
-!             name.inp_ci - input parameters (optional) 
-!             name.c      - list of configurations in the GRASP format 
+!     INPUT:  command-line arguments
+!             name.inp_ci - input parameters (optional)
+!             name.c      - list of configurations in the GRASP format
 !             name.bsw    - radial functions in B-spline representation
 !             name.bnk    - data bank for angular coefficients
 !
@@ -22,16 +22,16 @@
 !             name.d      - debug information (optional)
 !----------------------------------------------------------------------
 !     The parameters in command line has structure:   param=value
-!     except 'name' of case - should be given as the first argument 
+!     except 'name' of case - should be given as the first argument
 !----------------------------------------------------------------------
 !     List of main parameters with default values:
 !     (all arguments except "name" are optional)
 !
-!     name        - name of case 
-!     mbreit=1    - include (1) or not (0) Breit oprerators 
+!     name        - name of case
+!     mbreit=1    - include (1) or not (0) Breit oprerators
 !     msol=0      - how many eigensolution you need (0 -> all)
 !     nzero=0     - zero-order dimension (0 -> all configurations)
-!     debug=0     - if /= 0, file name.d contain debug information 
+!     debug=0     - if /= 0, file name.d contain debug information
 !
 !     eps_c    = 1.0D-10  -  tolerance for coefficients
 !     eps_det  = 1.0D-10  -  tolerance for determinant overlaps
@@ -47,20 +47,25 @@
       Use DBS_orbitals_pq
 
       Implicit none
-      Real(8) :: time, S
-      Real(8), external :: RRTC, DBS_core_pq, V_dhl
-      Integer :: i,j,nc
-      Real(8) :: t1,t2,t3,t4
+      Integer :: j
+      Real(8) :: t1,t2,t3
+      Real(8), external :: DBS_core_pq
 
-! ... read parameters and check input files: name.c, name.bsw, name.bnk
+      Call CPU_time(t1)
 
-      Call read_data
+! ... read parameters
+
+      Call Read_arg
+
+! ... check input files: name.c, name.bsw, name.bnk
+
+      Call Read_data
 
 ! ... define number of J-blocks (for each total momentum J)
 
       Call Def_jblocks
 
-! ... define the fine-turn parameters for configuration energies 
+! ... define the fine-turn parameters for configuration energies
 
       Call Read_shift
 
@@ -68,21 +73,22 @@
 
       Call Read_int_corr
 
-! ... define core energy: 
+! ... define core energy:
 
-      t1 = RRTC()
+      Call CPU_time(t2)
       Ecore = DBS_core_pq(ncore,mbreit)
-      t2 = RRTC()
+      Call CPU_time(t3)
       write(pri,'(/a,F16.8)') 'Ecore  =',ECORE
-      write(pri,'(/a,f8.2,a)') 'CORE:', (t2-t1)/60, ' min'
-      write(  *,'(/a,f8.2,a)') 'CORE:', (t2-t1)/60, ' min'
+      write(pri,'(/a,T30,f8.2,a)') 'CORE:', (t3-t2)/60, ' min'
+      write(  *,'(/a,T30,f8.2,a)') 'CORE:', (t3-t2)/60, ' min'
 
 ! ... prepare one-electron integrals:
 
+      Call CPU_time(t2)
       Call Gen_DHL_core(nclosed,mbreit,0)
-      t3 = RRTC()
-      write(pri,'(/a,f8.2,a)') 'L_integrals:', (t3-t2)/60, ' min'
-      write(  *,'(/a,f8.2,a)') 'L_integrals:', (t3-t2)/60, ' min'
+      Call CPU_time(t3)
+      write(pri,'(/a,T30,f8.2,a)') 'L_integrals:', (t3-t2)/60, ' min'
+      write(  *,'(/a,T30,f8.2,a)') 'L_integrals:', (t3-t2)/60, ' min'
 
 ! ... perform calculation for each J-value
 
@@ -104,7 +110,11 @@
        if(allocated(HM)) Deallocate(HM,SM,DM,EVAL)
        Allocate(HM(ncj,nzero),SM(ncj,nzero),EVAL(nzero),DM(ncj))
 
-       Call Gen_matrix(JTc1(j),JTc2(j))
+       Call CPU_time(t2)
+       Call Setup_matrix(JTc1(j),JTc2(j))
+       Call CPU_time(t3)
+       write(pri,'(a,T30,f8.2,a)') 'Matrix set-up:', (t3-t2)/60, ' min'
+       write(  *,'(a,T30,f8.2,a)') 'Matrix set-up:', (t3-t2)/60, ' min'
 
        if(check_c.gt.0) then
         if(njbl.gt.1) &
@@ -113,24 +123,24 @@
         Stop ' '
        end if
 
-       write(*,'(a)') 'Call Diag...'
+       Call CPU_time(t2)
        Call DIAG(JTc1(j)-1)
-       write(*,'(a)') 'Call Diag...done'
+       Call CPU_time(t3)
+       write(pri,'(a,T30,f8.2,a)') 'Diagonalization:', (t3-t2)/60, ' min'
+       write(  *,'(a,T30,f8.2,a)') 'Diagonalization:', (t3-t2)/60, ' min'
 
       End do  ! over J-blocks
 
 ! ... total number of solutions recorded in j-file:
 
-      write(nuj,'(/a,i7)') 'nsol = ',nsol
+      write(nuj,'(a,i7)') 'nsol = ',nsol
       Close(nuj)
 
-! ... timing
+! ... timing:
 
-      time = RRTC()
-      write(pri,'(/a,f10.2,a/)') &
-                   'Time of calculations =', time/60,'  min'
-      write(  *,'(/a,f10.2,a/)') &
-                   'Time of calculations =', time/60,'  min'
+      Call CPU_time(t2)
+      write(pri,'(/a,T30,f8.2,a/)') 'Time of calculations =', (t2-t1)/60,' min'
+      write(  *,'(/a,T30,f8.2,a/)') 'Time of calculations =', (t2-t1)/60,' min'
 
       End ! Program dbsr_ci
 

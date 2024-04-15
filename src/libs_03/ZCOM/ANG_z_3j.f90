@@ -1,5 +1,5 @@
 !====================================================================
-      Real(8) Function Z_3j (j1,m1,j2,m2,j3,m3) 
+      Real(8) Function Z_3j (j1,m1,j2,m2,j3,m3)
 !====================================================================
 !     determines the value of the 3j-symbols without direct using of
 !     factorials. The following expression for the 3j-symbols is used:
@@ -28,7 +28,7 @@
       Integer, intent(in) :: j1,m1,j2,m2,j3,m3
       Integer :: i,i_max,k,kk,m,iz,iz_min,iz_max
       Real(8) :: x,y,z
-      Integer :: a(3),b(3),J(16) 
+      Integer :: a(3),b(3),J(16)
 
       Z_3j=0.0
 
@@ -128,7 +128,7 @@
       Implicit none
       Integer, intent(in) :: j1,m1,j2,m2,j3,m3
       Real(8), external :: Z_3j
-       
+
       Z_3jj=Z_3j(j1+j1+1,m1+m1+1,j2+j2+1,m2+m2+1,j3+j3+1,m3+m3+1)
 
       End Function Z_3jj
@@ -142,7 +142,7 @@
       Implicit none
       Integer, intent(in) :: j1,m1,j2,m2,j3,m3
       Real(8), External :: Z_3j
-       
+
       Z_3j2=Z_3j(j1+1,m1+1,j2+1,m2+1,j3+1,m3+1)
 
       End Function Z_3j2
@@ -173,7 +173,7 @@
 !     (the moments are in L-representation)
 !----------------------------------------------------------------------
       Implicit none
-      Integer, intent(in) :: L, M, L1, M1, L2, M2 
+      Integer, intent(in) :: L, M, L1, M1, L2, M2
       Real(8), External :: Clebsh
 
       Clebch = Clebsh(l1+l1+1,m1+m1+1,l2+l2+1,m2+m2+1,l+l+1,m+m+1)
@@ -188,7 +188,7 @@
 !     (the moments are in 2J-representation)
 !----------------------------------------------------------------------
       Implicit none
-      Integer, intent(in) :: L, M, L1, M1, L2, M2 
+      Integer, intent(in) :: L, M, L1, M1, L2, M2
       Real(8), External :: Clebsh
 
       Clebsh2 = Clebsh(l1+1,m1+1,l2+1,m2+1,l+1,m+1)
@@ -216,7 +216,7 @@
       A=1.d0
       DO I=2,M
 
-      K=-1                
+      K=-1
       IF(M1.GE.I) K=K+1; IF(M2.GE.I) K=K+1; IF(M3.GE.I) K=K+1
       IF(N .GE.I) K=K+2
       IF(N1.GE.I) K=K-2; IF(N2.GE.I) K=K-2; IF(N3.GE.I) K=K-2
@@ -264,10 +264,10 @@
        IF(N2.GE.I) K=K-2
        IF(N3.GE.I) K=K-2
        J = I + N
-       L = -1 
-       IF(M1.GE.J) L=L+1 
-       IF(M2.GE.J) L=L+1 
-       IF(M3.GE.J) L=L+1 
+       L = -1
+       IF(M1.GE.J) L=L+1
+       IF(M2.GE.J) L=L+1
+       IF(M3.GE.J) L=L+1
        B=I;  C=J;  A = A * B**K * C**L
       End do
       ZCB = A
@@ -278,7 +278,7 @@
 !======================================================================
       Real(8) Function CLB(K1,K2,K3)
 !======================================================================
-!     Clebsh(k1,0,k2,0;k3,0) = (-1)^(k1-k2) [k3]^1/2 3j(k1,0,k2,0;k3,0) 
+!     Clebsh(k1,0,k2,0;k3,0) = (-1)^(k1-k2) [k3]^1/2 3j(k1,0,k2,0;k3,0)
 !----------------------------------------------------------------------
       Implicit none
       Integer, intent(in) :: k1,k2,k3

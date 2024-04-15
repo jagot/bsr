@@ -1,38 +1,31 @@
 !======================================================================
       Subroutine Conf_calc
 !======================================================================
-!     run loop over configurations 
+!     run loop over configurations
 !-----------------------------------------------------------------------
-
-      USE param_jj
-      USE conf_jj 
-
-      USE nljm_orbitals
-
-      USE term_exp
-
+      Use dbsr_breit
+      Use conf_jj
+      Use nljm_orbitals
+      Use term_exp
       Use symc_list; Use symt_list
+      Use coef_list; USE zoef_list; Use boef_list
 
-      USE coef_list; USE zoef_list; Use boef_list
-
-      Implicit none 
-
+      Implicit none
       Integer :: i,j,k,l,m,k1,k2,is,js, it,jt, ij
       Integer, external :: DEF_ij
       Real(8) :: t1,t2
-      Real(8), External :: RRTC
 
-      t1=RRTC()
+      Call CPU_time(t1)
 
 ! ... get the job:
 
-    1 Call Get_det_exp  
+    1 Call Get_det_exp
 
       if(ic.le.0) Return
 
 ! ... initial preparations:
 
-      Call Get_symc(ic,Jtotal1,no1,nn1,kn1,ln1,jn1,iq1,in1)        
+      Call Get_symc(ic,Jtotal1,no1,nn1,kn1,ln1,jn1,iq1,in1)
       k = 1
       Do i=1,no1
        Do j=k,k+iq1(i)-1
@@ -40,8 +33,8 @@
        End do
        k=k+iq1(i)
       End do
-              
-      Call Get_symc(jc,Jtotal2,no2,nn2,kn2,ln2,jn2,iq2,in2)        
+
+      Call Get_symc(jc,Jtotal2,no2,nn2,kn2,ln2,jn2,iq2,in2)
       k=1
       Do i=1,no2
        Do j=k,k+iq2(i)-1
@@ -51,36 +44,38 @@
       End do
 
 ! ... define number of needed terms:
-       
+
        if(Allocated(IP_kt12)) Deallocate(IP_kt12)
-       Allocate(IP_kt12(kt1,kt2));  IP_kt12 = 0 
+       Allocate(IP_kt12(kt1,kt2));  IP_kt12 = 0
 
        k = 0
-       Do k1=1,kt1; it=IP_kt1(k1) 
-       Do k2=1,kt2; jt=IP_kt2(k2)  
+       Do k1=1,kt1; it=IP_kt1(k1)
+       Do k2=1,kt2; jt=IP_kt2(k2)
         if(ic.eq.jc.and.it.gt.jt) Cycle
         ij = DEF_ij(it,jt)
         if(IT_done(ij).ne.0) Cycle
-        k=k+1; IP_kt12(k1,k2) = 1 
-       End do; End do 
+        k=k+1; IP_kt12(k1,k2) = 1
+       End do; End do
 
        if(k.eq.0) Stop 'Conf_loop: k = 0'
-  
+
 ! ...  repeat to get term pointers:
-       
+
        Call Alloc_trm(k)
        k = 0
-       Do k1=1,kt1; it=IP_kt1(k1) 
-       Do k2=1,kt2; jt=IP_kt2(k2)  
+       Do k1=1,kt1; it=IP_kt1(k1)
+       Do k2=1,kt2; jt=IP_kt2(k2)
         if(IP_kt12(k1,k2).eq.0) Cycle
         k=k+1; itc(k)=it;  jtc(k)=jt
-       End do; End do 
+       End do; End do
 
 ! ...  initial allocations:
 
        ncoef=0; Call Alloc_coef(icoef)
        nboef=0; Call Alloc_boef(iboef)
        nblk=0;  Call Alloc_blk(iblk); ncblk(0)=0
+       Call Alloc_ndet(-1)
+       Call Alloc_ndef(-1)
 
 ! ...  calculations:
 
@@ -94,7 +89,7 @@
 
         Call Det_me
 
-        if(nzoef.gt.0) Call Term_loop 
+        if(nzoef.gt.0) Call Term_loop
 
        End do;  End do
 
@@ -102,7 +97,7 @@
 
       Call Send_res
 
-      t2=RRTC()
+      Call CPU_time(t2)
       if(pri.gt.0) then
       write(pri,'(a,3i8,f10.2,a)')  'send conf.', ic,jc,ic_case, (t2-t1)/60, '  min'
       Close(pri); Open(pri,file=AF_pri,position='APPEND')
@@ -117,14 +112,12 @@
       Subroutine get_det_exp
 !======================================================================
 
-      USE MPI
-
-      USE param_jj, only: myid, ierr, pri,AF_pri
-      USE conf_jj,  only: ne
-      USE term_exp
+      Use MPI
+      Use dbsr_breit, only: myid, ierr, pri,AF_pri
+      Use conf_jj,  only: ne
+      Use term_exp
 
       Implicit none
-
       Integer :: status(MPI_STATUS_SIZE)
 
       Call MPI_RECV(ic,1,MPI_INTEGER, 0,0, MPI_COMM_WORLD, status, ierr)
@@ -164,15 +157,11 @@
 !======================================================================
       Subroutine send_res
 !======================================================================
-
-      USE MPI
-
-      USE param_jj, only: myid, ierr, pri, AF_pri
-
-      USE term_exp
+      Use MPI
+      Use dbsr_breit, only: myid, ierr, pri, AF_pri
+      Use term_exp
       Use NDET_list
-      Use NDEF_list 
-
+      Use NDEF_list
       Use coef_list, only: mcoef,ntrm,ncoef,idfc,intc,coef
 
       Implicit none

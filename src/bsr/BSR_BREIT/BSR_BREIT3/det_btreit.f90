@@ -6,7 +6,7 @@
 !     coefficients between possible combinations of symmetries
 !
 !     Isym - new disribution (perutatiom) of orbitals
-!     IPsym - pointer on last same orbutal in new list 
+!     IPsym - pointer on last same orbutal in new list
 !----------------------------------------------------------------------
       Use bsr_breit
       Use spin_orbitals
@@ -18,7 +18,7 @@
 
       NSYM = nsym1
 !----------------------------------------------------------------------
-! ... check for the same orbitals in the 2-nd configuration:      
+! ... check for the same orbitals in the 2-nd configuration:
 
       ksym2 = 1;  k2 = 0; IPsym2=0
 
@@ -29,26 +29,26 @@
         if(Msym(i).ne.Msym2(j)) Cycle
         if(Ssym(i).ne.Ssym2(j)) Cycle
         k2=k2+1; IPsym2(i)=k2; Isym2(k2)=j; ksym2(j)=0
-       End do        
+       End do
       End do
 
 ! ... exzaust the 2-st configuration:
 
-      Do i = 1,ne 
+      Do i = 1,ne
        if(ksym2(i).eq.0) Cycle
        Nsym = Nsym + 1
        Lsym(Nsym)=Lsym2(i); Msym(Nsym)=Msym2(i); Ssym(Nsym)=Ssym2(i)
        k2=k2+1; IPsym2(Nsym)=k2; Isym2(k2)=i; ksym2(i)=0
 
-! ... check for the same orbitals rest of 2-st configuration:      
-       
+! ... check for the same orbitals rest of 2-st configuration:
+
        Do j = i+1,ne
         if(ksym2(j).eq.0) Cycle
         if(Lsym(Nsym).ne.Lsym2(j)) Cycle
         if(Msym(Nsym).ne.Msym2(j)) Cycle
         if(Ssym(Nsym).ne.Ssym2(j)) Cycle
         k2=k2+1; IPsym2(Nsym)=k2; Isym2(k2)=j; ksym2(j)=0
-       End do        
+       End do
       End do
 
       if(k2.ne.ne) Stop 'Det_breit: k2 <> ne '
@@ -58,7 +58,7 @@
       if(Nsym.gt.Nsym1) IPsym1(nsym1+1:nsym)=IPsym1(nsym1)
       Do i=2,nsym
        if(IPsym2(i).eq.0) IPsym2(i)=IPsym2(i-1)
-      End do 
+      End do
 
 !----------------------------------------------------------------------
 !                              define the number of different orbitals:
@@ -101,7 +101,7 @@
        End do
 
        Call Zno_2ee(i1,i2,j1,j2)
-  
+
       Case(1)
 
        if(joper(3)+joper(5)+joper(6)+joper(7).eq.0) Return
@@ -153,7 +153,7 @@
 !     coefficients between possible combinations of symmetries
 !
 !     Isym - new disribution (perutatiom) of orbitals
-!     IPsym - pointer on last same orbutal in new list 
+!     IPsym - pointer on last same orbutal in new list
 !----------------------------------------------------------------------
       Use spin_orbitals
       Use conf_LS,         only: ne
@@ -168,21 +168,21 @@
 
       ksym1=1; k1=0
 
-      Do i = 1,ne 
+      Do i = 1,ne
        if(ksym1(i).eq.0) Cycle
        Nsym = Nsym + 1
        Lsym(Nsym)=Lsym1(i); Msym(Nsym)=Msym1(i); Ssym(Nsym)=Ssym1(i)
        k1=k1+1; IPsym1(Nsym)=k1; Isym1(k1)=i; ksym1(i)=0
 
-! ... check for the same orbitals rest the 1-st configuration:      
- 
+! ... check for the same orbitals rest the 1-st configuration:
+
        Do j = i+1,ne
         if(ksym1(j).eq.0) Cycle
         if(Lsym(Nsym).ne.Lsym1(j)) Cycle
         if(Msym(Nsym).ne.Msym1(j)) Cycle
         if(Ssym(Nsym).ne.Ssym1(j)) Cycle
         k1=k1+1; IPsym1(Nsym)=k1; Isym1(k1)=j; ksym1(j)=0
-       End do        
+       End do
 
       End do
 

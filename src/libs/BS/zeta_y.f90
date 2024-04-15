@@ -7,7 +7,7 @@
 !
 !   Calls:  QUADR, NKy, VKy  - integrals
 !           ZCB - 3j-symbol (to determine angular part of the intershell
-!                            interaction) 
+!                            interaction)
 !----------------------------------------------------------------------
       USE spline_orbitals, p => pbs, L => lbs
       USE spline_atomic, nclosd => kclosd

@@ -2,12 +2,12 @@
       Module hf_energy
 !=======================================================================
 !     This module defines the energy expression as sum  of
-!     one-electron       Sum_i  qsum(i) valueI (i)   
-!     and two-electron   Sum_i,j,k  coef(i,j,k)  value(i,j,k)  
+!     one-electron       Sum_i  qsum(i) valueI (i)
+!     and two-electron   Sum_i,j,k  coef(i,j,k)  value(i,j,k)
 !     integrals.   value(i,j,k) ->  Fk(i,j) or Gk(i,j) integrals,
-!     which is defined by subroutines a(i,j,k) and b(i,j,k). 
+!     which is defined by subroutines a(i,j,k) and b(i,j,k).
 !     Note that coef(i,j,k) with i > = j refer to direct Fk-integrals
-!     whereas coef(i,j,k) with i < j refer to exchage Gk-integrals. 
+!     whereas coef(i,j,k) with i < j refer to exchage Gk-integrals.
 !----------------------------------------------------------------------
       Implicit none
 
@@ -36,7 +36,7 @@
 
 
 !=======================================================================
-      Real(8) Function b(i,j,k) 
+      Real(8) Function b(i,j,k)
 !=======================================================================
 !     determine the coefficient of the y^k (i,j) p(j) term in the exchange
 !     expression for electron i
@@ -51,9 +51,9 @@
       if(i.eq.j) Return
       if(mod(k+lbs(i)+lbs(j),2) /= 0) Return
       if( k < abs(jbs(i)-jbs(j))/2 ) Return
-      if( k > (jbs(i)+jbs(j))/2 ) Return 
+      if( k > (jbs(i)+jbs(j))/2 ) Return
       b = coef(min(i,j),max(i,j),k)
-    
+
       End Function b
 
 
@@ -65,7 +65,6 @@
       Use hf_energy
       Use dbsr_hf
       Use df_orbitals, only: nbf,jbs
-      Integer :: i,j,k
 
       kmax = maxval(jbs(1:nbf))
       if(allocated(coef)) Deallocate(coef);  Allocate(coef(nbf,nbf,0:kmax))
@@ -92,7 +91,7 @@
 !======================================================================
 !     Angular coefficients for energy in average-term approximation
 !
-!     Into shell, only direct interaction:  
+!     Into shell, only direct interaction:
 !
 !     q(q-1)/2 [ F0(a,a)  -  (2j+1)/2j  { j  k   j } ^2  Fk(a,a)  ]
 !                                       {1/2 0 -1/2}
@@ -100,12 +99,12 @@
 !     Between shells: direct only k=0
 !
 !     q_a*q_b/2 [ F0(a,b) -   {j_a  k j_b} ^2  Gk(a,b)   ]
-!                             {1/2 0 -1/2}            
+!                             {1/2 0 -1/2}
 !
-!     We devide on (2ja+1)(2jb+1) due to using Function Cjkj instead 3J-symbol 
+!     We devide on (2ja+1)(2jb+1) due to using Function Cjkj instead 3J-symbol
 !
 !     Input parameter jj equal to ncore or nbf, depending what we need:
-!     core energy or total energy 
+!     core energy or total energy
 !----------------------------------------------------------------------
       Use hf_energy
       Use df_orbitals
@@ -114,8 +113,8 @@
       Integer, intent(in) :: jj
       Integer :: i,j, k
       Real(8) :: c
-      Real(8), external :: Cjkj, WW 
-	  
+      Real(8), external :: Cjkj, WW
+
       if(jj.le.0) Return
       Do i = 1,nbf
       Do j = 1,i
@@ -134,8 +133,8 @@
         End do
        end if
       End do; End do
-	  
-      End Subroutine av_energy_coef 
+
+      End Subroutine av_energy_coef
 
 
 !======================================================================
@@ -146,13 +145,13 @@
 !======================================================================
       Use dbsr_hf
       Use DF_orbitals
-      
+
       Implicit none
-      Integer, Intent(in) :: i,j 
+      Integer, Intent(in) :: i,j
       Integer :: ic
 
       if(nconf.eq.1) then
-       if(i.eq.j) WW = qsum(i)*(qsum(i)-1.d0)       
+       if(i.eq.j) WW = qsum(i)*(qsum(i)-1.d0)
        if(i.ne.j) WW = qsum(i)*qsum(j)
        Return
       end if
@@ -190,15 +189,15 @@
        if(ii.ne.0.and.i.ne.ii) Cycle
 
        valueI(i) = Vp_dhl (kbs(i),p(1,1,i),kbs(i),p(1,1,i))
- 
-       Do j = 1,i  ! nbf 
+
+       Do j = 1,i  ! nbf
         Do  k = 0,2*min0(l(i),l(j)),2
          if(a(i,j,k).eq.0.d0) Cycle
          value(i,j,k) = hf_fk(i,j,k)
        End do
-       End do 
- 
-       Do  j = 1,i-1 ! nbf 
+       End do
+
+       Do  j = 1,i-1 ! nbf
         Do k = abs(l(i)-l(j)),l(i)+l(j),2
          if(b(i,j,k).eq.0.d0) Cycle
          value(j,i,k) = hf_gk(i,j,k)
@@ -213,12 +212,12 @@
 !======================================================================
       Subroutine energy
 !======================================================================
-!     Determine the total energy of the state, together with                                                                
+!     Determine the total energy of the state, together with
 !     one-electron and two-electron (direct and exchange) parts
 !----------------------------------------------------------------------
       Use hf_energy
       Use dbsr_hf,     only: Etotal, E1body, E2body
-      Use df_orbitals, only: nbf, kbs, l => lbs, qsum
+      Use df_orbitals, only: nbf, l => lbs, qsum
 
       Implicit none
       Integer :: i,j,k
@@ -235,18 +234,18 @@
        Do j = 1,i
         Do  k = 0,2*min0(l(i),l(j)),2
          c = a(i,j,k); if(c.eq.0.d0) Cycle
-         S = value(i,j,k)                        
+         S = value(i,j,k)
          etotal = etotal + c*S
          E2body = E2body + c*S
         End do
-       End do 
+       End do
 
 ! ... exchange interaction
- 
+
        Do  j = 1,i-1
         Do k = abs(l(i)-l(j)),l(i)+l(j),2
          c = b(i,j,k); ; if(c.eq.0.d0) Cycle
-         S = value(j,i,k)                         
+         S = value(j,i,k)
          etotal = etotal + c*S
          E2body = E2body + c*S
         End do
@@ -269,14 +268,14 @@
       Use df_orbitals
 
       Implicit none
-      Integer :: i,j,k, ic,jc, ii,jj, km
+      Integer :: i,j,k, ic,jc, ii,jj
       Real(8) :: c
       Real(8), allocatable :: coefs(:,:,:)
-      Integer, external :: Ifind_orb 
+      Integer, external :: Ifind_orb
 
       rewind(nuc)
       ic = 0
-      Do 
+      Do
        read(nuc,'(a)') CONFIG
        if(CONFIG(6:6).ne.'(') Cycle
        read(nuc,'(a)') SHELLJ
@@ -295,14 +294,14 @@
        Do k=0,kmax
         C = coefs(i,j,k); if(abs(C).lt.eps_c) C=0.d0
         if(C.eq.0.d0) Cycle
-        coef(ii,jj,k) = coef(ii,jj,k) + C * weight(ic)  
+        coef(ii,jj,k) = coef(ii,jj,k) + C * weight(ic)
        End do; End do; End do
        Deallocate(coefs)
 
        if(jc.ne.0.and.ic.eq.jc) Exit
        if(ic.eq.nconf) Exit
       End do  ! over configurations
-  
-      End Subroutine jj_energy_coef 
+
+      End Subroutine jj_energy_coef
 
 

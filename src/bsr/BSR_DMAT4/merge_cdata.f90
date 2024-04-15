@@ -31,7 +31,7 @@
 ! ...  main loop ...
 
     1 Continue
-                             
+
 ! ... compare integrals in different blocks and merge the coefficients
 ! ... in case of equal integrals
 
@@ -48,7 +48,7 @@
        End do
       End do
 
-! ...  choose the minimum K1, then K2, then K3 
+! ...  choose the minimum K1, then K2, then K3
 
       j=IP(mm)
       Do m=1,nn
@@ -64,7 +64,7 @@
        end if
       End do
 
-! ... mark the chosen coefficient 
+! ... mark the chosen coefficient
 
       i=IP(mm)
       if(abs(CLDATA(i))+abs(CVDATA(i)).gt.EPS_c) then

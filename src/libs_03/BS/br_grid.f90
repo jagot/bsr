@@ -1,10 +1,10 @@
-!======================================================================  
-      Subroutine br_grid 
 !======================================================================
-      Use MPI 
-      Use spline_atomic 
-      Use spline_param 
-      Use spline_grid 
+      Subroutine br_grid
+!======================================================================
+      Use MPI
+      Use spline_atomic
+      Use spline_param
+      Use spline_grid
 
       Implicit none
       Integer :: myid,ierr

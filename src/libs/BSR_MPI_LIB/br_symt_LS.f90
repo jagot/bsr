@@ -8,7 +8,7 @@
 
       Implicit none
       Integer :: myid,ierr
-      
+
       Call MPI_COMM_RANK(MPI_COMM_WORLD, myid, ierr)
 
 ! ... configuration synnetrs:
@@ -22,7 +22,7 @@
        if(allocated(IT_conf)) Deallocate(IT_conf)
        if(allocated(ip_term)) Deallocate(ip_term)
        if(allocated(LS_term)) Deallocate(LS_term)
-       Allocate(IT_conf(msymt),ip_term(msymt),LS_term(ksymt,5))    
+       Allocate(IT_conf(msymt),ip_term(msymt),LS_term(ksymt,5))
       end if
 
       Call MPI_BCAST(IT_conf,msymt,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)

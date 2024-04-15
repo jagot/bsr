@@ -7,12 +7,12 @@
 !                   free shooter
 !                   email: oleg_zoi@yahoo.com
 !======================================================================
-!     Generation B-spline representation for orbitals 
+!     Generation B-spline representation for orbitals
 !     given in MCHF package format, w-files (C. Froese Fisher)
 !----------------------------------------------------------------------
 !
 !     INPUT ARGUMENTS:
-!     
+!
 !     name.w              -  input w-file (or file with list of w-files)
 !     Eps_end             -  tollerance for function tail (1.D-7)
 !     klarg               -  index for Lagrange interpolation (20)
@@ -24,7 +24,7 @@
 !     INPUT FILES:
 !
 !     list_w              -  list of w-files (optional)
-!     name.w              -  w-files  
+!     name.w              -  w-files
 !     knot.dat            -  parameters of B-splines
 !
 !     OUTPUT FILES:
@@ -41,10 +41,10 @@
       Real(8) :: Eps_end = 1.d-7
       Integer :: klagr = 20
       Character(80) :: AF, BF
-      
-      iarg = COMMAND_ARGUMENT_COUNT() 
-      if(iarg.gt.0) Call GET_COMMAND_ARGUMENT(1,AF) 
-     
+
+      iarg = COMMAND_ARGUMENT_COUNT()
+      if(iarg.gt.0) Call GET_COMMAND_ARGUMENT(1,AF)
+
       if(iarg.eq.0.or.AF.eq.'?') then
         write(*,'(/a)') 'w_bsw  converts  name.w  to name.bsw'
         write(*,'(/a)') 'w   - unformatted MCHF-CFF format for radial functions'
@@ -57,8 +57,8 @@
       end if
 
 !----------------------------------------------------------------------
-! ... sets up grid points and initializes the values of the spline: 
-    
+! ... sets up grid points and initializes the values of the spline:
+
       Call define_grid (z)
       Call define_spline
       Call Allocate_bsorb(ibf)
@@ -66,7 +66,7 @@
 !----------------------------------------------------------------------
 ! ... read arguments if any:
 
-      Call GETARG(1,AF) 
+      Call GETARG(1,AF)
       if(iarg.ge.2) then; Call GETARG(2,BF); read(BF,*) Eps_end; end if
       if(iarg.ge.3) then; Call GETARG(3,BF); read(BF,*) klagr; end if
 
@@ -79,15 +79,15 @@
 
       Do
 
-      if(inp.gt.0) read(inp,*,end=1) AF; if(AF(1:1).eq.'*') Exit 
+      if(inp.gt.0) read(inp,*,end=1) AF; if(AF(1:1).eq.'*') Exit
 
       ii=INDEX(AF,'.')-1;  if(ii.lt.0) ii=LEN_TRIM(AF)
       AF = AF(1:ii)//'.w'
       BF = AF(1:ii)//'.bsw'
 
       nuw=1; Open(nuw,file=AF,form='UNFORMATTED',status='OLD')
-      nub=2; Open(nub,file=BF,form='UNFORMATTED') 
- 
+      nub=2; Open(nub,file=BF,form='UNFORMATTED')
+
       write(ipri,'(/a,a)') 'Input file: ',AF
       write(ipri,'( a,a)') 'Output file: ',BF
 
@@ -95,10 +95,10 @@
       write(ipri,'(a,i5/)') 'Lagrange interpolation index: ',klagr
 
       write(ipri,'(a,F12.3/)') 'Border radius: ',t(ns+1)
-      
+
       nbf = 0
       Call CONVERT_MCHF(nuw,ipri,klagr,Eps_end)
-  
+
       Do i=1,nbf
        write(nub) ebs(i),z,h,hmax,rmax,ks,ns,mbs(i)
        write(nub) pbs(1:mbs(i),i)
@@ -115,7 +115,7 @@
 !======================================================================
       Subroutine Convert_mchf(nuw,pri,klagr,Eps_end)
 !======================================================================
-!     convert w -> bsw for one w-file, unit 'nuw'    
+!     convert w -> bsw for one w-file, unit 'nuw'
 !----------------------------------------------------------------------
       Use spline_param; Use spline_atomic; Use spline_grid
       Use spline_orbitals
@@ -126,28 +126,28 @@
 
 !----------------------------------------------------------------------
 ! ... MCHF radial scale:
- 
+
       Real(8), parameter :: HR = 1.d0/16.d0
       Real(8), parameter :: RHO = -4.d0
       Integer(4), parameter :: NOD = 220
       Character(6) :: Atom, Term
       Character(3) :: EL3
-      Real(8) :: R(NOD), R2(NOD), P(NOD) 
+      Real(8) :: R(NOD), R2(NOD), P(NOD)
 
 
 !----------------------------------------------------------------------
     1 read(nuw,end=2) Atom,Term,EL3,m,ZZ,EI,ZI,AZ,P(1:m)
 !      if(zz.ne.z) Stop 'z in function  <>  z-knot'
 
-      if(m.eq.0) go to 2 
+      if(m.eq.0) go to 2
 
       RO = RHO
       Do I=1,NOD
        R(I)=DEXP(RO)/ZZ;  R2(I)=DSQRT(R(I)); RO=RO+HR
-      End do 
+      End do
 
-      P(m+1:NOD) = 0.d0; P(:) = P(:) * R2(:) 
-      Call EL3_nlk(EL3,n,l,k)      
+      P(m+1:NOD) = 0.d0; P(:) = P(:) * R2(:)
+      Call EL3_nlk(EL3,n,l,k)
 
 ! ... remove unphysical oscilations in the end:
 
@@ -168,7 +168,7 @@
 ! ... check the normalization and max.deviation from original orbital:
 
       PN=sqrt(QUADR(i,i,0)); if(n.lt.10)  pbs(:,i)=pbs(:,i)/PN
- 
+
       ydm = 0.d0
       Do j=1,m
        if(r(j).gt.t(ns)) Exit
@@ -202,19 +202,19 @@
 !    a(ns-1:ns) = 0.d0 to garantee the bound character of orbital
 !                      i.e. with zero value for function and derivative
 !                      on the end of interval
-!    Eps_end - tolerence for the last points 
+!    Eps_end - tolerence for the last points
 !    PB - value of p(r) on the B_spline border
 !
 !----------------------------------------------------------------------
       Use spline_param; Use spline_grid; Use spline_galerkin
-      
+
       Implicit real(8) (A-H,O-Z)
       Integer, intent(in)  :: l, nr, klagr
       Integer, intent(out) :: n
       Real(8), intent(in)  :: r(nr),p(nr)
       Real(8), intent(out) :: cb(ns)
-      Real(8), intent(in)  :: Eps_end      
-      Real(8), intent(out) :: PB      
+      Real(8), intent(in)  :: Eps_end
+      Real(8), intent(out) :: PB
       Real(8), allocatable :: b(:), c(:), d(:), yg(:,:)
 
 ! ... allocate arrays:
@@ -246,7 +246,7 @@
       End do
       PB = 0.d0;  if(RM.gt.t(ns+1))  PB = SEVAL(nr,t(ns+1),r,p,b,c,d)
 
-! ... form the vector of inner products of the radial function 
+! ... form the vector of inner products of the radial function
 ! ... and the spline basis functions:
 
       Call VINTY (yg,cb)
@@ -260,9 +260,9 @@
 
       cb(1:1+ll)=0.d0; ! cb(ns-1)=0.d0; cb(ns)=0.d0
 
-! ... solve the system of equations  Sb x = cb  
+! ... solve the system of equations  Sb x = cb
 
-      Call dpbtrs ('U',ns,ks-1,1,bs,ks,cb,ns,ierr)  
+      Call dpbtrs ('U',ns,ks-1,1,bs,ks,cb,ns,ierr)
       if(ierr.ne.0) Stop 'convspl: dpbtrs (LAPACK) failed'
 
       Do i=1,ns; if(t(i).gt.RM) cb(i)=0.d0; End do
@@ -281,8 +281,8 @@
 
 ! ... restore initial bs for other routines:
 
-      Call FACSB 
-      
+      Call FACSB
+
       End Subroutine CONVSPL
 
 
@@ -310,7 +310,7 @@
         bs(j,ks-j+i) = 0.d0
        End do
       End do
- 
+
       Call DPBTRF('U',ns,ks-1,bs,ks,ierr)
       if (ierr .ne. 0 )  Stop 'facsbl: dpbtrf (LAPACK) failed'
 

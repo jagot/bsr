@@ -11,7 +11,7 @@
       Integer, intent(in) :: nu
       Integer :: i,j,k,l,n,m,itype,nsw,ksw,mw,kp,kq
       Character(5) :: elw
-      Integer, external :: Ifind_bsorb, Iadd_bsorb 
+      Integer, external :: Ifind_bsorb, Iadd_bsorb
       Real(8) :: tt(ns+ks)
 
       rewind(nu)
@@ -25,13 +25,13 @@
       k=1
       Do i=1,ns+ks
        if(abs(t(i)-tt(i)).lt.1.d-12) Cycle; k=0; Exit
-      End do    
+      End do
       if(k.eq.0) Stop 'Stop in read_pqbs: another knot grid ?'
 
     1 read(nu,end=2) elw,mw
       Call EL_NLJK(elw,n,k,l,j,i)
-      m = Ifind_bsorb(n,k,i,2) 
-      mbs(m)=mw 
+      m = Ifind_bsorb(n,k,i,2)
+      mbs(m)=mw
       pq(1:ns,1,m)=0.d0; read(nu) pq(1:mw,1,m)
       pq(1:ns,2,m)=0.d0; read(nu) pq(1:mw,2,m)
       bpq(:,1,m) = MATMUL(fpbs,pq(:,1,m))
@@ -45,7 +45,7 @@
 !======================================================================
       Subroutine Read_dbsw(nu,mode,ishift)
 !======================================================================
-!     read B-spline r.w.f. from bsw-file (unit nu) 
+!     read B-spline r.w.f. from bsw-file (unit nu)
 !     mode = 0  - clear previuous w.f. in module DBS_orbitals_pq
 !            1  - only read radial functions for existing orbitals
 !            2  - read and add if needed

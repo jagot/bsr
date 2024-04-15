@@ -1,10 +1,10 @@
 !======================================================================
-      Subroutine SUB1 
+      Subroutine SUB1
 !======================================================================
 !     drive routine for one partial wave
 !----------------------------------------------------------------------
       Use mpi
-      Use bsr_mat  
+      Use bsr_mat
       Use c_data
       Use conf_LS; Use symc_list_LS; Use symt_list_LS
       Use orb_overlaps
@@ -15,7 +15,7 @@
       Integer, external :: Ifind_channel
 
 !-----------------------------------------------------------------------
-! ... read configuration expansion and orbitals information: 
+! ... read configuration expansion and orbitals information:
 
       t1 = MPI_WTIME()
 
@@ -23,7 +23,7 @@
 
       if(exch_mode.eq.2) Return
 
-      if(mode.eq.7) then;  Call Sub1_mso_mpi; Return; end if
+      if(mode.eq.7) then;  Call Sub1_mso; Return; end if
 
 ! ... debug output if any:
 
@@ -32,7 +32,7 @@
         write(AF_pri,'(a,i5.5)') 'debug.',myid
         Open(pri,file=AF_pri)
        else
-        pri = 0      
+        pri = 0
        end if
       end if
 
@@ -40,7 +40,7 @@
        write(pri,'(/a/  )') 'Main dimensions in bsr_matrix module:'
        write(pri,'( a,i10,a)') 'nch    = ',nch,   '  -  number of channels '
        write(pri,'( a,i10,a)') 'npert  = ',npert, '  -  number of perturbers '
-       write(pri,'( a,i10,a)') 'ns     = ',ns,    '  -  number of splines ' 
+       write(pri,'( a,i10,a)') 'ns     = ',ns,    '  -  number of splines '
        write(pri,'(/a,T33,i8)') 'Dimension of interaction matrix:',nch*ns+npert
       end if
 
@@ -75,8 +75,8 @@
       Allocate(IP_channel(ncfg))
       Do i=1,ncfg; IP_channel(i)=Ifind_channel(i); End do
 
-      Call Allocate_ndets(-1)  
-      Call Allocate_ndefs(-1)  
+      Call Allocate_ndets(-1)
+      Call Allocate_ndefs(-1)
 
       Call Memory_estimations
 
@@ -90,7 +90,7 @@
 !                                  core-energy and target-energy shift:
       if(mode.eq.0) then
 
-       hcc = hcc * EC       
+       hcc = hcc * EC
        if(npert.gt.0) then;  hcb = hcb * EC; hbb = hbb * EC; end if
 
        Do ich = 1,nch
@@ -101,9 +101,9 @@
       else
 
        Call Allocate_matrix(i)
-       Call Read_matrix_mpi
+       Call Read_matrix
        if(myid.eq.0) then
-        read(nui) m         
+        read(nui) m
         read(nui) ACF
         read(nui) htarg
         read(nui) otarg
@@ -116,7 +116,7 @@
        Call MPI_BCAST(otarg,m,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
 
       end if
-       
+
 !----------------------------------------------------------------------
 !                                                          L-integrals:
       Call SUB1_Lintegrals;   if(interrupt.gt.0) go to 10
@@ -139,8 +139,8 @@
       if(myid.eq.0) &
       write(*  ,'(a,T20,f10.1,a)') 'BS_ORTH:  ',(t2-t1)/60,' min '
 
-! ... record interaction matrix: 
- 
+! ... record interaction matrix:
+
    10 t1 = MPI_WTIME();   Call Record_matrix(nuj);   t2 = MPI_WTIME()
 
       if(pri.gt.0) &
@@ -167,7 +167,7 @@
 ! ... target interaction matrix:
 
       if(interrupt.eq.0) then
-       t1 = MPI_WTIME();  Call Collect_otarg;  Call Collect_htarg; t2 = MPI_WTIME() 
+       t1 = MPI_WTIME();  Call Collect_otarg;  Call Collect_htarg; t2 = MPI_WTIME()
        if(pri.gt.0) &
         write(pri,'(/a,T20,f10.1,a)') 'Collect_targ:',(t2-t1)/60,' min '
        if(myid.eq.0) &
@@ -184,7 +184,7 @@
        if(interrupt.eq.0) Call Target_print(pri,Eps_tar)
       end if
 
-      End Subroutine SUB1 
+      End Subroutine SUB1
 
 
 
@@ -205,11 +205,11 @@
 
       if(pri.gt.0) write(pri,'(/a/)') 'Memory consuming:'
 
-! ... the < i | j > arrays: 
+! ... the < i | j > arrays:
 
-      m = mem_orb_overlaps 
+      m = mem_orb_overlaps
       if(pri.gt.0) &
-      write(pri,'(a,T33,f8.1,a)') 'Bound overlaps:', m*4.0/(1024*1024),'  Mb' 
+      write(pri,'(a,T33,f8.1,a)') 'Bound overlaps:', m*4.0/(1024*1024),'  Mb'
       mm = mm + m
 
 ! ... c_data arrays:
@@ -220,7 +220,7 @@
        nblock=k
        write(pri,'(/a,i8,a)') 'nblock = ',nblock,'  -  number of blocks re-assigned !!! '
       end if
-      Call Alloc_c_data(mtype,-1,npol,mblock,nblock,kblock,eps_c,m) 
+      Call Alloc_c_data(mtype,-1,npol,mblock,nblock,kblock,eps_c,m)
       if(pri.gt.0) &
       write(pri,'(a,T33,f8.1,a)')  'Memory for c_data:', m*4.0/(1024*1024),'  Mb'
       mm = mm + m
@@ -230,7 +230,7 @@
       if(.not.allocated(CBUF)) &
       Allocate(CBUF(maxnc),itb(maxnc),jtb(maxnc),intb(maxnc),idfb(maxnc))
       m = 6*maxnc
-      if(pri.gt.0) write(pri,'(a,T33,f8.1,a)') 'Buffer memory:', m*4.0/(1024*1024),'  Mb' 
+      if(pri.gt.0) write(pri,'(a,T33,f8.1,a)') 'Buffer memory:', m*4.0/(1024*1024),'  Mb'
       mm = mm + m
 
 ! ... splines:
@@ -251,10 +251,10 @@
 
       Call MPI_REDUCE(i,m,1,MPI_INTEGER,MPI_MAX,0,MPI_COMM_WORLD,ierr)
       if(myid.ne.0) m=i
-      mm = mm + m 
+      mm = mm + m
       if(pri.gt.0)  write(pri,'(a,T33,f8.1,a)') 'Total estimations: ',mm*4.0/(1024*1024),'  Mb'
 
-      ! ... the < . | j > values: 
+      ! ... the < . | j > values:
 
       Call br_file
       Call Check_orb_overlaps
@@ -279,7 +279,7 @@
        if(myid.eq.0) rewind(nui)
        if(myid.eq.0) read(nui) i,j,k
        Call Read_matrix
-      end if 
+      end if
 
       if(interrupt.gt.0.and.intercase.ne.11) then
        if(myid.eq.0) rewind(nuj)
@@ -289,7 +289,7 @@
       end if
 
       flag = 0
-    1 Continue             ! the point to repeat overlaps calculations: 
+    1 Continue             ! the point to repeat overlaps calculations:
 
       ! ... B-spline overlaps:  iitar =2  ???
 
@@ -330,11 +330,11 @@
 
     2 Continue
 
-      ! ... record overlap matrix: 
+      ! ... record overlap matrix:
 
       if(myid.eq.0) then;   rewind(nuj);  write(nuj) ns,nch,npert;  end if
 
-      Call Record_matrix(nuj)  
+      Call Record_matrix(nuj)
 
       Call CPU_time(t2)
       if(pri.gt.0) &
@@ -369,7 +369,7 @@
       if(myid.eq.0) &
       write(*  ,'(a,T20,f10.2,a)') 'L-integrals:',(t2-t1)/60,' min '
 
-      End Subroutine SUB1_Lintegrals 
+      End Subroutine SUB1_Lintegrals
 
 
 !======================================================================
@@ -383,16 +383,16 @@
 
       if(intercase.gt.0.and.intercase.ne.7) Return
 
-      if(mso.le.0) Return    
+      if(mso.le.0) Return
 
       Call CPU_time(t1)
 
       l = maxval(lbs); if(l.gt.mlso) l = mlso;  Call Gen_Zval(l)
 
       icase=7;  Call State_res;   Call Alloc_zcore(0,0)
- 
+
       Call CPU_time(t2)
-      
+
       if(pri.gt.0)  &
       write(pri,'(a,T20,f10.2,a)') 'Z-integrals:',(t2-t1)/60,' min '
       if(myid.eq.0) &
@@ -455,8 +455,8 @@
       Allocate(IP_channel(ncfg))
       Do i=1,ncfg; IP_channel(i)=Ifind_channel(i); End do
 
-      Call Allocate_ndets(-1)  
-      Call Allocate_ndefs(-1)  
+      Call Allocate_ndets(-1)
+      Call Allocate_ndefs(-1)
 
       Call Memory_estimations(mm)
 
@@ -468,7 +468,7 @@
 
       if(myid.eq.0) rewind(nuj)
       if(myid.eq.0) write(nuj) ns,nch,npert
-      Call Record_matrix(nuj)  
+      Call Record_matrix(nuj)
 
 ! ... Interaction matrix:
 
@@ -490,15 +490,15 @@
        End do; End do
       End do
 
-! ... record interaction matrix: 
+! ... record interaction matrix:
 
       Call Record_matrix(nuj)
 
-! ... asymptotic coefficients:  
+! ... asymptotic coefficients:
 
       if(myid.eq.0) write(nuj) mk
       if(myid.eq.0) write(nuj) ACF
 
       close(nuj)
-      
+
       End Subroutine SUB1_mso

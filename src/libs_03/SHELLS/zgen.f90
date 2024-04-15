@@ -19,7 +19,7 @@
       IF(Q.EQ.0.or.Q.EQ.1.or.Q.EQ.4*L+1) RETURN
       if(Q.LT.0.OR.Q.GT.4*L+1) then
        write(*,'(a,i2,a,i2)') 'Stop in ZGEN   L=',L,'  Q=',Q
-       Stop ' ' 
+       Stop ' '
       end if
 
       Select case(L)
@@ -29,7 +29,7 @@
          Case(4);   ZGEN = gen_p4(n1,n2)
          Case(5);   ZGEN = gen_p5(n1,n2)
         End Select
-      Case(2)   
+      Case(2)
         Select case(q+1)
          Case(3);   ZGEN = gen_d3(n1,n2)
          Case(4);   ZGEN = gen_d4(n1,n2)
@@ -45,11 +45,11 @@
          i=4*L+2-q; if(i.ge.3) then; i=IPV(i); IA1=IV(i+n1); end if
          i = Iterm_LS (l,Q+1,N2,IA2,IL2,IS2)
          i=4*L+2-q-1; if(i.ge.3) then; i=IPV(i); IA2=IV(i+n2); end if
-         i = IL1+IL2+IS1+IS2-4-L-L-IA1-IA2 
+         i = IL1+IL2+IS1+IS2-4-L-L-IA1-IA2
 
          if(mod(i,2).ne.0) then
-          write(*,'(10i6)') q,  N1,IA1,IL1,IS1 
-          write(*,'(10i6)') q+1,N2,IA2,IL2,IS2  
+          write(*,'(10i6)') q,  N1,IA1,IL1,IS1
+          write(*,'(10i6)') q+1,N2,IA2,IL2,IS2
           Stop 'ZGEN: problems with phase'
          end if
 
@@ -63,7 +63,7 @@
          Case(5);   ZGEN = gen_f5(n1,n2)
          Case(6);   ZGEN = gen_f6(n1,n2)
          Case(7);   ZGEN = gen_f7(n1,n2)
-         Case(8);   ZGEN = gen_f7(n2,n1)*S 
+         Case(8);   ZGEN = gen_f7(n2,n1)*S
          Case(9);   ZGEN = gen_f6(n2,n1)*S
          Case(10);  ZGEN = gen_f5(n2,n1)*S
          Case(11);  ZGEN = gen_f4(n2,n1)*S
@@ -72,7 +72,7 @@
         End Select
       Case default
         write(*,'(a,i2,a,i2)') 'Stop in ZGEN:  L=',L,'  Q=',Q
-        Stop ' ' 
+        Stop ' '
       End Select
 
 DATA IV /                                     &
@@ -104,15 +104,15 @@ DATA IV /                                     &
  3, 5, 5, 5, 5, 7, 7, 7, 7, 3, 5, 5, 5, 5, 7, &
  7, 3, 5, 5, 7, 7, 5, 5, 7, 7, 5, 7, 5, 7     /
 
- DATA IPV / 0,0,0, 17, 64, 137, 256 / 
+ DATA IPV / 0,0,0, 17, 64, 137, 256 /
 
  End Function ZGEN
 
 !=======================================================================
-  Real(8) Function gen_p3 (ip,id) 
+  Real(8) Function gen_p3 (ip,id)
 !=======================================================================
 !
-! contains p3-shell cfp coefficients as  sqrt(m1/m2) 
+! contains p3-shell cfp coefficients as  sqrt(m1/m2)
 !
 ! ip - index of parent term
 ! id - index of daughter term
@@ -136,13 +136,13 @@ DATA IV /                                     &
   Data IN/1,18,2/, IC/0,1,0,  4,-9,-5,  0,1,-1/
 
   End Function gen_p3
-  
+
 
 !=======================================================================
-  Real(8) Function gen_p4 (ip,id) 
+  Real(8) Function gen_p4 (ip,id)
 !=======================================================================
 !
-! contains p4-shell cfp coefficients as  sqrt(m1/m2) 
+! contains p4-shell cfp coefficients as  sqrt(m1/m2)
 !
 ! ip - index of parent term
 ! id - index of daughter term
@@ -169,10 +169,10 @@ DATA IV /                                     &
 
 
 !=======================================================================
-  Real(8) Function gen_p5 (ip,id) 
+  Real(8) Function gen_p5 (ip,id)
 !=======================================================================
 !
-! contains p5-shell cfp coefficients as  sqrt(m1/m2) 
+! contains p5-shell cfp coefficients as  sqrt(m1/m2)
 !
 ! ip - index of parent term
 ! id - index of daughter term
@@ -199,10 +199,10 @@ DATA IV /                                     &
 
 
 !=======================================================================
-  Real(8) Function gen_d3 (ip,id) 
+  Real(8) Function gen_d3 (ip,id)
 !=======================================================================
 !
-! contains d3-shell cfp coefficients as  sqrt(m1/m2) 
+! contains d3-shell cfp coefficients as  sqrt(m1/m2)
 !
 ! ip - index of parent term
 ! id - index of daughter term
@@ -234,10 +234,10 @@ DATA IV /                                     &
 
 
 !=======================================================================
-  Real(8) Function gen_d4 (ip,id) 
+  Real(8) Function gen_d4 (ip,id)
 !=======================================================================
 !
-! contains d4-shell cfp coefficients as  sqrt(i1/i2) 
+! contains d4-shell cfp coefficients as  sqrt(i1/i2)
 !
 ! ip - index of parent term
 ! id - index of daughter term
@@ -283,10 +283,10 @@ DATA IV /                                     &
 
 
 !=======================================================================
-  Real(8) Function gen_d5 (ip,id) 
+  Real(8) Function gen_d5 (ip,id)
 !=======================================================================
 !
-! contains d5-shell cfp coefficients as  sqrt(i1/i2) 
+! contains d5-shell cfp coefficients as  sqrt(i1/i2)
 !
 ! ip - index of parent term
 ! id - index of daughter term
@@ -328,10 +328,10 @@ DATA IV /                                     &
 
 
 !=======================================================================
-  Real(8) Function gen_d6 (ip,id) 
+  Real(8) Function gen_d6 (ip,id)
 !=======================================================================
 !
-! contains d6-shell cfp coefficients as  sqrt(i1/i2) 
+! contains d6-shell cfp coefficients as  sqrt(i1/i2)
 !
 ! ip - index of parent term
 ! id - index of daughter term
@@ -373,10 +373,10 @@ DATA IV /                                     &
 
 
 !=======================================================================
-  Real(8) Function gen_d7 (ip,id) 
+  Real(8) Function gen_d7 (ip,id)
 !=======================================================================
 !
-! contains d7-shell cfp coefficients as  sqrt(i1/i2) 
+! contains d7-shell cfp coefficients as  sqrt(i1/i2)
 !
 ! ip - index of parent term
 ! id - index of daughter term
@@ -419,10 +419,10 @@ DATA IV /                                     &
   End Function gen_d7
 
 !=======================================================================
-  Real(8) Function gen_d8 (ip,id) 
+  Real(8) Function gen_d8 (ip,id)
 !=======================================================================
 !
-! contains d8-shell cfp coefficients as  sqrt(i1/i2) 
+! contains d8-shell cfp coefficients as  sqrt(i1/i2)
 !
 ! ip - index of parent term
 ! id - index of daughter term
@@ -455,10 +455,10 @@ DATA IV /                                     &
 
 
 !=======================================================================
-  Real(8) Function gen_d9 (ip,id) 
+  Real(8) Function gen_d9 (ip,id)
 !=======================================================================
 !
-! contains d9-shell cfp coefficients as  sqrt(i1/i2) 
+! contains d9-shell cfp coefficients as  sqrt(i1/i2)
 !
 ! ip - index of parent term
 ! id - index of daughter term

@@ -5,7 +5,7 @@
 !     Dirac continuum Coulomb Function
 !     (after Toffoli and Decleva, CPC, 152 (2003) 151)
 !
-!     Call: COULFG 
+!     Call: COULFG
 !
 !     mode = 0 - only function values;
 !          = 1 - also derivaties
@@ -52,11 +52,11 @@
        iup=M1
        ilow=M1+1
        EFAC = 1.d0/EFAC
-      end if  
+      end if
 
       FREG = CNORM *(FC(iup)+A*B*FC(ilow))
       FIRR = CNORM *(GC(iup)+A*B*GC(ilow))
-      GREG = W*CNORM *(B*FC(iup)+A*FC(ilow)) 
+      GREG = W*CNORM *(B*FC(iup)+A*FC(ilow))
       GIRR = W*CNORM *(B*GC(iup)+A*GC(ilow))
 
       TAND = -zalpha * efac /(AK+gamma)
@@ -78,7 +78,7 @@
 !   Gives the magnitude and derivative for continuuum Coulomb Function
 !   with k^2 = E, orbital momentum L, and charge Z in point R
 !
-!   Call: COULFG 
+!   Call: COULFG
 !---------------------------------------------------------------------
       Implicit real(8) (A-H,O-Z)
       Integer, intent(in) :: L
@@ -87,19 +87,19 @@
       Integer, parameter :: max_lc = 99
       Integer :: lmin, lmax, ifail
       Real(8) :: RHO,ETA,K,AN,FC,FCP,GC,GCP, XL,XM
- 
+
       COMMON /COUL/ FC(100),GC(100),FCP(100),GCP(100)
- 
+
       if(l.gt.max_lc) Stop ' ZCFG: l > max_lc=99'
- 
+
       K = SQRT(E)
       ETA = -Z/K
       RHO = K*R
       XL = L
       XM = L
- 
+
       CALL COULFG(RHO,ETA,XL,XM,FC,GC,FCP,GCP,1,0,IFAIL)
-          
+
       AN=DSQRT(1.0/K)
       F = FC(1)*AN
       G = GC(1)*AN

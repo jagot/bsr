@@ -13,8 +13,8 @@
 
       Implicit none
 
-      Integer, Intent(in) :: in1,in2,nub
-      Integer :: nsymc_bnk, nsymt_bnk, ij, it,jt, i,k
+      Integer, intent(in) :: in1,in2,nub
+      Integer :: nsymc_bnk, nsymt_bnk, it,jt, i,k
 
 ! ... initialize arrays:
 
@@ -48,7 +48,7 @@
 
       Do i=1,ncfg
        it=IC_term(IP_stat(i))
-       if(IT_state1(it).eq.0) IT_state1(it)=i; IT_state2(it)=i 
+       if(IT_state1(it).eq.0) IT_state1(it)=i; IT_state2(it)=i
       End do
 
 !----------------------------------------------------------------------

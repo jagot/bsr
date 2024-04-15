@@ -1,7 +1,7 @@
 !======================================================================
       Subroutine Read_matrix
 !======================================================================
-!     read transformed Hamiltonian matrix 
+!     read transformed Hamiltonian matrix
 !----------------------------------------------------------------------
       Use dbsr_hd
 
@@ -37,16 +37,16 @@
 !---------------------------------------------------------------------------
 ! ... read non-trivial blocks
 
-      Do 
+      Do
        if(io_processor) read(nui) ic,jc
-       Call br_ipar(ic)        
-       Call br_ipar(jc)        
+       Call br_ipar(ic)
+       Call br_ipar(jc)
        Call BLACS_BARRIER (ctxt, 'all')
        if(ic.le.0) Exit
 
       if(ic.gt.nch.and.jc.gt.nch) then       !  pert-pert
 
-       if(io_processor) read(nui) adp(ic-nch,jc-nch) 
+       if(io_processor) read(nui) adp(ic-nch,jc-nch)
 
       elseif(ic.gt.nch) then                 !  ch-pert
 
@@ -58,8 +58,8 @@
 
       else                                   !  ch-ch
 
-       i=ipsol(ic-1)+1; idim=ipsol(ic)-ipsol(ic-1) 
-       j=ipsol(jc-1)+1; jdim=ipsol(jc)-ipsol(jc-1) 
+       i=ipsol(ic-1)+1; idim=ipsol(ic)-ipsol(ic-1)
+       j=ipsol(jc-1)+1; jdim=ipsol(jc)-ipsol(jc-1)
        if(io_processor) read(nui) add(1:idim,1:jdim)
        Call pdgeadd ('notrans',idim,jdim, one,add,  1,1, descadd,&
                                           zero,  a, i,j, desca )

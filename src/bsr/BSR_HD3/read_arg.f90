@@ -5,7 +5,7 @@
 !----------------------------------------------------------------------
       Use bsr_hd
       Use target, only: ntarg, Etarg
-    
+
       Implicit none
       Integer, intent(in) :: nu
       Integer :: i,it,Icheck_file

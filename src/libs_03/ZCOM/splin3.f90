@@ -1,7 +1,7 @@
 !======================================================================
       Subroutine SPLIN3 (N, X, Y, B, C, D)
 !======================================================================
-!     DEFINES COEFFICIENTS B(I), C(I), AND D(I), I=1,2,...,N  
+!     DEFINES COEFFICIENTS B(I), C(I), AND D(I), I=1,2,...,N
 !     FOR A CUBIC INTERPOLATING SPLINE
 !
 !     S(X) = Y(I) + B(I)*(X-X(I)) + C(I)*(X-X(I))**2 + D(I)*(X-X(I))**3
@@ -31,7 +31,7 @@
       Real(8), Intent(out) :: B(n),C(n),D(n)
       Integer :: I,J,M
       Real(8) :: T
- 
+
       IF ( N .LT. 2 ) RETURN
 
       IF ( N .LT. 3 ) THEN ! liniar interpolation for n = 2 :
@@ -43,11 +43,11 @@
       END IF
 
       M = N-1
- 
+
 ! ... SET UP TRIDIAGONAL SYSTEM
 
 ! ... B = DIAGONAL, D = OFFDIAGONAL, C = RIGHT HAND SIDE.
- 
+
       D(1) = X(2) - X(1)
       C(2) = (Y(2) - Y(1))/D(1)
       Do I = 2, M
@@ -56,10 +56,10 @@
          C(I+1) = (Y(I+1) - Y(I))/D(I)
          C(I) = C(I+1) - C(I)
       End do
- 
+
 ! ... END CONDITIONS. THIRD DERIVATIVES AT  X(1)  AND  X(N)
 ! ... OBTAINED FROM DIVIDED DIFFERENCES
- 
+
       B(1) = -D(1)
       B(N) = -D(N-1)
       C(1) = 0.
@@ -70,26 +70,26 @@
        C(1) = C(1)*D(1)**2/(X(4)-X(1))
        C(N) = -C(N)*D(N-1)**2/(X(N)-X(N-3))
       END IF
- 
+
 !     FORWARD ELIMINATION
- 
+
       Do I = 2, N
          T = D(I-1)/B(I-1)
          B(I) = B(I) - T*D(I-1)
          C(I) = C(I) - T*C(I-1)
       End do
- 
+
 ! ... BACK SUBSTITUTION
- 
+
       C(N) = C(N)/B(N)
       Do J = 1, M
        I=N-J; C(I) = (C(I) - D(I)*C(I+1))/B(I)
       End do
- 
+
 ! ... C(I) IS NOW THE SIGMA(I) OF THE TEXT
- 
+
 ! ... COMPUTE POLYNOMIAL COEFFICIENTS
- 
+
       B(N) = (Y(N) - Y(M))/D(M) + D(M)*(C(M) + 2.*C(N))
       Do I = 1, M
          B(I) = (Y(I+1) - Y(I))/D(I) - D(I)*(C(I+1) + 2.*C(I))
@@ -114,9 +114,8 @@
       Real(8) :: DX
 
       Call INTERV (X,N,U,I,mflag)
-      
+
       DX=U-X(I); SEVAL=Y(I)+DX*(B(I)+DX*(C(I)+DX*D(I)))
 
       End function SEVAL
 
-    

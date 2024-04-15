@@ -3,10 +3,10 @@
 !======================================================================
 !     contains main parameters and arrays used in program bsr_prep
 !----------------------------------------------------------------------
-      Use spline_param; Use spline_grid; Use spline_atomic               
-      Use spline_orbitals, p => pbs 
-      Use conf_LS; Use orb_LS;  Use target                         
-      Use channels, npert1 => npert, ipert1 => ipert, ippert1 => ippert       
+      Use spline_param; Use spline_grid; Use spline_atomic
+      Use spline_orbitals, p => pbs
+      Use conf_LS; Use orb_LS;  Use target
+      Use channels, npert1 => npert, ipert1 => ipert, ippert1 => ippert
       Use channel, only: npert, ipert, ippert
 
       Implicit none
@@ -27,8 +27,8 @@
 
       Integer :: nua=15;  Character(ma) :: AF_sub = 'target_sub.bsw'
       Integer :: nuo=16;  Character(ma) :: AF_orb = 'target_orb'
- 
-! ... default value for parameter: 
+
+! ... default value for parameter:
 
       Real(8) :: eps_ovl  = 1.d-6
       Real(8) :: eps_phys = 0.25d0
@@ -47,7 +47,7 @@
 
       Character(200) :: title, AS
       Character(80), allocatable :: AFK(:)
-      Integer, allocatable :: klsp(:), ipt(:) 
+      Integer, allocatable :: klsp(:), ipt(:)
 
       Integer :: kshift = 0
 

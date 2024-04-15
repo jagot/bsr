@@ -1,13 +1,13 @@
 !======================================================================
-      Subroutine Full_mat_sym(ns,ks,x,y,sym) 
+      Subroutine Full_mat_sym(ns,ks,x,y,sym)
 !======================================================================
 !     Builds full matrix from different storage modes for banded matrix
 !     (see p.328 in BSR description, CPC 174 (2006))
 !----------------------------------------------------------------------
       Implicit none
       Integer, intent(in) :: ns,ks
-      Real(8), intent(in) :: x(ns,*) 
-      Real(8), intent(out) :: y(ns,ns) 
+      Real(8), intent(in) :: x(ns,*)
+      Real(8), intent(out) :: y(ns,ns)
       Character(*), intent(in) :: sym
       Integer ::  i,j, jp, imin,imax
 

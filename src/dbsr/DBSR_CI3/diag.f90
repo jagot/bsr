@@ -1,12 +1,12 @@
 !======================================================================
-      Subroutine DIAG(ishift) 
+      Subroutine DIAG(ishift)
 !======================================================================
-!     this subroutine calls the LAPACK (htmm://www.netlib.org) routines 
+!     this subroutine calls the LAPACK (htmm://www.netlib.org) routines
 !     (DSYGV or DSYGVX) to solve the generalized eigenvalue problem
 !
 !                Hx = E Sx,    NORT > -1,
 !
-!     or (DSYEV or DSYEVX) to solve standard eigenvalue problems 
+!     or (DSYEV or DSYEVX) to solve standard eigenvalue problems
 !
 !                Hx = E x,     NORT = -1,
 !
@@ -22,19 +22,19 @@
 
       HM = HM + Ecore*SM
 
-! ... record interaction matrix for further use if needed: 
+! ... record interaction matrix for further use if needed:
 
-      AF_mat = trim(name)//'.mat' 
+      AF_mat = trim(name)//'.mat'
       open(num,file=AF_mat,form='UNFORMATTED')
       Do i=1,ncj;  write(num) HM(i,1:i); End do
 
       if(debug.gt.0) then                     ! print interaction matrix
-       write(pri,'(/a/)') ncj, '   Overlap matrix' 
+       write(pri,'(/a/)') ncj, '   Overlap matrix'
        Do i=1,ncj
         write(pri,'(i5)') i
         write(pri,'(5f16.8)') SM(i,1:i)
        End do
-       write(pri,'(/a/)') ncj, '   Interaction matrix' 
+       write(pri,'(/a/)') ncj, '   Interaction matrix'
        Do i=1,ncj
         write(pri,'(i5)') i
         write(pri,'(5f16.8)') HM(i,1:i)
@@ -59,7 +59,7 @@
 !       else
         Call LAP_DSYGV ('V','L',nzero,ncj,HM,SM,eval,info)
 !       end if
- 
+
       else                  ! simple eigenvalue problem
 
        if(meiv.lt.nzero) then
@@ -93,12 +93,14 @@
        write(nuj,'(i8,2x,a)')  nsol, TRIM(Label)
        write(nuj,'(f16.8,3i8,f16.4)')  EVAL(k), jot, ishift+1,ishift+ncj,EVAL(k)*au_eV
        write(nuj,'(6f20.15)') (SM(j,k),j=1,ncj)
-       EE = 0.d0
-       Do i=1,ncj; Do j=1,i
-        S = SM(i,k)*SM(j,k)*HM(i,j)
-        EE = EE + S; if (i.ne.j) EE = EE + S
-       End do; End do
-       write(pri,'(a,3f16.8)') 'Energy  =',EE,EVAL(k),EE-EVAL(k)
+
+!       EE = 0.d0
+!       Do i=1,ncj; Do j=1,i
+!        S = SM(i,k)*SM(j,k)*HM(i,j)
+!        EE = EE + S; if (i.ne.j) EE = EE + S
+!       End do; End do
+!       write(pri,'(a,3f16.8)') 'Energy  =',EE,EVAL(k),EE-EVAL(k)
+
       End do
 
       Close(num,status='DELETE')
@@ -107,7 +109,7 @@
 
 
 !=======================================================================
-      Subroutine FIRST 
+      Subroutine FIRST
 !=======================================================================
 !     Compute the first-order corrections to the eigenvalue and
 !     eigenvectors.
@@ -126,8 +128,8 @@
         y1 = 1.d0
         y2 = 1.d0
         DO j = NZERO+1,ncj
-         x1 = SUM(HM(j,1:nzero)*SM(1:nzero,i)) 
-         x2 = SUM(SM(j,1:nzero)*SM(1:nzero,i)) 
+         x1 = SUM(HM(j,1:nzero)*SM(1:nzero,i))
+         x2 = SUM(SM(j,1:nzero)*SM(1:nzero,i))
          x  = x1 - E0*x2
          SM(j,i) = x/(E0-DM(j))
          E1 = E1 + x*SM(j,i)
@@ -162,9 +164,9 @@
 
 
 !======================================================================
-      Subroutine Check_cfile 
+      Subroutine Check_cfile
 !======================================================================
-!     check the expansion in c-file by comparing 
+!     check the expansion in c-file by comparing
 !     the calculated energy and the energy recorded in c-file
 !----------------------------------------------------------------------
       Use dbsr_ci
@@ -180,7 +182,7 @@
 
       Call read_expn_jj(nuc)
 
-! ... calculate energy: 
+! ... calculate energy:
 
       EE = 0.d0
       Do i=1,ncj; Do j=1,i
@@ -188,22 +190,22 @@
        EE = EE + S; if (i.ne.j) EE = EE + S
       End do; End do
 
-! ... calculate total normalization: 
+! ... calculate total normalization:
 
       ss = 0.d0
       Do i=1,ncj; Do j=1,i
        S = WC(i)*WC(j)*SM(i,j)
        ss = ss + S; if (i.ne.j) ss = ss + S
       End do; End do
-      
+
       write(pri,'(a,f16.8)') 'Overlap =',SS
-      
+
       rewind(nuc); read(nuc,'(15x,f16.8)') E0
 
       write(pri,'(a,3f16.8)') &
         'Energy (calulated, from c-fils, difference:', EE,E0,EE-E0
 
-      End Subroutine Check_cfile 
+      End Subroutine Check_cfile
 
 
 

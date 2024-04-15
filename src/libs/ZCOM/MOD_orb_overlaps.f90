@@ -1,7 +1,7 @@
 !======================================================================
       Module orb_overlaps
 !======================================================================
-!     contains the desription of one-electron overlaps 
+!     contains the desription of one-electron overlaps
 !----------------------------------------------------------------------
       Implicit none
 
@@ -11,17 +11,17 @@
 
 ! ... pointer to orbitals in l-order, (1:norb) arrays:
 
-      Integer, allocatable :: lorb(:)   ! list of l-values for all orbitals 
+      Integer, allocatable :: lorb(:)   ! list of l-values for all orbitals
       Integer, allocatable :: ipl(:)    ! l-values ordering pointer
       Integer, allocatable :: jpl(:)    ! jpl(ipl(i)) = i
-      Integer, allocatable :: chan(:)   ! channel index (i =0 -> no channel associated) 
+      Integer, allocatable :: chan(:)   ! channel index (i =0 -> no channel associated)
 
 ! ... base pointer to orbitals for given l, (0:max_l) arrays
 
       Integer :: max_l = 0
       Integer, allocatable :: ip_l(:)   ! first -1 entry (base) for given l in ordered list, ip_l(l)=jp_l(l-1)
-      Integer, allocatable :: jp_l(:)   ! last entry for given l in ordered list  
-      
+      Integer, allocatable :: jp_l(:)   ! last entry for given l in ordered list
+
 ! ... base pointer to overlaps for given l in Cobs array,                 !  .
 ! ... where all overlaps are presented half square-matrixes               !  ..
                                                                           !  ...
@@ -40,7 +40,7 @@
 
       Integer :: mem_orb_overlaps = 0
 
-      Integer :: ibo = 2**15 
+      Integer :: ibo = 2**15
 
       End Module orb_overlaps
 
@@ -55,14 +55,14 @@
       Implicit none
       Integer, intent(in) :: nbf,lbs(nbf),iech(nbf),ncore
       Real(8), external :: QUADR
-      Integer :: i,j,l, il,jl,is,js, ip 
+      Integer :: i,j,l, il,jl,is,js, ip
 
       if(allocated(ipl)) Deallocate(ipl,jpl,lorb,chan,ip_l,jp_l,ip_ovl,Cobs)
       norb = 0; mem_orb_overlaps = 0
       if(nbf.le.0) Return
 
 ! ... sort the orbitals according l-values:
-  
+
       norb = nbf
       Allocate(lorb(norb)); lorb(1:norb) = lbs(1:norb)
       Allocate(chan(norb)); chan(1:norb) = iech(1:norb)
@@ -79,7 +79,7 @@
        l=lorb(i); jp_l(l) = j
       End do
 
-! ... ip_l is  "base" for given l:     
+! ... ip_l is  "base" for given l:
 
       Do l=1,max_l;  if(jp_l(l).eq.0) jp_l(l)=jp_l(l-1); End do
       Do l=max_l,1,-1;  ip_l(l) = jp_l(l-1); End do;  ip_l(0)=0
@@ -87,11 +87,11 @@
 ! ... allocate the overlaps:
 
       Allocate(ip_ovl(0:max_l)); ip_ovl=0
-      i = jp_l(0)-ip_l(0); nobs = i*(i+1)/2  
+      i = jp_l(0)-ip_l(0); nobs = i*(i+1)/2
       Do l = 1,max_l
        ip_ovl(l) = nobs
        i = jp_l(l)-ip_l(l)
-       nobs = nobs + i*(i+1)/2  
+       nobs = nobs + i*(i+1)/2
       End do
       Allocate(Cobs(nobs)); Cobs = 0.d0
       mem_orb_overlaps = 2*nobs + 4*norb + 3*max_l
@@ -101,7 +101,7 @@
 !     il,jl - indexes in the ordered list
 
       Do il = 1,norb;  i = ipl(il);  l = lorb(i)
-      Do jl = 1,il;    j = ipl(jl);  if(l.ne.lorb(j)) Cycle              
+      Do jl = 1,il;    j = ipl(jl);  if(l.ne.lorb(j)) Cycle
 
        ip = ip_l(l)
        is = max(il,jl)-ip; js = min(il,jl)-ip
@@ -110,13 +110,13 @@
        if(chan(i).eq.0.and.chan(j).eq.0) then
         Cobs(ip) = QUADR(i,j,0)
        elseif(chan(i).ne.0.and.chan(j).eq.0) then
-        Cobs(ip) = i*ibo+j        
+        Cobs(ip) = i*ibo+j
         if(j.le.ncore) Cobs(ip) = 0.d0
        elseif(chan(i).eq.0.and.chan(j).ne.0) then
-        Cobs(ip) = j*ibo+i        
+        Cobs(ip) = j*ibo+i
         if(i.le.ncore) Cobs(ip) = 0.d0
        else
-        Cobs(ip) = i*ibo+j        
+        Cobs(ip) = i*ibo+j
        end if
 
       End do
@@ -164,7 +164,7 @@
       Real(8) :: ADET(kd*kd)
       Real(8), external :: DET, OBS
 
-      if(kd.eq.0) then                
+      if(kd.eq.0) then
        VDET = 1.d0
       elseif(kd.eq.1) then
        VDET = OBS(N1(1),N2(1))
@@ -177,12 +177,12 @@
               OBS(N1(1),N2(3))*OBS(N1(2),N2(1))*OBS(N1(3),N2(2)) -  &
               OBS(N1(1),N2(3))*OBS(N1(2),N2(2))*OBS(N1(3),N2(1)) -  &
               OBS(N1(1),N2(2))*OBS(N1(2),N2(1))*OBS(N1(3),N2(3)) -  &
-              OBS(N1(1),N2(1))*OBS(N1(2),N2(3))*OBS(N1(3),N2(2)) 
-      else                
+              OBS(N1(1),N2(1))*OBS(N1(2),N2(3))*OBS(N1(3),N2(2))
+      else
        Do i=1,kd;  Do j=1,kd
          adet((i-1)*kd+j)=OBS(N1(i),N2(j))
        End do; End do
-       VDET = DET(kd,adet)      
+       VDET = DET(kd,adet)
       end if
 
       End Function VDET
@@ -209,20 +209,20 @@
 !======================================================================
       Subroutine Check_orb_overlaps
 !======================================================================
-!     the imposed orthogonal conditions given as < n1k1| n2k2>=0  
+!     the imposed orthogonal conditions given as < n1k1| n2k2>=0
 !----------------------------------------------------------------------
       Use orb_overlaps
-      Use internal_file            
+      Use internal_file
 
       Implicit none
-      Integer :: i,j,l, i1,n1,l1,k1, i2,n2,l2,k2, is,js,ip, ii  
+      Integer :: i,j,l, i1,n1,l1,k1, i2,n2,l2,k2, is,js,ip, ii
       Integer, external :: Ifind_bsorb
       Character(13) :: Aort
-    
+
       Do ii = 1,nlines
 
       Aort = trim(aline(ii))
-      if(Aort(1:1).ne.'<') Cycle 
+      if(Aort(1:1).ne.'<') Cycle
       Call EL4_nlk(Aort(2: 5),n1,l1,k1)
       i1 = Ifind_bsorb(n1,l1,k1)
       if(i1.eq.0) Cycle
@@ -230,7 +230,7 @@
       i2 = Ifind_bsorb(n2,l2,k2)
       if(i2.eq.0) Cycle
 
-      if(l1.ne.l2) Cycle; l = l1 
+      if(l1.ne.l2) Cycle; l = l1
       read(Aort(13:13),'(i1)') j
       if(j.ne.0) Cycle
 
@@ -243,5 +243,5 @@
 
       End do
 
-      End Subroutine Check_orb_overlaps 
+      End Subroutine Check_orb_overlaps
 

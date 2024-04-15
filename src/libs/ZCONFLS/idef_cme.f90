@@ -6,7 +6,7 @@
 !---------------------------------------------------------------------
       Use conf_LS,      only: noper, ioper, joper, JT_oper
       Use term_exp,     only: kt1, kt2, IP_kt1, IP_kt2
-      Use symt_list_LS, only: IT_oper, ij 
+      Use symt_list_LS, only: IT_oper, ij
 
       Implicit none
       Integer :: is,js, it,jt,ik,jk, i, k
@@ -24,7 +24,7 @@
       End do
 
       Do i=1,noper; joper(i)=maxval(JT_oper(:,i)); End do
-       
+
       IDEF_cme=maxval(joper(:))
 
-      End Function IDEF_cme 
+      End Function IDEF_cme

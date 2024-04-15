@@ -10,10 +10,10 @@
 !   on exit:  x(i)   Gaussian coordinates of the points
 !   -------   w(i)   Gaussian weight to point x(i)
 !
-!   Restriction:     1<= k <= 15   
+!   Restriction:     1<= k <= 15
 !   -----------
 !
-!   This is an old version, see also gauleg.f90 for the general case. 
+!   This is an old version, see also gauleg.f90 for the general case.
 !-----------------------------------------------------------------------
     IMPLICIT NONE
     INTEGER, INTENT(IN) :: k

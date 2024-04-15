@@ -8,9 +8,9 @@
       Use df_orbitals,  only: nbf,kbs,p
 
       Implicit none
-   
-      Real(8), allocatable :: hd (:,:,:)    
-      Real(8), allocatable :: hdc(:,:,:)    
+
+      Real(8), allocatable :: hd (:,:,:)
+      Real(8), allocatable :: hdc(:,:,:)
       Integer :: nkap = 0
       Integer, allocatable :: kap_list(:)
 
@@ -22,7 +22,7 @@
 
 ! ... coefficients and their attributes:
 
-      Real(8), allocatable :: cbk(:)   
+      Real(8), allocatable :: cbk(:)
       Integer, allocatable :: kr1(:),kr2(:),kr3(:),kr4(:)
 
       End Module hd_core
@@ -39,7 +39,7 @@
       Integer, intent(in) :: ncore
       Integer :: i,k,k1,k2
       Integer, external :: ipointer
-      
+
       if(allocated(hd)      ) Deallocate(hd)
       if(allocated(hdc)     ) Deallocate(hdc)
       if(allocated(kap_list)) Deallocate(kap_list)
@@ -52,7 +52,7 @@
 
       nkap=0
       Do k=k1,k2
-       if(ipointer(nbf,kbs,k).ne.0) nkap=nkap+1 
+       if(ipointer(nbf,kbs,k).ne.0) nkap=nkap+1
       End do
 
       Allocate(kap_list(nkap))
@@ -62,7 +62,7 @@
       i=0
       Do k=k1,k2
        if(ipointer(nbf,kbs,k).eq.0) Cycle
-       i=i+1; kap_list(i)=k 
+       i=i+1; kap_list(i)=k
       End do
 
       kcore = ncore
@@ -73,12 +73,12 @@
 !======================================================================
       Subroutine Gen_hd_core (ncore,mbreit,kappa)
 !======================================================================
-!     Generates the HD-matrixes and integrals 
+!     Generates the HD-matrixes and integrals
 !----------------------------------------------------------------------
-      Use hd_core 
+      Use hd_core
 
       Implicit none
-      Integer, intent(in) :: ncore,mbreit,kappa 
+      Integer, intent(in) :: ncore,mbreit,kappa
       Integer :: k,ik
 
       if(nkap.eq.0) Call Alloc_hd_core(ncore)
@@ -86,10 +86,10 @@
 !... set up hd matrix:
 
       Do ik = 1,nkap;  k=kap_list(ik)
-       if(kappa.ne.0.and.kappa.ne.k) Cycle 
+       if(kappa.ne.0.and.kappa.ne.k) Cycle
        Call Gen_hd(k,hd(1,1,ik))
-      End do   
-   
+      End do
+
 ! ... core contribution:
 
       if(ncore.gt.0) then
@@ -97,7 +97,7 @@
        if(nbk.eq.0) Call Add_int_core(ncore,mbreit)
 
        Do ik = 1,nkap;  k=kap_list(ik)
-        if(kappa.ne.0.and.kappa.ne.k) Cycle 
+        if(kappa.ne.0.and.kappa.ne.k) Cycle
         Call Load_int_core(ik)
        End do
 
@@ -113,9 +113,9 @@
 !     Breit corrections only from exchange interaction?
 !---------------------------------------------------------------------
       Use hd_core
-      
+
       Implicit none
-      Integer, intent(in) :: ncore,mbreit 
+      Integer, intent(in) :: ncore,mbreit
       Integer :: i, kc,lc,jc, k,k1,k2, v, kk,ll,jj, ik, int
       Integer, External ::  l_kappa, j_kappa, itra
 
@@ -128,20 +128,20 @@
 
 ! ... direct interaction:
 
-       C = dble(jc+1);  Call Add_hd_coef(0,1,i,ik,C)  
+       C = dble(jc+1);  Call Add_hd_coef(0,1,i,ik,C)
 
 ! ... exchange interaction:
 
        k1=iabs(jc-jj)/2;  k2=iabs(jc+jj)/2
- 
+
        Do k=k1,k2
 
-        C = -CJKJ(jc,k,jj)**2 / (jj+1); 
+        C = -CJKJ(jc,k,jj)**2 / (jj+1);
         if(C.eq.0.d0) Cycle
- 
+
         CR = C; if(mod(lc+k+ll,2).eq.1.or.itra(lc,k,ll).eq.0) CR = 0.d0
 
-        if(CR.ne.0.d0)  Call Add_hd_coef(k,4,i,ik,C)  
+        if(CR.ne.0.d0)  Call Add_hd_coef(k,4,i,ik,C)
 
         if(mbreit.eq.0) Cycle
 
@@ -158,7 +158,7 @@
                   Call Add_hd_coef(v,int,i,ik,CC)  ! Sk(Pi Qc; Qc Pi)
          int=64;  CC = C*(S(7)+S(8))
                   Call Add_hd_coef(v,int,i,ik,CC)  ! Sk(Pc Qi; Qj Pc)
-        
+
         End do   ! over v
        End do    ! over k
       End do     ! over i
@@ -185,7 +185,7 @@
 
       Do ii=1,2; Do jj=1,2
 
-      Select Case (10*ii+jj)      
+      Select Case (10*ii+jj)
        Case(11);  Call mrk_pppp(k)
        Case(12);  Call mrk_pqpq(k)
        Case(21);  Call mrk_qpqp(k)
@@ -196,7 +196,7 @@
 
       if(k.eq.0) then
        dd = 0.d0
-       Do j = 1,nbk   
+       Do j = 1,nbk
         if(kr4(j).ne.ik) Cycle
         if(cbk(j).eq.0.d0) Cycle
         if(kr1(j).ne.0) Cycle
@@ -205,15 +205,15 @@
         Call density(ns,ks,d,p(1,jj,io),p(1,jj,io),'s')
         dd = dd + cbk(j)*d
        End do
-    
+
        Call Convol(ns,ks,d,dd,1,'s','s')
-       Call UPDATE_HS(ms,hdc(1,1,ik),ii,ii,ns,ks,d,'s')          
+       Call UPDATE_HS(ms,hdc(1,1,ik),ii,ii,ns,ks,d,'s')
       end if
 
 ! ... exchange contribution:
 
       xx = 0.d0; met=0
-      Do j = 1,nbk   
+      Do j = 1,nbk
        if(kr4(j).ne.ik) Cycle
        if(cbk(j).eq.0.d0) Cycle
        if(kr1(j).ne.k) Cycle
@@ -226,15 +226,15 @@
 
       if(met.eq.1) then
        Call Convol(ns,ks,x,xx,4,'s','s')
-       Call UPDATE_HS(ms,hdc(1,1,ik),ii,jj,ns,ks,x,'x')          
+       Call UPDATE_HS(ms,hdc(1,1,ik),ii,jj,ns,ks,x,'x')
       end if
 
 ! ... Breit interaction: not added yet
-       
+
       End do; End do
       End do  ! over k
 
-      End Subroutine Load_int_core        
+      End Subroutine Load_int_core
 
 
 !======================================================================
@@ -251,7 +251,7 @@
 
       if(m.le.0) then
        if(allocated(cbk)) Deallocate (cbk,kr1,kr2,kr3,kr4)
-       nbk = 0; mbk = 0 
+       nbk = 0; mbk = 0
       elseif(.not.allocated(cbk)) then
        mbk = m; nbk = 0
        Allocate(cbk(mbk),kr1(mbk),kr2(mbk),kr3(mbk),kr4(mbk))
@@ -280,7 +280,7 @@
 !======================================================================
       Subroutine Add_hd_coef(k1,k2,k3,k4,C)
 !======================================================================
-!     add new data to the list 
+!     add new data to the list
 !----------------------------------------------------------------------
       Use hd_core
 
@@ -294,7 +294,7 @@
 ! ... search position (k) for new integral
 
       k=1; l=nbk
-    1 if(k.gt.l) go to 2              
+    1 if(k.gt.l) go to 2
       m=(k+l)/2
       if    (k1.lt.kr1(m)) then;       l = m - 1
       elseif(k1.gt.kr1(m)) then;       k = m + 1
@@ -315,7 +315,7 @@
        end if
       end if
       go to 1
-    2 Continue 
+    2 Continue
 
 ! ... shift the rest data up:
 
@@ -328,7 +328,7 @@
 ! ... add new integral:
 
       cbk(k)=C; kr1(k)=k1; kr2(k)=k2; kr3(k)=k3; kr4(k)=k4; nbk=nbk+1
-      if(nbk.eq.mbk) Call Alloc_hd_coefs(mbk+ibk) 
+      if(nbk.eq.mbk) Call Alloc_hd_coefs(mbk+ibk)
 
       End Subroutine Add_hd_coef
 
@@ -336,9 +336,9 @@
 !======================================================================
       Subroutine Get_hd_core (kappa,dhl)
 !======================================================================
-!     Generates the HD-matrixes and integrals 
+!     Generates the HD-matrixes and integrals
 !----------------------------------------------------------------------
-      Use hd_core 
+      Use hd_core
 
       Implicit none
       Integer :: kappa,ik, Ipointer
@@ -352,16 +352,16 @@
       else
        dhl(:,:)=hdc(:,:,ik)
       end if
-      
+
       End Subroutine Get_hd_core
 
 
 !======================================================================
       Subroutine Get_hd (kappa,dhl)
 !======================================================================
-!     Generates the HD-matrixes and integrals 
+!     Generates the HD-matrixes and integrals
 !----------------------------------------------------------------------
-      Use hd_core 
+      Use hd_core
 
       Implicit none
       Integer :: kappa,ik, Ipointer
@@ -371,7 +371,7 @@
       if(ik.eq.0) Stop 'Get_hd: hd_core is not initialized'
 
       dhl(:,:)=hd(:,:,ik)
-      
+
       End Subroutine Get_hd
 
 
@@ -389,12 +389,12 @@
       dh_value = 0.d0
       if(kbs(i).ne.kbs(j)) Return
 
-      Call Get_hd(kbs(i),dhl)  
+      Call Get_hd(kbs(i),dhl)
       Call Get_pv_df(i,vi)
       Call Get_pv_df(j,vj)
       v = MATMUL(dhl,vj)
       dh_value = SUM(vi*v)
-    
+
       End Function dh_value
 
 
@@ -417,7 +417,7 @@
       Call Get_pv_df(j,vj)
       v = MATMUL(dhl,vj)
       dhc_value = SUM(vi*v)
-    
+
       End Function dhc_value
 
 

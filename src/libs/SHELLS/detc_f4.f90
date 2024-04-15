@@ -1,29 +1,29 @@
 !=======================================================================
   Real(8) Function detc_f4 (id,it)
 !=======================================================================
-! coefficient for determinamt id and term it for subshell f4 
+! coefficient for determinamt id and term it for subshell f4
 !-----------------------------------------------------------------------
- 
+
   Implicit none
- 
+
   Integer, intent(in)  :: id,it
- 
+
   Integer, parameter :: kd_f4 =1001
   Integer, parameter :: nt_f4 =  47
- 
+
   Integer :: INT_f4 (kd_f4,nt_f4)
- 
+
   Integer :: Norm_f4  = 3769920
- 
+
   if(id.le.0.or.id.gt.kd_f4) Stop "detc_f4: index id is out of range"
   if(it.le.0.or.it.gt.nt_f4) Stop "detc_f4: index it is out of range"
- 
+
   detc_f4 = dfloat(INT_f4(id,it))/dfloat(Norm_f4)
- 
+
   detc_f4 = dsqrt(dabs(detc_f4))
- 
+
   if(INT_f4(id,it).lt.0) detc_f4=-detc_f4
- 
+
 
   Data INT_f4 (:,   1)/ &
         0,        0,        0,        0,        0,        0,        0,        0,        0,        0,        0,        0, &
@@ -4066,5 +4066,5 @@
     12500,      -20,        0,   -19450,        0,   -11664,        0,        0,        0,        0,    -1458,        0, &
     -3360,        0,    18625,        0,    -2430,     2430,        0,  3769920,        0,     3360,        0,     1458, &
     -3360,        0,    -1458,        0,      729/
- 
+
   End Function detc_f4

@@ -3,7 +3,7 @@
 !======================================================================
 !     Containes the coefficients for two configuration symmetries.
 !     Each coefficient has two identifiers: iz_int and iz_df,
-!     the pointers for integral and overlap factor, respectively. 
+!     the pointers for integral and overlap factor, respectively.
 !----------------------------------------------------------------------
       Implicit none
 
@@ -11,7 +11,7 @@
       Integer :: mzoef = 0       ! current dimentsion of the list
       Integer :: izoef = 2**10   ! initial dimension
 
-      Integer, allocatable :: IZ_int(:),IZ_df(:)   
+      Integer, allocatable :: IZ_int(:),IZ_df(:)
       Real(8), allocatable :: Zoef(:)
 
 ! ... debug paramters:
@@ -51,15 +51,15 @@
        mzoef = m
        Allocate(ia(nzoef))
        ia=IZ_int(1:nzoef); Deallocate(IZ_int)
-       Allocate(IZ_int(mzoef)); IZ_int(1:nzoef)=ia 
+       Allocate(IZ_int(mzoef)); IZ_int(1:nzoef)=ia
        ia=IZ_df(1:nzoef); Deallocate(IZ_df)
-       Allocate(IZ_df(mzoef)); IZ_df(1:nzoef)=ia 
+       Allocate(IZ_df(mzoef)); IZ_df(1:nzoef)=ia
        Deallocate(ia)
        Allocate(ra(nzoef))
        ra=Zoef(1:nzoef); Deallocate(Zoef)
-       Allocate(Zoef(mzoef)); Zoef(1:nzoef)=ra 
+       Allocate(Zoef(mzoef)); Zoef(1:nzoef)=ra
        Deallocate(ra)
-       zoef_realloc = zoef_realloc + 1 
+       zoef_realloc = zoef_realloc + 1
        write(*,*) ' realloc_zoef: m = ', m,izoef
       end if
 
@@ -94,7 +94,7 @@
 ! ... add new integral:
 
       if(nzoef.eq.mzoef) Call Alloc_zoef(mzoef+izoef)
-      nzoef = nzoef+1 
+      nzoef = nzoef+1
       Zoef(nzoef)=C; IZ_int(nzoef)=int; IZ_DF(nzoef)=idf
       if(nzoef.gt.max_zoef) max_zoef=nzoef
 

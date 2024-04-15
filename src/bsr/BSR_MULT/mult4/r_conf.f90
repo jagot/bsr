@@ -6,7 +6,7 @@
 !     data-bnk if any (unit nub)
 !     Prepare the angular arrays.
 !----------------------------------------------------------------------
-      Use mult_par  
+      Use mult_par
       Use symc_list_LS
       Use symt_list_LS
       USE conf_LS
@@ -50,7 +50,7 @@
 
       nuc=in1
       rewind(nuc); parity=0
-      Do 
+      Do
        read(nuc,'(a)') CONFIG
        if(CONFIG(1:1).eq.'*') Exit
        if(CONFIG(5:5).ne.'(') Cycle
@@ -61,15 +61,15 @@
 
        iconf = Iadd_symc_LS(Ltotal,Stotal,no,iq,ln)
        iterm = Iadd_symt_LS(iconf,no,LS)
-       IT_stat(iterm)=1  
-      End do  
+       IT_stat(iterm)=1
+      End do
 
       write(*,'(a,a,a,3i10)') 'First set : ',trim(AF1),'  ncfg=',ncfg1, nsymc, nsymt
 
       if(AF1.ne.AF2) then
       nuc=in2
       rewind(nuc); parity=0
-      Do 
+      Do
        read(nuc,'(a)') CONFIG
        if(CONFIG(1:1).eq.'*') Exit
        if(CONFIG(5:5).ne.'(') Cycle
@@ -80,8 +80,8 @@
 
        iconf = Iadd_symc_LS(Ltotal,Stotal,no,iq,ln)
        iterm = Iadd_symt_LS(iconf,no,LS)
-       IT_stat(iterm)=2  
-      End do  
+       IT_stat(iterm)=2
+      End do
       end if
 
       write(*,'(a,a,a,3i10)') 'Second set: ',trim(AF2),'  ncfg=',ncfg2, nsymc, nsymt
@@ -117,13 +117,13 @@
       IT_done = 0
       if(new.eq.0) Call Load_done_LS(nub)
 
-! ... define strong orthogonality:      
+! ... define strong orthogonality:
 
        Do ic = 1,nsymc
-        Call Get_symc_LS(ic,Ltotal1,Stotal1,no1,nn1,ln1,iq1,kn1) 
+        Call Get_symc_LS(ic,Ltotal1,Stotal1,no1,nn1,ln1,iq1,kn1)
         Call Conf_parity(1)
        Do jc = 1,ic
-        Call Get_symc_LS(jc,Ltotal2,Stotal2,no2,nn2,ln2,iq2,kn2) 
+        Call Get_symc_LS(jc,Ltotal2,Stotal2,no2,nn2,ln2,iq2,kn2)
         Call Conf_parity(2)
         k = Kort_conf()
         Do ik=IC_term1(ic),IC_term2(ic);  it=IT_sort(ik)
@@ -153,9 +153,9 @@
 
        IT_need=0; JT_need=0
 
-       Do it=1,nsymt; Do jt=1,it; ij = DEF_ij8(it,jt) 
+       Do it=1,nsymt; Do jt=1,it; ij = DEF_ij8(it,jt)
         if(IT_done(ij).eq.1) Cycle
-        ii = IT_stat(it)*IT_stat(jt)        
+        ii = IT_stat(it)*IT_stat(jt)
         if(ii.eq.0) then; IT_done(ij)=-1; Cycle; end if
         JT_need(ij)=1; IT_need(it)=1; IT_need(jt)=1
        End do; End do
@@ -195,7 +195,7 @@
        write(*,*)
       else
        write(*,'(/a,a/)') trim(AF_b),' is complete'
-      end if 
+      end if
 
       End Subroutine R_conf
 

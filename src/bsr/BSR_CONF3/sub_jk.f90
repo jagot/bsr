@@ -1,6 +1,6 @@
 !======================================================================
       Subroutine SUB_JK
-!====================================================================== 
+!======================================================================
 !     define channels orbitals in JK case
 !----------------------------------------------------------------------
       Use bsr_conf
@@ -15,10 +15,10 @@
 
       Character(4), external :: ELF4
       Integer, external :: NEW_INDEX, Iadd_cfg_LS, Ifind_nlk, Icheck_del,ITRI
-      Real(8), external :: T_LS_jk      
+      Real(8), external :: T_LS_jk
 
-       K_min = iabs(Jpar-2) + 1 
-       K_max = iabs(Jpar+2) - 1 
+       K_min = iabs(Jpar-2) + 1
+       K_max = iabs(Jpar+2) - 1
 
        Do it=1,ntarg
 
@@ -60,7 +60,7 @@
           Call Get_cfg_LS(ic)
           IL = LS(no,4); IS = LS(no,5); no=no+1
           CT = CT + WC(ic)**2
- 
+
           ISTmin = iabs(IS-2)+1;  ILTmin = iabs(IL-ll)+1
           ISTmax = iabs(IS+2)-1;  ILTmax = iabs(IL+ll)-1
 
@@ -73,7 +73,7 @@
            if(ITRI(IST,ILT,Jpar).eq.0) Cycle
            C = WC(ic) * T_LS_jk (IL,ll,IS,2,ILT,IST,JT,KK,Jpar)
            CC = CC + C**2;  if(C.eq.0.d0) Cycle
-           
+
            nn(no) = n; ln(no) = l; iq(no) = 1; kn(no) = k
            LS(no,1)=1; LS(no,2)=ll; LS(no,3)=2
            LS(no,4)=ILT; LS(no,5)=IST

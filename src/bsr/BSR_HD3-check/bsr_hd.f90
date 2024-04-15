@@ -1,5 +1,5 @@
 !======================================================================
-!     PROGRAM       B S R _ H D                               version 3        
+!     PROGRAM       B S R _ H D                               version 3
 !
 !               C O P Y R I G H T -- 2011
 !
@@ -8,7 +8,7 @@
 !
 !======================================================================
 !   Program diagonalizes the Hamiltonian in the inner region and
-!   generates H.DAT file for scattering or photoionization 
+!   generates H.DAT file for scattering or photoionization
 !   calculations in the R-matrix approach.
 !   Additional option - calculation of bound (or pseudo-) states.
 !======================================================================
@@ -16,15 +16,15 @@
 !    MAIN INPUT ARGUMENTS:
 !
 !     itype - type of calculations
-!   
+!
 !           = -1 - bound-structure calculations
 !           =  0 - scattering calculations
-!           =  1 - additional output of all R-matrix solutions 
+!           =  1 - additional output of all R-matrix solutions
 !                  required for photoionization calculations
 !
-!     klsp  or klsp1,klsp2  - the indexes of partial waves under consideration  
+!     klsp  or klsp1,klsp2  - the indexes of partial waves under consideration
 !
-! 
+!
 !    INPUT FILES:
 !
 !     bsr_par        -  input parameters
@@ -34,8 +34,8 @@
 !     bsr_mat.nnn    -  interaction matrix
 !
 !    OUTPUT FILES:
-!   
-!     bsr_hd.nnn     -  running information 
+!
+!     bsr_hd.nnn     -  running information
 !     h.nnn          -  eigenvalues and suface amplitudes
 !                       required to obtain R-matrix
 !     w.nnn          -  file of channel weights (optional)
@@ -48,7 +48,7 @@
 !=====================================================================
       Use bsr_hd
       Use spline_atomic, only: z
-      
+
       Implicit none
       Real(8) :: t1,t2
 
@@ -56,8 +56,8 @@
 
 !---------------------------------------------------------------------
 ! ... set up B-splines:
- 
-      CALL define_grid(z); Call define_spline   
+
+      CALL define_grid(z); Call define_spline
       Call Conv_au (Z,0.d0,au_cm,au_eV,0)
 
 ! ... read target information:

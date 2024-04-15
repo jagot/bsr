@@ -3,54 +3,54 @@
 !
 !               C O P Y R I G H T -- 2013
 !
-!     Written by:   Oleg Zatsarinny 
+!     Written by:   Oleg Zatsarinny
 !                   email: oleg_zoi@yahoo.com
 !======================================================================
-!    generates angular coefficient in non-orthogonal mode 
+!    generates angular coefficient in non-orthogonal mode
 !----------------------------------------------------------------------
 !
 !    INPUT ARGUMENTS:
-!    
+!
 !    klsp,klsp1,klsp2  - range of partial wave in BSR calculations,
 !                        then cfg.001, cfg.002, ..., are input files
 !                        (default -> 0, with input file is cfg.inp)
-!   
+!
 !    oper  - character(7), where each position can be 0 or 1,
 !            and indicate the operator under consideration:
-!            oper(1) - OVERLAPS       
+!            oper(1) - OVERLAPS
 !            oper(2) - KINATIC ENERGY
 !            oper(3) - TWO-ELECTRON ELECTROSTATIC
-!            oper(4) - SPIN ORBIT       
+!            oper(4) - SPIN ORBIT
 !            oper(5) - SPIN-OTHER-ORBIT
 !            oper(6) - SPIN-SPIN
-!            oper(7) - ORBIT-ORBIT       
+!            oper(7) - ORBIT-ORBIT
 !            Default -> 1110000 - non-relativistic calculations
 !
 !    mk    - max.multipole index (default -> 9)
 !
 !----------------------------------------------------------------------
 !
-!    example:    1.  bsr_breit 
-!                2.  bsr_breit klsp1=1 klsp2=5 oper=1111110  
+!    example:    1.  bsr_breit
+!                2.  bsr_breit klsp1=1 klsp2=5 oper=1111110
 !                3.  bsr_breit km=5
-!            
+!
 !----------------------------------------------------------------------
 !
 !    INPUT FILES:
-!    
+!
 !    cfg.nnn     -  configuration list for partial wave nnn = klsp
 !                   (cfg.inp in case klsp = 0, default)
-!                  
+!
 !    int_bnk.nnn -  input data bank for angular coefficients
 !                   (optional; int_bnk in case klsp = 0)
-!                   
-!    
+!
+!
 !    OUTPUT FILES:
-!    
+!
 !    int_bnk.nnn  - output data bank for angular coefficients
 !                   (int_bnk in case klsp = 0)
-!                   
-!---------------------------------------------------------------------     
+!
+!---------------------------------------------------------------------
       Use bsr_breit
       Use conf_LS,      only: ne
       Use det_list,     only: ndet,ldet
@@ -58,7 +58,7 @@
 
       Use symt_list_LS
 
-      Implicit none 
+      Implicit none
       Integer :: klsp, i, ntotc, system
       Real(8) :: time, t1,t2,tt, adet,adef
 
@@ -67,7 +67,7 @@
 !----------------------------------------------------------------------
 ! ... HEADER:
 
-      Call open_br(pri,0) 
+      Call open_br(pri,0)
       write(pri,'(/20x,a/20x,a/20x,a/)') &
              '=======================',     &
              '   B S R _ B R E I T   ',     &
@@ -75,19 +75,19 @@
 
 ! ... read arguments from command line:
 
-      Call Read_arg 
+      Call Read_arg
 
 !----------------------------------------------------------------------
 !                                             cycle over partial waves:
       time = 0.d0
       Do klsp = klsp1,klsp2
 
-       write(pri,'(80(''-''))') 
+       write(pri,'(80(''-''))')
        write(pri,'(/a,i5/)') ' Partial wave: ',klsp
        if(klsp.gt.0) write(*,'(/a,i5/)') ' Partial wave: ',klsp
        Call CPU_time(t1)
 
-! ... open relevant files: 
+! ... open relevant files:
 
        Call open_br(nuc,klsp)       ! c-file
        Call open_br(nub,klsp)       ! data bank results, if any
@@ -101,11 +101,11 @@
 
        Call Read_conf
 
-       if(icalc.eq.0) then; Close(nur,STATUS='DELETE'); Cycle; end if        
-  
-! ...  extract old results: 
+       if(icalc.eq.0) then; Close(nur,STATUS='DELETE'); Cycle; end if
 
-       if(new.eq.1) then 
+! ...  extract old results:
+
+       if(new.eq.1) then
         Call Alloc_det(-1)
         Call Alloc_def(-1)
        else
@@ -115,22 +115,22 @@
 
 !----------------------------------------------------------------------
 ! ... define possible mls orbitals:
-      
+
        Call Alloc_spin_orbitals(ne)
 
 ! ... prepare det. expantions:
 
        Call open_br(nua,0); Call open_br(nud,0)
- 
+
        write(pri,'(/a/)') ' Determinant expansions: '
 
-       Call Pre_det_exp 
+       Call Pre_det_exp
 
 ! ... calculations for new angular symmetries:
 
        write(pri,'(/a/)') ' Calculations for given symmetry: '
 
-       Call Conf_loop 
+       Call Conf_loop
 
 ! ...  record results:
 
@@ -144,7 +144,7 @@
        if(new.eq.0) Call RW(nub,nur,ntotc)
        rewind(nui); Call RW(nui,nur,ntotc)
 
-! ...  print the main dimensions:      
+! ...  print the main dimensions:
 
        adet=ldet; if(ndet.gt.0) adet=adet/ndet
        adef=ldef; if(ndef.gt.0) adef=adef/ndef
@@ -154,12 +154,12 @@
        write(pri,'(a,i10,f10.1)') &
           ' number of overlap determinants =', ndet,adet
        write(pri,'(a,i10,f10.1)') &
-          ' number of overlap factors      =', ndef,adef 
+          ' number of overlap factors      =', ndef,adef
        write(pri,'(a,i10,f10.1)') &
           ' total number of coefficient    =', ntotc
 
-! ...  rename new results as new data bank (int_res -> int_bnk): 
- 
+! ...  rename new results as new data bank (int_res -> int_bnk):
+
        close(nui); close(nur); close(nub)
 
        if(klsp.eq.0) then
@@ -170,7 +170,7 @@
         write(BS,'(a,a,1x,a)') 'move ',trim(BF_r),trim(BF_b)
        end if
 
-       i = System(trim(AS))      ! Unix 
+       i = System(trim(AS))      ! Unix
 !       i = System(trim(BS))     ! Windows
 
 ! ... time for one partial wave:

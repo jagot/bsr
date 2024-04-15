@@ -8,7 +8,7 @@
       Integer, parameter :: msh = 25     ! max. number of shells behind core
       Integer, parameter :: ibc = 2**15  ! packing parameter
       Integer, parameter :: ksmax=61*61  ! max. set number,  see ASET in ELF4
-       
+
 
 !----------------------------------------------------------------------
 !     the matrix elements under consideration:
@@ -33,7 +33,7 @@
 
 !-----------------------------------------------------------------------
 
-      Integer, parameter :: noper=7      
+      Integer, parameter :: noper=7
       Integer ioper(noper)/1,1,1,0,0,0,0/, joper(noper)
       Integer koper(noper)     !  MPI copy
       Real(8) :: coper(noper)

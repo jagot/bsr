@@ -1,5 +1,5 @@
 !=======================================================================
-      Double precision function VKy (I1,J1,I2,J2,K) 
+      Double precision function VKy (I1,J1,I2,J2,K)
 !=======================================================================
 !                 k
 !     Evaluates  V (i1, j1; i2, j2)  through the diff. equations
@@ -9,8 +9,8 @@
 !
 !                   VKy
 !           --------------------
-!          /       ||          |    
-! Allocate_slater  YVK        YVAL   
+!          /       ||          |
+! Allocate_slater  YVK        YVAL
 !                   |
 !                -----------------------
 !               /     |     |      |    \
@@ -82,7 +82,7 @@
        INTEGER, INTENT(in) :: j1,j2,k
 
        REAL(8) :: fk, yns
-       Integer(4) :: info 
+       Integer(4) :: info
 
 !  ... calculation of Zk function ...
 
@@ -121,5 +121,5 @@
        END SUBROUTINE YVK
 
        END FUNCTION VKy
-      
-      
+
+

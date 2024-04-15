@@ -10,9 +10,9 @@
       Integer, intent(in) :: j1,j2,j3
 
 ! ... add coefficient to list:
-      
-      i = iblk(itype); ip = ipblk(i); jp = jpblk(i) 
-      Call Add_cdata(ip,jp,CL,CV,j1,j2,j3)                    
+
+      i = iblk(itype); ip = ipblk(i); jp = jpblk(i)
+      Call Add_cdata(ip,jp,CL,CV,j1,j2,j3)
       jpblk(i) = jp
 
 ! ... check if the block full:
@@ -30,7 +30,7 @@
        m = 1; Exit
       End do
       if(m.ne.0) Return
-     
+
 ! ... everything is full - it is time to generate matrix for
 ! ... the current and most extended cases:
 
@@ -39,8 +39,8 @@
       m = 0
       Do i=1,ntype
        if(nblk(i).lt.m) Cycle
-       m=nblk(i); itype=i	    
+       m=nblk(i); itype=i
       End do
       Call Gen_matrix
 
-      End Subroutine Add_coef 
+      End Subroutine Add_coef

@@ -98,7 +98,7 @@
 
     ! .. factorize dyk
 
-    ! .. CALL dgbfa(dyk,ktx,ns,ks-1,ks-1,ipvtd,ier)  
+    ! .. CALL dgbfa(dyk,ktx,ns,ks-1,ks-1,ipvtd,ier)
     ! .. IF (ier /= 0) STOP 'FACDYK: dgbtrf from LINPACK failed'
 
      Call DGBTRF (ns,ns,ks-1,ks-1,dyk,ktx,ipvtd,ier)

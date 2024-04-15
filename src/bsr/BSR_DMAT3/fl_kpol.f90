@@ -13,8 +13,8 @@
 !======================================================================
       Implicit none
       Integer, intent(in) :: kpol,li,lj
-      Real(8), intent(out) :: fl 
-      Integer :: ll       
+      Real(8), intent(out) :: fl
+      Integer :: ll
 
       Select case(kpol)
 
@@ -29,14 +29,14 @@
        if(ll.eq.2) then;      fl = fl + 2.d0
        elseif(ll.eq.0) then;  fl = 1.5d0
        elseif(ll.eq.-2) then; fl =-fl + 1.d0
-       else; Stop 'fl_kpol: inconsistent li,lj for kpol=2'              
+       else; Stop 'fl_kpol: inconsistent li,lj for kpol=2'
        end if
 
       Case default
 
        fl = 0.d0
 
-      End Select      
+      End Select
 
       End Subroutine fl_kpol
 

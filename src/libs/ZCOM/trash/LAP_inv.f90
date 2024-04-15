@@ -37,7 +37,7 @@
 !======================================================================
 !
 !     Call LAPACK procedures DGETRF and DGETRI to obtain the inverse
-!     matrix A^-1 for symmetric matrix 
+!     matrix A^-1 for symmetric matrix
 !
 !---------------------------------------------------------------------
 

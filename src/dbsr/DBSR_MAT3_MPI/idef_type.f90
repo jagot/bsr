@@ -3,10 +3,10 @@
 !======================================================================
 !     we have following 16 different structures for overlaps:
 !
-! 1   ic, jc                -  bound-bound             -  k1=ic  k2=jc 
-! 2   < i | . > ic          -  bound-channel           -  k1=io  k2=ic 
-! 3   < i | . > < j | . >   -  channel-channel         -  k1=io  k2=jo 
-! 4   < i | j >             -  target contribution     -  k1=io  k2= 0 
+! 1   ic, jc                -  bound-bound             -  k1=ic  k2=jc
+! 2   < i | . > ic          -  bound-channel           -  k1=io  k2=ic
+! 3   < i | . > < j | . >   -  channel-channel         -  k1=io  k2=jo
+! 4   < i | j >             -  target contribution     -  k1=io  k2= 0
 !
 !     where .  denotes bound orbital, i,j - channels.
 !----------------------------------------------------------------------
@@ -38,7 +38,7 @@
       elseif(io.gt.0.and.jo.eq.0) then
 
        k1=io; k2=0;  k3=0; k4=0; itype = 4
- 
+
       end if
 
       if(itype.eq.0) Stop 'Idef_Otype: itype=0'
@@ -55,7 +55,7 @@
 !======================================================================
 !     we have following different structures for one-electron integrals:
 !
-! 1.1   L( . . )  ic, jc               -  bound-bound  
+! 1.1   L( . . )  ic, jc               -  bound-bound
 ! 1.2   L( . . ) < i | . > ic          -  bound-channel
 ! 1.3   L( . . ) < i | . > < j | . >   -  channel-channel
 ! 1.4   L( . . ) < i | j >             -  target contribution
@@ -69,7 +69,7 @@
 !
 ! 1.1   L( . . )  ic, jc               -  k1=i  k2=j  k3= ic  k4= jc
 ! 1.2   L( . . ) < i | . > ic          -  k1=i  k2=j  k3=-io  k4= ic
-! 1.3   L( . . ) < i | . > < j | . >   -  k1=i  k2=j  k3=-io  k4=-jo  
+! 1.3   L( . . ) < i | . > < j | . >   -  k1=i  k2=j  k3=-io  k4=-jo
 ! 1.4   L( . . ) < i | j >             -  k1=i  k2=j  k3=-io  k4=  0
 !
 ! 2.1   L( i . )  ic                   -  k1=j  k2=ich  k3= ic  k4=0
@@ -90,9 +90,9 @@
       if(jo.gt.0.and.io.le.0) Stop 'jo>0, io<=0'
       if(io.gt.0.and.jc.ne.0) Stop 'jc>0, io>0'
       if(jo.gt.0.and.ic.ne.0) Stop 'jc>0, jo>0'
-     
+
       itype=0
-      i=min(ii,jj); j=max(ii,jj); ich=ipbs(i); jch=ipbs(j); 
+      i=min(ii,jj); j=max(ii,jj); ich=ipbs(i); jch=ipbs(j);
 
       if(jc.gt.0) then
 
@@ -113,7 +113,7 @@
       elseif(io.eq.0) then
 
         k1=j; k2=i;  k3=0; k4=0;                      itype = 3
-                                           
+
       elseif(io.gt.0.and.jo.eq.0) then
 
         if(ich.ne.0.and.jch.eq.0) then
@@ -144,7 +144,7 @@
 !
 !     we have following 16 different structures for radial integrals:
 !
-! 1 1.0  Rk( . . . .)  ic, jc               -  bound-bound  
+! 1 1.0  Rk( . . . .)  ic, jc               -  bound-bound
 ! 2 1.1  Rk( . . . .) < i | . > ic          -  bound-channel
 ! 3 1.2  Rk( . . . .) < i | . > < j | . >   -  channel-channel
 ! 4 1.3  Rk( . . . .) < i | j >             -  target structure
@@ -167,10 +167,10 @@
 !     where .  denotes bound orbital, i,j - channels.
 !
 !                                        ibo         ibo
-! 1.0 Rk( . . . .)  ic, jc       -  k1=(i1,i3)  k2=(i2,i4)  k3=-ic  k4=-jc 
-! 1.1 Rk( . . . .) < i | . > ic  -  k1=(i1,i3)  k2=(i2,i4)  k3= io  k4=-ic 
+! 1.0 Rk( . . . .)  ic, jc       -  k1=(i1,i3)  k2=(i2,i4)  k3=-ic  k4=-jc
+! 1.1 Rk( . . . .) < i | . > ic  -  k1=(i1,i3)  k2=(i2,i4)  k3= io  k4=-ic
 ! 1.2 Rk( . . . .) <i|.> <j|.>   -  k1=(i1,i3)  k2=(i2,i4)  k3= io  k4= jo
-! 1.3 Rk( . . . .) < i | j >     -  k1=(i1,i3)  k2=(i2,i4)  k3= io  k4= 0 
+! 1.3 Rk( . . . .) < i | j >     -  k1=(i1,i3)  k2=(i2,i4)  k3= io  k4= 0
 !
 ! 2.0 Rk( i . . .) < j | . >     -  k1=(i2,i4)  k2=i3  k3=ich  k4=io
 ! 3.0 Rk( . i . .) < j | . >     -  k1=(i1,i3)  k2=i4  k3=ich  k4=io
@@ -178,7 +178,7 @@
 ! 5.0 Rk( . . . i) < j | . >     -  k1=(i1,i3)  k2=i2  k3=ich  k4=io
 !
 ! 2.1 Rk( i . . .)  ic           -  k1=(i2,i4)  k2=i3  k3=ich  k4=-ic
-! 3.1 Rk( . i . .)  ic           -  k1=(i1,i3)  k2=i4  k3=ich  k4=-ic           
+! 3.1 Rk( . i . .)  ic           -  k1=(i1,i3)  k2=i4  k3=ich  k4=-ic
 ! 4.1 Rk( . . i .)  ic           -  k1=(i2,i4)  k2=i1  k3=ich  k4=-ic
 ! 5.1 Rk( . . . i)  ic           -  k1=(i1,i3)  k2=i2  k3=ich  k4=-ic
 !
@@ -193,7 +193,7 @@
       Implicit none
       Integer, intent(in) :: k,j1,j2,j3,j4,ic,jc,io,jo
       Real(8), intent(in) :: C
-      Integer :: k1,k2,k3,k4, i1,i2,i3,i4,m,ich,jch,itype 
+      Integer :: k1,k2,k3,k4, i1,i2,i3,i4,m,ich,jch,itype
 
       if(abs(C).lt.eps_C) Return
 
@@ -203,7 +203,7 @@
       if(jo.ne.0.and.iabs(jo).le.ibo) Stop 'Idef_Rtype: jo<ibo'
       if(jc.gt.0.and.ic.le.0) Stop 'jc>0, ic<=0'
 
-! ... apply symmetry:      
+! ... apply symmetry:
 
       itype=0
 
@@ -231,7 +231,7 @@
          k1=i2*ibo+i4; k2=i3; k3=ipbs(i1); k4=-ic; itype = 2
         elseif(ipbs(i2).gt.0) then
          k1=i1*ibo+i3; k2=i4; k3=ipbs(i2); k4=-ic; itype = 2
-        elseif(ipbs(i3).gt.0) then            
+        elseif(ipbs(i3).gt.0) then
          k1=i2*ibo+i4; k2=i1; k3=ipbs(i3); k4=-ic; itype = 2
         elseif(ipbs(i4).gt.0) then
          k1=i1*ibo+i3; k2=i2; k3=ipbs(i4); k4=-ic; itype = 2
@@ -272,7 +272,7 @@
         else
          k1=ipbs(i2)*ibo+ipbs(i3); k2=i4; k3=i1; k4=0; itype = 4
         end if
-       end if                                       
+       end if
 
       elseif(io.gt.0.and.jo.eq.0) then
 
@@ -308,7 +308,7 @@
 !
 !     we have following 16 different structures for radial integrals:
 !
-! 1 1.0  Rk( . . . .)  ic, jc               -  bound-bound  
+! 1 1.0  Rk( . . . .)  ic, jc               -  bound-bound
 ! 2 1.1  Rk( . . . .) < i | . > ic          -  bound-channel
 ! 3 1.2  Rk( . . . .) < i | . > < j | . >   -  channel-channel
 ! 4 1.3  Rk( . . . .) < i | j >             -  target structure
@@ -331,10 +331,10 @@
 !     where .  denotes bound orbital, i,j - channels.
 !
 !                                        ibo         ibo
-! 1.0 Rk( . . . .)  ic, jc       -  k1=(i1,i3)  k2=(i2,i4)  k3=-ic  k4=-jc 
-! 1.1 Rk( . . . .) < i | . > ic  -  k1=(i1,i3)  k2=(i2,i4)  k3= io  k4=-ic 
+! 1.0 Rk( . . . .)  ic, jc       -  k1=(i1,i3)  k2=(i2,i4)  k3=-ic  k4=-jc
+! 1.1 Rk( . . . .) < i | . > ic  -  k1=(i1,i3)  k2=(i2,i4)  k3= io  k4=-ic
 ! 1.2 Rk( . . . .) <i|.> <j|.>   -  k1=(i1,i3)  k2=(i2,i4)  k3= io  k4= jo
-! 1.3 Rk( . . . .) < i | j >     -  k1=(i1,i3)  k2=(i2,i4)  k3= io  k4= 0 
+! 1.3 Rk( . . . .) < i | j >     -  k1=(i1,i3)  k2=(i2,i4)  k3= io  k4= 0
 !
 ! 2.0 Rk( i . . .) < j | . >     -  k1=(i2,i4)  k2=i3  k3=ich  k4=io
 ! 3.0 Rk( . i . .) < j | . >     -  k1=(i1,i3)  k2=i4  k3=ich  k4=io
@@ -342,7 +342,7 @@
 ! 5.0 Rk( . . . i) < j | . >     -  k1=(i1,i3)  k2=i2  k3=ich  k4=io
 !
 ! 2.1 Rk( i . . .)  ic           -  k1=(i2,i4)  k2=i3  k3=ich  k4=-ic
-! 3.1 Rk( . i . .)  ic           -  k1=(i1,i3)  k2=i4  k3=ich  k4=-ic           
+! 3.1 Rk( . i . .)  ic           -  k1=(i1,i3)  k2=i4  k3=ich  k4=-ic
 ! 4.1 Rk( . . i .)  ic           -  k1=(i2,i4)  k2=i1  k3=ich  k4=-ic
 ! 5.1 Rk( . . . i)  ic           -  k1=(i1,i3)  k2=i2  k3=ich  k4=-ic
 !
@@ -407,7 +407,7 @@
         k1=ipbs(i1)*ibo+ipbs(i4); k2=i3; k3=i2; k4=0; itype = 8
        elseif(ipbs(i2).gt.0.and.ipbs(i3).gt.0) then
         k1=ipbs(i3)*ibo+ipbs(i2); k2=i1; k3=i4; k4=0; itype = 9
-       end if                                       
+       end if
 
       elseif(io.gt.0.and.jo.eq.0) then
 
@@ -430,7 +430,7 @@
       end if
 
       if(itype.eq.0) Stop 'IDEF_TYPE: itype=0'
-      itype = atype*ibtype + itype  
+      itype = atype*ibtype + itype
 
       Call Add_coef(C,k,k1,k2,k3,k4,itype)
 

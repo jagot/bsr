@@ -3,7 +3,7 @@
 !
 !               C O P Y R I G H T -- 2016
 !
-!     Written by:   Oleg Zatsarinny 
+!     Written by:   Oleg Zatsarinny
 !     email:        oleg_zoi@yahoo.com
 !
 !======================================================================
@@ -14,7 +14,7 @@
 !
 !     klsp1, klsp2   -  range of partial wave under consideration
 !
-!     INPUT FILES: 
+!     INPUT FILES:
 !
 !     target_jj      -  description of target states and channels
 !     knot.dat       -  B-spline grid
@@ -31,16 +31,16 @@
 !     mat_log.nnn    -  running information
 !
 !=====================================================================
-      Use dbsr_mat         
-      
+      Use dbsr_mat
+
       Implicit none
       Real(8) :: t1,t2,t3
-       
+
       Call CPU_time(t1)
 
 ! ... file for general log-output:
 
-      Open(prj,file=AF_prj)       
+      Open(prj,file=AF_prj)
 
 ! ... read arguments:
 
@@ -51,14 +51,14 @@
 
       Call Check_file(AF_tar);  Open(nut,file=AF_tar)
       Call Read_target_jj(nut)
-      
+
 ! ... prepare B-splines and other relevant arrays:
 
       Call read_knot_dat
       Call alloc_DBS_gauss
       Call Def_Vnucl
 
-      Call alloc_Rk_integrals(ns,ks,0,mk,ntype_R) 
+      Call alloc_Rk_integrals(ns,ks,0,mk,ntype_R)
       if(mbreit.gt.0)  Call alloc_Sk_integral(ns,ks)
 
 ! ... find number of closed shells and core energy:
@@ -68,7 +68,7 @@
 ! ... loop over partial waves:
 
       Do klsp = klsp1,klsp2
- 
+
        write(*,'(/a,i3/)') 'DBSR_MAT:  klsp =', klsp
 
        Call CPU_time(t2);  Call SUB1;  Call CPU_time(t3)
@@ -89,8 +89,8 @@
 !======================================================================
 !     calculate and broadcast the core energy
 !----------------------------------------------------------------------
-      Use dbsr_mat         
-      
+      Use dbsr_mat
+
       Implicit none
       Integer :: i,j
       Integer, external :: Ifind_bsorb
@@ -98,16 +98,21 @@
 
 ! ... find nclosd and core energy:
 
+      Ecore = 0
+
       i=LEN_TRIM(AF_cfg); write(AF_cfg(i-2:i),'(i3.3)') klsp1
       Call Check_file(AF_cfg); Open(nuc,file=AF_cfg)
       Call Read_core_jj(nuc)
+
+      if(ncore.eq.0) Return
+
       Do i=1,nwf; j=Ifind_bsorb(NEF(i),KEF(i),IEF(i),2); End do
       mbs = 0
       Open(nuw, file=AF_bsw, STATUS='OLD', form='UNFORMATTED')
       Call Read_dbsw(nuw,0,0)
       Close(nuw)
 
-      Ecore = Ecore_dbs(ncore,mbreit,kbs) 
+      Ecore = Ecore_dbs(ncore,mbreit,kbs)
 
       write(prj,'(/a,i10,T20,a)')  'ntarg  =',ntarg,'- number of target states'
       write(prj,'(/a,i10,T20,a)')  'ncore  =',ncore,'- number of core subshells'

@@ -1,7 +1,7 @@
 !=======================================================================
       Module df_orbitals
 !=======================================================================
-!     contains description of one-electron orbitals 
+!     contains description of one-electron orbitals
 !-----------------------------------------------------------------------
       Implicit none
 
@@ -36,7 +36,7 @@
 !=======================================================================
       Subroutine alloc_df_orbitals(n)
 !=======================================================================
-!     allocate, deallocate or reallocate arrays in module "df_orbiyals" 
+!     allocate, deallocate or reallocate arrays in module "df_orbiyals"
 !-----------------------------------------------------------------------
       Use df_orbitals
       Implicit none
@@ -47,7 +47,7 @@
       if(n.le.0) return
       nbf=n
       Allocate(nbs(nbf),kbs(nbf),ibs(nbf),mbs(nbf),lbs(nbf),jbs(nbf), &
-               ebs(nbf),e(nbf),iord(nbf),qsum(nbf),dpm(nbf),clsd(nbf), )
+               ebs(nbf),e(nbf),iord(nbf),qsum(nbf),dpm(nbf),clsd(nbf) )
 
       nbs=0; kbs=0; ibs=0; mbs=0; lbs=0; jbs=0; iord=0
       qsum=0.d0; dpm=0.d0; clsd = .false.
@@ -58,7 +58,7 @@
 !=======================================================================
       Subroutine alloc_df_radial(ns)
 !=======================================================================
-!     allocates or deallocates radial one-electron functions 
+!     allocates or deallocates radial one-electron functions
 !-----------------------------------------------------------------------
       Use DBS_grid, only: ks
       Use df_orbitals
@@ -79,7 +79,7 @@
       Integer Function Ifind_orb_df(n,k,iset)
 !=======================================================================
 !     find orbital (n,k,iset) in the list "df_orbitals"
-!-----------------------------------------------------------------------      
+!-----------------------------------------------------------------------
       Use df_orbitals
       Implicit none
       Integer, intent(in) :: n,k,iset
@@ -113,7 +113,7 @@
 !=======================================================================
       Subroutine Put_pv_df(i,v)
 !=======================================================================
-!     put two-component vector "v" in p-array, location "i" 
+!     put two-component vector "v" in p-array, location "i"
 !-----------------------------------------------------------------------
       Use DBS_grid
       Use df_orbitals
@@ -122,5 +122,5 @@
       Real(8), intent(in) :: v(ms)
       p(1:ns,1,i)=v(1:ns)
       p(1:ns,2,i)=v(ns+1:ms)
-      End Subroutine Put_pv_df  
+      End Subroutine Put_pv_df
 

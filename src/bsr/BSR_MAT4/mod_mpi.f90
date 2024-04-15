@@ -5,13 +5,13 @@
 !----------------------------------------------------------------------
 
 !
-!  
+!
 !  (C) 1993 by Argonne National Laboratory and Mississipi State University.
 !      All rights reserved.  See COPYRIGHT in top-level directory.
 !
 !
 ! user include file for MPI programs, with no dependencies.
-! THIS IS AN UNTESTED F90 MODULE FILE.  PLEASE SEND US ANY FIXES 
+! THIS IS AN UNTESTED F90 MODULE FILE.  PLEASE SEND US ANY FIXES
 !
 ! It really isn't possible to make a perfect include file that can
 ! be used by both F77 and F90 compilers, but this is close.  We've removed
@@ -21,14 +21,14 @@
 ! should work for both Fortran 77 and Fortran 90.
 !
 !
-! return codes 
+! return codes
  Integer, parameter :: MPI_SUCCESS = 0, MPI_ERR_BUFFER=1,MPI_ERR_COUNT=2, &
       MPI_ERR_TYPE=3, MPI_ERR_TAG=4, MPI_ERR_COMM=5, MPI_ERR_RANK=6, &
       MPI_ERR_ROOT=7,MPI_ERR_GROUP=8, MPI_ERR_OP=9,MPI_ERR_TOPOLOGY=10, &
       MPI_ERR_DIMS=11, MPI_ERR_ARG=12,MPI_ERR_UNKNOWN=13, &
       MPI_ERR_TRUNCATE=14,MPI_ERR_OTHER=15, MPI_ERR_INTERN=16, &
       MPI_ERR_IN_STATUS=17, MPI_ERR_PENDING=18, MPI_ERR_REQUEST=19, &
-      MPI_ERR_LASTCODE=4114 
+      MPI_ERR_LASTCODE=4114
 !
       Integer, parameter :: MPI_UNDEFINED = (-32766)
 !
@@ -46,15 +46,15 @@
       Integer, parameter :: MPI_COMM_NULL=0
 !
       Integer, parameter :: MPI_DATATYPE_NULL = 0
-      
+
       Integer, parameter :: MPI_ERRHANDLER_NULL = 0
-      
+
       Integer, parameter :: MPI_GROUP_NULL = 0
-      
+
       Integer, parameter :: MPI_KEYVAL_INVALID = 0
-      
+
       Integer, parameter :: MPI_REQUEST_NULL = 0
-! 
+!
       Integer, parameter :: MPI_IDENT=0, MPI_CONGRUENT=1, MPI_SIMILAR=2, &
            MPI_UNEQUAL=3
 !

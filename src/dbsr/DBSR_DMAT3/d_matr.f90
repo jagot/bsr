@@ -58,27 +58,27 @@
        if(is.le.ncfg1) then
         m=1; ih=is; jh=js-ncfg1
         j1=IP_orb(ip1+i1);  ich1=ipbs(j1)          ! change sign ?
-        j2=IP_orb(ip2+i2);  ich2=ipbs(j2) 
+        j2=IP_orb(ip2+i2);  ich2=ipbs(j2)
         sign = 1.d0
        else
-        m=2; ih=js; jh=is-ncfg1 
+        m=2; ih=js; jh=is-ncfg1
         j1=IP_orb(ip2+i2);  ich1=ipbs(j1)
-        j2=IP_orb(ip1+i1);  ich2=ipbs(j2) 
-        sign = (-1)**((jt1-jt2)/2)  
+        j2=IP_orb(ip1+i1);  ich2=ipbs(j2)
+        sign = (-1)**((jt1-jt2)/2)
        end if
 
-! ... include the expansion coefficients: 
+! ... include the expansion coefficients:
 
-       CC = C * C1(ih)*C2(jh);  
-    
+       CC = C * C1(ih)*C2(jh);
+
        if(abs(CC).lt.eps_c) Cycle
 
-! ... find index of the pertuber if any: 
+! ... find index of the pertuber if any:
 
        ic = Ifind_pert_jj(ilsp1,ih)
-       jc = Ifind_pert_jj(ilsp2,jh)                
+       jc = Ifind_pert_jj(ilsp2,jh)
 
-! ... find overlap factors with extracted continuum:  
+! ... find overlap factors with extracted continuum:
 
        Call Det_fact(idf,np1,np2); if(nndef.eq.0) Cycle
 

@@ -14,7 +14,7 @@
 
       Use det_exp; Use det_f3; Use det_f4; Use det_f5
 
-      Implicit none 
+      Implicit none
       Integer,Intent(in ) :: l,q,id
       Integer,Intent(out) :: ML,MS, Idet(q)
       Integer :: i,j,k,nd,nq
@@ -25,7 +25,7 @@
 !----------------------------------------------------------------------
 ! ... two-electron case for l>5, the only case we should compute:
 
-      if(q.eq.2.and.l.gt.5) then       
+      if(q.eq.2.and.l.gt.5) then
        nq=4*l+2; nd=nq*(nq-1)/2; if(id.gt.nd) Call DET_shw (l,q,id)
        k=0
        Do i=1,nq-1
@@ -47,7 +47,7 @@
        if(id.gt.1) Call DET_shw (l,q,id)
        ML=1; MS=1; Do i=1,q; Idet(i)=i; End do; Return
 
-      elseif(q.eq.4*l+1) then                ! one-electron vacancy: 
+      elseif(q.eq.4*l+1) then                ! one-electron vacancy:
        if(id.gt.4*l+2) Call DET_shw (l,q,id)
        ML=-ML_id(id)+2; MS=-MS_id(id)+2
        k=0
@@ -55,7 +55,7 @@
         if(i.ne.id) then; k=k+1; Idet(k)=i;  end if
        End do
        Return
-     
+
       else
 
 !----------------------------------------------------------------
@@ -125,7 +125,7 @@
 
 !----------------------------------------------------------------------
       Subroutine DET_shw (l,q,id)
-!----------------------------------------------------------------------       
+!----------------------------------------------------------------------
 
       Integer, Intent(in) :: l,q,id
 

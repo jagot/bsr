@@ -3,11 +3,11 @@
 !====================================================================
 !     contains a set of integrals with 6 identifiers
 !--------------------------------------------------------------------
-      Implicit none 
-    
+      Implicit none
+
       Integer :: mint =  0      !  max. number of coefficients
       Integer :: nint =  0      !  current number of coefficients
-      Integer :: kint = 2**10   !  initial space  
+      Integer :: kint = 2**10   !  initial space
 
       Integer, allocatable :: Jcase(:),Jpol(:),J1(:),J2(:),J3(:),J4(:)
 
@@ -23,7 +23,7 @@
 
       Implicit none
       Integer, Intent(in) :: m
-      Integer, allocatable :: iar(:) 
+      Integer, allocatable :: iar(:)
 
       if(m.le.0) then
        if(allocated(Jcase)) Deallocate (Jcase,Jpol,J1,J2,J3,J4)
@@ -55,7 +55,7 @@
         ' memory requred = ', 24.d0*m/(1024*1024),'  Mb'
       end if
 
-      End Subroutine alloc_INT 
+      End Subroutine alloc_INT
 
 
 !=======================================================================
@@ -86,8 +86,8 @@
 ! ... add new integral:
 
       if(nint.eq.mint) Call Alloc_int(mint+kint)
-      nint=nint+1; Jcase(nint)=icase; Jpol(nint)=kpol 
+      nint=nint+1; Jcase(nint)=icase; Jpol(nint)=kpol
       J1(nint)=i1; J2(nint)=i2; J3(nint)=i3; J4(nint)=i4
       Iadd_int = nint
 
-      End Function Iadd_int 
+      End Function Iadd_int

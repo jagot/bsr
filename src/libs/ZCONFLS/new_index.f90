@@ -1,7 +1,7 @@
 !======================================================================
       Integer Function New_index(l,kksmax,nwf,ln,kn)
 !======================================================================
-!     assign new set index for orbital 'l'  
+!     assign new set index for orbital 'l'
 !----------------------------------------------------------------------
       Use param_LS, only: ksmax
 
@@ -10,7 +10,7 @@
       Integer, Intent(in) :: ln(*),kn(*)
       Integer :: i,k,m
 
-      Do m=1,ksmax                    
+      Do m=1,ksmax
        k=m
        Do i=1,nwf
         if(l.eq.ln(i).and.m.eq.kn(i)) then

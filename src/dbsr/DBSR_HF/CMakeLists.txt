@@ -8,5 +8,6 @@ add_executable(dbsr_hf
   hf_get_spline_param.f90      hf_matrix.f90             hf_orthogonality.f90
   hf_plot_bsw.f90              hf_read_pqbs.f90          hf_read_GRASP.f90
   hf_rk.f90                    hf_rotate.f90             hf_sk.f90
-  hf_solve_HF.f90              hf_state_energies.f90     hf_summry.f90)
+  hf_solve_HF.f90              hf_state_energies.f90     hf_summry.f90
+  write_nl.f90)
 target_link_libraries(dbsr_hf ${BLAS_LAPACK_LIBRARIES})

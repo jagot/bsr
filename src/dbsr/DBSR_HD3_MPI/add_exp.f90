@@ -9,8 +9,8 @@
       Real(8) :: S
       Integer :: i,ii, it, idim, ich
 
-      if(io_processor) & 
-       write(pri,'(/a/)') 'Experimental energies:'  
+      if(io_processor) &
+       write(pri,'(/a/)') 'Experimental energies:'
 
       add = zero
 

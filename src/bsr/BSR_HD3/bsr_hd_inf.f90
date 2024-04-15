@@ -8,7 +8,7 @@
 
       Call GET_COMMAND_ARGUMENT(1,A);   if(A.ne.'?') Return
 
-      open(nu,file=AF) 
+      open(nu,file=AF)
 
 
       write(nu,'(a)') &
@@ -33,7 +33,7 @@
 'msol   =  0  -  max. number of bound states for output                                   ',&
 'iwt    = 0|1 -  output of w.nnn files with channels weights                              ',&
 'cwt    =  0  -  additional output of channel composition (for weights > cwt=..)          ',&
-' '                                                                                      
+' '
 
       write(*,'(a)') &
 '                                                                                         ',&
@@ -57,20 +57,19 @@
 'msol   =  0  -  max. number of bound states for output                                   ',&
 'iwt    = 0|1 -  output of w.nnn files with channels weights                              ',&
 'cwt    =  0  -  additional output of channel composition (for weights > cwt=..)          ',&
-' '                                                                                      
-      Stop                                                                               
-                                                                                         
-      End Subroutine bsr_hd_inf                                                          
-                                                                                         
-                                                                                         
-                                                                                         
-                                                                                         
-                                                                                         
-                                                                                         
-                                                                                         
-                                                                                         
-                                                                                         
-                                                                                         
-                                                                                         
-                                                                                         
-                                                                                         
+' '
+      Stop
+
+      End Subroutine bsr_hd_inf
+
+
+
+
+
+
+
+
+
+
+
+

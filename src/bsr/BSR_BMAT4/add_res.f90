@@ -1,11 +1,11 @@
 !======================================================================
       Subroutine Add_res(is_conf,js_conf)
-!======================================================================                                              
+!======================================================================
 !     extracts the data from int_bnk for specific case
 !----------------------------------------------------------------------
       Use bsr_breit
       Use bsr_mat
-      Use conf_LS 
+      Use conf_LS
       Use Ndet_list, only: ndet; Use Ndef_list, only: ndef
       Use new_dets;  Use new_defs
       Use term_exp, only: kt1,kt2, IP_kt1, IP_kt2
@@ -14,17 +14,17 @@
       Implicit none
       Integer, intent(in) :: is_conf,js_conf
       Integer :: i,j,k,it,jt,is,js,is1,is2,js1,js2,ik,jk,ich,jch,ip1,ip2,ik1,ik2
-      Integer :: jcase,kpol,itype,jtype, irecord,icase,kterm,kcoef,int,ii      
+      Integer :: jcase,kpol,itype,jtype, irecord,icase,kterm,kcoef,int,ii
       Integer :: i1,i2,i3,i4,j1,j2,j3,j4,k1,k2,k3,k4,ic,jc,io,jo,idf, m1,m2,m3,m4
       Integer :: ILT1,ILT2,IST1,IST2
       Real(8) :: C,CC,CCC, tt1,tt2
       Integer, external :: Idef_itype, no_ic_LS, Check_idef,Ifind_type
       Real(8), external :: Z_6j,c_blocks_occupation
 
-      if(debug.gt.0) then 
-       write(*,'(a,i10)') 'ncoef = ',ncoef 
-       write(*,'(a,i10)') 'ndet  = ',ndet 
-       write(*,'(a,i10)') 'ndef  = ',ndef 
+      if(debug.gt.0) then
+       write(*,'(a,i10)') 'ncoef = ',ncoef
+       write(*,'(a,i10)') 'ndet  = ',ndet
+       write(*,'(a,i10)') 'ndef  = ',ndef
       end if
 
       Call CPU_TIME(tt1)
@@ -33,19 +33,19 @@
 ! ... loop over terms:
 
       kterm = 0
-      Do ik1=1,kt1; it=IP_kt1(ik1) 
-      Do ik2=1,kt2; jt=IP_kt2(ik2)  
+      Do ik1=1,kt1; it=IP_kt1(ik1)
+      Do ik2=1,kt2; jt=IP_kt2(ik2)
        if(is_conf.eq.js_conf.and.it.gt.jt) Cycle
        kterm = kterm + 1
 
-! ... determine the range of states for terms:. 
+! ... determine the range of states for terms:.
 
       is1 = IT_state1(it); js1 = IT_state1(jt)
       if(is1.eq.0.or.js1.eq.0) Cycle
       is2 = IT_state2(it); js2 = IT_state2(jt)
 
 !----------------------------------------------------------------------
-! ... loop over all relevant states: 
+! ... loop over all relevant states:
 
       Do ik=is1,is2; is=IP_stat(ik); ich=IP_channel(is)
       Do jk=js1,js2; js=IP_stat(jk); jch=IP_channel(js)
@@ -57,7 +57,7 @@
 
 ! ... consider only low-half of interaction matrix
 
-       if(it.eq.jt.and.js.gt.is) Cycle                   
+       if(it.eq.jt.and.js.gt.is) Cycle
 
 ! ... loop for angular coefficients
 
@@ -69,9 +69,9 @@
        idf = idfc(kcoef)
        int = intc(kcoef)
 
-       Call Decode_INT (icase,k,i1,i2,i3,i4,intc(kcoef))        
+       Call Decode_INT (icase,k,i1,i2,i3,i4,intc(kcoef))
 
-       kpol = k 
+       kpol = k
        Select case(icase)
         Case(4,8,9,10); kpol=k-1
         Case(6,7,11);   kpol=0
@@ -84,7 +84,7 @@
         Case(3,4,8,9,10); if(abs(WC(is)*WC(js)).lt.Eps_soo) Cycle
        End Select
 
-! ... include the expansion coefficients 
+! ... include the expansion coefficients
 
        C = coef(kterm,kcoef)
        if(ich.eq.jch.and.is.ne.js) C = C + C
@@ -112,8 +112,8 @@
        if(icase.eq.6.or.icase.eq.7) kpol = lbs(j1)
        if(icase.eq.7.and.kpol.gt.mlso) Cycle
 
-! ... J-dependence for relativistic ccorrections 
-       
+! ... J-dependence for relativistic ccorrections
+
        if(icase.gt.6.and.icase.lt.11) then
         Call Term_ic (is,ILT1,IST1)
         Call Term_ic (js,ILT2,IST2)
@@ -123,8 +123,8 @@
         if(abs(CC).lt.Eps_C) Cycle
        end if
 
-! ... we do not need anymore the configuration index, 
-! ... only pertuber index if any:   
+! ... we do not need anymore the configuration index,
+! ... only pertuber index if any:
 
        i=0; if(ich.gt.nch) i=ich-nch
        j=0; if(jch.gt.nch) j=jch-nch
@@ -135,7 +135,7 @@
 
        Call Jsym_int(icase,j1,j2,j3,j4)
 
-! ... find overlap factors with extracted continuum:  
+! ... find overlap factors with extracted continuum:
 
        Call Ndet_fact(idf,np1,np2); if(nndef.eq.0) Cycle
 
@@ -151,7 +151,7 @@
 
         ii = Ifind_type(icase,kpol,itype)
         Call Add_coef_cblock(CCC,k1,k2,k3,k4,ii)
-       End do            
+       End do
 
       End do   ! over coefficients (kcoef)
 
@@ -163,7 +163,7 @@
        write(*,*) 'failed at kterm,kt1,kt2', kterm,kt1,kt2
        fail =  1
        Return
-      end if 
+      end if
 
       End do; End do ! over terms  (it,jt)
 
@@ -176,4 +176,3 @@
 
       End Subroutine Add_res
 
-             

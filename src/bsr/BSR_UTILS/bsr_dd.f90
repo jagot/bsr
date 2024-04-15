@@ -36,15 +36,15 @@
 
        if(ipar(i).ne.1) Cycle
 
-       write(BI,'(a,i3.3)') 'rsol.' ,i 
+       write(BI,'(a,i3.3)') 'rsol.' ,i
        if(Icheck_file(BI).eq.0) Cycle
-       write(BI,'(a,i3.3)') 'cfg.' ,i 
+       write(BI,'(a,i3.3)') 'cfg.' ,i
 
       Do j=1,klsp
 
-       write(BJ,'(a,i3.3)') 'rsol.' ,j 
+       write(BJ,'(a,i3.3)') 'rsol.' ,j
        if(Icheck_file(BJ).eq.0) Cycle
-       write(BJ,'(a,i3.3)') 'cfg.' ,j 
+       write(BJ,'(a,i3.3)') 'cfg.' ,j
 
        if(ipar(i).eq.ipar(j)) Cycle
 
@@ -52,7 +52,7 @@
 
        if(ITRA(lpar(i),kpol,lpar(j)).eq.0) Cycle
 
-       if(lpar(i)+lpar(j).lt.kpol) Cycle      
+       if(lpar(i)+lpar(j).lt.kpol) Cycle
 
        write(AS,'(3(a,1x),a,2i3.3)') 'mult3',trim(BJ),trim(BI),'E1 mult_bnk_',i,j
        write(*,*) trim(AS)
@@ -60,8 +60,8 @@
 
        write(AS,'(a,a,2i3.3,a)') 'cp ','mult_bnk_',i,j,' mult_bnk'
        Call System(AS)
-   
-       icount = icount + 1 
+
+       icount = icount + 1
 
        write(AF,'(a,i3.3)') 'D',icount
        write(AS,'(a,a,a,a,a,a,a)')  &
@@ -73,7 +73,7 @@
        write(81,*)  icount, ispar(j),lpar(j),(1-ipar(j))/2, &
                             ispar(i),lpar(i),(1-ipar(i))/2
 
-      End do; End do 
+      End do; End do
 
       open(82,file='D00',form='UNFORMATTED')
 
@@ -84,7 +84,7 @@
        write(82)     i1,i2,i3,i4,i5,i6
       End do
       Close(82)
-      Close(81,status='DELETE') 
+      Close(81,status='DELETE')
 
       End ! program dd_bsr
 

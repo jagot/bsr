@@ -37,7 +37,7 @@
       End do
 
       Call Read_ipar(inp,'nz',nz);  Z=nz
-      Call Conv_au (Z,AWT,au_cm,au_eV,0)      
+      Call Conv_au (Z,AWT,au_cm,au_eV,0)
 
       imax=0; jmax=0
       Do i = 1,ntarg
@@ -58,8 +58,7 @@
        write(nu,'(i4.4,3x,a,3x,a,2x, F20.8, F17.6, F15.5, F13.1)') &
           i, AF1(1:imax),AF2(1:jmax), E_au(i), E_Ry, E_ev, E_cm
 
-      End do 
+      End do
 
       End ! program
 
-      

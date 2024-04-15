@@ -17,20 +17,20 @@
 !      NOPEN      = NUMBER OF OPEN CHANNELS
 !      EN         = CHANNEL ENERGIES IN RYDS.
 !-----------------------------------------------------------------------
- 
+
       IMPLICIT NONE
- 
+
       INTEGER(4), INTENT(in) :: NAST, nch
       INTEGER(4), INTENT(out) :: nopen
       INTEGER(4), INTENT(in), DIMENSION(NAST) :: NCONAT
-      
+
       REAL(8), INTENT(in) :: ETOT
       REAL(8), INTENT(in), DIMENSION(NAST) :: ENAT
       REAL(8), INTENT(out), DIMENSION(nch) :: EN
-      
+
       Integer(4) :: K,N,NC
       Real(8) :: ECH
-       
+
       NOPEN = 0
       K = 0
       DO N = 1,NAST
@@ -42,6 +42,6 @@
           EN(K) = ECH
         END DO
       END DO
- 
+
       END SUBROUTINE ZOPEN
- 
+

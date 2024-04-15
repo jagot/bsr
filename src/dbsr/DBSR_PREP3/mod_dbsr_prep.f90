@@ -6,7 +6,7 @@
       Use conf_jj;          Use DBS_grid
       Use orb_jj;           Use DBS_orbitals_pq
       Use target_jj;        Use DBS_gauss
-      Use channels_jj, npert1 => npert, ipert1 => ipert, ippert1 => ippert       
+      Use channels_jj, npert1 => npert, ipert1 => ipert, ippert1 => ippert
       Use channel_jj,  only: npert, ipert, ippert
 
       Implicit none
@@ -46,5 +46,5 @@
 
       Integer, allocatable :: ipt(:)
 
-      End Module dbsr_prep 
+      End Module dbsr_prep
 

@@ -15,8 +15,8 @@
       Implicit real(8) (A-H,O-Z)
 
 !----------------------------------------------------------------------
-!   These are the Bernoulli numbers B02, B04, ..., B14, expressed as   
-!   rational numbers. From Abramowitz and Stegun, p. 810.              
+!   These are the Bernoulli numbers B02, B04, ..., B14, expressed as
+!   rational numbers. From Abramowitz and Stegun, p. 810.
 
       Real(8), Save :: PI, HLNTPI, eps, MAXEXP, MINEXP
       Real(8), Dimension(7), SAVE :: FN,FD
@@ -61,7 +61,7 @@
 
             IF (ABS (DBLE (NINT (ARGR))-ARGR) .LE. eps) &
                STOP 'CGAMMA: Argument too close to a pole.'
-            
+
 !   Otherwise use the reflection formula (Abramowitz and Stegun 6.1.17)
 !   to ensure that the argument is suitable for Stirling's formula
 
@@ -139,7 +139,7 @@
          ARGUR2 = ARGUR*ARGUR
          TERMR = 0.5d0*LOG (ARGUR2+ARGUI2)
          TERMI = ATAN2 (ARGUI,ARGUR)
-         if(TERMI.lt.0.d0) TERMI = TERMI + PI + PI 
+         if(TERMI.lt.0.d0) TERMI = TERMI + PI + PI
          CLNGR = (ARGUR-0.5d0)*TERMR - ARGUI*TERMI-ARGUR+HLNTPI
          CLNGI = (ARGUR-0.5d0)*TERMI + ARGUI*TERMR-ARGUI
          FAC = (ARGUR2+ARGUI2)**(-2)
@@ -162,12 +162,12 @@
          CLNGR = CLNGR - 0.5d0 * LOG (OVLFR*OVLFR+OVLFI*OVLFI)
          A = ATAN2(OVLFI,OVLFR); if(A.lt.0.d0) A = A + PI + PI
          CLNGI = CLNGI - ATAN2(OVLFI,OVLFR)
- 
+
       END IF
- 
+
 !   Now exponentiate the complex Log Gamma function to get
 !   the complex Gamma function
- 
+
       IF (CLNGR.ge.MAXEXP.or.CLNGR.le.MINEXP) then
           write(*,*) CLNGR,MAXEXP,MINEXP
          STOP 'CGAMMA: Argument to exponential function out of range.'
@@ -192,7 +192,7 @@
       Real(dp), intent(in) :: X
       Real(dp) :: RGAMMA, Y,Z, A1,A2,A3,A4,A5,A6,A7, C,D,G
 
-      Y=X 
+      Y=X
       G=one
     1 IF(Y.GT.seven)  go to 2
       G=G*Y

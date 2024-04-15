@@ -21,17 +21,18 @@
 
       Do ich=2,nch
        Do jch=1,ich-1
-        if(overlaps(ich,jch).lt.s_ovl) Cycle 
+!        if(icc(ich,jch).eq.0) Cycle
+        if(overlaps(ich,jch).lt.s_ovl) Cycle
         met = met + 1
         ! ... find bigest overlap and put orth.condition
-        Call Def_SM(ich,jch)       
+        Call Def_SM(ich,jch)
         if(SM.eq.0.d0) Call Def_SM(jch,ich)
         if(SM.eq.0.d0) then
          write(pri,'(2a10,f10.5)') elc(ich),elc(jch),overlaps(ich,jch)
          Stop 'I cannot find orth.condition'
         end if
        End do  ! over jch
-       if(met.ne.0) Exit     
+       if(met.ne.0) Exit
       End do
 
 !----------------------------------------------------------------------
@@ -42,8 +43,9 @@
       Do ich=1,nch
 
        Do ip=1,npert
-        if(overlaps(nch+ip,ich).lt.s_ovl) Cycle 
-        met = met + 1 
+!        if(icb(ich,ip).eq.0) Cycle
+        if(overlaps(nch+ip,ich).lt.s_ovl) Cycle
+        met = met + 1
 
         ! ... find bigest overlap and put orth.condition
 
@@ -52,22 +54,22 @@
          if(kch(ich).ne.kbs(js)) Cycle
          if(IBORT(ipch(ich),js).eq.0) Cycle
          Call Get_qv(js,v,ns)
-          ksol=ipsol(ich); CM = 0.d0 
+          ksol=ipsol(ich); CM = 0.d0
           Do i = 1,ksol
-           C = abs( SUM(v(:)*diag(:,i,ich)) )        
+           C = abs( SUM(v(:)*diag(:,i,ich)) )
            if(C.lt.CM) Cycle; CM = C
           End do
           if(CM.lt.SM) Cycle
           SM = CM; jm = js
-         End do                                                               
- 
+         End do
+
          if(SM.eq.0.d0) Stop 'I cannot find orth.condition'
 
          it = iptar(ich)
          write(nuc,'(a1,a5,a1,a5,a3,5x,a12,a6,5x,a12,i6,3f10.3)') &
             '<',elc(ich),'|',ebs(jm),'>=0', AFT(it),elc(ich), 'perturber   ',ip,SM, &
-            overlaps(nch+ip,ich), s_ovl 
-         Call Nulify_BORT(ipch(ich),jm)  
+            overlaps(nch+ip,ich), s_ovl
+         Call Nulify_BORT(ipch(ich),jm)
          overlaps(:,ich) = 0.d0
 
        End do ! over perturbers
@@ -78,7 +80,7 @@
 
       if(npert.le.1) Return
 
-      Do i=2,npert; Do j=1,i-1                 
+      Do i=2,npert; Do j=1,i-1                   !; k=ibb(i,j); if(k.eq.0) Cycle
        S = abs(overlaps(i+nch,j+nch))
        if(S.lt.S_ovl) Cycle
        write(nuc,'(f10.5,2i5,a)') S, i,j , ' - suspicious perturber overlap '
@@ -99,23 +101,24 @@
        if(kch(ich).ne.kbs(j)) Cycle
        if(IBORT(ipch(ich),js).eq.0) Cycle
        Call Get_qv(js,v,ns)
-       ksol=ipsol(ich); CM = 0.d0 
+       ksol=ipsol(ich); CM = 0.d0
        Do i = 1,ksol
-        C = abs( SUM( v(1:ms)*diag(1:ms,i,ich) ) )        
+        C = abs( SUM( v(1:ms)*diag(1:ms,i,ich) ) )
         if(C.lt.CM) Cycle; CM = C
        End do
        if(CM.lt.SM) Cycle
        SM = CM; jm = js
-      End do                                                               
+      End do
 
       it = iptar(ich)
       write(nuc,'(a1,a5,a1,a5,a3,5x,a12,a6,5x,a12,a6,3f10.3)') &
          '<',elc(ich),'|',ebs(jm),'>=0', AFT(it),elc(ich), AFT(jt),elc(jch), SM, &
-         overlaps(ich,jch), s_ovl 
-      Call Nulify_bort(ipch(ich),jm) 
+         overlaps(ich,jch), s_ovl
+      Call Nulify_bort(ipch(ich),jm)
       overlaps(:,jch) = 0.d0
 
       End Subroutine Def_SM
+
 
       End Subroutine Check_mat
 

@@ -53,17 +53,17 @@
 
 !----------------------------------------------------------------------
 
-      if(io_processor) then      
+      if(io_processor) then
        i = INDEX(AF_w,'.'); AF = AF_w(1:i)//ALSP
        Open(nuw,file=AF,form='UNFORMATTED')
        rewind(nuw)
        write(nuw) kch, kcp, khm
-      end if 
+      end if
 
 ! ... define and record weights:
 
       Do is = 1,khm
-       
+
        call pdgeadd ('notrans', khm, 1, one, z, 1,is,descz, &
                                        zero, v, 1,1, descv)
        call BLACS_BARRIER (ctxt, 'all')
@@ -99,10 +99,10 @@
 !----------------------------------------------------------------------
 ! ... define the configurations for labels
 
-      if(io_processor) then      
+      if(io_processor) then
        i = LEN_TRIM(AF_cfg); AF = AF_cfg(1:i-3)//ALSP
        i = Icheck_file(AF)
-       if(i.eq.1) then 
+       if(i.eq.1) then
         Open(nuc,file=AF)
         ncfg=0; lcfg=0; Call Add_conf_LS(nuc,0)
         Close(nuc)
@@ -133,7 +133,7 @@
         S=SUM(WT(:)); S_ch=SUM(WT(1:kch)); S_pt=S-S_ch
         E_Ry = (eval(is)-etarg(1))*2
 
-        S = zero            ! closed-channel contribution 
+        S = zero            ! closed-channel contribution
         Do ich=1,nwt
          if(ich.gt.kch) Cycle
          it = iptar(ich)
@@ -168,14 +168,14 @@
          it = iptar(ich)
          if(Etarg(it).gt.eval(is))  AS = 'closed ch:'
          write(pri,'(a,i6,f11.5,5x,a)') AS,ich,WT(ich),TRIM(Labl)
-        end if 
+        end if
 
        End do
       End do
 
       end if ! over cwt
 
-      if(io_processor) then           
+      if(io_processor) then
        Call CPU_time(t1)
        write (pri,'(/a,T30,f10.2,a)') 'W_out:,', (t1-t0)/60, ' min.'
        write (*  ,'(/a,T30,f10.2,a)') 'W_out:,', (t1-t0)/60, ' min.'

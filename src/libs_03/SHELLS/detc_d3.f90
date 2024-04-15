@@ -1,29 +1,29 @@
 !=======================================================================
   Real(8) Function detc_d3 (id,it)
 !=======================================================================
-! coefficient for determinamt id and term it for subshell d3 
+! coefficient for determinamt id and term it for subshell d3
 !-----------------------------------------------------------------------
- 
+
   Implicit none
- 
+
   Integer, intent(in)  :: id,it
- 
+
   Integer, parameter :: kd_d3 = 120
   Integer, parameter :: nt_d3 =   8
- 
+
   Integer :: INT_d3 (kd_d3,nt_d3)
- 
+
   Integer :: Norm_d3  = 210
- 
+
   if(id.le.0.or.id.gt.kd_d3) Stop "detc_d3: index id is out of range"
   if(it.le.0.or.it.gt.nt_d3) Stop "detc_d3: index it is out of range"
- 
+
   detc_d3 = dfloat(INT_d3(id,it))/dfloat(Norm_d3)
- 
+
   detc_d3 = dsqrt(dabs(detc_d3))
- 
+
   if(INT_d3(id,it).lt.0) detc_d3=-detc_d3
- 
+
 
   Data INT_d3 (:,   1)/ &
       -27,      -27,       27,       27,        0,        0,        0,        0,        0,        0,        1,        0, &
@@ -120,5 +120,5 @@
       -42,      -64,       63,        7,       -7,      -63,       28,        0,       28,        0,      210,      -16, &
        -9,       -1,        0,      -42,      -30,      -30,       84,       84,       42,        0,        9,        1, &
        16,     -210,       42,      -16,       -1,       -9,        0,     -210,        7,        7,       -7,       -7  /
- 
+
   End Function detc_d3

@@ -9,14 +9,14 @@
       Implicit none
       Character(64) :: Label1
       Integer :: i,j,ns1,nhm1
-      Real(8) :: E1,SL,SV 
+      Real(8) :: E1,SL,SV
       Real(8), allocatable ::  CL(:),CV(:)
       Integer, external :: Idef_st
- 
+
       if(ktype.ne.'E') Stop 'dv_out: non-electric-transition case ? '
 !      if(kpol.ne.1)    Stop 'dv_out: kpol <> 1 --> non-dipole case ? '
-      if(jmode.eq.1)   Stop 'dv_out: jmode = 1' 
-      
+      if(jmode.eq.1)   Stop 'dv_out: jmode = 1'
+
       i = INDEX(AF_v,'.'); AF = AF_v(1:i)//ALS2
       Open(nud,file=AF,form='UNFORMATTED')
 
@@ -35,14 +35,14 @@
        if(nhm1.ne.kdm1) Stop ' nhm1 --> ? '
 
       elseif(ctype1.eq.'c') then
-	   
+
        inb1=in1; nstate1=1
 
       else
 
        i = LEN_TRIM(name1)-1; AF = name1(1:i)//ctype1
        Open(inb1,file=AF,status='OLD')
-       nstate1 = Idef_st(inb1)                                  
+       nstate1 = Idef_st(inb1)
 
       end if
 !----------------------------------------------------------------------
@@ -69,7 +69,7 @@
 
       write(nud) kpol,ktype
       write(nud) E1,jot1,IPT1,Label1
-      write(nud) kdm2,kch2,kcp2              ! ??? npert2              
+      write(nud) kdm2,kch2,kcp2              ! ??? npert2
       write(nud) CL
       write(nud) CV
 

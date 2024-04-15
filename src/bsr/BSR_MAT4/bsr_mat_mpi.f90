@@ -3,7 +3,7 @@
 !
 !               C O P Y R I G H T -- 2016
 !
-!     Written by:   Oleg Zatsarinny 
+!     Written by:   Oleg Zatsarinny
 !     email:        oleg_zoi@yahoo.com
 !
 !======================================================================
@@ -14,7 +14,7 @@
 !
 !     klsp1, klsp2   -  range of partial wave under consideration
 !
-!   INPUT FILES: 
+!   INPUT FILES:
 !
 !     target         -  description of target states and channels
 !     target.bsw     -  target w.f.'s in B-spline basis
@@ -61,7 +61,7 @@
 
       if(myid.eq.0) Call define_grid(z)
       Call br_grid
-      Call define_spline        
+      Call define_spline
 
 ! ... target:
 
@@ -90,7 +90,7 @@
        i=LEN_TRIM(AF_cfg); ; write(AF_cfg(i-2:i),'(i3.3)') klsp1
        Open(nuc,file=AF_cfg,status='OLD')
        Call R_closed(nuc)
-       kclosd=nclosd    
+       kclosd=nclosd
        Call Bcore
        write(prj,'(/a,i4,a)') 'nclosd  =',nclosd,' - common core shells'
        write(prj,'(/a,F15.8,a)') 'Bcore   =', EC,'  -  calculated core energy'
@@ -102,7 +102,7 @@
 ! ... loop over partial waves:
 
       Do klsp = klsp1,klsp2
- 
+
        if(myid.eq.0)  write(*,'(/a,i3/)') 'BSR_MAT:  klsp =', klsp
 
        t1 =  MPI_WTIME();   Call SUB1;   t2 =  MPI_WTIME()

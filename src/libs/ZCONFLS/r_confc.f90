@@ -6,7 +6,7 @@
 !     the dublicated configurations are omitted
 !--------------------------------------------------------------------
       Use conf_LS
-      
+
       Implicit none
       Integer, intent(in) :: nu
       Integer, intent(in), optional :: kshift
@@ -14,7 +14,7 @@
       Integer, external :: Ifind_cfg_LS
       Character(100) :: AS
       Real(8) :: W
-      
+
       if(mcfg.eq.0) Call alloc_cfg_LS(icfg)
 
       rewind(nu)
@@ -44,7 +44,7 @@
 !     if mu < 0  -  read from the given position
 !--------------------------------------------------------------------
       Use conf_LS
-      
+
       Implicit none
       Integer, intent(in) :: mu
       Integer, intent(in), optional :: kshift
@@ -52,7 +52,7 @@
       Integer, External :: Iadd_cfg_LS
       Character(100) :: AS
       Real(8) :: W
-      
+
       if(mcfg.eq.0) Call alloc_cfg_LS(icfg)
 
       parity = 0; ne=0
@@ -84,7 +84,7 @@
 !     if mu < 0  -  read from the given position
 !--------------------------------------------------------------------
       Use conf_LS
-      
+
       Implicit none
       Integer, intent(in) :: mu
       Integer, intent(in), optional :: kshift
@@ -120,7 +120,7 @@
 !     reads only configurations (without terms)
 !--------------------------------------------------------------------
       Use conf_LS
-      
+
       Implicit none
       Integer, intent(in) :: nu
       Integer, intent(in), optional :: kshift
@@ -128,7 +128,7 @@
       Integer, External :: Ifind_cfg_LS
       Character(100) :: AS
       Real(8) :: W
-      
+
       if(mcfg.le.0) Call alloc_cfg_LS(icfg)
 
       Do i=1,msh; COUPLE((i-1)*4+1:i*4)=' 1S '; End do
@@ -143,7 +143,7 @@
       if(LEN_TRIM(AS).gt.64) read(AS(65:),*) W
       Call Decode_c
       kn=kn+kshift
-      if(kshift.eq.-1) kn=0 
+      if(kshift.eq.-1) kn=0
       ic = Ifind_cfg_LS()
       if(abs(W).gt.WC(ic)) WC(ic) = abs(W)
       go to 1

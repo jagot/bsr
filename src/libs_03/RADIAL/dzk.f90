@@ -19,7 +19,7 @@
 
       IMPLICIT NONE
       Integer(4), Intent(in) :: i,j,k
-      Integer(4) :: m, m1,m2 
+      Integer(4) :: m, m1,m2
       Real(8) :: A,B,C, A1,A2,A3,A4,A5, F1,F2,F3,F4,F5
 
 ! ... estimation of ZK in first points ...

@@ -1,7 +1,7 @@
 !=========================================================================
       Program bs_hwf
 !=========================================================================
-!     This utility provides hydrogen-like bound and continuum pseudo-state 
+!     This utility provides hydrogen-like bound and continuum pseudo-state
 !     on the given B-spline basis (with output in BSR format)
 !-------------------------------------------------------------------------
       Use spline_atomic
@@ -33,8 +33,8 @@
         write(*,'( a)') 'emax  -  maximum energy [100] '
         write(*,'( a)') 'eps_tail -  tolerence for the last B-spline [1d-7] '
         write(*,'(/a)') 'output files:  nl_###.bsw and nl_###.c, with ### - index of solution'
-        Stop 
-      end if        
+        Stop
+      end if
 !---------------------------------------------------------------------
       Open(pri,file='bs_hwf.log')
 
@@ -42,20 +42,20 @@
 
       Allocate(hm(ns,ns),cm(ns,ns))
       Allocate(ip(ns),np(ns),kp(ns),ap(ns),cp(ns))
-      
+
 !----------------------------------------------------------------------
 ! ,,, read parameters:
 
 
       l = 0;         Call Read_iarg('l',l)
-      ii = -1;       Call Read_iarg('ii',ii) 
+      ii = -1;       Call Read_iarg('ii',ii)
       jj =  1;       Call Read_iarg('jj',jj)
-                                                                  
+
       eps_tail = 1d-7;  Call Read_rarg('eps_tail',eps_tail)
       emax = 100d0;     Call Read_rarg('emax',emax)
 
-      nsol = 1;     Call Read_iarg('nsol',nsol) 
-   
+      nsol = 1;     Call Read_iarg('nsol',nsol)
+
       write(pri,'(a,i6)')   'l   =',l
       write(pri,'(a,f6.1)') 'z   =',z
       write(pri,*)
@@ -74,7 +74,7 @@
       write(pri,*)
       write(pri,'(a)') 'Boundary conditions at r = a:'
       write(pri,*)
-      write(pri,'(a,i2,a)') 'jj =',jj,'  - number of last zero B-splines' 
+      write(pri,'(a,i2,a)') 'jj =',jj,'  - number of last zero B-splines'
 
 ! ... some initiations:
 
@@ -110,16 +110,16 @@
         k=k+1; ap(k)=hm(i,j); cp(k)=cm(i,j)
        End do
        hm(1:nhm,m)=ap(1:nhm); cm(1:nhm,m)=cp(1:nhm)
-      End do 
-      khm=m                                                 
+      End do
+      khm=m
 
 !----------------------------------------------------------------------
 ! ... diagonalization of interaction matrix:
 
-      Call LAP_DSYGV('V','L',khm,nhm,hm,cm,cp,info)         
+      Call LAP_DSYGV('V','L',khm,nhm,hm,cm,cp,info)
 
       write(pri,'(/75a1)') ('-',i=1,75)
-      write(pri,'(/a,i5,a)') 'khm =',khm,' - final full size of matrix'      
+      write(pri,'(/a,i5,a)') 'khm =',khm,' - final full size of matrix'
       write(pri,'(/75a1)') ('-',i=1,75)
 
 !----------------------------------------------------------------------
@@ -164,7 +164,7 @@
         if(ip(i).eq.0) Cycle;  k=k+1; ap(i)=hm(k,j)
        End do
        hm(:,j)=ap(:)
-      End do 
+      End do
 
 !----------------------------------------------------------------------
 ! ... output solutions in BSR format:
@@ -173,12 +173,12 @@
       write(term,'(1x,i1,a1,i1)') 2,AL(l,2),1
 
       if(nsol.gt.khm) khm=nsol
-      Do is = 1,nsol 
+      Do is = 1,nsol
 
 ! ...  bsw - file:
 
        ap(:) = hm(:,is)
-       m = ns       
+       m = ns
        Do i=ns,1,-1
         if(abs(ap(i)).gt.eps_tail) Exit
         m=i-1
@@ -204,7 +204,7 @@
        write(nu,'(15x,f16.8)') cp(is)
        write(nu,*)
        write(nu,'(a4,a4,56x,f11.8)') EL4,'( 1)',1.d0
-       write(nu,'(a,a)') term,term        
+       write(nu,'(a,a)') term,term
        write(nu,'(a)') '*'
        close(nu)
 

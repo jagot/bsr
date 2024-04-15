@@ -1,31 +1,31 @@
 !======================================================================
-!     PROGRAM   test_mult_2conf                      
+!     PROGRAM   test_mult_2conf
 !
 !               C O P Y R I G H T -- 2013
 !
 !     Written by:   Oleg Zatsarinny
 !                   email: oleg_zoi@yahoo.com
 !======================================================================
-!    it is a debug program to check subroutine     "mult_2conf" 
+!    it is a debug program to check subroutine     "mult_2conf"
 !    to generate angular coefficient for multipole one-electron operator
 !    in case of orthogonal one-electron radial functions
 !----------------------------------------------------------------------
 !
-!    INPUT ARGUMENTS:  name  or   cfg=...  tab=...  
-!    
+!    INPUT ARGUMENTS:  name  or   cfg=...  tab=...
+!
 !----------------------------------------------------------------------
 !
-!    INPUT FILE:     AF_cfg    (default  - cfg.inp) 
+!    INPUT FILE:     AF_cfg    (default  - cfg.inp)
 !    OUTPUT FILES:   AF_tab    (default  - coef.tab)
-!    
-!----------------------------------------------------------------------     
-      Implicit none 
+!
+!----------------------------------------------------------------------
+      Implicit none
 
       Integer :: nuc=1; Character(40) :: AF_cfg = 'cfg.inp'
       Integer :: out=2; Character(40) :: AF_tab = 'coef.tab'
       Character(40) :: name = ' '
 
-      Integer :: kpol = 1      !  multipole index 
+      Integer :: kpol = 1      !  multipole index
       Integer :: ik, jk        !  indexes of interaction orbitals
       Real(8) :: Ck            !  angular coefficient
 
@@ -33,15 +33,15 @@
       Integer :: no1, nn1(msh),ln1(msh),iq1(msh),kn1(msh), LS1(5,msh)
       Integer :: no2, nn2(msh),ln2(msh),iq2(msh),kn2(msh), LS2(5,msh)
 
-      Character(8*msh), allocatable :: CONFIG(:), COUPLE(:) 
+      Character(8*msh), allocatable :: CONFIG(:), COUPLE(:)
       Character(8*msh) :: AS
       Character(3) :: EL1, EL2, EL3, EL4
       Real(8) :: C, eps_C = 1.d-7
       Integer :: i,j, k, k1,k2,k3,k4, ic,jc, i1,i2,j1,j2, ncfg
-      Integer, external :: Idef_ncfg 
+      Integer, external :: Idef_ncfg
 
 !----------------------------------------------------------------------
-! ... input data:     
+! ... input data:
 
       Call Read_name(name)
       if(len_trim(name).ne.0) then
@@ -62,7 +62,7 @@
 
       rewind(nuc)
       Do ic = 1,ncfg
-      Do 
+      Do
        read(nuc,'(a)') AS
        if(AS(5:5).ne.'(') Cycle
        CONFIG(ic) = AS
@@ -75,7 +75,7 @@
        Call Decode_cn (CONFIG(ic),COUPLE(ic),no1,nn1,ln1,iq1,kn1,LS1)
       Do jc = ic,ncfg
        Call Decode_cn (CONFIG(jc),COUPLE(jc),no2,nn2,ln2,iq2,kn2,LS2)
-     
+
 
        Call mult_2conf(no1,nn1,ln1,iq1,LS1,no2,nn2,ln2,iq2,LS2, &
                        kpol,Ck,ik,jk)
@@ -83,16 +83,16 @@
 
 
        write(out,'(64("-"))')
-       write(out,'(a)') trim(CONFIG(ic)) 
+       write(out,'(a)') trim(CONFIG(ic))
        write(out,'(a)') trim(COUPLE(ic))
-       write(out,'(a)') trim(CONFIG(jc)) 
+       write(out,'(a)') trim(CONFIG(jc))
        write(out,'(a)') trim(COUPLE(jc))
        write(out,'(64("-"))')
 
        AS = CONFIG(ic);  i = 2 + (ik-1)*8; EL1=AS(i:i+2)
        AS = CONFIG(jc);  j = 2 + (jk-1)*8; EL2=AS(j:j+2)
        write(out,'(a,i1,1x,a,a,a,a,a,f10.5)') &
-		       'd',kpol,'(',EL1,',',EL2,')=',Ck        
+		       'd',kpol,'(',EL1,',',EL2,')=',Ck
        write(out,*)
 
       End do; End do   ! over ic
@@ -108,7 +108,7 @@
       Implicit none
       Character(*), intent(in) :: CONFIG,COUPLE
       Integer :: no,nn(*),ln(*),iq(*),kn(*),LS(5,*)
-      Integer :: ii, k,i,j 
+      Integer :: ii, k,i,j
       Integer, external :: LA
 
       no=0; ii=LEN_TRIM(CONFIG); ii=ii/8;  k=1; j=2
@@ -170,7 +170,7 @@
       Integer :: iarg,i,i1,i2,iname
       Character(80) :: AS
 
-      iarg = Command_argument_count(); if(iarg.eq.0) Return 
+      iarg = Command_argument_count(); if(iarg.eq.0) Return
       Do i=1,iarg
        Call GET_COMMAND_ARGUMENT(i,AS)
        if(INDEX(AS,'=').ne.0) Cycle
@@ -191,7 +191,7 @@
       Integer :: iarg,i,i1,i2,iname
       Character(80) :: AS
 
-      iarg = Command_argument_count(); if(iarg.eq.0) Return 
+      iarg = Command_argument_count(); if(iarg.eq.0) Return
       iname=LEN_TRIM(name)
       Do i=1,iarg
        Call get_command_argument(i,AS)
@@ -206,7 +206,7 @@
 !======================================================================
       Subroutine Read_iarg(name,ivalue)
 !======================================================================
-!     read integer argument as name=... from the command line 
+!     read integer argument as name=... from the command line
 !----------------------------------------------------------------------
       Implicit none
       Character(*) :: name
@@ -215,7 +215,7 @@
       Character(80) :: AS
       Integer, external :: IARGC
 
-      iarg = Command_argument_count(); if(iarg.eq.0) Return 
+      iarg = Command_argument_count(); if(iarg.eq.0) Return
       iname=LEN_TRIM(name)
       Do i=1,iarg
        Call GETARG(i,AS)
@@ -247,7 +247,7 @@
 !====================================================================
 !     gives the value of L from spetroscopic symbol "a"
 !--------------------------------------------------------------------
-      Implicit none  
+      Implicit none
       Character, Intent(in) :: a
       Character(21) :: AS, AB
       Integer :: i
@@ -274,8 +274,8 @@
 !--------------------------------------------------------------------
       Implicit none
       Character(4), intent(in) :: EL
-      Integer, intent(out) :: n,l,k    
-      Integer :: i,j,ic, k1,k2  
+      Integer, intent(out) :: n,l,k
+      Integer :: i,j,ic, k1,k2
       Integer, external :: LA
 
       Character(61) :: ASET = &
@@ -319,7 +319,7 @@
       i=i+1
       if(i.le.4.and.j.le.3) go to 1
       if(n.ge.100.or.l.lt.0) then
-       write(*,*) 'EL4_nlk is fail to decode: ',EL 
+       write(*,*) 'EL4_nlk is fail to decode: ',EL
        Stop ' '
       end if
 

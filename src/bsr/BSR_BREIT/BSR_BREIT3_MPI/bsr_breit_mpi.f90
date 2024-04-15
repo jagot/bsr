@@ -6,51 +6,51 @@
 !     Written by:   Oleg Zatsarinny
 !                   email: oleg_zoi@yahoo.com
 !======================================================================
-!    generates angular coefficient in non-orthogonal mode 
+!    generates angular coefficient in non-orthogonal mode
 !----------------------------------------------------------------------
 !
 !    INPUT ARGUMENTS:
-!    
+!
 !    klsp1,klsp2  - range of partial wave in BSR calculations,
 !                   then cfg.001, cfg.002, ..., are input files
 !                   (default -> 0, with input file is cfg.inp)
-!   
+!
 !    oper  - character(7), where each position can be 0 or 1,
 !            and indicate the operator under consideration:
-!            oper(1) - OVERLAPS       
+!            oper(1) - OVERLAPS
 !            oper(2) - KINATIC ENERGY
 !            oper(3) - TWO-ELECTRON ELECTROSTATIC
-!            oper(4) - SPIN ORBIT       
+!            oper(4) - SPIN ORBIT
 !            oper(5) - SPIN-OTHER-ORBIT
 !            oper(6) - SPIN-SPIN
-!            oper(7) - ORBIT-ORBIT       
+!            oper(7) - ORBIT-ORBIT
 !            Default -> 1110000 - non-relativistic calculations
 !
 !    mk    - max.multipole index (default -> 9, see module param_br)
 !
 !----------------------------------------------------------------------
 !
-!    example:    1.  bsr_breit 
-!                2.  bsr_breit klsp1=1 klsp2=5 oper=1111110  
+!    example:    1.  bsr_breit
+!                2.  bsr_breit klsp1=1 klsp2=5 oper=1111110
 !                3.  bsr_breit km=5
-!            
+!
 !----------------------------------------------------------------------
 !
 !    INPUT FILES:
-!    
+!
 !    cfg.nnn     -  configuration list for partial wave nnn = klsp
 !                   (cfg.inp in case klsp = 0, default)
-!                  
+!
 !    int_bnk.nnn -  input data bank for angular coefficients
 !                   (optional; int_bnk in case klsp = 0)
-!                   
-!    
+!
+!
 !    OUTPUT FILES:
-!    
+!
 !    int_bnk.nnn  - output data bank for angular coefficients
 !                   (int_bnk in case klsp = 0)
-!                   
-!---------------------------------------------------------------------     
+!
+!---------------------------------------------------------------------
 
       USE MPI
 
@@ -58,11 +58,11 @@
       USE conf_LS,       only: ne
       Use spin_orbitals, only: mls_max
 
-      Implicit none 
+      Implicit none
 
       Integer :: l
       Real(8) :: t1,t2,tt
- 
+
 !----------------------------------------------------------------------
 ! ... initialize MPI:
 
@@ -80,7 +80,7 @@
 !----------------------------------------------------------------------
 ! ... read arguments from command line:
 
-      if(myid.eq.0) Call Read_arg;    Call br_arg   
+      if(myid.eq.0) Call Read_arg;    Call br_arg
 
 ! ... log - file:
 
@@ -104,18 +104,18 @@
 
        t1 = MPI_WTIME()
 
-! ... open relavent files: 
+! ... open relavent files:
 
        if(myid.eq.0) then
         Call open_br(nuc)       ! c-file
         Call open_br(nub)       ! data bank results, if any
         Call open_br(nur)       ! new results
         Call open_br(nui)       ! intermediate results
-        write(pri,'(80(''-''))') 
+        write(pri,'(80(''-''))')
         write(pri,'(/a,i5/)') ' Partial wave: ',klsp
         if(new.eq.1) write(pri,'(a/)') ' It is new calculations '
         if(new.eq.0) write(pri,'(a/)') ' It is continued calculations '
-       end if 
+       end if
 
 ! ... read the configuration list:
 
@@ -126,28 +126,28 @@
        if(icalc.eq.0) Cycle
 
        Call MPI_BCAST(ne,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
- 
+
        if(myid.eq.0) then; Call Def_maxl(l);  mls_max=4*l+2; end if
 
        Call MPI_BCAST(mls_max,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
 
-       Call Alloc_spin_orbitals(ne)  
+       Call Alloc_spin_orbitals(ne)
 
-! ... extract old results: 
+! ... extract old results:
 
        if(myid.eq.0)   Call Read_dets(nub,new)
 
 ! ... prepare det. expantions:
 
        if(myid.eq.0) then
-        Call open_br(nua); Call open_br(nud);   Call Pre_det_exp 
+        Call open_br(nua); Call open_br(nud);   Call Pre_det_exp
        end if
 
        Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
 
 ! ... calculations for new angular symmetries:
 
-       if(myid.eq.0)     Call Conf_loop 
+       if(myid.eq.0)     Call Conf_loop
        if(myid.gt.0)     Call Conf_calc
 
 ! ... record results:
@@ -176,7 +176,7 @@
       Implicit none
       Integer :: nub, new
 
-      if(new.eq.1) then 
+      if(new.eq.1) then
        Call Alloc_det(-1)
        Call Alloc_def(-1)
       else
@@ -221,7 +221,7 @@
 
       Close(nur)
 
-! ... print the main dimensions:      
+! ... print the main dimensions:
 
       write(pri,'(/a/)') &
           ' Results for new angular symmetry calculations:'
@@ -230,13 +230,13 @@
           ' number of overlap determinants =', ndet,adet,ldet
       adet=ldef; adef=adef/ndef
       write(pri,'(a,i10,f10.1,i10)') &
-          ' number of overlap factors      =', ndef,adef,ldef 
-      nc_total = nc_old + nc_new 
+          ' number of overlap factors      =', ndef,adef,ldef
+      nc_total = nc_old + nc_new
       write(pri,'(a,3i10)') &
           ' total number of coeff.s        =', nc_total, nc_old, nc_new
 
-! ... rename new results as new data bank (int_res -> int_bnk): 
- 
+! ... rename new results as new data bank (int_res -> int_bnk):
+
       if(klsp.eq.0) then
        write(AS,'(a,a,a,a)') 'mv ',trim(AF_r),' ',trim(AF_b)
       else

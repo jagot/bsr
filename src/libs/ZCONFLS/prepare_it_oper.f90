@@ -13,31 +13,31 @@
       Integer(8) :: ijc
       Integer(8), external :: Def_ij8
 
-!-------------------------------------------------------------------------		 
+!-------------------------------------------------------------------------
 ! ... additional restrictions for spi_orbit interaction:
 
       if(eps_soo.gt.0.d0) then
        Allocate(C_term(nsymt));  C_term = 0.d0
-       Do i=1,nsymt; ik= IT_state1(i); jk=IT_state2(i) 
+       Do i=1,nsymt; ik= IT_state1(i); jk=IT_state2(i)
         Do  j = ik,jk; ic=IP_stat(j)
           C_term(i) = max(C_term(i),abs(WC(ic)))
         End do
        End do
       end if
 
-!-------------------------------------------------------------------------		 
+!-------------------------------------------------------------------------
 ! ... allocate IT_oper:
 
       Call Alloc_it_oper_LS(1)
 
-!-------------------------------------------------------------------------		 
-! ... define strong orthogonality:      
+!-------------------------------------------------------------------------
+! ... define strong orthogonality:
 
       Do ic = 1,nsymc
-       Call Get_symc_LS(ic,Ltotal1,Stotal1,no1,nn1,ln1,iq1,kn1) 
+       Call Get_symc_LS(ic,Ltotal1,Stotal1,no1,nn1,ln1,iq1,kn1)
       Do jc = 1,ic
-       Call Get_symc_LS(jc,Ltotal2,Stotal2,no2,nn2,ln2,iq2,kn2) 
-      
+       Call Get_symc_LS(jc,Ltotal2,Stotal2,no2,nn2,ln2,iq2,kn2)
+
        Call Jort_conf(joper)
 
        Do ik=IC_term1(ic),IC_term2(ic);  it=IT_sort(ik)
@@ -47,7 +47,7 @@
           if(ioper(i).eq.0) then
            koper(i)=-1
           else
-           koper(i) = joper(i)            
+           koper(i) = joper(i)
           end if
          End do
 
@@ -65,7 +65,7 @@
 
       if(allocated(C_term)) Deallocate(C_term)
 
-!-------------------------------------------------------------------------		 
+!-------------------------------------------------------------------------
 ! ... define IT_need and JT_need:
 
       if(allocated(IT_need)) Deallocate(IT_need)
@@ -82,7 +82,7 @@
         End do
        End do; End do
 
-!-------------------------------------------------------------------------		 
+!-------------------------------------------------------------------------
 ! ... define IC_need and JC_need:
 
       if(allocated(IC_need)) Deallocate(IC_need)
@@ -122,7 +122,7 @@
       write(nu) IT_need
       write(nu) IC_need
       write(nu) JC_need
-            
+
       End Subroutine Record_it_oper
 
 
@@ -158,6 +158,6 @@
       ijc = DEF_ij8(nsymc,nsymc)
       Allocate(JC_need(ijc))
       read(nu) JC_need
-            
+
       End Subroutine Load_it_oper
 

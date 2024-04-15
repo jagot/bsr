@@ -1,5 +1,5 @@
 !======================================================================
-!     PROGRAM       B S R _ P O L                          version. 3                        
+!     PROGRAM       B S R _ P O L                          version. 3
 !
 !               C O P Y R I G H T -- 2011
 !
@@ -10,7 +10,7 @@
 !
 !    INPUT  ARGUMENTS:
 !
-!     klsp  - the indexes of partial waves under consideration  
+!     klsp  - the indexes of partial waves under consideration
 !
 !    INPUT FILES:
 !
@@ -20,15 +20,15 @@
 !     dv.nnn        -  dipole matrix
 !
 !    OUTPUT FILES:
-!   
-!     bsr_pol.log   -  running information 
+!
+!     bsr_pol.log   -  running information
 !     pol.nnn       -  bound-like solusions for polarized pseudo-states
 !
 !     Above, nnn indicates index of the partial wave
 !
 !=====================================================================
       Use bsr_pol
-      
+
       Implicit none
       Real(8) :: t1,t2
 
@@ -39,7 +39,7 @@
 ! ... read data:
 
       Call Read_data
-      
+
 ! ... read interaction matrix:
 
       Call Read_bsrmat

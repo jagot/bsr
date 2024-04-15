@@ -15,7 +15,7 @@
       Character(80) :: AS
       Integer, External :: IARGC
 
-      iarg = IARGC(); if(iarg.eq.0) Return 
+      iarg = IARGC(); if(iarg.eq.0) Return
       iname=LEN_TRIM(name)
       Do i=1,iarg
        Call GETARG(i,AS)
@@ -44,7 +44,7 @@
       Character(80) :: AS
       Integer, External :: IARGC
 
-      iarg = IARGC(); if(iarg.eq.0) Return 
+      iarg = IARGC(); if(iarg.eq.0) Return
       iname=LEN_TRIM(name)
       Do i=1,iarg
        Call GETARG(i,AS)
@@ -71,7 +71,7 @@
       Character(80) :: AS
       Integer, External :: IARGC
 
-      iarg = IARGC(); if(iarg.eq.0) Return 
+      iarg = IARGC(); if(iarg.eq.0) Return
       iname=LEN_TRIM(name)
       Do i=1,iarg
        Call GETARG(i,AS)
@@ -99,7 +99,7 @@
       Character(80) :: AS
       Integer, External :: IARGC
 
-      iarg = IARGC(); if(iarg.eq.0) Return 
+      iarg = IARGC(); if(iarg.eq.0) Return
       iname=LEN_TRIM(name)
       k=0
       Do i=1,iarg
@@ -111,7 +111,7 @@
       if(k.eq.0) Return
 
       ia=0; j1=i1; ! iarr=0
-      Do 
+      Do
        j2=INDEX(AS(j1:i2),',')
        if(j2.eq.0) then; j2=i2; else; j2=j2+j1-1; end if
        j=0 ! INDEX(AS(j1:j2),'-'); k = j+j1-1
@@ -126,7 +126,7 @@
          iarr(ia)=k
         End do
        end if
-       j1=j2+1; 
+       j1=j2+1;
        if(j1.gt.i2) Exit
       End do
 
@@ -147,7 +147,7 @@
       Character(80) :: AS
       Integer, External :: IARGC
 
-      iarg = IARGC(); if(iarg.eq.0) Return 
+      iarg = IARGC(); if(iarg.eq.0) Return
       Do i=1,iarg
        Call GETARG(i,AS)
        if(INDEX(AS,'=').ne.0) Cycle
@@ -161,12 +161,12 @@
 !======================================================================
 !
 !     read the integer variable 'ivalue' with identifier 'name'
-!     from unit 'nu', where the record like 
-!       
+!     from unit 'nu', where the record like
+!
 !     name =  #####      is supposed to exist
 !
 !----------------------------------------------------------------------
-      
+
       Implicit none
 
       Integer, Intent(in) :: nu
@@ -175,7 +175,7 @@
 
       Character(80) :: AS
       Integer :: i
- 
+
       i=LEN_TRIM(name)
       rewind(nu)
     1 read(nu,'(a)',end=2) AS
@@ -185,21 +185,21 @@
       read(AS(i:),*) ivalue
     2 Continue
 
-      End Subroutine Read_ipar 
-    
+      End Subroutine Read_ipar
+
 !======================================================================
       Subroutine Read_rpar(nu,name,rvalue)
 !======================================================================
 !
 !     read the real variable 'rvalue' with identifier 'name'
-!     from unit 'nu', where the record like 
-!       
-!     name =  #####    ! coments 
+!     from unit 'nu', where the record like
+!
+!     name =  #####    ! coments
 !
 !     is supposed to exist
 !
 !----------------------------------------------------------------------
-      
+
       Implicit none
 
       Integer, Intent(in) :: nu
@@ -218,7 +218,7 @@
       read(AS(i:),*) rvalue
     2 Continue
 
-      End Subroutine Read_rpar 
+      End Subroutine Read_rpar
 
 
 !======================================================================
@@ -226,14 +226,14 @@
 !======================================================================
 !
 !     read the real variable 'rvalue' with identifier 'name'
-!     from unit 'nu', where the record like 
-!       
-!     name =  #####    ! coments 
+!     from unit 'nu', where the record like
+!
+!     name =  #####    ! coments
 !
 !     is supposed to exist
 !
 !----------------------------------------------------------------------
-      
+
       Implicit none
 
       Integer, Intent(in) :: nu
@@ -245,27 +245,27 @@
 
       rewind(nu)
     1 read(nu,'(a)',end=2) AS
-      i=INDEX(AS,name)  
+      i=INDEX(AS,name)
       if(i.eq.0) go to 1
       i=INDEX(AS,'=')+1
       read(AS(i:),*) rvalue
     2 Continue
 
-      End Subroutine Read_rval 
+      End Subroutine Read_rval
 
 !======================================================================
       Subroutine Read_apar(nu,name,avalue)
 !======================================================================
 !
 !     read the character variable 'avalue' with identifier 'name'
-!     from unit 'nu', where the record like 
-!       
-!     name =  #####    ! coments 
+!     from unit 'nu', where the record like
+!
+!     name =  #####    ! coments
 !
 !     is supposed to exist
 !
 !----------------------------------------------------------------------
-      
+
       Implicit none
 
       Integer, Intent(in) :: nu
@@ -284,19 +284,19 @@
       read(AS(i:180),*) avalue
     2 Continue
 
-      End Subroutine Read_apar 
-        
+      End Subroutine Read_apar
+
 !======================================================================
       Subroutine Read_iarray(nu,name,nv,ivalue)
 !======================================================================
 !
 !     read the integer variable 'ivalue' with identifier 'name'
-!     from unit 'nu', where the record like 
-!       
+!     from unit 'nu', where the record like
+!
 !     name =  # # # # #      is supposed to exist
 !
 !----------------------------------------------------------------------
-      
+
       Implicit none
 
       Integer,Intent(in) :: nu, nv
@@ -305,7 +305,7 @@
 
       Character(80) :: AS
       Integer :: i,j
- 
+
       rewind(nu)
     1 read(nu,'(a)',end=2) AS
       i = INDEX(AS,name)
@@ -314,7 +314,7 @@
       read(AS(i:),*) (ivalue(j),j=1,nv)
     2 Continue
 
-      End Subroutine Read_iarray 
+      End Subroutine Read_iarray
 
 
 
@@ -323,7 +323,7 @@
 !======================================================================
 !     find position of line with "name" in the begining
 !----------------------------------------------------------------------
-      
+
       Implicit none
 
       Integer, Intent(in) :: nu
@@ -331,7 +331,7 @@
 
       Character(80) :: AS
       Integer :: i,j
- 
+
       Ifind_position = 0
 
       i=LEN_TRIM(name); j=0
@@ -349,9 +349,9 @@
 !======================================================================
       Integer Function Jfind_position(nu,name)
 !======================================================================
-!     find fisrt record in file containing "name" 
+!     find fisrt record in file containing "name"
 !----------------------------------------------------------------------
-      
+
       Implicit none
 
       Integer, Intent(in) :: nu
@@ -359,7 +359,7 @@
 
       Character(80) :: AS
       Integer :: i,j
- 
+
       Jfind_position = 0
 
       i=LEN_TRIM(name); j=0
@@ -376,13 +376,13 @@
       Subroutine Read_string(nu,name,avalue)
 !======================================================================
 !     read the character variable 'avalue' with identifier 'name'
-!     from unit 'nu', where the record like 
-!       
-!     name =  #####    
+!     from unit 'nu', where the record like
+!
+!     name =  #####
 !
 !     is supposed to exist
 !----------------------------------------------------------------------
-      
+
       Implicit none
 
       Integer, Intent(in) :: nu
@@ -415,7 +415,7 @@
       end if
 
       End Subroutine Check_file
-       
+
 
 !======================================================================
       Integer Function Icheck_file(AF)
@@ -429,11 +429,11 @@
       if(.not.EX) Icheck_file = 0
 
       End Function Icheck_file
-       
+
 !======================================================================
       Subroutine Find_free_unit(nu)
 !======================================================================
-	        
+
       Implicit none
       Integer :: nu,i
       Logical :: connected
@@ -463,7 +463,7 @@
 !====================================================================
       CHARACTER FUNCTION AL(L,k)
 !====================================================================
-!        
+!
 !     provides spectroscopic symbols for L values
 !
 !     Limits: L <= 153
@@ -499,7 +499,7 @@
 !     gives the value of L from spetroscopic symbol "a"
 !--------------------------------------------------------------------
 
-      IMPLICIT NONE  
+      IMPLICIT NONE
       Character, Intent(in) :: a
       CHARACTER(21), SAVE :: AS, AB
       Integer(4) :: i
@@ -516,7 +516,7 @@
 
 
 !====================================================================
-      Character(4) function ELF4(n,l,k)     
+      Character(4) function ELF4(n,l,k)
 !====================================================================
 !
 !     gives the specroscopic notation for electron orbital (n,l,k)
@@ -545,7 +545,7 @@
        if(k.le.61) then
         EL(i:i)=ASET(k:k); i=i-1
        elseif(k.le.61*61) then
-        k1=k/61; k2=mod(k,61); 
+        k1=k/61; k2=mod(k,61);
         if(k2.eq.0) then; k1=k1-1; k2=61; end if
 	       EL(i:i)=ASET(k2:k2); i=i-1
 	       EL(i:i)=ASET(k1:k1); i=i-1
@@ -576,7 +576,7 @@
 
 
 !====================================================================
-      Character(3) function ELF3(n,l,k)     
+      Character(3) function ELF3(n,l,k)
 !====================================================================
 !
 !     gives the A3 specroscopic notation for electron orbital (n,l,k)
@@ -596,14 +596,14 @@
 	   '123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
       if(k.eq.0) then
-       ELF3(1:1) = ' '      
+       ELF3(1:1) = ' '
        ELF3(2:2)=CHAR(n + ICHAR('1') - 1)
        ELF3(3:3)=AL(l,1)
       else
        ELF3(1:1)=CHAR(n + ICHAR('1') - 1)
        ELF3(2:2)=AL(l,1)
        ELF3(3:3)=ASET(k:k)
-      end if 
+      end if
 
       End Function ELF3
 
@@ -625,9 +625,9 @@
        '123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
       Character(4), intent(in) :: EL
-      Integer(4), Intent(out) :: n,l,k    
+      Integer(4), Intent(out) :: n,l,k
 
-      Integer(4) :: i,j,ic, k1,k2  
+      Integer(4) :: i,j,ic, k1,k2
       Integer(4), EXTERNAL :: LA
 
       n=0; l=-1; k=0; i=1; j=1
@@ -668,7 +668,7 @@
       i=i+1
       if(i.le.4.and.j.le.3) go to 1
       if(n.ge.100.or.l.lt.0) then
-       write(*,*) 'EL4_nlk is fail to decode: ',EL 
+       write(*,*) 'EL4_nlk is fail to decode: ',EL
        Stop ' '
       end if
 
@@ -691,7 +691,7 @@
       IMPLICIT NONE
 
       Character(3), intent(in) :: EL
-      Integer(4), intent(out) :: n,l,k     
+      Integer(4), intent(out) :: n,l,k
 
       Integer(4) :: i,j,ic
       Integer(4), EXTERNAL :: LA
@@ -750,8 +750,8 @@
       IMPLICIT none
 
       Integer(4), intent(in) :: n
-      Real(8), intent(in), dimension(*) :: S 
-      Integer(4), intent(out), dimension(*) :: IPT 
+      Real(8), intent(in), dimension(*) :: S
+      Integer(4), intent(out), dimension(*) :: IPT
 
       Integer(4) :: i,i1,j1,i2,j2
 

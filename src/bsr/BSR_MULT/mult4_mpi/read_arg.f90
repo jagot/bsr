@@ -2,13 +2,13 @@
       Subroutine  Read_arg
 !======================================================================
 !    INPUT ARGUMENTS:
-!    
+!
 !     AF1  -  c-file for initial state
 !     AF2  -  c-file for final state
 !     AA   -  type of calculation, E1,E2,M1,M2...
-! 
+!
 !-----------------------------------------------------------------------
-      Use mult_par  
+      Use mult_par
 
       Character(2) :: AA
       Integer, external :: Icheck_file
@@ -23,7 +23,7 @@
 
       Call get_command_argument(1,AF1)
       Call get_command_argument(2,AF2)
-      
+
 ! ... define the type of calculations:
 
       AA = 'E1'
@@ -45,7 +45,7 @@
        rewind(nub)
        read(nub) AA,k
        if(AA.ne.ktype.or.k.ne.kpol) new=1
-       if(new.eq.1) close(nub) 
+       if(new.eq.1) close(nub)
       end if
 
       End Subroutine Read_arg

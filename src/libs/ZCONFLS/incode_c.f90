@@ -15,15 +15,15 @@
 
       k=0; m=1
       Do i=1,no; k=k+iq(i); if(iq(i).eq.0) m=0; End do
-      
+
       if(m.eq.0.and.k.gt.0) then
        k=0
        Do i=1,no
-        if(iq(i).eq.0) Cycle 
+        if(iq(i).eq.0) Cycle
         k=k+1
         nn(k)=nn(i); ln(k)=ln(i); kn(k)=kn(i); iq(k)=iq(i)
         LS(k,:)=LS(i,:)
-       End do         
+       End do
        no=k
       end if
 
@@ -87,8 +87,8 @@
         j=j+4
        End do
        j = j - 2
-       if(couple(j:j).eq.'a') LS(1,5)=-1 
-       if(couple(j:j).eq.'b') LS(1,5)=-2 
+       if(couple(j:j).eq.'a') LS(1,5)=-1
+       if(couple(j:j).eq.'b') LS(1,5)=-2
 
        Ltotal = LS(no,4)
        Stotal = LS(no,5)
@@ -103,7 +103,7 @@
        Implicit none
        Character(*), intent(in) :: CONFIG,COUPLE
        Integer :: no,nn(*),ln(*),iq(*),kn(*),LS(5,*)
-       Integer :: ii, k,i,j 
+       Integer :: ii, k,i,j
        Integer, external :: LA
 
        no=0; ii=LEN_TRIM(CONFIG); ii=ii/8;  k=1; j=2
@@ -144,7 +144,7 @@
       Character(26), Intent(out) :: ASYM
       Character(40), Intent(out) :: BSYM
       Character(1), EXTERNAL :: AL
- 
+
       Integer(4) :: i,k,m
 
       k=1
@@ -180,7 +180,7 @@
 
       Use conf_LS
       Character(26), Intent(in) :: ASYM
- 
+
       no = LEN_TRIM(ASYM(1:24))/3
       k=1
       Do i=1,no
@@ -225,7 +225,7 @@
 !----------------------------------------------------------------------
 
       Implicit none
-      
+
       Integer, Intent(in) :: no,nn(no),ln(no),iq(no)
       Character(*) :: label
 
@@ -255,7 +255,7 @@
 !----------------------------------------------------------------------
 
       Implicit none
-      
+
       Integer, Intent(in) :: no,nn(no),ln(no),iq(no),kk
       Character(*) :: label
 
@@ -280,7 +280,7 @@
        end if
        k=k+1; write(label(k:k),'(a)') '_'
       End do
-      
+
       label(k:k)=BLANK
 
       Call Clean_a(label)

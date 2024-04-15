@@ -6,7 +6,7 @@
       Use bsr_hd
       Use target,        only: ntarg, Etarg
       Use spline_atomic, only: z
-    
+
       Implicit none
       Integer, intent(in) :: nu
       Integer :: i,it
@@ -81,7 +81,7 @@
 
 ! ... read corrections for pertuber:
 
-      if(iexp_pert.gt.0) then 
+      if(iexp_pert.gt.0) then
        Call Check_file(AF_pert)
        open(nue,file=AF_pert)
        Call Read_ipar(nue,'nperts',nperts)

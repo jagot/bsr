@@ -4,9 +4,9 @@
 !     defines the J-dependence for reduced matrix elements of
 !     k-pole electric and magnetic transition operator (type MA):
 !
-!     <LSJ||O[k]||L'S'J'> = DJ_fact *  <LS||O[k]||L'S'>  
+!     <LSJ||O[k]||L'S'J'> = DJ_fact *  <LS||O[k]||L'S'>
 !
-!     DJ_fact = (-1)^(L+S+J'+k) [J,J']^1/2  { L  S J },  S = S' 
+!     DJ_fact = (-1)^(L+S+J'+k) [J,J']^1/2  { L  S J },  S = S'
 !                                           { J' k L'}
 !
 !     momenta are given in (2J+1)-representation
@@ -29,7 +29,7 @@
 !     defines the J-dependence for reduced matrix elements of
 !     k-pole magnetic operator MB:
 !
-!     <LSJ||MB[k]||L'S'J'> = DJM_fact *  <LS||MB[k]||L'S'>  
+!     <LSJ||MB[k]||L'S'J'> = DJM_fact *  <LS||MB[k]||L'S'>
 !
 !     DJM_fact =  [J,J',k]^1/2  { L  S  J }
 !                               { L' S' J'}

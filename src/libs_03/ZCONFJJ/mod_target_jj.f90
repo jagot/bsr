@@ -10,15 +10,15 @@
       Integer :: ntarg       ! number of target states
       Integer :: nelc	     ! number of atomic electrons
       Integer :: nz          ! atomic number
-      Integer :: nct	     ! total number of target config.s 
+      Integer :: nct	     ! total number of target config.s
       Integer :: nwt         ! total number of taget orbitals
 
       Real(8), allocatable :: etarg(:)   ! target energy in au
-      Integer, allocatable :: jtarg(:)   ! 2J-value                                  
-      Integer, allocatable :: ptarg(:)   ! parity (+1|-1)                            
-      Integer, allocatable :: nctarg(:)  ! number of target configurations  
-      Integer, allocatable :: nwtarg(:)  ! number of new orbitals           
-      Integer, allocatable :: ictarg(:)  ! pointer to target in conf. list 
+      Integer, allocatable :: jtarg(:)   ! 2J-value
+      Integer, allocatable :: ptarg(:)   ! parity (+1|-1)
+      Integer, allocatable :: nctarg(:)  ! number of target configurations
+      Integer, allocatable :: nwtarg(:)  ! number of new orbitals
+      Integer, allocatable :: ictarg(:)  ! pointer to target in conf. list
 
       Character(80), allocatable :: AFT(:)  ! given file-names for target states
       Character(80), allocatable :: BFT(:)  ! original file-names for target states
@@ -29,12 +29,12 @@
 !======================================================================
       Subroutine alloc_target_jj(m)
 !======================================================================
-!     allocate (deallocate) space in module "target_jj" 
+!     allocate (deallocate) space in module "target_jj"
 !----------------------------------------------------------------------
       Use target_jj
 
       Implicit none
-      Integer, Intent(in) :: m      
+      Integer, Intent(in) :: m
 
       if(m.le.0) then
        if(allocated(jtarg)) Deallocate(jtarg,ptarg, &
@@ -57,14 +57,14 @@
 !======================================================================
       Subroutine Read_target_jj(nut)
 !======================================================================
-!     read target information from unit 'nut'  
+!     read target information from unit 'nut'
 !----------------------------------------------------------------------
-      Use target_jj 
-      
+      Use target_jj
+
       Implicit none
       Integer, intent(in) :: nut
       Integer :: i
- 
+
       rewind(nut)
       read(nut,'(a)') title
 
@@ -74,9 +74,9 @@
 
       if(ntarg.le.0) Stop 'R_targ: ntarg <= 0 '
       i=ntarg; Call Alloc_target_jj(i)
-        
+
       Call Read_ipar(nut,'ntarg',ntarg)
-      read(nut,*) 
+      read(nut,*)
       nct = 0
       Do i=1,ntarg
        read(nut,*) AFT(i),BFT(i),jtarg(i),ptarg(i),etarg(i), &
@@ -92,19 +92,19 @@
 !======================================================================
       Subroutine Write_target_jj(nut)
 !======================================================================
-!     write target information to file 'nut'  
+!     write target information to file 'nut'
 !----------------------------------------------------------------------
-      Use target_jj 
+      Use target_jj
 
       Implicit none
       Integer, intent(in) :: nut
       Integer :: i,ia,ib
 
       rewind(nut)
-      write(nut,'(a)') TRIM(title) 
+      write(nut,'(a)') TRIM(title)
       write(nut,'(80(''-''))')
       write(nut,'(a,i4,5x,a)') &
-                'nz    = ',nz,   ' !   nuclear charge' 
+                'nz    = ',nz,   ' !   nuclear charge'
       write(nut,'(a,i4,5x,a)') &
                 'nelc  = ',nelc, ' !   number of electrons'
       write(nut,'(80(''-''))')

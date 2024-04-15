@@ -4,7 +4,7 @@
 !     broadcast the one-electron orbitals in module "DBS_orbitals"
 !----------------------------------------------------------------------
       Use MPI
-      Use DBS_orbitals_pq 
+      Use DBS_orbitals_pq
       Use DBS_grid, only: ns
 
       Implicit none
@@ -36,7 +36,7 @@
 
       Call MPI_BCAST(nv_ch,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
       if(nv_ch.gt.0) then
-       if(myid.ne.0) then 
+       if(myid.ne.0) then
         if(allocated(i_ch)) deallocate(i_ch); Allocate(i_ch(nv_ch))
         if(allocated(j_ch)) deallocate(j_ch); Allocate(j_ch(nv_ch))
        end if

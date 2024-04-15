@@ -10,7 +10,7 @@
       Character(*) :: string,name, avalue
       Integer :: i,j
 
-      i = INDEX(string,name); if(i.eq.0) Return 
+      i = INDEX(string,name); if(i.eq.0) Return
       j = INDEX(string(i+1:),'=')
       if(j.gt.0) read(string(j+1:),*) avalue
 
@@ -27,7 +27,7 @@
       Character(*) :: string,name
       Integer :: i,j, ivalue
 
-      i = INDEX(string,name); if(i.eq.0) Return 
+      i = INDEX(string,name); if(i.eq.0) Return
       j = INDEX(string(i+1:),'=')
       if(j.gt.0) read(string(j+1:),*) ivalue
 
@@ -45,7 +45,7 @@
       Integer :: i,j
 	  Real(8) :: rvalue
 
-      i = INDEX(string,name); if(i.eq.0) Return 
+      i = INDEX(string,name); if(i.eq.0) Return
       j = INDEX(string(i+1:),'=')
       if(j.gt.0) read(string(j+1:),*) rvalue
 

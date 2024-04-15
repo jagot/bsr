@@ -12,9 +12,9 @@
 ! ... input/output files and units:
 
       Integer, parameter :: ma = 100    ! limit for file-name length
-      Character(ma) :: AF     
+      Character(ma) :: AF
 
-      Integer :: log = 3;   Character(ma) :: AF_log  = 'name.log'                            
+      Integer :: log = 3;   Character(ma) :: AF_log  = 'name.log'
       Integer :: inp = 5;   Character(ma) :: AF_dat  = 'name.inp'
       Integer :: scr = 6;
 
@@ -31,7 +31,7 @@
 
       Character(ma) :: name = ' '
 
-! ... atomic parameters: 
+! ... atomic parameters:
 
       Character(2)  :: atom = ' '
       Character(2)  :: ion  = ' '
@@ -42,24 +42,26 @@
 
       Real(8) :: Etotal, Ecore
 
+      Integer :: mbreit = 0
+
 ! ... convergence:
 
       Real(8) :: scf_tol = 1.d-9,   scf_diff = 1.d0
       Real(8) :: orb_tol = 1.d-5,   orb_diff = 1.d0
       Real(8) :: end_tol = 1.d-6
-      Real(8) :: eps_c   = 1.d-8    
+      Real(8) :: eps_c   = 1.d-8
       Real(8) :: eps_det = 1.d-8
       Real(8) :: eps_rot = 1.d-2
       Real(8) :: qsum_min= 1.d-8
 
       Integer :: max_it  = 25
-      
-      Integer :: n_corr  = 1
-      Real(8) :: eps_corr= 1.d-1
+
+      Real(8) :: aweight = 0.7
+      Real(8) :: bweight = 0.7
+      Integer :: acc = 0
 
 ! ... running options:
 
-      Integer :: all     = 0
       Integer :: method  = 1
       Integer :: newton  = 0
       Integer :: rotate  = 0
@@ -67,11 +69,12 @@
       Real(8) :: srhs    = 0.d0
       Integer :: debug   = 0
       Integer :: icore   = 0
+      Character(80) :: amethod
 
-! ... block parameters: 
+! ... block parameters:
 
-      Integer :: eol = 5                     !  = 1,5,9 - optimization mode 
-                                             
+      Integer :: eol = 5                     !  = 1,5,9 - optimization mode
+
       Integer :: nlevels = 0                 !  number of levels chosen for optimization
                                              !  each level has attritutes:
       Integer, allocatable :: block(:)       !  block index from (1:nlevel)
@@ -81,12 +84,12 @@
       Real(8), allocatable :: elevel(:)      !  level energy (1:nlevel)
       Integer, allocatable :: ip_level(:)    !  pointer to the given level in array coeffs, see below
       Character(mlab), allocatable :: labeln(:)  ! level_label  (1:nlevel)
-                                             
-      Integer :: coefs_size = 0                 
+
+      Integer :: coefs_size = 0
       Real(8), allocatable :: coefs(:)       !  contains expansion coeff.s for all opt. levels
-      Real(8) :: memory_mat = 0.d0 
-                                             
-! ... orbital variables:  
+      Real(8) :: memory_mat = 0.d0
+
+! ... orbital variables:
 
       Integer :: kmin= 0
       Integer :: kmax= 0
@@ -96,21 +99,21 @@
       Integer :: mblock = 5000
 
       Integer :: varied = 0
-      Character(ma) :: avaried = 'all'
+      Character(200) :: avaried = 'all'
       Integer, allocatable :: ivaried(:)
+      Integer, allocatable :: iphys(:)       !  physical orbital
+      Character(200) :: physical = ' '
 
-      Integer :: mbreit = 0      
-
-      Integer :: ipzero = 0 
-      Integer :: iqzero = 0 
-      Integer :: jpzero = 1 
-      Integer :: jqzero = 1 
+      Integer :: ipzero = 0
+      Integer :: iqzero = 0
+      Integer :: jpzero = 1
+      Integer :: jqzero = 1
 
 ! ... buffer size for coefficients:
 
       Integer, parameter :: maxnc = 1000000
 
-! ... frequently called functions:   
+! ... frequently called functions:
 
       Integer, external :: Icheck_file
 
@@ -139,38 +142,20 @@
       Integer :: nint = 0                    ! number of integrals
       Real(8), allocatable :: Rk_int(:)      ! value of integral
       Integer, allocatable :: i1_int(:)      ! orbital index
-      Integer, allocatable :: i2_int(:)      ! 
-      Integer, allocatable :: i3_int(:)      ! 
-      Integer, allocatable :: i4_int(:)      ! 
+      Integer, allocatable :: i2_int(:)      !
+      Integer, allocatable :: i3_int(:)      !
+      Integer, allocatable :: i4_int(:)      !
       Integer :: ncoef = 0                   ! number of angular coefficients
       Integer, allocatable :: ic_coef(:)     ! first configuration index
       Integer, allocatable :: jc_coef(:)     ! second configuration index
       Real(8), allocatable :: Rk_coef(:)     ! angular coefficients
-      Integer, allocatable :: ip_int (:)     ! pointers to the coefficient 
+      Integer, allocatable :: ip_int (:)     ! pointers to the coefficient
       Integer, allocatable :: nk_int (:)     ! pointer for integrals for given k-value
       Integer, allocatable :: nk_coef(:)     ! pointer for coefficients for given k-value
       Integer(1), allocatable :: if_int(:)   ! fixed or not
 
-! ... list of Sk-integrals:
+      Real(8) :: au_cm, au_eV
 
-      Integer :: Sint = 0                    ! number of integrals
-      Real(8), allocatable :: Sk_int (:)     ! value of integral
-      Integer, allocatable :: i1_Sint(:)     ! orbital index
-      Integer, allocatable :: i2_Sint(:)     ! 
-      Integer, allocatable :: i3_Sint(:)     ! 
-      Integer, allocatable :: i4_Sint(:)     ! 
-      Integer :: Scoef = 0                   ! number of angular coefficients
-      Integer, allocatable :: ic_Scoef(:)    ! first configuration index
-      Integer, allocatable :: jc_Scoef(:)    ! second configuration index
-      Real(8), allocatable :: Rk_Scoef(:)    ! angular coefficients
-      Integer, allocatable :: ip_Sint (:)    ! pointers to the coefficient 
-      Integer, allocatable :: nk_Sint (:)    ! pointer for integrals for given k-value
-      Integer, allocatable :: nk_Scoef(:)    ! pointer for coefficients for given k-value
-      Integer(1), allocatable :: if_Sint(:)  ! fixed or not
-
-      Real(8) :: memory_coefs = 0.d0 
-
-      Integer, allocatable :: iphys(:)       !  physical orbital 
-      Character(200) :: physical = ' '
+      Real(8) :: memory_coefs = 0.d0
 
       End Module dbsr_mchf

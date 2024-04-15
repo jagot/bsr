@@ -3,7 +3,7 @@
 !======================================================================
 !     read integer variable 'ivalue' with identifier 'name'
 !     from unit 'nu', where the record like    name = ...
-!     is supposed to exist; if absent - ivalue is not changed 
+!     is supposed to exist; if absent - ivalue is not changed
 !----------------------------------------------------------------------
       Implicit none
       Integer, intent(in) :: nu
@@ -22,15 +22,15 @@
       read(AS(i:),*) ivalue
     2 Continue
 
-      End Subroutine Read_ipar 
+      End Subroutine Read_ipar
 
-    
+
 !======================================================================
       Subroutine Read_rpar(nu,name,rvalue)
 !======================================================================
 !     read real variable 'rvalue' with identifier 'name'
 !     from unit 'nu', where the record begining with  name = ...
-!     is supposed to exist; if absent - rvalue is not changed 
+!     is supposed to exist; if absent - rvalue is not changed
 !----------------------------------------------------------------------
       Implicit none
       Integer, intent(in) :: nu
@@ -49,7 +49,7 @@
       read(AS(i:),*,end=2,err=2) rvalue
     2 Continue
 
-      End Subroutine Read_rpar 
+      End Subroutine Read_rpar
 
 
 !======================================================================
@@ -57,7 +57,7 @@
 !======================================================================
 !     read real variable 'rvalue' with identifier 'name'
 !     from unit 'nu', where the record containing  name = ...
-!     is supposed to exist; if absent - rvalue is not changed 
+!     is supposed to exist; if absent - rvalue is not changed
 !----------------------------------------------------------------------
       Implicit none
       Integer, intent(in) :: nu
@@ -68,14 +68,14 @@
 
       rewind(nu)
     1 read(nu,'(a)',end=2) AS
-      i=INDEX(AS,name)  
+      i=INDEX(AS,name)
       if(i.eq.0) go to 1
       i=INDEX(AS,'=')+1
       if(i.eq.1) go to 1
       read(AS(i:),*) rvalue
     2 Continue
 
-      End Subroutine Read_rval 
+      End Subroutine Read_rval
 
 
 !======================================================================
@@ -83,7 +83,7 @@
 !======================================================================
 !     read character variable 'avalue' with identifier 'name'
 !     from unit 'nu', where the record begining with  name = ...
-!     is supposed to exist; if absent - avalue is not changed 
+!     is supposed to exist; if absent - avalue is not changed
 !----------------------------------------------------------------------
       Implicit none
       Integer, intent(in) :: nu
@@ -102,15 +102,15 @@
       read(AS(i:180),*) avalue
     2 Continue
 
-      End Subroutine Read_apar 
-        
+      End Subroutine Read_apar
+
 
 !======================================================================
       Subroutine Read_iarray(nu,name,nv,ivalue)
 !======================================================================
 !     read integer array 'ivalue(1:nv)' with identifier 'name'
 !     from unit 'nu', where the record like    name = ...
-!     is supposed to exist; if absent - ivalue is not changed 
+!     is supposed to exist; if absent - ivalue is not changed
 !----------------------------------------------------------------------
       Implicit none
       Integer, intent(in) :: nu, nv
@@ -118,7 +118,7 @@
       Integer, intent(out) :: ivalue(nv)
       Character(80) :: AS
       Integer :: i,j
- 
+
       rewind(nu)
     1 read(nu,'(a)',end=2) AS
       i = INDEX(AS,name)
@@ -128,7 +128,7 @@
       read(AS(i:),*) (ivalue(j),j=1,nv)
     2 Continue
 
-      End Subroutine Read_iarray 
+      End Subroutine Read_iarray
 
 
 !======================================================================
@@ -141,7 +141,7 @@
       Character(*), Intent(in) :: name
       Character(80) :: AS
       Integer :: i,j
- 
+
       Ifind_position = 0
       i=LEN_TRIM(name); j=0
       rewind(nu)
@@ -166,7 +166,7 @@
       Character(*), intent(in) :: name
       Character(80) :: AS
       Integer :: i,j
- 
+
       Jfind_position = 0
       i=LEN_TRIM(name); j=0
       rewind(nu)
@@ -184,7 +184,7 @@
 !======================================================================
 !     read character variable 'avalue' with identifier 'name'
 !     from unit 'nu', where the record begining with  name = ...
-!     is supposed to exist; if absent - avalue is not changed. 
+!     is supposed to exist; if absent - avalue is not changed.
 !     Avalue may contains blanks.
 !----------------------------------------------------------------------
       Implicit none
@@ -204,4 +204,3 @@
     2 Continue
 
       End Subroutine Read_string
-        

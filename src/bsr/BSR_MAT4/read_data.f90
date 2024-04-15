@@ -5,7 +5,7 @@
 !----------------------------------------------------------------------
       Use bsr_mat
       Use conf_LS;  Use orb_LS
-      Use det_list; Use def_list  
+      Use det_list; Use def_list
 
       Implicit none
       Integer :: i,j,m, nc,lc,kc, min_lt, max_lt
@@ -41,9 +41,9 @@
        read(nui) interrupt, intercase, max_nbuf
        rewind(nui)
 
-       write(pri,'(a,i10)') 'interrupt =',interrupt  
+       write(pri,'(a,i10)') 'interrupt =',interrupt
        write(pri,'(a,i10)') 'intercase =',intercase
-       write(pri,'(a,i10)') 'max_nbuf  =',max_nbuf  
+       write(pri,'(a,i10)') 'max_nbuf  =',max_nbuf
 
        AF = trim(AF_mat)//'_new'
        Open(nuj,file=AF,form='UNFORMATTED')
@@ -72,27 +72,27 @@
 
 !----------------------------------------------------------------------
 ! ... read configurations and open angular coef.s file:
-           
+
 ! ... c-file:
 
       i=LEN_TRIM(AF_cfg); AF_cfg(i-2:i)=ALSP
       Open(nuc,file=AF_cfg,status='OLD')
 
       if(bp_mode.eq.0) then
- 
+
        i=LEN_TRIM(AF_inf); AF_inf(i-2:i)=ALSP
        Open(nub,file=AF_inf,status='OLD',form='UNFORMATTED')
-       
+
        Call Read_conf(nuc,nub)
-       
+
        Call Load_det(nub)
        Call Load_def(nub)
-       
+
        Close(nub)
        i=LEN_TRIM(AF_int); AF_int(i-2:i)=ALSP
        if(mode.ne.11) &
        Open(nub,file=AF_int,status='OLD',form='UNFORMATTED')
-       
+
       else
 
        Call Read_conf_bp(nuc)
@@ -100,7 +100,7 @@
        i=LEN_TRIM(AF_lst); AF_lst(i-2:i)=ALSP
        if(mode.ne.11) &
        Open(nub,file=AF_lst,status='OLD',form='UNFORMATTED')
-      
+
       end if
 
 ! ... read physical orbitals if they not in c-file:
@@ -156,7 +156,7 @@
 
 !----------------------------------------------------------------------
 ! ... read B-spline expantions for bound orbitals:
-   
+
       Call Allocate_bsorb(nwf)
       nbf = nwf
       Do i = 1,nbf
@@ -179,12 +179,12 @@
        Call Read_bsw(nuw)
        Close(nuw)
       end if
-      
+
 ! ... correction of pertuber pointer:
 
       if(ncp.gt.0) ippert = ippert + ipconf(nch)
 
-! ... check the correspondence between c- and bsw-files: 
+! ... check the correspondence between c- and bsw-files:
 
       j = 0
       Do i = 1,nwf
@@ -195,7 +195,7 @@
        end if
       End do
       if(j.gt.0) Call Stop_mpi(0,0,'no correspondence between c- and w- files')
-      
+
 ! ... remove orb_LS arrays:
 
 !      Call Alloc_orb_LS(nclosd)           !  ????
@@ -206,18 +206,18 @@
        if(iech(i).ne.0) Cycle
        Call BXV(ks,ns,sb(1,1),pbs(1,i),qbs(1,i))
       End do
-       
+
 ! ... read orthogonal conditions:
 
       Call alloc_file(0)
       rewind(nuc)
     1 read(nuc,'(a)',end=2) line
-      if(line(1:1).ne.'<') go to 1 
+      if(line(1:1).ne.'<') go to 1
       i = Iadd_line(line)
       go to 1
     2 Continue
 
-! ... the < p | p > values 
+! ... the < p | p > values
 
       Call Alloc_orb_overlaps(nbf,lbs,iech,kclosd)
 
@@ -237,7 +237,7 @@
        End do
        write(pri,*)
        write(pri,'(a,i10,a)')  'lt_max   = ',max_lt, &
-        '  -  maximum l-value in target'           
+        '  -  maximum l-value in target'
        write(pri,'(a,i10,a)')  'lt_min   = ',min_lt, &
         '  -  minumum l-value in channels'
        if(max_lt + mk .ge. min_lt) Stop 'no-exchage mode is not working'
@@ -246,7 +246,7 @@
 
        if(exch_mode.eq.1) then
         Close(nui,status='DELETE')
-        AF = trim(AF_mat)//'.mask' 
+        AF = trim(AF_mat)//'.mask'
         Open(nui,file=AF,form='UNFORMATTED')
        end if
 
@@ -261,4 +261,4 @@
        rewind(nuj);  write(nuj) ns,nch,npert
 
       End Subroutine Read_data
-    
+

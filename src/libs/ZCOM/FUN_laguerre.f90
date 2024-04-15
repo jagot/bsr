@@ -13,16 +13,16 @@
       Integer :: i
 
 ! ... check the input parameters:
-      
+
       if(m.lt.2) Stop 'Laguerre:  m < 2'
       if(a.le.-1.d0) Stop 'Laguerre:  a < -1.d0'
       if(x.lt. 0.d0) Stop 'Laguerre:  a < -1.d0'
 
 ! ... recurrence calculations:
 
-      P(0) = 1.d0;  P(1) = -x+a-1.d0 
+      P(0) = 1.d0;  P(1) = -x+a-1.d0
       Do i=2,m
        P(i) = ( (2*i-1+a-x)*P(i-1) - (i-1+a)*P(i-2)) / i
       End do
 
-      End Subroutine Laguerre 
+      End Subroutine Laguerre

@@ -11,7 +11,7 @@
       Real(8) :: C,fl,ygr(nv,ks)
       Integer, external :: ITRA
 
-! ... prepare B-splines arrays in the band non-symmetric storage mode:      
+! ... prepare B-splines arrays in the band non-symmetric storage mode:
 
       Allocate(bbbs(ns,ks+ks-1),rrbs(ns,ks+ks-1), &
                ddbs(ns,ks+ks-1),ttbs(ns,ks+ks-1))
@@ -30,17 +30,17 @@
        Call ZINTYN (ns,ks,nv,bsp,bspd,grw,ddbs)
        Do i=1,nv; Do m=1,ks
         ygr(i,m) = grw(i,m)*grm(i,m)
-       End do;    End do 
+       End do;    End do
       Call ZINTYN (ns,ks,nv,bsp,bsp,ygr,ttbs)
-      end if 
-       
+      end if
+
       if(ktype.eq.'E'.and.kpol.eq.2)  then
        Do i=1,nv; Do m=1,ks
         ygr(i,m) = grw(i,m)*gr(i,m)
-       End do;    End do 
+       End do;    End do
        Call ZINTYN (ns,ks,nv,bsp,bspd,ygr,ddbs)
        ttbs = bbbs
-      end if 
+      end if
 
 ! ...  < . | p >,  < . | r | p >,  < . | d/dr | p > ,  < . | 1/r | p >
 
@@ -53,13 +53,13 @@
        if(iech(i).ne.0) Cycle
        Call bav(ns,ks,bbbs,pbs(1,i),qbs(1,i) ,'n','r')
        Call bav(ns,ks,rrbs,pbs(1,i),rbs(1,i) ,'n','r')
-       Call bav(ns,ks,ddbs,pbs(1,i),dbsr(1,i),'n','r')   
-       Call bav(ns,ks,ddbs,pbs(1,i),dbsl(1,i),'n','l')   
+       Call bav(ns,ks,ddbs,pbs(1,i),dbsr(1,i),'n','r')
+       Call bav(ns,ks,ddbs,pbs(1,i),dbsl(1,i),'n','l')
        Call bav(ns,ks,ttbs,pbs(1,i),tbs(1,i) ,'n','r')
       End do
 
-! ... one-electron overlaps 
-   
+! ... one-electron overlaps
+
       obs = 0.d0
       Do i=1,nbf; if(iech(i).ne.0) Cycle
        Do j=i,nbf; if(iech(j).ne.0) Cycle

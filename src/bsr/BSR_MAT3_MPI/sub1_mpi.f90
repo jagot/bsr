@@ -9,7 +9,7 @@
       USE conf_LS;   USE symc_list_LS; Use symt_list_LS
       USE spline_atomic,   only: EC,kclosd
       USE spline_param,    only: ns,ks
-      USE spline_orbitals, only: mbf,nbf,lbs      
+      USE spline_orbitals, only: mbf,nbf,lbs
       USE spline_galerkin, only: sb
       USE spline_grid,     only: t
 
@@ -20,7 +20,7 @@
 
       t3 = MPI_WTIME()
 
-! ... read configuration expansion and orbitals information: 
+! ... read configuration expansion and orbitals information:
 
       if(myid.eq.0) Call Read_data
 
@@ -47,7 +47,7 @@
        else
         pri = 0
        end if
-      end if 
+      end if
 
 ! ... initialize arrays:
 
@@ -55,8 +55,8 @@
       Allocate(IP_channel(ncfg))
       Do i=1,ncfg; IP_channel(i)=Ifind_channel(i); End do
 
-      Call Allocate_ndets(-1)  
-      Call Allocate_ndefs(-1)  
+      Call Allocate_ndets(-1)
+      Call Allocate_ndefs(-1)
 
 ! ... memory requirements:
 
@@ -64,21 +64,21 @@
       Call MPI_REDUCE(i,m,1,MPI_INTEGER,MPI_MAX,0,MPI_COMM_WORLD,ierr)
       if(myid.ne.0) m=i
       if(pri.gt.0) write(pri,'(a,f10.2,a)') &
-       'Matrix memory:     ', m*4.0/(1024*1024),'  Mb' 
+       'Matrix memory:     ', m*4.0/(1024*1024),'  Mb'
       mm = m
 
       l=maxval(lbs(1:nbf))
       npol=max(l,mk); k=(npol+2)*ntype; if(nb.lt.k) nb=k
       Call Allocate_cmdata(nb,mb,kb,m)
       if(pri.gt.0) write(pri,'(a,f10.2,a)') &
-       'CMDATA memory:     ', m*4.0/(1024*1024),'  Mb' 
+       'CMDATA memory:     ', m*4.0/(1024*1024),'  Mb'
       mm = mm + m
 
       if(.not.allocated(CBUF)) &
        Allocate(CBUF(maxnc),ijtb(maxnc),intb(maxnc),idfb(maxnc))
       m = 5*maxnc
       if(pri.gt.0) write(pri,'(a,f10.2,a)') &
-       'Buffer memory:     ', m*4.0/(1024*1024),'  Mb' 
+       'Buffer memory:     ', m*4.0/(1024*1024),'  Mb'
       mm = mm + m
 
       m = 2*(4*ns*ks + + 3*ns*ns + nbf*nbf + ns*nbf + ns*ns*(l+1))
@@ -86,7 +86,7 @@
        'L-integrals memory:',m*4.0/(1024*1024),'  Mb'
       mm = mm + m
 
-      m = mbf * 6 + 3*nbf*nbf + 4*ns*nbf  
+      m = mbf * 6 + 3*nbf*nbf + 4*ns*nbf
       if(pri.gt.0)  write(pri,'(a,f10.2,a)') &
        'Orbitals arrays:   ',m*4.0/(1024*1024),'  Mb'
       mm = mm + m
@@ -140,7 +140,7 @@
 ! ... redo overlap matrix:
 
       if(k.gt.0) then
-       
+
        if(pri.gt.0) write(pri,*) 'redo overlap matrix: k =',k
        hcc=0.d0; acf=0.d0; htarg=0.d0; otarg=0.d0
        if(kcp.gt.0) then;  hcb=0.d0;  hbb=0.d0; end if
@@ -157,11 +157,11 @@
 
       end if
 
-! ... record overlap matrix: 
+! ... record overlap matrix:
 
       if(myid.eq.0) then; rewind(nui);  write(nui) ns,nch,kcp; end if
 
-      Call Record_matrix(nui)  
+      Call Record_matrix(nui)
 
       Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
       t4 = MPI_WTIME()
@@ -183,7 +183,7 @@
 
       Call Gen_Lval
 
-      icase=6;   Call State_res   
+      icase=6;   Call State_res
 
       Call Alloc_Lcore(0,0,0)
 
@@ -196,22 +196,22 @@
 
 !----------------------------------------------------------------------
 !                                                          Z-integrals:
-      if(mso.gt.0) then    
+      if(mso.gt.0) then
 
        t3 = MPI_WTIME()
 
-       Call Gen_Zval;  icase=7;  Call State_res   
+       Call Gen_Zval;  icase=7;  Call State_res
 
        Call Alloc_zcore(0,0,0)
 
        t4 = MPI_WTIME()
-       
+
        Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
        if(myid.eq.0) &
         write(*,'(a,f10.2,a)') 'Z-integrals:  ',(t4-t3)/60,' min '
        if(pri.gt.0) &
         write(pri,'(/a,f10.2,a/)') 'Z-integrals:  ',(t4-t3)/60,' min '
- 
+
       end if
 !----------------------------------------------------------------------
 !                                                          R-integrals:
@@ -244,7 +244,7 @@
       End do
 
 !----------------------------------------------------------------------
-! ... symmetrize the int. matrix: 
+! ... symmetrize the int. matrix:
 
       Do ich = 1,nch
        ij = icc(ich,ich); if(ij.eq.0) Cycle
@@ -262,7 +262,7 @@
       if(myid.eq.0) &
        write(*  ,'(a,4x,f10.2,a)') 'BS_ORTH:  ',(t4-t3)/60,' min '
 
-! ... record interaction matrix: 
+! ... record interaction matrix:
 
       Call Record_matrix(nui)
 
@@ -279,8 +279,8 @@
 !----------------------------------------------------------------------
 ! ... target interaction matrix:
 
-      Call Collect_otarg 
-      Call Collect_htarg 
+      Call Collect_otarg
+      Call Collect_htarg
 
       if(myid.eq.0) then
        write(nui) htarg
@@ -288,12 +288,12 @@
        write(nui) Etarg
        write(nui) EC
        close(nui)
- 
+
        Call Target_print(pri,EC,Eps_tar)
 
       end if
 
-      End Subroutine SUB1 
+      End Subroutine SUB1
 
 
 

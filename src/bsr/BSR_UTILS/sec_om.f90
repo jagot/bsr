@@ -1,7 +1,7 @@
 !=====================================================================
 !     UTILITY  sec_om
 !=====================================================================
-!     provides collizion strengths or cross sections 
+!     provides collizion strengths or cross sections
 !     for given transitions from information in 'zarm.om'
 !
 !     Arguments: i11,i12,  i21,i22  - range for first and second
@@ -10,17 +10,17 @@
 !                      0 - sigma in a.u.  (default)
 !                      1 - sigma in 10-16
 !                      2 - sigma in 10-18
-!                     -1 - omega 
+!                     -1 - omega
 !---------------------------------------------------------------------
       Use target
 
       Implicit real(8) (A-H,O-Z)
 
-      Real, allocatable :: e(:), om(:), y(:), fl(:) 
+      Real, allocatable :: e(:), om(:), y(:), fl(:)
       Real :: Ry = 13.6057
       Logical :: EX
       Character(3)  :: AT
-      Integer, allocatable :: itf1(:), itf2(:) 
+      Integer, allocatable :: itf1(:), itf2(:)
 
       Integer :: nut=1;  Character(20) :: AF_t  = 'target'
       Integer :: nuo=2;  Character(20) :: AF_om = 'zarm.om'
@@ -58,7 +58,7 @@
       Allocate(itf1(ntf),itf2(ntf),fl(ntf))
       Do i = 1,ntf
        read(nuf,*) itf1(i),itf2(i),fl(i)
-      End do                                                                                                                                          
+      End do
    25 Continue
       write(*,'(a,i6)') 'ntf =',ntf
 
@@ -124,10 +124,10 @@
        if(IStarg(i2).eq.0) g2=Ltarg(i2)+1
 
 ! ... read data for given transition:
-      
+
       ne=0
       rewind(nuo)
-    5 read(nuo,*,end=15) x,ns,(y(i),i=1,ns) 
+    5 read(nuo,*,end=15) x,ns,(y(i),i=1,ns)
       if(ns.lt.itr) go to 5
       if(x.le.etarg(i2)) go to 5
 
@@ -174,14 +174,14 @@
 
 
       if(ion.eq.0.and.i1.ne.i2.and.i16.ge.0) &
-      write(out,'(f14.8,e16.8,f12.6,e16.8,f12.6)') etarg(i2)*Ry,0.d0,etarg(i2),0.d0,0.d0  
+      write(out,'(f14.8,e16.8,f12.6,e16.8,f12.6)') etarg(i2)*Ry,0.d0,etarg(i2),0.d0,0.d0
       if(i16.eq.-1) write(out,'(f14.6,e16.8)') etarg(i2),0.d0
 
       if(i16.eq.-2) write(out,'(3(f14.6,e16.8))') &
          etarg(i2), 0.d0, etarg(i2)-etarg(i1), 0.d0, 0.d0
 
       Do ie=1,ne
-       
+
        es=e(ie)-etarg(i1)
        s=om(ie)/g/es                                   ! in [pi ao^2]
        if(i16.eq.0) S = S * 3.1415926                  ! in ao^2
@@ -190,9 +190,9 @@
 
        if(i16.ge.0) &
         write(out,'(f14.8,e16.8,f12.6,e16.8,f12.6)') &
-                         e(ie)*Ry,s,e(ie),om(ie),e(ie)/zion   
+                         e(ie)*Ry,s,e(ie),om(ie),e(ie)/zion
        if(i16.eq.-1) &
-        write(out,'(f14.6,e16.8)') e(ie),om(ie)  ! only omega 
+        write(out,'(f14.6,e16.8)') e(ie),om(ie)  ! only omega
 
        if(i16.eq.-2) then
         sn = 0.28003 * 3.1415926
@@ -200,7 +200,7 @@
         e2 = e(ie)-etarg(i2)
         s1 = om(ie)/g1/e1 * sn
         s2 = om(ie)/g2/e2 * sn
-        write(out,'(3(f14.6,e16.8))') e(ie),om(ie),e1,s1,e2,s2 
+        write(out,'(3(f14.6,e16.8))') e(ie),om(ie),e1,s1,e2,s2
        end if
       End do
 
@@ -228,7 +228,7 @@
       Do ie = 1,ne
        er = log( (e(ie)-etarg(i2))/de + 2.71828 )
        or = om(ie) / er / f
-       write(nur,'(f14.8,3e16.8)') e(ie),om(ie),er,or 
+       write(nur,'(f14.8,3e16.8)') e(ie),om(ie),er,or
       End do
 
       End do; End do  ! over transitions
@@ -242,12 +242,12 @@
 !======================================================================
 !     provide screen information about sec_om utility
 !----------------------------------------------------------------------
-       
+
       Implicit real(8) (a-h,o-z)
 
       Character(80) :: A
 
-      Call get_command_argument(1,A)  
+      Call get_command_argument(1,A)
       if(A.ne.'?') Return
 
       write(*,*) &

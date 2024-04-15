@@ -1,5 +1,5 @@
 !======================================================================
-      Subroutine Gen_dbs(nbf1,nbf2,wfact,kpol,ktype)      
+      Subroutine Gen_dbs(nbf1,nbf2,wfact,kpol,ktype)
 !======================================================================
 !     one-electron dipole integrals between two subsets of orbitals;
 !----------------------------------------------------------------------

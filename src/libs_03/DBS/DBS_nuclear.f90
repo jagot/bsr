@@ -8,7 +8,7 @@
       Implicit none
 
       Real(8) :: atomic_number  = zero
-      Real(8) :: atomic_weight  = zero 
+      Real(8) :: atomic_weight  = zero
 
       Character(20) :: nuclear = 'Fermi'
 
@@ -58,19 +58,19 @@
 !======================================================================
 !     Set up the nuclear parameters in module DBS_nuclear
 !     z,awt - data from the calling program
-!     if they are zero - try to get them from file unit "nu" 
+!     if they are zero - try to get them from file unit "nu"
 !----------------------------------------------------------------------
       Use DBS_nuclear
 
       Implicit none
-      Integer :: nu, an
+      Integer :: nu, an, aw
       Real(8) :: apar,cpar, z,atw, rms, A
       Character(200) :: atom, core, conf
 
 ! ... read parameters from file:
 
       if(nu.gt.0) then
-                                            
+
        Call Read_rpar(nu,'atomic_number',atomic_number)
        Call Read_rpar(nu,'atomic_weight',atomic_weight)
        Call Read_apar(nu,'nuclear',nuclear)
@@ -89,7 +89,7 @@
       if(an.lt.1.or.an.gt.104) Stop 'Stop in Read_nuclear:  Z out of range'
       Call Def_atom(an,atom,A,rms,core,conf)
 
-      if(atw.le.0.d0) atw = A 
+      if(atw.le.0.d0) atw = A
       if(rrms.eq.0.d0) rrms = rms
       if(rrms.lt.0.d0) then
        if(an.le.90)  then
@@ -98,14 +98,6 @@
          rrms=(0.77d0*atw**(1.d0/3.d0)+0.980d0)
        end if
       end if
-
-      if(nuclear.eq.'Fermi'.and.rrms.lt.2.d0) then
-       rrms = 2.d0
-       write(*,'(70("_"))')
-       write(*,*) 'rrms is changed to 2.0 because GETCPR routine from GRASP'
-       write(*,*) 'is nor working for small values of rrms'
-       write(*,'(70("_")/)')
-      end if  
 
       atomic_number = z
       atomic_weight = atw
@@ -122,6 +114,18 @@
 
        apar = a_fermi / fermi_in_cm * bohr_radius_in_cm
        cpar = c_fermi / fermi_in_cm * bohr_radius_in_cm
+
+       aw = NINT(atw)
+       if(c_fermi.eq.0.d0.and.aw.le.4) then
+!L. Visscher and K.G. Dyall, Dirac-Fock atomic electronic structure calculations using different nuclear
+!charge distributions, Atom. Data Nucl. Data Tabl., 67, (1997), 207.
+        c_fermi = 2.2291d-5*atw**(1.d0/3.d0) - 0.90676d-5
+        cpar = c_fermi / fermi_in_cm * bohr_radius_in_cm
+        apar = t_fermi/(four*LOG(three))
+        CALL GETAPR(rrms,apar,cpar)
+        a_fermi = apar * fermi_in_cm / bohr_radius_in_cm
+        t_fermi = apar * (four*LOG(three))
+       end if
 
        if(a_fermi.eq.0.d0) then
         apar = t_fermi/(four*LOG(three))
@@ -146,7 +150,6 @@
                        Z => atomic_number
       Implicit none
       Real(8), intent(in) :: r
-      Real(8) :: ro
 
       if(r.le.zero) then
        Z_nuclear = zero
@@ -154,12 +157,12 @@
        Z_nuclear = zero                                          ! ???
        if(r.le.0.0219)  Z_nuclear = Z       ! after GRASP
       elseif(nuclear.eq.'uniform') then     ! uniform distribution
-       ro_uniform = Z/(4*pi/3*b**3)        
+       ro_uniform = Z/(4*pi/3*b**3)
        Z_nuclear = zero
-       if(r.le.b)  Z_nuclear = ro           ! ???
+       if(r.le.b)  Z_nuclear = ro_uniform
       elseif(nuclear.eq.'Fermi') then       ! Fermi distribution
        if(ro_fermi.eq.zero) Call  DEF_ro_fermi
-       Z_nuclear = ro_fermi/(one+exp((r-c)/a)) 
+       Z_nuclear = ro_fermi/(one+exp((r-c)/a))
       else
         Stop 'Z_nuclear: unknown charge distribution '
       end if
@@ -317,7 +320,7 @@
     2 CPMAX = two*CPMAX
       if (ESTRMS(APARM,CPMAX) .LT. RRMS) GOTO 2
 
-! ... find CPARM by the method of bisection
+! ... find CPARM by the method of bisection:
 
     3 CPTRY = half*(CPMAX+CPMIN)
 
@@ -335,4 +338,52 @@
       CPARM = CPTRY
 
       End Subroutine GETCPR
+
+!=====================================================================
+      SUBROUTINE GETAPR (RRMS,APARM,CPARM)
+!=====================================================================
+!     Determines the parameter `c' (CPARM) for a Fermi nucleus,  given
+!     the root mean square radius (RRMS) and the parameter `a' (APARM).
+!     Call(s) to: ESTRMS.
+!----------------------------------------------------------------------
+      Use zconst
+
+      Implicit none
+      Real(8), intent(inout) :: RRMS,CPARM,APARM
+      Real(8) :: ACCY,APMIN,APMAX,APTRY,RMSTRY
+      Real(8), external :: ESTRMS
+
+! ... accuracy parameter
+
+      ACCY = two*epsilon(one)
+
+! ... bracket CPARM with a lower and upper limits:
+
+      APMIN = APARM
+      APMAX = APARM
+
+    1 APMIN = half*APMIN
+      if (ESTRMS(APMIN,CPARM) .gt. RRMS) GOTO 1
+
+    2 APMAX = two*APMAX
+      if (ESTRMS(APMAX,CPARM) .lt. RRMS) GOTO 2
+
+! ... find APARM by the method of bisection
+
+    3 APTRY = half*(APMAX+APMIN)
+
+      RMSTRY = ESTRMS(APTRY,CPARM)
+
+      if (RMSTRY .lt. RRMS) then
+        APMIN = APTRY
+      else
+        APMAX = APTRY
+      END if
+
+      if ( ( (APMAX-APMIN)/(APMAX+APMIN) .GT. ACCY )   .AND. &
+           ( ABS(RMSTRY-RRMS)/RRMS       .GT. ACCY ) )  GOTO 3
+
+      APARM = APTRY
+
+      End Subroutine GETAPR
 

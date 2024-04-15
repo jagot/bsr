@@ -3,27 +3,27 @@
 !=======================================================================
 ! coefficient for determinamt id and term it for subshell f11
 !-----------------------------------------------------------------------
- 
+
   Implicit none
- 
+
   Integer, intent(in)  :: id,it
- 
+
   Integer, parameter :: kd_f11 = 364
   Integer, parameter :: nt_f11 =  17
- 
+
   Integer :: INT_f11(kd_f11,nt_f11)
- 
+
   Integer :: Norm_f11 = 24024
- 
+
   if(id.le.0.or.id.gt.kd_f11) Stop "detc_f11: index id is out of range"
   if(it.le.0.or.it.gt.nt_f11) Stop "detc_f11: index it is out of range"
- 
+
   detc_f11 = dfloat(INT_f11(id,it))/dfloat(Norm_f11)
- 
+
   detc_f11 = dsqrt(dabs(detc_f11))
- 
+
   if(INT_f11(id,it).lt.0) detc_f11=-detc_f11
- 
+
 
   Data INT_f11(:,   1)/ &
         0,        0,        0,        0,        0,        0,        0,        0,        0,        0,        0,        0, &
@@ -585,5 +585,5 @@
      2520,    -1650,    -6600,    -5600,    -1400,     -150,        0,     -660,        0,      630,        0,     1650, &
         0,    -1400,        0,    -2250,     3300,     3300,    -3300,    -3300,    -4800,    -4800,     4800,     4800, &
      2100,     2100,    -2100,    -2100  /
- 
+
   End Function detc_f11

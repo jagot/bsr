@@ -3,9 +3,9 @@
 !======================================================================
 !     read data for given partial wave klsp
 !----------------------------------------------------------------------
-      Use dbsr_mat           
+      Use dbsr_mat
       Use DBS_nuclear
-      Use radial_overlaps 
+      Use radial_overlaps
 
       Implicit none
       Integer :: i,j,l,k,m,n, ich,jch
@@ -29,7 +29,7 @@
       Open(nuc,file=AF_cfg,status='OLD')
 
 ! ... bnk-file:
- 
+
       i=LEN_TRIM(AF_bnk); AF_bnk(i-2:i)=ALSP
       Open(nub,file=AF_bnk,status='OLD',form='UNFORMATTED')
 
@@ -94,7 +94,7 @@
       ipbs = 0
       Do ich = 1,nch
        Call EL_NLJK(ELC(ich),n,k,l,j,i)
-       m = Ifind_bsorb(n,k,i,1); ipbs(m) = ich 
+       m = Ifind_bsorb(n,k,i,1); ipbs(m) = ich
        ipch(ich)=m
       End do
 
@@ -109,7 +109,7 @@
 
 !----------------------------------------------------------------------
 ! ... read B-spline expantions for bound orbitals:
-   
+
 ! ... target radial functions:
 
       Open(nuw, file=AF_bsw, STATUS='OLD', form='UNFORMATTED')
@@ -125,7 +125,7 @@
        Close(nuw)
       end if
 
-! ... check the correspondence between c- and bsw-files: 
+! ... check the correspondence between c- and bsw-files:
 
       j = 0
       Do i = 1,nbf
@@ -145,7 +145,7 @@
        bpq(1:ns,2,i) = MATMUL(fqbs, pq(:,2,i))
       End do
 
-! ... the < p | p > values 
+! ... the < p | p > values
 
       Call CPU_time(t1)
 
@@ -153,19 +153,19 @@
       Do i=1,nbf; Do j=1,i; if(kbs(i).ne.kbs(j)) Cycle
        if(ipbs(i).ne.0) Cycle
        if(ipbs(j).ne.0) Cycle
-       S = SUM(pq(:,1,i)*bpq(:,1,j)) + SUM(pq(:,2,i)*bpq(:,2,j))  
+       S = SUM(pq(:,1,i)*bpq(:,1,j)) + SUM(pq(:,2,i)*bpq(:,2,j))
        if(abs(S).lt.eps_ovl) Cycle
-       Call Iadd_obs(i,j,S)                 
+       Call Iadd_obs(i,j,S)
       End do; End do
 
       Call CPU_time(t2)
 
       write(pri,'(/a,i8,T40,f10.2,a)') 'Radial overlaps:',nobs,(t2-t1)/60,' min'
 
-! ... the < . | j > values 
+! ... the < . | j > values
 
       Call Alloc_nv_ch(1)
       Call Read_bort_jj(nuc)
 
       End Subroutine Read_data
-    
+

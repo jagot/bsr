@@ -28,7 +28,7 @@
 
 ! ... convert to new basis:
 
-      Do ich=1,nch; i=(ich-1)*ms     
+      Do ich=1,nch; i=(ich-1)*ms
        j1 = ipsol(ich-1)+1; j2=ipsol(ich)
        Do j=j1,j2
         d(j) = SUM(v(i+1:i+ms)*bb(1:ms,j))
@@ -44,5 +44,5 @@
       write(pri,'(a,i5,a)')  '2J     = ',jot1,'  - 2J-value of the initial state'
       write(pri,'(/a,f16.8,a)') 'E1     = ',E1,  '  - energy of the initial state'
 
-      End Subroutine R_dvector 
+      End Subroutine R_dvector
 

@@ -9,7 +9,7 @@
 !
 !                  TKy
 !           -------------------
-!          /        ||        |  
+!          /        ||        |
 !  Allocate_slater  YTK      YVAL
 !                    |
 !                 ------------------------
@@ -62,7 +62,7 @@
 !           (d^2-k(k+1)/r^2)yk(r)= -(2k+1)(1/r) P_1(r)P'_2(r)
 !
 !     Calls:  yval,  vinty,  dgbtrs, dgbtrf  (lapack)
-!                                   
+!
 !     on exit
 !     -------
 !     yk    spline expansion of the solution

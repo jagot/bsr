@@ -28,8 +28,8 @@
       Subroutine alloc_DBS_integrals(ns,ks,kmin,kmax,ktype)
 !====================================================================
 ! ... Allocates space for spline integrals:
-!     1.  pppp  
-!     2.  qqqq  
+!     1.  pppp
+!     2.  qqqq
 !     3.  pqpq
 !     4.  qpqp
 !--------------------------------------------------------------------

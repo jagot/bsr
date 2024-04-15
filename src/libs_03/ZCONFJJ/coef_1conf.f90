@@ -1,19 +1,44 @@
 !======================================================================
       Subroutine coef_1conf(no,ln,jn,iq,Jshell,Vshell,Jintra,kmax,coefs)
 !======================================================================
-!     compute the angular coefficients for 1 atomic states
+!     compute the angular coefficients for 1 atomic state
+!
+!     Input:
+!
+!      no,ln,jn,iq,Jshell,Vshell,Jintra - description of the input state
+!
+!      no - number of subshells
+!      ln(1:no) - l-values for subshell orbitals
+!      jn(1:no) - 2j-values for subshell orbitals (integers)
+!      iq(1:no) - occuation numbers
+!      JSHELL(1:no) - 2J-values for subshell terms
+!      VSHELL(1:no) - seniority numbers
+!      Jintra(1:no) - 2J-values for intermidiate terms
+!                     Jintra(1) = JSHELL(1)
+!                     Jintra(no) - total 2J-value of the state
+!      kmax - max. multipole index (= max(jn))
+!
+!     Output:
+!
+!      coefs(1:no,1:no,0:kmax) - angular coefficients for
+!
+!      direct integrals:     coef(i,j,k) with i <= j
+!      exchange integrals:   coef(i,j,k) with i > j
+!
 !----------------------------------------------------------------------
-      Implicit none 
+      Implicit none
 
-! ... input-output:
+! ... input:
 
       Integer, intent(in) :: no,ln(no),jn(no),iq(no), kmax, &
                              Jshell(no),Vshell(no),Jintra(no)
+! ... output:
+
       Real(8), intent(out):: coefs(no,no,0:kmax)
 
 ! ... determinant expansion:
 
-      Integer :: kdt 
+      Integer :: kdt
       Integer, allocatable :: IP_det(:,:)
       Real(8), allocatable :: C_det(:)
       Real(8) :: CC_det
@@ -33,18 +58,18 @@
       Do i=2,no
        ip1(i)=ip2(i-1)+1
        ip2(i)=ip2(i-1)+iq(i)
-      End do 
+      End do
 
 ! ... determinant expansion:
 
-      Call Det_expn_jj  
+      Call Det_expn_jj
 
 ! ... calculations:       total M - ???  Clebsh - ???
 
       Do kd1 = 1,kdt
       Do kd2 = kd1,kdt
         CC_det = C_det(kd1) * C_det(kd2)
-        if(kd1.ne.kd2) CC_det = CC_det + CC_det 
+        if(kd1.ne.kd2) CC_det = CC_det + CC_det
         Call me_det
       End do;  End do
 
@@ -52,18 +77,21 @@
 CONTAINS
 
 !======================================================================
-      Subroutine Det_expn_jj  
+      Subroutine Det_expn_jj
 !======================================================================
-!     procedure of exaustion of all possible determinants for given
-!     configurations. The determinants and their coefficients
-!     are recoded on unit 'nua'
+!     determine all possible determinants for given configuration;
 !
-!     Calls: Det_sh_jq, DETC_jq, Clebsh2, Ndets_jq, Jterm, mj_value 
+!     results in arrays of the calling routine:
+!     kdt - number of determinants
+!     IP_det (1:ne,1:kdt) - pointer to involved njm orbitals
+!     C_det - ecpansion coeffocients
+!
+!     Calls: Det_sh_jq, DETC_jq, Clebsh2, Ndets_jq, Jterm, mj_value
 !----------------------------------------------------------------------
-      Implicit none 
+      Implicit none
 
       Integer :: i,j,k, mkdt, JW,JQ
-      Integer, external :: Ndets_jq, Jterm, mj_value 
+      Integer, external :: Ndets_jq, Jterm, mj_value
       Real(8) :: C
       Real(8), external :: DETC_jq, Clebsh2
 
@@ -92,7 +120,7 @@ CONTAINS
 !--------------------------------------------------------------------
 ! ... exausting all possible determinants:
 
-      kdt=0; i=1; nd(i)=1              
+      kdt=0; i=1; nd(i)=1
     1 Call DET_sh_jq(jn(i),iq(i),nd(i),MJs(i),Idet(ipn(i)))
 
       if(i.eq.1) then
@@ -131,9 +159,9 @@ CONTAINS
 
     3 Continue
 
-      Do k=1,kdt; Do i=1,ne 
+      Do k=1,kdt; Do i=1,ne
        j=IP_det(i,k); IP_det(i,k)=mj_value(j)
-      End do; End do 
+      End do; End do
 
       End Subroutine Det_expn_jj
 
@@ -142,7 +170,7 @@ CONTAINS
       Subroutine me_det
 !======================================================================
 !     find the possible interaction orbitals in two determinants and
-!     call the subroutines to calculate m.e. between possible 
+!     call the subroutines to calculate m.e. between possible
 !     combinations of nj-orbitals (me_ee)
 !----------------------------------------------------------------------
       Implicit none
@@ -168,15 +196,15 @@ CONTAINS
        ii = 0
        Do i=1,no; k=ip1(i); kk=ip2(i)
         Do i1=k,kk; Do i2=k,kk
-         if(IP_det(i1,kd1).eq.IP_det(i2,kd2)) ii(i1,i2)=1 
+         if(IP_det(i1,kd1).eq.IP_det(i2,kd2)) ii(i1,i2)=1
         End do; End do
        End do
-       idif = ne - SUM(ii) 
+       idif = ne - SUM(ii)
        if(idif.gt.2) Return
        if(idif.ne.2) Stop 'Det_me: idif <> 2 ???'
 
 ! ... find interaction orbitals:
- 
+
        k = 1;  jdif=0
        Do i=1,no; k=ip1(i); kk=ip2(i); k1=k; k2=k
         idif = iq(i) - SUM(ii(k:kk,k:kk))
@@ -188,7 +216,7 @@ CONTAINS
          io = i
          Do i1=k,kk
           if(SUM(II(i1,k:kk)).eq.1) Cycle; isym1=i1; Exit
-         End do 		 
+         End do
          Do i2=k,kk
           if(SUM(II(k:kk,i2)).eq.1) Cycle; isym2=i2; Exit
          End do
@@ -197,15 +225,15 @@ CONTAINS
          k1 = isym1+1
          k2 = isym2+1
         end if
-		
-	       if(idif.eq.0) Cycle
+
+       if(idif.eq.0) Cycle
 
 ! ... second orbital:
 
         jo = i
         Do i1=k1,kk
          if(SUM(II(i1,k:kk)).eq.1) Cycle; jsym1=i1; Exit
-        End do 		 
+        End do
         Do i2=k2,kk
          if(SUM(II(k:kk,i2)).eq.1) Cycle; jsym2=i2; Exit
         End do
@@ -233,7 +261,7 @@ CONTAINS
       if(IP_det(i1,kd1)+IP_det(j1,kd1).ne. &
          IP_det(i2,kd2)+IP_det(j2,kd2)) Return
 
-      Call Check_boef(ln(i),jn(i),IP_det(i1,kd1), & 
+      Call Check_boef(ln(i),jn(i),IP_det(i1,kd1), &
                       ln(j),jn(j),IP_det(j1,kd1), &
                       ln(i),jn(i),IP_det(i2,kd2), &
                       ln(j),jn(j),IP_det(j2,kd2))
@@ -251,7 +279,7 @@ CONTAINS
        else
          k = -k - 1
          coefs(i,j,k) = coefs(i,j,k) + Boef(ib)*CC_det*kz
-       end if        
+       end if
       End do
 
       End Subroutine me_ee

@@ -16,13 +16,13 @@
        iarg = command_argument_count()
        if(iarg.gt.0) then
         Call GET_COMMAND_ARGUMENT(1,BF); i=INDEX(BF,'=')
-        if(i.eq.0) then 
+        if(i.eq.0) then
          i=LEN_TRIM(BF)
          AF=BF; if(BF(i-1:i).ne.'.c') AF=trim(BF)//'.c'
          i=LEN_TRIM(AF)-2; name = AF(1:i); iname=i
         end if
        end if
-      end if  
+      end if
 
       Call Check_file(AF)
       Open(nuc,file=AF)
@@ -34,7 +34,7 @@
 !======================================================================
       Subroutine Open_int_list
 !======================================================================
-!     just check name for int_list file 
+!     just check name for int_list file
 !----------------------------------------------------------------------
       Use bsr_breit
 
@@ -45,7 +45,7 @@
 
       i=Index(BF_b,'.'); write(BF_b(i+1:),'(i3.3)') klsp
 
-      End  Subroutine Open_int_list      
+      End  Subroutine Open_int_list
 
 
 !======================================================================
@@ -67,14 +67,14 @@
       if(klsp.gt.0) then
        write(BF,'(a,a,i3.3)') trim(AF),'.',klsp
        AF = BF
-      end if  
+      end if
 
       ic_case = 0
       if(Icheck_file(AF).eq.0) then
 
        write(pri,'(/a)') 'Prepare det. expansions:'
-       write(pri,'(/a,i10 )') 'mkt  =',mkt 
-       write(pri,'( a,i10 )') 'mkdt =',mkdt 
+       write(pri,'(/a,i10 )') 'mkt  =',mkt
+       write(pri,'( a,i10 )') 'mkdt =',mkdt
 
        Open(nud,file=AF,form='UNFORMATTED')
 
@@ -82,7 +82,7 @@
        if(klsp.gt.0) then
         write(BF,'(a,a,i3.3)') trim(AF),'.',klsp
         AF = BF
-       end if  
+       end if
        Open(nux,file=AF)
 
        Call Pre_det_exp(nud,mkt,mkdt,nux)
@@ -92,7 +92,7 @@
        if(klsp.gt.0) then
         write(BF,'(a,a,i3.3)') trim(AF),'.',klsp
         AF = BF
-       end if 
+       end if
        Open(nur,file=AF,form='UNFORMATTED')
        Close(nur,status='DELETE')
 
@@ -102,12 +102,12 @@
        BACKSPACE(nud)
        read(nud) ic_case
        write(pri,'(/a)') 'Use old det. expansions:'
-       write(pri,'(/a,i10 )') 'ic_case =',ic_case 
+       write(pri,'(/a,i10 )') 'ic_case =',ic_case
 
       end if
       rewind(nud)
 
-      End Subroutine Open_det_exp      
+      End Subroutine Open_det_exp
 
 
 !======================================================================
@@ -126,7 +126,7 @@
       if(klsp.gt.0) then
        write(BF,'(a,a,i3.3)') trim(AF),'.',klsp
        AF = BF
-      end if 
+      end if
 
       if(Icheck_file(AF).eq.0) then
        Open(nur,file=AF,form='UNFORMATTED')
@@ -137,4 +137,4 @@
       end if
       rewind(nur)
 
-      End Subroutine Open_det_done      
+      End Subroutine Open_det_done

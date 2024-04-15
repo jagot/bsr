@@ -2,7 +2,7 @@
       Real(8) Function IZ0_lamda (lamda, k1,l1, k2,l2)   result(F)
 !======================================================================
 !     Coulomb integrals,  Z = 0
-!     (after A.Burgess and C. Whelam, CPC, 47, 295 (1987)  
+!     (after A.Burgess and C. Whelam, CPC, 47, 295 (1987)
 !-----------------------------------------------------------------------
       Implicit none
       Integer, intent(in) :: lamda,l1,l2
@@ -57,7 +57,7 @@
 !======================================================================
       Real(8) Function E_fun(a,b,c)
 !======================================================================
-!     E =  (a+b+c+1)! (1/2(a+b-c))! (1/2(a-b+c))! (1/2(-a+b+c))!  
+!     E =  (a+b+c+1)! (1/2(a+b-c))! (1/2(a-b+c))! (1/2(-a+b+c))!
 !          / (1/2(a+b+c))!  / (a+b-c)!
 !
 !     a + b + c  - even   plus   triangle relation  {a,b,c}
@@ -82,7 +82,7 @@
        IF(M3.GE.I) K=K+1
        IF(N1.GE.I) K=K-1
        IF(N2.GE.I) K=K-1
-       Y=I;  X = X * Y**K 
+       Y=I;  X = X * Y**K
       End do
       E_fun = X
 
@@ -90,7 +90,7 @@
 
 
 !======================================================================
-      Real(8) Function F0_lamda_diag (lamda, k,l1,l2) 
+      Real(8) Function F0_lamda_diag (lamda, k,l1,l2)
 !======================================================================
 !     F0_diag = pi k**(lamda-1) GAMMA(lamda) GAMMA[1/2(l1+l2-lamda+2)]/
 !               2**(lamda+1) GAMMA[1/2(l1-l2+lamda+1)] GAMMA[1/2(l2-l1+lamda+1)]
@@ -113,112 +113,112 @@
 
 
 !=============================================================================
-      SUBROUTINE DLEGENI(Z,NMAX,PL,QL,NUEVO)                                 
+      SUBROUTINE DLEGENI(Z,NMAX,PL,QL,NUEVO)
 !=============================================================================
 !     LEGENDRE FUNCTIONS OF FIRST AND SECOND KIND OF ARGUMENT GREATER THEN ONE
-!     (after  A.Gil and J.Segura, CPC, 105, 273, 1997) 
+!     (after  A.Gil and J.Segura, CPC, 105, 273, 1997)
 !-----------------------------------------------------------------------------
-!  INPUT :                                                                    
-!                                                                             
-!    Z        ARGUMENT OF THE FUNCTIONS                                       
-!                                                                             
-!    NMAX     MAXIMUM ORDER OF THE FUNCTIONS :                                
-!             WE SHALL GET  FUNCTIONS OF ALL THE ORDERS BELOW                 
-!             MIN(NMAX). NUEVO IS DEFINED BELOW .                             
-!                                                                             
-!  OUTPUT :                                                                   
-!                                                                             
-!    PL(L+1)                                                                  
-!             WE SHALL KEEP THESE VALUES IN AN ARRAY                          
-!    QL(L+1)                                                                  
-!             WE SHALL KEEP THESE VALUES IN AN ARRAY                          
-!    NUEVO    MAXIMUM ORDER OF  FUNCTIONS CALCULATED WHEN                     
-!             PL (NMAX+1,Z) IS LARGER THAN 10**NPRE                           
-!                                                                             
-!---------------------------------------------------------------------------    
-                                                                               
-        IMPLICIT REAL*8 (A-H,O-Z)                                               
+!  INPUT :
+!
+!    Z        ARGUMENT OF THE FUNCTIONS
+!
+!    NMAX     MAXIMUM ORDER OF THE FUNCTIONS :
+!             WE SHALL GET  FUNCTIONS OF ALL THE ORDERS BELOW
+!             MIN(NMAX). NUEVO IS DEFINED BELOW .
+!
+!  OUTPUT :
+!
+!    PL(L+1)
+!             WE SHALL KEEP THESE VALUES IN AN ARRAY
+!    QL(L+1)
+!             WE SHALL KEEP THESE VALUES IN AN ARRAY
+!    NUEVO    MAXIMUM ORDER OF  FUNCTIONS CALCULATED WHEN
+!             PL (NMAX+1,Z) IS LARGER THAN 10**NPRE
+!
+!---------------------------------------------------------------------------
 
-        Real(8) :: PL(0:2001),QL(0:2001)                                         
+        IMPLICIT REAL*8 (A-H,O-Z)
+
+        Real(8) :: PL(0:2001),QL(0:2001)
         Real(8), parameter :: PI=3.14159265358979323D0
         Real(8), parameter :: EPS=1.D-16
         Real(8), parameter :: TINY=1.D-180
         Integer, parameter :: NPRE=300
-                                                                                
-!   EPS: REQUIRED ACCURACY FOR THE CONTINUED FRACTION (MODIFIED LENTZ)          
-!   TINY: SMALL PARAMETER TO PREVENT OVERFLOWS 
-                                                                                
-        IF (Z.LE.1.D0) THEN                                                     
-          WRITE(6,*)'IMPROPER ARGUMENT. Z MUST BE GREATER THAN 1'               
-          STOP                                                                  
-        END IF                                                                  
-                                                                                
-!   WE USE THE CODE IF NMAX IS GREATER THAN OR EQUAL TO 2                       
-                                                                                
-        NMAXP=NMAX                                                              
-        IF(NMAX.LT.2) NMAX=2                                                    
-                                                                                
-!   LIMITS TO THE VALUE OF NMAX:                                                
-!   THE MAXIMUM VALUE OF NMAX IS SUCH THAT                                
-!   PL(NMAX+1) IS LESS THAN 10**NPRE                                     
-                                                                                
-         ALFA=DLOG(Z+DSQRT(Z*Z-1.D0))                                           
-                                                                                
-         CANT=0.5*( DLOG(2.D0*PI)+DLOG(DSINH(ALFA))-ALFA)+NPRE*DLOG(10.D0)                                                  
-                                                                              
-         DO WHILE ((ALFA*NMAX-0.5D0*DLOG(DFLOAT(NMAX))).GE.(CANT))            
-           NMAX=NMAX-3                                                        
-         END DO                                                               
-                                                                                                                                                               
-         NUEVO=NMAX                                                             
-                                                                                
-!   WE STORAGE THE VALUES OF PL(0) AND PL(1)                                    
-                                                                                
-         PL(0)=1.D0                                                             
-         PL(1)=Z                                                                
-                                                                                
-!   WE USE THE RECURRENCE RELATIONS                                    
-                                                                                
-        DO NP=1,NMAX                                                            
-          PL(NP+1)=((2.D0*NP+1.D0)*Z*PL(NP)-NP*PL(NP-1))/(NP+1.D0)             
-        END DO                                                                   
 
-!   WE EVALUATE THE CONTINUED FRACTION USING                                    
-!   LENTZ ALGORITHM                                                             
-                                                                                
-        N=NMAX                                                                  
-        M=0                                                                     
-        B=(2.D0+1.D0/(N+1.D0) )*Z                                               
-        A=1.D0                                                                  
-        FC=TINY                                                                 
-        C0=FC                                                                   
-        D0=0.D0                                                                 
-10      D0=B+A*D0                                                               
-        IF (D0.EQ.0.D0) D0=TINY                                                 
-        C0=B+A/C0                                                               
-        IF (C0.EQ.0.D0) C0=TINY                                                 
-        D0=1.D0/D0                                                              
-        DELTA=C0*D0                                                             
-        FC=FC*DELTA                                                             
-        M=M+1                                                                   
-        A=-(1.D0+1.D0/DFLOAT(N+M))                                              
-        B=(2.D0+1.D0/(N+M+1.D0))*Z                                              
-        IF (ABS(DELTA-1.D0).GT.EPS) GOTO 10                                     
-     
-!     WE EVALUATE QL(NMAX+1) AND QL(NMAX) USING :                              
-!     THE WRONSKIAN : W{PL(NMAX),QL(NMAX)} =1./(1.-Z**2)                       
-!     THE KNOWN VALUES OF PL(NMAX+1) AND PL(NMAX)                              
-!     THE VALUE OF H = QL(NMAX+1)/QL(NMAX)                                     
-                                                                                
-        QL(NMAX)=1.D0/(PL(NMAX+1)-FC*PL(NMAX))/(NMAX+1.D0)                      
-        QL(NMAX+1)=QL(NMAX)*FC                                                  
-                                                                                
-        DO I=1,NMAX                                                             
-          NP=NMAX+1-I                                                           
-          N=NP-1                                                                
-          QL(N)=((NP+NP+1.D0)*Z*QL(NP)-(NP+1.D0)*QL(NP+1))/NP                   
-        END DO                                                                   
-                                                                                
-        NMAX=NMAXP                                                              
-                                                                                
-        END SUBROUTINE DLEGENI                                                                    
+!   EPS: REQUIRED ACCURACY FOR THE CONTINUED FRACTION (MODIFIED LENTZ)
+!   TINY: SMALL PARAMETER TO PREVENT OVERFLOWS
+
+        IF (Z.LE.1.D0) THEN
+          WRITE(6,*)'IMPROPER ARGUMENT. Z MUST BE GREATER THAN 1'
+          STOP
+        END IF
+
+!   WE USE THE CODE IF NMAX IS GREATER THAN OR EQUAL TO 2
+
+        NMAXP=NMAX
+        IF(NMAX.LT.2) NMAX=2
+
+!   LIMITS TO THE VALUE OF NMAX:
+!   THE MAXIMUM VALUE OF NMAX IS SUCH THAT
+!   PL(NMAX+1) IS LESS THAN 10**NPRE
+
+         ALFA=DLOG(Z+DSQRT(Z*Z-1.D0))
+
+         CANT=0.5*( DLOG(2.D0*PI)+DLOG(DSINH(ALFA))-ALFA)+NPRE*DLOG(10.D0)
+
+         DO WHILE ((ALFA*NMAX-0.5D0*DLOG(DFLOAT(NMAX))).GE.(CANT))
+           NMAX=NMAX-3
+         END DO
+
+         NUEVO=NMAX
+
+!   WE STORAGE THE VALUES OF PL(0) AND PL(1)
+
+         PL(0)=1.D0
+         PL(1)=Z
+
+!   WE USE THE RECURRENCE RELATIONS
+
+        DO NP=1,NMAX
+          PL(NP+1)=((2.D0*NP+1.D0)*Z*PL(NP)-NP*PL(NP-1))/(NP+1.D0)
+        END DO
+
+!   WE EVALUATE THE CONTINUED FRACTION USING
+!   LENTZ ALGORITHM
+
+        N=NMAX
+        M=0
+        B=(2.D0+1.D0/(N+1.D0) )*Z
+        A=1.D0
+        FC=TINY
+        C0=FC
+        D0=0.D0
+10      D0=B+A*D0
+        IF (D0.EQ.0.D0) D0=TINY
+        C0=B+A/C0
+        IF (C0.EQ.0.D0) C0=TINY
+        D0=1.D0/D0
+        DELTA=C0*D0
+        FC=FC*DELTA
+        M=M+1
+        A=-(1.D0+1.D0/DFLOAT(N+M))
+        B=(2.D0+1.D0/(N+M+1.D0))*Z
+        IF (ABS(DELTA-1.D0).GT.EPS) GOTO 10
+
+!     WE EVALUATE QL(NMAX+1) AND QL(NMAX) USING :
+!     THE WRONSKIAN : W{PL(NMAX),QL(NMAX)} =1./(1.-Z**2)
+!     THE KNOWN VALUES OF PL(NMAX+1) AND PL(NMAX)
+!     THE VALUE OF H = QL(NMAX+1)/QL(NMAX)
+
+        QL(NMAX)=1.D0/(PL(NMAX+1)-FC*PL(NMAX))/(NMAX+1.D0)
+        QL(NMAX+1)=QL(NMAX)*FC
+
+        DO I=1,NMAX
+          NP=NMAX+1-I
+          N=NP-1
+          QL(N)=((NP+NP+1.D0)*Z*QL(NP)-(NP+1.D0)*QL(NP+1))/NP
+        END DO
+
+        NMAX=NMAXP
+
+        END SUBROUTINE DLEGENI

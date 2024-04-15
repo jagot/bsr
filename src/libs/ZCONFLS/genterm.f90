@@ -5,7 +5,7 @@
 !----------------------------------------------------------------------
       Use conf_LS, only: msh,no,ln,iq,LS
 
-      Implicit none 
+      Implicit none
       Integer :: mt(msh),nt(msh)
       Integer :: i,i1,i2,ii,IA,IL,IS
       Integer, external :: Iterm_LS
@@ -96,12 +96,12 @@
       Subroutine Save_term
 !======================================================================
       Use conf_LS
-       
+
       Implicit none
       Integer :: i, ILT,IST, j1,j2
       Integer, external :: Jadd_symt_LS
 
-! ... check the total term: 
+! ... check the total term:
 
       ILT=LS(no,4)
       IST=LS(no,5)
@@ -115,7 +115,7 @@
       if(J_min.gt.0.and.J_min.gt. j2) Return
       if(J_max.gt.0.and.J_max.lt. j1) Return
 
-! ... add configuration: 
+! ... add configuration:
 
       i = Jadd_symt_LS(iconf,no,LS)
 

@@ -59,24 +59,24 @@
       Use nljm_orbitals
       Implicit none
       Integer :: ne,msh,m
-     
+
       if(allocated(Lsym)) Return
-     
+
       m = 2*ne
       Allocate(Lsym(m),Lsym1(m),Lsym2(m), &
                Jsym(m),Jsym1(m),Jsym2(m), &
                Msym(m),Msym1(m),Msym2(m))
-     
+
       Allocate(Isym1(m),Isym2(m),  &
                Ksym1(m),Ksym2(m),  &
                nnsym1(m),nnsym2(m),&
                IPsym1(0:m),IPsym2(0:m))
-     
+
       IPsym1(0) = 0; IPsym2(0) = 0
-     
+
       Allocate(Idet(m),Jdet(m))
       Allocate(N1(m),N2(m),N3(m),N4(m),NP(m))
-     
+
       Allocate(md(msh),nd(msh),ipn(msh),MJs(msh),MJi(msh))
-     
+
       End Subroutine Alloc_nljm

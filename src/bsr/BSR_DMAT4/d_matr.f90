@@ -56,22 +56,22 @@
       if(is.gt.ncfg1.and.js.gt.ncfg1) Cycle
       if(is.le.ncfg1.and.js.le.ncfg1) Cycle
 
-      if(it.eq.jt.and.is.gt.js) Cycle 
+      if(it.eq.jt.and.is.gt.js) Cycle
 
 ! ... check if conf.s are in the right order:
 
       if(is.le.ncfg1) then
        ih = is;  jh = js-ncfg1
-       i=LSP1(ih); j=LSP2(jh); m=0        
+       i=LSP1(ih); j=LSP2(jh); m=0
        kz=1
       else
        ih = js;  jh = is-ncfg1
-       i=LSP1(ih); j=LSP2(jh); m=1        
-       kz = (ILterm1(i)-ILterm2(j)+ISterm1(i)-ISterm2(j))/ 2        
-       kz = (-1)**kz        
+       i=LSP1(ih); j=LSP2(jh); m=1
+       kz = (ILterm1(i)-ILterm2(j)+ISterm1(i)-ISterm2(j))/ 2
+       kz = (-1)**kz
       end if
 
-! ... include the expansion coefficients: 
+! ... include the expansion coefficients:
 
       if(abs(C1(ih)).lt.Eps_CH) Cycle
       if(abs(C2(jh)).lt.Eps_CH) Cycle
@@ -84,7 +84,7 @@
        j1=IP_orb(ip1+i1); j2=IP_orb(ip2+i2)
       else
        j1=IP_orb(ip2+i2); j2=IP_orb(ip1+i1)
-      end if       
+      end if
       ich1=iech(j1); ich2=iech(j2)
 
 ! ... J-dependence factor:
@@ -93,16 +93,16 @@
       if(jmode.eq.2) then
        CCL = CC * DJ(i,j); CCV = CC * DJM(i,j)
        if(abs(CCL)+abs(CCV).lt.Eps_C) Cycle
-      end if 
+      end if
       if(int_type.eq.2) CCV = 0.d0
       if(int_type.eq.3) CCL = 0.d0
 
-! ... find index of the pertuber if any: 
+! ... find index of the pertuber if any:
 
       ic = Ifind_pert(ilsp1,ih)
-      jc = Ifind_pert(ilsp2,jh)                
+      jc = Ifind_pert(ilsp2,jh)
 
-! ... find overlap factors with extracted continuum:  
+! ... find overlap factors with extracted continuum:
 
       Call Det_fact(idf,np1,np2); if(nndef.eq.0) Cycle
 
@@ -114,15 +114,15 @@
 
        io=iof(i); jo=jof(i)
 
-       if(jo.gt.0) then 
+       if(jo.gt.0) then
         if(iech(io/ibo).eq.0) then
          ii = io; io=jo; jo=ii
-        end if 
+        end if
        end if
 
        itype=Idef_dtype(j1,j2,ich1,ich2,io,jo,ic,jc,kk1,kk2,kk3)
        CL=CCCL; CV=CCCV
-       if(ich1+ich2.eq.0) then 
+       if(ich1+ich2.eq.0) then
         CL=CCCL*dipL(j1,j2); CV=CCCV*dipV(j1,j2)
        end if
        Call Add_coef(CL,CV,kk1,kk2,kk3)

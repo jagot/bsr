@@ -2,7 +2,7 @@
 !======================================================================
       Subroutine Term_loop
 !======================================================================
-!     Add to the common list (coef_list) the coeff.s between two 
+!     Add to the common list (coef_list) the coeff.s between two
 !     determinants (zoef_list) weighted with term-dependent factors.
 !     Check also if the specific coefficient is needed to be added
 !     to the bank.
@@ -11,7 +11,7 @@
       Use term_exp;    Use coef_list
 
       Implicit none
-      Integer :: i,k,m, it,jt, k1,k2
+      Integer :: i,k,k1,k2
       Real(8) :: C
 
 ! ... find term-dependent coefficients between two determinants:
@@ -21,8 +21,8 @@
        if(IP_kt12(k1,k2).eq.0) Cycle
        k = k + 1
        cdtrm(k) = C_det1(k1,kd1)*C_det2(k2,kd2)
-      End do; End do 
- 
+      End do; End do
+
 ! ... add final coefficients:
 
       Do i=1,nzoef
@@ -30,7 +30,7 @@
        Ctrm = cdtrm * C
        int = IZ_int(i)
        idf = IZ_df(i)
-       Call Add_coef 
+       Call Add_coef
       End do
       nzoef = 0
 

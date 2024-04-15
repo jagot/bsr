@@ -1,22 +1,18 @@
 !======================================================================
       Subroutine Conf_loop
 !======================================================================
-!     run loop over configurations 
+!     run loop over configurations
 !-----------------------------------------------------------------------
+      Use dbsr_breit
+      Use term_exp
+      Use conf_jj
+      Use symc_list
 
-      USE param_jj
-      USE term_exp
-      USE conf_jj,   only: ne
-      Use symc_list, only: JC_need
-
-      Implicit none 
-
+      Implicit none
       Integer :: i,j,ij,is,js, met
+      Real(8) :: t1,t2,tt
 
-      Real(8) :: t1,t2,tt   
-      Real(8), External :: RRTC
-
-      t1=RRTC()
+      Call CPU_time(t1)
 
 !----------------------------------------------------------------------
 !                                          cycle 1 over configurations:
@@ -31,7 +27,7 @@
 
        if(Allocated(IP_det1)) Deallocate(IP_det1)
        Allocate(IP_det1(ne,kdt1)); Read(nud) IP_det1
-             
+
        if(Allocated(C_det1)) Deallocate(C_det1)
        Allocate(C_det1(kt1,kdt1)); Read(nud) C_det1
 
@@ -47,48 +43,51 @@
 
        if(Allocated(IP_det2)) Deallocate(IP_det2)
        Allocate(IP_det2(ne,kdt2)); Read(nud) IP_det2
-              
+
        if(Allocated(C_det2)) Deallocate(C_det2)
        Allocate(C_det2(kt2,kdt2)); Read(nud) C_det2
 
        i = max(ic,jc); j = min(ic,jc); ij = i*(i-1)/2 + j
-       if(JC_need(ij).eq.0) Cycle      
-              
+       if(JC_need(ij).eq.0) Cycle
+
 !----------------------------------------------------------------------
 
        met = 0
        Do i=1,nprocs-1
-        if(ip_proc(i).ne.0) Cycle 
+        if(ip_proc(i).ne.0) Cycle
         Call Send_det_exp(i)
-        met = i 
+        met = i
         ip_proc(i) = 1
         Exit
        End do
 
        if(met.eq.0) then
-        Call Get_res(i)        
+        Call Get_res(i)
         Call Add_res(nui)
         Call Send_det_exp(i)
-        met = i 
+        met = i
        end if
 
 !----------------------------------------------------------------------
 
       End do    ! over jc
 
-      t2=RRTC()
-      write(pri,'(a,2i8,f10.2,a)')  'conf.', is,ic_case, (t2-t1)/60, '  min'
-      Close(pri); Open(pri,file=AF_pri,position='APPEND')
+      Call CPU_time(t2)
 
+      Call Incode_confj1
+      write(*,  '(a,4i6,f8.0,a,a)')  &
+        'ic,nsymc,kt,kdt =',ic,nsymc,kt1,kdt1,t2-t1,' sec ',trim(CONFIG)
+      write(pri,'(a,4i6,f8.0,a,a)')  &
+        'ic,nsymc,kt,kdt =',ic,nsymc,kt1,kdt1,t2-t1,' sec ',trim(CONFIG)
 
       End do    ! over ic
 
 !----------------------------------------------------------------------
 ! ... final results:
 
-       Do 
-        if(sum(ip_proc).eq.0) Exit 
-        Call Get_res(j)        
+       Do
+        if(sum(ip_proc).eq.0) Exit
+        Call Get_res(j)
         Call Add_res(nui)
         ip_proc(j) = 0
        End do
@@ -100,22 +99,20 @@
         Call Send_det_exp(i)
        End do
 
-
       End Subroutine Conf_loop
 
 
 !======================================================================
       Subroutine send_det_exp(id)
 !======================================================================
-
-      USE MPI
-
-      USE conf_jj,   only: ne
-      USE term_exp
+!  ... send determinant expansion to processor 'id'
+!----------------------------------------------------------------------
+      Use MPI
+      Use conf_jj,   only: ne
+      Use term_exp
 
       Implicit none
-      
-      Integer :: ierr, id 
+      Integer :: ierr, id
 
       Call MPI_SEND(ic  ,1,MPI_INTEGER,id,0,MPI_COMM_WORLD,ierr)
       if(ic.le.0) Return

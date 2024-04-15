@@ -59,7 +59,7 @@
 
       vv = 0.d0
       Do j=ipsol(ich-1)+1,ipsol(ich)
-       vv(1:ns) = vv(1:ns) + a(j,is)*bb(1:ns,j)     
+       vv(1:ns) = vv(1:ns) + a(j,is)*bb(1:ns,j)
       End do
 
 ! ... find nodes:

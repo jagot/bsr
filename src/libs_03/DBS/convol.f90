@@ -2,7 +2,7 @@
       Subroutine convol(ns,ks,a,d,icase,sym_i,sym_j)
 !======================================================================
 !     convolutes the rkb(i,j,i',j') array of spline integrals
-!     with density matrix d(:,:) 
+!     with density matrix d(:,:)
 !
 !     results in array a(:,:)
 !
@@ -29,7 +29,7 @@
       Integer :: i,j, ip,jp, imin,imax, jmin,jmax, ii,jj
       Real(8) :: c,t1,t2
 
-      t1 = RRTC()
+      Call CPU_time(t1)
 
       if(icase.le.2) a(1:ns,1:ks)=0.d0
       if(icase.gt.2) a(1:ns,1:ns)=0.d0
@@ -41,7 +41,7 @@
       if(sym_i.eq.'s'.and.sym_j.eq.'s') then
 
         do ip=1,ks
-        do i=1,ns-ip+1   
+        do i=1,ns-ip+1
            a(i,ip) = SUM(d(1:ns,1:ks)*rkb(i,1:ns,ip,1:ks))
         end do; end do
 
@@ -88,7 +88,7 @@
       if(sym_i.eq.'s'.and.sym_j.eq.'s') then
 
         do ip=1,ks
-        do i=1,ns-ip+1   
+        do i=1,ns-ip+1
            a(i,ip) = SUM(d(1:ns,1:ks)*rkb(1:ns,i,1:ks,ip))
         end do; end do
 
@@ -128,7 +128,7 @@
         end do; end do;   a(j,jp)=c
         end do; end do
 
-      end if 
+      end if
 
 !----------------------------------------------------------------------
       Case(3);  a(1:ns,1:ns) = 0.d0                    ! I( . a ; b . )
@@ -149,9 +149,9 @@
       elseif(sym_i.eq.'l'.and.sym_j.eq.'l') then
 
         do jp=1,ks
-        do j=ks+1-jp,ns; jj=j+jp-ks 
+        do j=ks+1-jp,ns; jj=j+jp-ks
         do ip=1,ks
-        do i=ks+1-ip,ns; ii=i+ip-ks 
+        do i=ks+1-ip,ns; ii=i+ip-ks
           c = rkb(i,j,ip,jp);       a( i,jj) = a( i,jj) + c*d(ii, j)
           if(ip.ne.ks)              a(ii,jj) = a(ii,jj) + c*d( i, j)
           if(jp.ne.ks)              a( i, j) = a( i, j) + c*d(ii,jj)
@@ -172,7 +172,7 @@
       elseif(sym_i.eq.'n'.and.sym_j.eq.'l') then
 
         do jp=1,ks
-        do j=ks+1-jp,ns; jj=j+jp-ks 
+        do j=ks+1-jp,ns; jj=j+jp-ks
         do ip=1,ks+ks-1; imin=max(1,1+ks-ip); imax=min(ns,ns+ks-ip)
         do i =imin,imax; ii=i+ip-ks
           c = rkb(i,j,ip,jp);      a( i,jj) = a( i,jj) + c*d(ii, j)
@@ -185,7 +185,7 @@
         do jp=1,ks+ks-1; jmin=max(1,1+ks-jp); jmax=min(ns,ns+ks-jp)
         do j =jmin,jmax; jj=j+jp-ks
         do ip=1,ks
-        do i=ks+1-ip,ns; ii=i+ip-ks 
+        do i=ks+1-ip,ns; ii=i+ip-ks
           c = rkb(i,j,ip,jp);       a( i,jj) = a( i,jj) + c*d(ii, j)
           if(ip.ne.ks)              a(ii,jj) = a(ii,jj) + c*d( i, j)
         end do; end do
@@ -221,9 +221,9 @@
       elseif(sym_i.eq.'l'.and.sym_j.eq.'l') then
 
         do jp=1,ks
-        do j=ks+1-jp,ns; jj=j+jp-ks 
+        do j=ks+1-jp,ns; jj=j+jp-ks
         do ip=1,ks
-        do i=ks+1-ip,ns; ii=i+ip-ks 
+        do i=ks+1-ip,ns; ii=i+ip-ks
           c = rkb(i,j,ip,jp);       a(ii, j) = a(ii, j) + c*d( i,jj)
           if(ip.ne.ks)              a( i, j) = a( i, j) + c*d(ii,jj)
           if(jp.ne.ks)              a(ii,jj) = a(ii,jj) + c*d( i, j)
@@ -234,7 +234,7 @@
       elseif(sym_i.eq.'n'.and.sym_j.eq.'l') then
 
         do jp=1,ks
-        do j=ks+1-jp,ns; jj=j+jp-ks 
+        do j=ks+1-jp,ns; jj=j+jp-ks
         do ip=1,ks+ks-1; imin=max(1,1+ks-ip); imax=min(ns,ns+ks-ip)
         do i =imin,imax; ii=i+ip-ks
           c = rkb(i,j,ip,jp);       a(ii, j) = a(ii, j) + c*d( i,jj)
@@ -247,7 +247,7 @@
         do jp=1,ks+ks-1; jmin=max(1,1+ks-jp); jmax=min(ns,ns+ks-jp)
         do j =jmin,jmax; jj=j+jp-ks
         do ip=1,ks
-        do i=ks+1-ip,ns; ii=i+ip-ks 
+        do i=ks+1-ip,ns; ii=i+ip-ks
           c = rkb(i,j,ip,jp);       a(ii, j) = a(ii, j) + c*d( i,jj)
           if(ip.ne.ks)              a( i, j) = a( i, j) + c*d(ii,jj)
         end do; end do
@@ -261,7 +261,7 @@
 
       End Select
 
-      t2 = RRTC()
+      Call CPU_time(t2)
       ic_convol = ic_convol + 1
       if(icase.le.2) time_convol=time_convol + (t2-t1)
 

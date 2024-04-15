@@ -1,5 +1,5 @@
 !======================================================================
-!     PROGRAM   test_coef_ee_2conf                      
+!     PROGRAM   test_coef_ee_2conf
 !
 !               C O P Y R I G H T -- 2013
 !
@@ -7,22 +7,22 @@
 !                   email: oleg_zoi@yahoo.com
 !======================================================================
 !
-!    it is a debug program to check subroutine     "coef_ee_1conf" 
-!    to generate angular coefficient for Breit_Pauli calculations 
-!    for one-configuration in case of orthogonal one-electron 
+!    it is a debug program to check subroutine     "coef_ee_1conf"
+!    to generate angular coefficient for Breit_Pauli calculations
+!    for one-configuration in case of orthogonal one-electron
 !    radial functions
 !
 !----------------------------------------------------------------------
 !
-!    INPUT ARGUMENTS:  name  or   cfg=...  tab=...  
-!    
+!    INPUT ARGUMENTS:  name  or   cfg=...  tab=...
+!
 !----------------------------------------------------------------------
 !
-!    INPUT FILE:     AF_cfg    (default  - cfg.inp) 
+!    INPUT FILE:     AF_cfg    (default  - cfg.inp)
 !    OUTPUT FILES:   AF_tab    (default  - coef.tab)
-!    
-!----------------------------------------------------------------------     
-      Implicit none 
+!
+!----------------------------------------------------------------------
+      Implicit none
 
       Integer :: nuc=1; Character(40) :: AF_cfg = 'cfg.inp'
       Integer :: out=2; Character(40) :: AF_tab = 'coef.tab'
@@ -32,12 +32,12 @@
       Integer :: no1, nn1(msh),ln1(msh),iq1(msh),kn1(msh), LS1(5,msh)
       Integer :: no2, nn2(msh),ln2(msh),iq2(msh),kn2(msh), LS2(5,msh)
 
-      Character(8*msh), allocatable :: CONFIG(:), COUPLE(:) 
+      Character(8*msh), allocatable :: CONFIG(:), COUPLE(:)
       Character(8*msh) :: AS
       Character(3) :: EL1, EL2, EL3, EL4
       Real(8) :: C, eps_C = 1.d-7
       Integer :: i,j, k, k1,k2,k3,k4, ic,jc, i1,i2,j1,j2, ncfg
-      Integer, external :: Idef_ncfg 
+      Integer, external :: Idef_ncfg
 
 ! ... result coefficients:
 
@@ -65,7 +65,7 @@
 
       rewind(nuc)
       Do ic = 1,ncfg
-      Do 
+      Do
        read(nuc,'(a)') AS
        if(AS(5:5).ne.'(') Cycle
        CONFIG(ic) = AS
@@ -78,16 +78,16 @@
        Call Decode_cn (CONFIG(ic),COUPLE(ic),no1,nn1,ln1,iq1,kn1,LS1)
       Do jc = ic,ncfg
        Call Decode_cn (CONFIG(jc),COUPLE(jc),no2,nn2,ln2,iq2,kn2,LS2)
-     
+
        Call coef_ee_2conf(no1,nn1,ln1,iq1,LS1,no2,nn2,ln2,iq2,LS2, &
                           mcoef,ncoef,icoefs,coefs)
        if(ncoef.eq.0) Cycle
 
        write(out,'(64("-"))')
-       write(out,'(a)') trim(CONFIG(ic)) 
+       write(out,'(a)') trim(CONFIG(ic))
        write(out,'(a)') trim(COUPLE(ic))
        if(ic.ne.jc) then
-        write(out,'(a)') trim(CONFIG(jc)) 
+        write(out,'(a)') trim(CONFIG(jc))
         write(out,'(a)') trim(COUPLE(jc))
        end if
        write(out,'(64("-"))')
@@ -95,7 +95,7 @@
       Do i=1,ncoef
        C = coefs(i); if(abs(C).lt.eps_c) Cycle
 !       if(k.lt.0) Cycle
-       k =icoefs(1,i) 
+       k =icoefs(1,i)
        AS = CONFIG(ic)
        i1=icoefs(2,i); k1 = 2 + (i1-1)*8; EL1=AS(k1:k1+2)
        i2=icoefs(3,i); k2 = 2 + (i2-1)*8; EL2=AS(k2:k2+2)
@@ -104,19 +104,19 @@
        j2=icoefs(5,i); k4 = 2 + (j2-1)*8; EL4=AS(k4:k4+2)
        if(ic.eq.jc.and.k.ge.0) then
         if(j1.le.j2) write(out,'(a,i2,a,a,a,a,a,f10.5)') &
-		       'F',k,'(',EL1,',',EL2,')=',C        
+		       'F',k,'(',EL1,',',EL2,')=',C
         if(j1.gt.j2) write(out,'(a,i2,a,a,a,a,a,f10.5)') &
-		       'G',k,'(',EL1,',',EL2,')=',C        
+		       'G',k,'(',EL1,',',EL2,')=',C
        elseif(k.ge.0) then
         write(out,'(a,i2,a,a,a,a,a,a,a,a,a,f10.5)') &
-		            'R',k,'(',EL1,',',EL2,';',EL3,',',EL4,')=',C        
+		            'R',k,'(',EL1,',',EL2,';',EL3,',',EL4,')=',C
        end if
       End do
 
 ! ... one-electron integrals
 
       Do i=1,ncoef
-       k =icoefs(1,i) 
+       k =icoefs(1,i)
        if(k.ne.-1) Cycle
        C = coefs(i); if(abs(C).lt.eps_c) Cycle
        AS = CONFIG(ic)
@@ -124,7 +124,7 @@
        AS = CONFIG(jc)
        j1=icoefs(4,i); k3 = 2 + (j1-1)*8; EL3=AS(k3:k3+2)
         write(out,'(a,2x,a,a,a,a,a,f10.5)') &
-		            'L','(',EL1,';',EL3,')=',C        
+		            'L','(',EL1,';',EL3,')=',C
       End do
 
       write(out,*)
@@ -142,7 +142,7 @@
        Implicit none
        Character(*), intent(in) :: CONFIG,COUPLE
        Integer :: no,nn(*),ln(*),iq(*),kn(*),LS(5,*)
-       Integer :: ii, k,i,j 
+       Integer :: ii, k,i,j
        Integer, external :: LA
 
        no=0; ii=LEN_TRIM(CONFIG); ii=ii/8;  k=1; j=2
@@ -204,7 +204,7 @@
       Integer :: iarg,i,i1,i2,iname
       Character(80) :: AS
 
-      iarg = Command_argument_count(); if(iarg.eq.0) Return 
+      iarg = Command_argument_count(); if(iarg.eq.0) Return
       Do i=1,iarg
        Call GET_COMMAND_ARGUMENT(i,AS)
        if(INDEX(AS,'=').ne.0) Cycle
@@ -225,7 +225,7 @@
       Integer :: iarg,i,i1,i2,iname
       Character(80) :: AS
 
-      iarg = Command_argument_count(); if(iarg.eq.0) Return 
+      iarg = Command_argument_count(); if(iarg.eq.0) Return
       iname=LEN_TRIM(name)
       Do i=1,iarg
        Call get_command_argument(i,AS)
@@ -256,7 +256,7 @@
 !====================================================================
 !     gives the value of L from spetroscopic symbol "a"
 !--------------------------------------------------------------------
-      Implicit none  
+      Implicit none
       Character, Intent(in) :: a
       Character(21) :: AS, AB
       Integer :: i
@@ -283,8 +283,8 @@
 !--------------------------------------------------------------------
       Implicit none
       Character(4), intent(in) :: EL
-      Integer, intent(out) :: n,l,k    
-      Integer :: i,j,ic, k1,k2  
+      Integer, intent(out) :: n,l,k
+      Integer :: i,j,ic, k1,k2
       Integer, external :: LA
 
       Character(61) :: ASET = &
@@ -328,7 +328,7 @@
       i=i+1
       if(i.le.4.and.j.le.3) go to 1
       if(n.ge.100.or.l.lt.0) then
-       write(*,*) 'EL4_nlk is fail to decode: ',EL 
+       write(*,*) 'EL4_nlk is fail to decode: ',EL
        Stop ' '
       end if
 

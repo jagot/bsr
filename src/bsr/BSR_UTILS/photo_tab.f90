@@ -4,9 +4,9 @@
       Use target; Use channels
 
       Implicit real(8) (A-H,O-Z)
- 
+
       Allocatable IP_phot(:), NU_phot(:), E_thresh(:), &
-                  IP_targ(:), IP_energy(:) 
+                  IP_targ(:), IP_energy(:)
 
       Integer :: ke=1000, ne=0, me
       Real(8), allocatable :: e(:),ev(:), x(:),y(:)
@@ -14,7 +14,7 @@
       Real(8), allocatable :: CSR(:,:),CSV(:,:)
       Real(8), allocatable :: ASR(:,:,:),ASV(:,:,:)
       Real(8) :: E_shift = 0.0
-      
+
 ! ... files:
 
       Character(40) :: targ  = 'target';       Integer :: nut = 1
@@ -22,7 +22,7 @@
       Character(40) :: pname = 'bsr_phot.nnn'; Integer :: nup = 20
       Character(80) :: AF_res, AF,BF,  AF_states = 'states_selected'
 
-      me=ke; Allocate(e(me),ev(me)) 
+      me=ke; Allocate(e(me),ev(me))
 !----------------------------------------------------------------------
 ! ... target information:
 
@@ -46,28 +46,28 @@
 
       write(*,*) 'Energy shift?'
       read(*,*) E_shift
-      
+
       Do i=1,nphot
        klsp = IP_phot(i)
        write(pname(ii+1:ii+3),'(i3.3)') klsp
        Call Check_file(pname)
        NU_phot(i) = nup + i
-       Open(NU_phot(i),file=pname)       
+       Open(NU_phot(i),file=pname)
        it = iptar(klsp,1)
        E_thresh(i) = etarg(it)
        Call Read_energies(NU_phot(i))
       End do
-      ev = ev - E_shift 
+      ev = ev - E_shift
 
       write(*,*) 'ne = ',ne
-      if(ne.eq.0) Stop 'nothing to do' 
+      if(ne.eq.0) Stop 'nothing to do'
 
       Allocate(IP_energy(ne)); IP_energy = 0
 
-      Call Rsort(ne,e) 
-      Call Rsort(ne,ev) 
+      Call Rsort(ne,e)
+      Call Rsort(ne,ev)
       Allocate(IPE(ne))
-      Call sortR(ne,e,IPE) 
+      Call sortR(ne,e,IPE)
 
 !----------------------------------------------------------------------
 ! ... choose the work:
@@ -118,7 +118,7 @@ CONTAINS
 !=======================================================================
 
       Implicit real(8) (A-H,O-Z)
-      
+
       Real(8), Allocatable :: ee(:)
       Integer :: i
 
@@ -137,7 +137,7 @@ CONTAINS
          read(nu,'(5d15.8)',err=2) (AK,j=1,nwt)
         End do
        end if
-       if(ikm.gt.0) read(nu,'(6d13.6)',err=2) ((C,i=1,j),j=1,nopen)       
+       if(ikm.gt.0) read(nu,'(6d13.6)',err=2) ((C,i=1,j),j=1,nopen)
 
        ie=0; Do i=1,ne; if(e1.ne.e(i)) Cycle; ie=i; Exit; End do
 
@@ -163,14 +163,14 @@ CONTAINS
 !=======================================================================
 
       Implicit real(8) (A-H,O-Z)
- 
+
       if(Allocated(CSR)) Deallocate(CSR,CSV)
 
       Allocate(CSR(ne,nphot));  CSR = 0.d0
       Allocate(CSV(ne,nphot));  CSV = 0.d0
 
       Do iphot=1,nphot
-       
+
        nu = NU_phot(iphot); rewind(nu)
 
     1  read(nu,'(2d15.8,4i5)',end=2) e1,e2,nopen,nwt,ikm
@@ -187,7 +187,7 @@ CONTAINS
          read(nu,'(5d15.8)') (AK,j=1,nwt)
         End do
        end if
-       if(ikm.gt.0) read(nu,'(6d13.6)') ((C,i=1,j),j=1,nopen)       
+       if(ikm.gt.0) read(nu,'(6d13.6)') ((C,i=1,j),j=1,nopen)
 
        ie=0;  Do i=1,ne; if(e1.ne.e(i)) Cycle; ie=i; Exit; End do
 
@@ -206,12 +206,12 @@ CONTAINS
       SS = 20.d0
       Do i=1,ne; ie=IPE(i)
 
-       CL=0.d0; CV=0.d0; ii = 1 
+       CL=0.d0; CV=0.d0; ii = 1
        Do iphot=1,nphot
         if(e(ie).le.E_thresh(iphot)) Cycle
         if(CSR(ie,iphot).eq.0.d0) ii =0
-        CL = CL + CSR(ie,iphot)           
-        CV = CV + CSV(ie,iphot)           
+        CL = CL + CSR(ie,iphot)
+        CV = CV + CSV(ie,iphot)
        End do
 
        if(ii.eq.0) IP_energy(ie) = 1
@@ -239,12 +239,12 @@ CONTAINS
 !=======================================================================
 
       Implicit real(8) (A-H,O-Z)
- 
+
       Real(8), Allocatable, Dimension(:) :: SL,SV
 
       write(*,*) 'partial wave and range of channels (0,0 means all):'
       read(*,*) iphot,ich1,ich2
-      klsp = IP_phot(iphot) 
+      klsp = IP_phot(iphot)
       kch = nch(klsp)
       if(ich1.le.0) ich1=1
       if(ich2.le.0) ich2=kch
@@ -274,7 +274,7 @@ CONTAINS
          read(nu,'(5d15.8)') (AK,j=1,nwt)
         End do
        end if
-       if(ikm.gt.0) read(nu,'(6d13.6)') ((C,i=1,j),j=1,nopen)       
+       if(ikm.gt.0) read(nu,'(6d13.6)') ((C,i=1,j),j=1,nopen)
 
        ie=0;  Do i=1,ne; if(e1.ne.e(i)) Cycle; ie=i; Exit; End do
 
@@ -307,7 +307,7 @@ write(nur,'(a15,a10,5x,20(a2,i2.2,8x) )') 'eV  ','k2   ',&
       Subroutine Target_cs
 !=======================================================================
       Implicit real(8) (A-H,O-Z)
- 
+
       Real(8), Allocatable :: SL(:),SV(:), Atarg(:,:),Btarg(:,:), ST(:)
       Real(8), allocatable :: ek(:),Sek(:), Sekt(:), ekt(:), Skt(:)
 
@@ -316,7 +316,7 @@ write(nur,'(a15,a10,5x,20(a2,i2.2,8x) )') 'eV  ','k2   ',&
       ASR = 0.d0; ASV = 0.d0
 
       Do iphot=1,nphot
-       
+
        kch = nch(IP_phot(iphot))
        if(Allocated(SL)) Deallocate(SL,SV)
        Allocate(SL(kch),SV(kch))
@@ -337,7 +337,7 @@ write(nur,'(a15,a10,5x,20(a2,i2.2,8x) )') 'eV  ','k2   ',&
          read(nu,'(5d15.8)') (AK,j=1,nwt)
         End do
        end if
-       if(ikm.gt.0) read(nu,'(6d13.6)') ((C,i=1,j),j=1,nopen)       
+       if(ikm.gt.0) read(nu,'(6d13.6)') ((C,i=1,j),j=1,nopen)
 
        ie=0;  Do i=1,ne; if(e1.ne.e(i)) Cycle; ie=i; Exit; End do
 
@@ -355,7 +355,7 @@ write(nur,'(a15,a10,5x,20(a2,i2.2,8x) )') 'eV  ','k2   ',&
       End do  ! over iphot
 
 !.................................................................
-! ... check the energies:   
+! ... check the energies:
 
       if(allocated(ST)) Deallocate(ST); Allocate(ST(nphot)); ST = 0.d0
       Do je = 1,ne; ie=ipe(je)
@@ -379,16 +379,16 @@ write(nur,'(a15,a10,5x,20(a2,i2.2,8x) )') 'eV  ','k2   ',&
       Allocate(Atarg(ne,ntarg),Btarg(ne,ntarg))
       Atarg = 0.d0; Btarg = 0.d0
 
-      Do i = 1,ne;  Do it = 1,ntarg 
+      Do i = 1,ne;  Do it = 1,ntarg
        Atarg(i,it) = SUM(ASR(i,:,it))
        Btarg(i,it) = SUM(ASV(i,:,it))
       End do; End do
 
 ! .................................................................
 ! ... output in separate files:
- 
+
       Do it = 1,ntarg
-     
+
        if(SUM(Atarg(:,it)).eq.0.d0) Cycle
 
        write(AF,'(a,a,i3.3)') trim(AF_res),'_t',it
@@ -401,7 +401,7 @@ write(nur,'(a15,a10,5x,20(a2,i2.2,8x) )') 'eV  ','k2   ',&
         if(Atarg(ie,it).eq.0.d0) Cycle
         write(nur,'(f15.8,f10.6,2E15.5)') ev(ie), e(ie)-etarg(it), &
                                             Atarg(ie,it),Btarg(ie,it)
-       End do   
+       End do
 
       End do   ! it
 
@@ -424,7 +424,7 @@ go to 50
       S = sum(Atarg(ie,1:ntarg))
 
       Do it = 1,ntarg
-       SS = Atarg(ie,it)/S 
+       SS = Atarg(ie,it)/S
        if(SS.lt.0.01) Cycle
        write(*,'(a,i5,f10.2,a)') 'it =',it, SS*100, '%'
       End do
@@ -447,7 +447,7 @@ go to 50
       Do i=1,nk;  ek(i) = ek1 + ekd*(i-1); End do
 
       Open(nur,file='electron_spectrum')
-      
+
       Sek = 0.d0
       Do it = 1,ntarg
 
@@ -460,7 +460,7 @@ go to 50
         nt = nt + 1
         ekt(nt) = ee
         Skt(nt) = Atarg(ie,it)
-       End do   
+       End do
        if(nt.eq.0) Cycle
 
        Do i = 1,nk
@@ -491,11 +491,11 @@ go to 50
       nus = 81
       open(nus,file=AF_states)
       rewind(nus)
-   10 read(nus,'(a80)',end=20)  AF 
+   10 read(nus,'(a80)',end=20)  AF
       if(AF(1:5).ne.'Label') go to 10
 write(*,*) trim(AF)
 
-      read(AF,*) BF,BF,nt  
+      read(AF,*) BF,BF,nt
       Do i=1,nt; read(nus,*) IP_targ(i); End do
       write(AF,'(a,a,a)') trim(AF_res),'_',trim(BF)
       open(nur,file=AF)
@@ -511,7 +511,7 @@ write(*,*) trim(AF)
       Do i=1,ne; ie=IPE(i); if(IP_energy(ie).eq.1) Cycle
        if(ST(ie).eq.0.d0) Cycle
        write(nur,'(f15.8,f10.6,2E15.5)') ev(ie), e(ie), ST(ie)
-      End do   
+      End do
 
       go to 10
    20 Continue
@@ -526,7 +526,7 @@ write(*,*) trim(AF)
 !=======================================================================
 
       Implicit real(8) (A-H,O-Z)
- 
+
       Real(8), Allocatable :: DLR(:),DLI(:),DVR(:),DVI(:)
       Real(8), Allocatable :: dd(:,:)
 
@@ -563,7 +563,7 @@ write(*,*) trim(AF)
         read(nu,'(5d15.8)') (AK,j=1,nwt)
        End do
       end if
-      if(ikm.gt.0) read(nu,'(6d13.6)') ((C,i=1,j),j=1,nopen)       
+      if(ikm.gt.0) read(nu,'(6d13.6)') ((C,i=1,j),j=1,nopen)
 
       if(ich.gt.nopen) go to 1
 
@@ -572,7 +572,7 @@ write(*,*) trim(AF)
       if(ie.eq.0) Stop 'Dipole_me: problems with energies'
 
        dd(1,ie) = DLR(ich)
-       dd(3,ie) = DLI(ich)            
+       dd(3,ie) = DLI(ich)
        dd(5,ie) = DVR(ich)
        dd(7,ie) = DVI(ich)
 
@@ -598,7 +598,7 @@ write(*,*) trim(AF)
 !      End do
 
       write(nur,'(a,5x,a,10x,a,10x,a,10x,a,10x,a)')  &
-                '  E_phot(eV)', 'k^2', 'dr_L', 'di_L', 'dr_v', 'di_V' 
+                '  E_phot(eV)', 'k^2', 'dr_L', 'di_L', 'dr_v', 'di_V'
       Do ie=1,ne
        write(nur,'(f12.8,f10.6, 4E16.8)') ev(ie), e(ie)-etarg(it), &
           dd(1,ie), dd(3,ie), dd(5,ie), dd(7,ie)
@@ -614,7 +614,7 @@ write(*,*) trim(AF)
 !=======================================================================
 
       Implicit real(8) (A-H,O-Z)
- 
+
       Real(8), Allocatable :: DLR(:),DLI(:),DVR(:),DVI(:)
       Real(8), Allocatable :: dd(:,:,:)
       Character(20), Allocatable :: term(:)
@@ -641,9 +641,9 @@ write(*,*) trim(AF)
 
       Do i=1,kch
         if(mod(jkch(klsp,i),2).eq.1) &
-        write(at,'(a,a,a,i1,a)') 'k',AL(lch(klsp,i),1),'[',(jkch(klsp,i)-1)/2,']' 
+        write(at,'(a,a,a,i1,a)') 'k',AL(lch(klsp,i),1),'[',(jkch(klsp,i)-1)/2,']'
         if(mod(jkch(klsp,i),2).eq.0) &
-        write(at,'(a,a,a,i1,a)') 'k',AL(lch(klsp,i),1),'[',jkch(klsp,i)-1,'/2]' 
+        write(at,'(a,a,a,i1,a)') 'k',AL(lch(klsp,i),1),'[',jkch(klsp,i)-1,'/2]'
         term(i) = at
       End do
 
@@ -667,7 +667,7 @@ write(*,*) trim(AF)
         read(nu,'(5d15.8)') (AK,j=1,nwt)
        End do
       end if
-      if(ikm.gt.0) read(nu,'(6d13.6)') ((C,i=1,j),j=1,nopen)       
+      if(ikm.gt.0) read(nu,'(6d13.6)') ((C,i=1,j),j=1,nopen)
 
       if(ich1.gt.nopen) go to 1
 
@@ -688,8 +688,8 @@ write(*,*) trim(AF)
       Open(nur,file=AF_res)
 
       write(nur,'(a,5x,a,150(8x,a,4x))')  &
-           '  E_phot(eV)', 'k^2', ('dr_L','di_L',i=ich1,ich2) 
-!           '  E_phot(eV)', 'k^2', ('dr_L','di_L','dr_v','di_V',i=ich1,ich2) 
+           '  E_phot(eV)', 'k^2', ('dr_L','di_L',i=ich1,ich2)
+!           '  E_phot(eV)', 'k^2', ('dr_L','di_L','dr_v','di_V',i=ich1,ich2)
 
       write(nur,'(24x,50(a,i3,a,i3,3x,a9))') &
                 ('target',iptar(klsp,i),' channel',i, term(i),i=ich1,ich2)
@@ -709,7 +709,7 @@ write(*,*) trim(AF)
 !=======================================================================
 
       Implicit real(8) (A-H,O-Z)
- 
+
       Real(8), Allocatable :: S(:),SS(:,:),ed(:)
 
 ! ... find delete energies:
@@ -717,7 +717,7 @@ write(*,*) trim(AF)
       nud = 3
       open(nud,file='delete_list')
       nd = 0
-   10 read(nud,*,end=20) x   
+   10 read(nud,*,end=20) x
       nd = nd+1
       go to 10
    20 write(*,*) 'ndelete = ',nd
@@ -726,7 +726,7 @@ write(*,*) trim(AF)
       rewind(nud)
       Do i=1,nd; read(nud,*) ed(i); End do
       Close(nud)
-      
+
 
       Do iphot=1,nphot
 
@@ -740,11 +740,11 @@ write(*,*) trim(AF)
        ii = INDEX(pname,'.',back=.true.)
        klsp = IP_phot(iphot)
        write(pname(ii+1:),'(i3.3,a)') klsp,'_del'
-       Open(nud,file=pname)       
+       Open(nud,file=pname)
 
     1  read(nu,'(2d15.8,4i5)',end=2) e1,e2,nopen,nwt,ikm
-       idel = 0; Do i=1,nd; if(ed(i).ne.e1) Cycle; idel=1; Exit; End do 
-       if(idel.eq.0) write(nud,'(2d15.8,4i5)') e1,e2,nopen,nwt,ikm      
+       idel = 0; Do i=1,nd; if(ed(i).ne.e1) Cycle; idel=1; Exit; End do
+       if(idel.eq.0) write(nud,'(2d15.8,4i5)') e1,e2,nopen,nwt,ikm
        read(nu,'(5d15.8)') SLP,(S(i),i=1,nopen)
        if(idel.eq.0) write(nud,'(5d15.8)') SLP,(S(i),i=1,nopen)
        read(nu,'(5d15.8)') SVP,(S(i),i=1,nopen)
@@ -771,7 +771,7 @@ write(*,*) trim(AF)
         End do
        end if
        if(ikm.gt.0) then
-        read(nu,'(6d13.6)') ((SS(i,j),i=1,j),j=1,nopen)       
+        read(nu,'(6d13.6)') ((SS(i,j),i=1,j),j=1,nopen)
         if(idel.eq.0) write(nud,'(6d13.6)') ((SS(i,j),i=1,j),j=1,nopen)
        end if
        go to 1
@@ -788,7 +788,7 @@ write(*,*) trim(AF)
       Subroutine Correct
 !=======================================================================
       Implicit real(8) (A-H,O-Z)
- 
+
       Character(80) :: AS
       Real(8), allocatable :: S(:),SS(:,:),ed(:)
 
@@ -804,15 +804,15 @@ write(*,*) trim(AF)
        ii = INDEX(pname,'.',back=.true.)
        klsp = IP_phot(iphot)
        write(pname(ii+1:),'(i3.3,a)') klsp,'_corrected'
-       nud=3; Open(nud,file=pname)       
+       nud=3; Open(nud,file=pname)
 
-       
+
     1  read(nu,'(a)',end=2) AS
        if(len_trim(AS).ne.45) go to 1
        if(AS(36:36).ne.' ') go to 1
        read(AS,'(2d15.8,4i5)',err=1) e1,e2,nopen,nwt,ikm
        if(nopen.le.0.or.nopen.gt.kch) go to 1
-       write(nud,'(2d15.8,4i5)') e1,e2,nopen,nwt,ikm      
+       write(nud,'(2d15.8,4i5)') e1,e2,nopen,nwt,ikm
        read(nu,'(5d15.8)',err=1) SLP,(S(i),i=1,nopen)
        write(nud,'(5d15.8)') SLP,(S(i),i=1,nopen)
        read(nu,'(5d15.8)',err=1) SVP,(S(i),i=1,nopen)
@@ -839,7 +839,7 @@ write(*,*) trim(AF)
         End do
        end if
        if(ikm.gt.0) then
-        read(nu,'(6d13.6)',err=1) ((SS(i,j),i=1,j),j=1,nopen)       
+        read(nu,'(6d13.6)',err=1) ((SS(i,j),i=1,j),j=1,nopen)
         write(nud,'(6d13.6)') ((SS(i,j),i=1,j),j=1,nopen)
        end if
        go to 1
@@ -856,7 +856,7 @@ write(*,*) trim(AF)
 !=======================================================================
 
       Implicit real(8) (A-H,O-Z)
- 
+
       Real(8), Allocatable :: S(:),SS(:,:),ed(:)
       Real(8) :: eps=1.d-8
 
@@ -868,7 +868,7 @@ write(*,*) trim(AF)
       open(nud,file='energy_list')
       rewind(nud)
       nd = 0
-   10 read(nud,*,end=20) x   
+   10 read(nud,*,end=20) x
       nd = nd+1
       go to 10
    20 write(*,*) 'n_energies = ',nd
@@ -888,14 +888,14 @@ write(*,*) trim(AF)
        ii = INDEX(pname,'.',back=.true.)
        klsp = IP_phot(iphot)
        write(pname(ii+1:),'(i3.3,a)') klsp,'_cleaned'
-       Open(nud,file=pname)       
+       Open(nud,file=pname)
 
     1  read(nu,'(2d15.8,4i5)',end=2) e1,e2,nopen,nwt,ikm
        idel = 0
-       Do i=1,nd; if(abs(ed(i)-e1).gt.eps) Cycle; idel=1; ed(i)=0.d0; Exit; End do 
+       Do i=1,nd; if(abs(ed(i)-e1).gt.eps) Cycle; idel=1; ed(i)=0.d0; Exit; End do
 
 
-       if(idel.eq.1) write(nud,'(2d15.8,4i5)') e1,e2,nopen,nwt,ikm      
+       if(idel.eq.1) write(nud,'(2d15.8,4i5)') e1,e2,nopen,nwt,ikm
        read(nu,'(5d15.8)') SLP,(S(i),i=1,nopen)
        if(idel.eq.1) write(nud,'(5d15.8)') SLP,(S(i),i=1,nopen)
        read(nu,'(5d15.8)') SVP,(S(i),i=1,nopen)
@@ -922,7 +922,7 @@ write(*,*) trim(AF)
         End do
        end if
        if(ikm.gt.0) then
-        read(nu,'(6d13.6)') ((SS(i,j),i=1,j),j=1,nopen)       
+        read(nu,'(6d13.6)') ((SS(i,j),i=1,j),j=1,nopen)
         if(idel.eq.1) write(nud,'(6d13.6)') ((SS(i,j),i=1,j),j=1,nopen)
        end if
        go to 1
@@ -939,7 +939,7 @@ write(*,*) trim(AF)
 !=======================================================================
 
       Implicit real(8) (A-H,O-Z)
- 
+
       Real(8), Allocatable :: DLR(:),DLI(:),DVR(:),DVI(:), CP(:,:)
       Real(8), Allocatable :: ALR(:,:,:),ALI(:,:,:),AVR(:,:,:),AVI(:,:,:)
       Real(8), Allocatable :: betaL(:),betaV(:)
@@ -955,7 +955,7 @@ write(*,*) trim(AF)
       if(it1.le.0.or.it1.gt.ntarg) it1=1
       if(it2.le.0.or.it2.gt.ntarg) it2=ntarg
       if(it2.lt.it1) it2=it1
-      
+
       mch = 0
       Do i=1,nphot
        kch = nch(IP_phot(i)); if(kch.gt.mch) mch=kch
@@ -967,7 +967,7 @@ write(*,*) trim(AF)
       ALR = 0.d0; ALI = 0.d0; AVR = 0.d0; AVI = 0.d0
 
       Do iphot=1,nphot
-       
+
        kch = nch(IP_phot(iphot))
        if(Allocated(DLR)) Deallocate(DLR,DLI,DVR,DVI)
        Allocate(DLR(kch),DLI(kch),DVR(kch),DVI(kch))
@@ -992,7 +992,7 @@ write(*,*) trim(AF)
          read(nu,'(5d15.8)') (AK,j=1,nwt)
         End do
        end if
-       if(ikm.gt.0) read(nu,'(6d13.6)') ((C,i=1,j),j=1,nopen)       
+       if(ikm.gt.0) read(nu,'(6d13.6)') ((C,i=1,j),j=1,nopen)
 
        ie=0;  Do i=1,ne; if(e1.ne.e(i)) Cycle; ie=i; Exit; End do
 
@@ -1000,7 +1000,7 @@ write(*,*) trim(AF)
 
        Do i=1,nopen
         ALR(ie,iphot,i) = DLR(i)
-        ALI(ie,iphot,i) = DLI(i)         ! ???     -   
+        ALI(ie,iphot,i) = DLI(i)         ! ???     -
         AVR(ie,iphot,i) = DVR(i)
         AVI(ie,iphot,i) = DVI(i)
        End do
@@ -1014,7 +1014,7 @@ write(*,*) trim(AF)
 
       lmax = 0
       Do ilsp=1,nphot
-       klsp=IP_phot(ilsp); kch=nch(klsp) 
+       klsp=IP_phot(ilsp); kch=nch(klsp)
        Do ich=1,kch
         l=lch(klsp,ich)
         if(l.gt.lmax) lmax=l
@@ -1034,12 +1034,12 @@ write(*,*) trim(AF)
 
       Do i=1,ne; ie=IPE(i)
 
-       ii = 1 
+       ii = 1
        Do iphot=1,nphot
         if(e(ie).le.E_thresh(iphot)) Cycle
         S = SUM(ALR(ie,iphot,:))
         if(S.eq.0.d0) ii =0
-       End do      
+       End do
        if(ii.eq.0) Cycle
 
 ! ... Coulomb phases: cp(l+1) = s(l+1)-s(0) = cp(l) + tn^-1(q/(l+1)):
@@ -1052,12 +1052,12 @@ write(*,*) trim(AF)
          CP(0,it) = 0.5d0*ATAN(q) +  q * LOG( sqrt(1+q*q) - 1)  - q/12/(1+q*q)
          Do l=1,lmax
           s=l; CP(l,it) = CP(l-1,it) + DATAN2(q,s)
-         End do    
+         End do
         End do
        end if
 
 ! ... target loop:
-       
+
        betaL = 0.d0; betaV= 0.d0
 
        Do it = it1,it2
@@ -1066,8 +1066,8 @@ write(*,*) trim(AF)
 
         DENL = 0.d0; DENV = 0.d0
 
-        Do ilsp1=1,nphot; klsp1=IP_phot(ilsp1); kch1=nch(klsp1) 
- 
+        Do ilsp1=1,nphot; klsp1=IP_phot(ilsp1); kch1=nch(klsp1)
+
         Do ich1=1,kch1; if(iptar(klsp1,ich1).ne.it) Cycle
 
            J1 = jpar(klsp1); l1 = lch(klsp1,ich1); k1 = jkch(klsp1,ich1)
@@ -1075,14 +1075,14 @@ write(*,*) trim(AF)
            a1 = ALR(ie,ilsp1,ich1); b1 = ALI(ie,ilsp1,ich1)
            c1 = AVR(ie,ilsp1,ich1); d1 = AVI(ie,ilsp1,ich1)
 
-           denL = denL + (a1*a1+b1*b1) 
-           denV = denV + (c1*c1+d1*d1) 
+           denL = denL + (a1*a1+b1*b1)
+           denV = denV + (c1*c1+d1*d1)
 
-        Do ilsp2=1,nphot; klsp2=IP_phot(ilsp2); kch2=nch(klsp2) 
+        Do ilsp2=1,nphot; klsp2=IP_phot(ilsp2); kch2=nch(klsp2)
 
         Do ich2=1,kch2; if(iptar(klsp2,ich2).ne.it) Cycle
 
-           J2 = jpar(klsp2); l2 = lch(klsp2,ich2); k2 = jkch(klsp2,ich2)        
+           J2 = jpar(klsp2); l2 = lch(klsp2,ich2); k2 = jkch(klsp2,ich2)
                              ll2 = l2+l2+1
            a2 = ALR(ie,ilsp2,ich2); b2 = ALI(ie,ilsp2,ich2)
            c2 = AVR(ie,ilsp2,ich2); d2 = AVI(ie,ilsp2,ich2)
@@ -1090,10 +1090,10 @@ write(*,*) trim(AF)
           S = ll1*ll2*J1*J2*k1*k2
           S = sqrt(S)
 
-          S = S * Z_6j (k1,k2,5,ll2,ll1,JF)   
-          S = S * Z_6j (k1,k2,5,J2 ,J1 ,2 )  
-          S = S * Z_6j (J1,J2,5,3  ,3  ,J0)  
-          S = S * Z_3j0(l1,l2,2)              
+          S = S * Z_6j (k1,k2,5,ll2,ll1,JF)
+          S = S * Z_6j (k1,k2,5,J2 ,J1 ,2 )
+          S = S * Z_6j (J1,J2,5,3  ,3  ,J0)
+          S = S * Z_3j0(l1,l2,2)
 
           if(S.eq.0.d0) Cycle
 
@@ -1125,7 +1125,7 @@ write(*,*) trim(AF)
 
           S = sqrt(30.d0) * (-1)**((Jf+J0-3)/2)
 
-          betaL(it) = betaL(it) / DENL * S  
+          betaL(it) = betaL(it) / DENL * S
           betaV(it) = betaV(it) / DENV * S
 
        End do  ! over target
@@ -1149,7 +1149,7 @@ write(*,*) trim(AF)
 !=======================================================================
 
       Implicit real(8) (A-H,O-Z)
- 
+
       Real(8), Allocatable :: DLR(:),DLI(:),DVR(:),DVI(:), CP(:,:)
       Real(8), Allocatable :: ALR(:,:,:),ALI(:,:,:),AVR(:,:,:),AVI(:,:,:)
       Real(8), Allocatable :: betaL(:),betaV(:)
@@ -1165,7 +1165,7 @@ write(*,*) trim(AF)
       if(it1.le.0.or.it1.gt.ntarg) it1=1
       if(it2.le.0.or.it2.gt.ntarg) it2=ntarg
       if(it2.lt.it1) it2=it1
-      
+
       mch = 0
       Do i=1,nphot
        kch = nch(IP_phot(i)); if(kch.gt.mch) mch=kch
@@ -1177,7 +1177,7 @@ write(*,*) trim(AF)
       ALR = 0.d0; ALI = 0.d0; AVR = 0.d0; AVI = 0.d0
 
       Do iphot=1,nphot
-       
+
        kch = nch(IP_phot(iphot))
        if(Allocated(DLR)) Deallocate(DLR,DLI,DVR,DVI)
        Allocate(DLR(kch),DLI(kch),DVR(kch),DVI(kch))
@@ -1202,7 +1202,7 @@ write(*,*) trim(AF)
          read(nu,'(5d15.8)') (AK,j=1,nwt)
         End do
        end if
-       if(ikm.gt.0) read(nu,'(6d13.6)') ((C,i=1,j),j=1,nopen)       
+       if(ikm.gt.0) read(nu,'(6d13.6)') ((C,i=1,j),j=1,nopen)
 
        ie=0;  Do i=1,ne; if(e1.ne.e(i)) Cycle; ie=i; Exit; End do
 
@@ -1210,7 +1210,7 @@ write(*,*) trim(AF)
 
        Do i=1,nopen
         ALR(ie,iphot,i) = DLR(i)
-        ALI(ie,iphot,i) = DLI(i)         ! ???     -   
+        ALI(ie,iphot,i) = DLI(i)         ! ???     -
         AVR(ie,iphot,i) = DVR(i)
         AVI(ie,iphot,i) = DVI(i)
        End do
@@ -1224,7 +1224,7 @@ write(*,*) trim(AF)
 
       lmax = 0
       Do ilsp=1,nphot
-       klsp=IP_phot(ilsp); kch=nch(klsp) 
+       klsp=IP_phot(ilsp); kch=nch(klsp)
        Do ich=1,kch
         l=lch(klsp,ich)
         if(l.gt.lmax) lmax=l
@@ -1244,12 +1244,12 @@ write(*,*) trim(AF)
 
       Do i=1,ne; ie=IPE(i)
 
-       ii = 1 
+       ii = 1
        Do iphot=1,nphot
         if(e(ie).le.E_thresh(iphot)) Cycle
         S = SUM(ALR(ie,iphot,:))
         if(S.eq.0.d0) ii =0
-       End do      
+       End do
        if(ii.eq.0) Cycle
 
 ! ... Coulomb phases: cp(l+1) = s(l+1)-s(0) = cp(l) + tn^-1(q/(l+1)):
@@ -1259,15 +1259,15 @@ write(*,*) trim(AF)
         Do it = 1,ntarg
          if(e(ie)-etarg(it).le.0.d0) Cycle
          q = ion/sqrt(e(ie)-etarg(it))
-         CP(0,it) = 0.5d0*ATAN(q) +  q * LOG( sqrt(1+q*q) - 1)  - q/12/(1+q*q)                            
+         CP(0,it) = 0.5d0*ATAN(q) +  q * LOG( sqrt(1+q*q) - 1)  - q/12/(1+q*q)
          Do l=1,lmax
           s=l; CP(l,it) = CP(l-1,it) + DATAN2(q,s)
-         End do    
+         End do
         End do
        end if
 
 ! ... target loop:
-       
+
        betaL = 0.d0; betaV= 0.d0
 
        Do it = it1,it2
@@ -1276,8 +1276,8 @@ write(*,*) trim(AF)
 
         DENL = 0.d0; DENV = 0.d0
 
-        Do ilsp1=1,nphot; klsp1=IP_phot(ilsp1); kch1=nch(klsp1) 
- 
+        Do ilsp1=1,nphot; klsp1=IP_phot(ilsp1); kch1=nch(klsp1)
+
         Do ich1=1,kch1; if(iptar(klsp1,ich1).ne.it) Cycle
 
            J1 = jpar(klsp1); l1 = lch(klsp1,ich1); jj1 = jkch(klsp1,ich1)
@@ -1285,13 +1285,13 @@ write(*,*) trim(AF)
            a1 = ALR(ie,ilsp1,ich1); b1 = ALI(ie,ilsp1,ich1)
            c1 = AVR(ie,ilsp1,ich1); d1 = AVI(ie,ilsp1,ich1)
 
-           denL = denL + (a1*a1+b1*b1) 
-           denV = denV + (c1*c1+d1*d1) 
+           denL = denL + (a1*a1+b1*b1)
+           denV = denV + (c1*c1+d1*d1)
 
-        Do ilsp2=1,nphot; klsp2=IP_phot(ilsp2); kch2=nch(klsp2) 
+        Do ilsp2=1,nphot; klsp2=IP_phot(ilsp2); kch2=nch(klsp2)
 
         Do ich2=1,kch2; if(iptar(klsp2,ich2).ne.it) Cycle
-           J2 = jpar(klsp2); l2 = lch(klsp2,ich2); jj2 = jkch(klsp2,ich2)        
+           J2 = jpar(klsp2); l2 = lch(klsp2,ich2); jj2 = jkch(klsp2,ich2)
                              ll2 = l2+l2+1
            a2 = ALR(ie,ilsp2,ich2); b2 = ALI(ie,ilsp2,ich2)
            c2 = AVR(ie,ilsp2,ich2); d2 = AVI(ie,ilsp2,ich2)
@@ -1299,10 +1299,10 @@ write(*,*) trim(AF)
           S = ll1*ll2*J1*J2*jj1*jj2
           S = sqrt(S)
 
-          S = S * Z_6j (jj1,jj2,5,ll2,ll1,2 ) &  
-                * Z_6j (jj1,jj2,5,J2 ,J1 ,JF) & 
-                * Z_6j (J1 ,J2 ,5,3  ,3  ,J0) & 
-                * Z_3j0(l1,l2,2)              
+          S = S * Z_6j (jj1,jj2,5,ll2,ll1,2 ) &
+                * Z_6j (jj1,jj2,5,J2 ,J1 ,JF) &
+                * Z_6j (J1 ,J2 ,5,3  ,3  ,J0) &
+                * Z_3j0(l1,l2,2)
 
           if(S.eq.0.d0) Cycle
 
@@ -1333,7 +1333,7 @@ write(*,*) trim(AF)
 
           S = sqrt(30.d0) * (-1)**((Jf-J0-1)/2)
 
-          betaL(it) = betaL(it) / DENL * S  
+          betaL(it) = betaL(it) / DENL * S
           betaV(it) = betaV(it) / DENV * S
 
        End do  ! over target
@@ -1352,7 +1352,7 @@ write(*,*) trim(AF)
 !=======================================================================
 
       Implicit real(8) (A-H,O-Z)
- 
+
       Real(8), Allocatable :: DLR(:),DLI(:),DVR(:),DVI(:), CP(:,:)
       Real(8), Allocatable :: ALR(:,:,:),ALI(:,:,:),AVR(:,:,:),AVI(:,:,:)
       Real(8), Allocatable :: betaL(:),betaV(:)
@@ -1368,7 +1368,7 @@ write(*,*) trim(AF)
       if(it1.le.0.or.it1.gt.ntarg) it1=1
       if(it2.le.0.or.it2.gt.ntarg) it2=ntarg
       if(it2.lt.it1) it2=it1
-      
+
       mch = 0
       Do i=1,nphot
        kch = nch(IP_phot(i)); if(kch.gt.mch) mch=kch
@@ -1380,7 +1380,7 @@ write(*,*) trim(AF)
       ALR = 0.d0; ALI = 0.d0; AVR = 0.d0; AVI = 0.d0
 
       Do iphot=1,nphot
-       
+
        kch = nch(IP_phot(iphot))
        if(Allocated(DLR)) Deallocate(DLR,DLI,DVR,DVI)
        Allocate(DLR(kch),DLI(kch),DVR(kch),DVI(kch))
@@ -1405,7 +1405,7 @@ write(*,*) trim(AF)
          read(nu,'(5d15.8)') (AK,j=1,nwt)
         End do
        end if
-       if(ikm.gt.0) read(nu,'(6d13.6)') ((C,i=1,j),j=1,nopen)       
+       if(ikm.gt.0) read(nu,'(6d13.6)') ((C,i=1,j),j=1,nopen)
 
        ie=0;  Do i=1,ne; if(e1.ne.e(i)) Cycle; ie=i; Exit; End do
 
@@ -1413,7 +1413,7 @@ write(*,*) trim(AF)
 
        Do i=1,nopen
         ALR(ie,iphot,i) = DLR(i)
-        ALI(ie,iphot,i) = DLI(i)         ! ???     -   
+        ALI(ie,iphot,i) = DLI(i)         ! ???     -
         AVR(ie,iphot,i) = DVR(i)
         AVI(ie,iphot,i) = DVI(i)
        End do
@@ -1428,7 +1428,7 @@ write(*,*) trim(AF)
 
       lmax = 0
       Do ilsp=1,nphot
-       klsp=IP_phot(ilsp); kch=nch(klsp) 
+       klsp=IP_phot(ilsp); kch=nch(klsp)
        Do ich=1,kch
         l=lch(klsp,ich)
         if(l.gt.lmax) lmax=l
@@ -1447,12 +1447,12 @@ write(*,*) trim(AF)
 
       Do i=1,ne; ie=IPE(i)
 
-       ii = 1 
+       ii = 1
        Do iphot=1,nphot
         if(e(ie).le.E_thresh(iphot)) Cycle
         S = SUM(ALR(ie,iphot,:))
         if(S.eq.0.d0) ii=0
-       End do      
+       End do
        if(ii.eq.0) Cycle
 
 ! ... Coulomb phases: cp(l+1) = s(l+1)-s(0) = cp(l) + tn^-1(q/(l+1)):
@@ -1465,12 +1465,12 @@ write(*,*) trim(AF)
          CP(0,it) = 0.5d0*ATAN(q) +  q * LOG( sqrt(1+q*q) - 1)  - q/12/(1+q*q)
          Do l=1,lmax
           s=l; CP(l,it) = CP(l-1,it) + DATAN2(q,s)
-         End do    
+         End do
         End do
        end if
 
 ! ... target loop:
-       
+
        betaL = 0.d0; betaV= 0.d0
 
        Do it = it1,it2
@@ -1479,28 +1479,28 @@ write(*,*) trim(AF)
 
         DENL = 0.d0; DENV = 0.d0
 
-        Do ilsp1=1,nphot; klsp1=IP_phot(ilsp1); kch1=nch(klsp1) 
- 
+        Do ilsp1=1,nphot; klsp1=IP_phot(ilsp1); kch1=nch(klsp1)
+
         Do ich1=1,kch1; if(iptar(klsp1,ich1).ne.it) Cycle
            ILT1 = lpar(klsp1); l1 = lch(klsp1,ich1)
            a1 = ALR(ie,ilsp1,ich1); b1 = ALI(ie,ilsp1,ich1)
            c1 = AVR(ie,ilsp1,ich1); d1 = AVI(ie,ilsp1,ich1)
 
-           denL = denL + (a1*a1+b1*b1) 
-           denV = denV + (c1*c1+d1*d1) 
+           denL = denL + (a1*a1+b1*b1)
+           denV = denV + (c1*c1+d1*d1)
 
-        Do ilsp2=1,nphot; klsp2=IP_phot(ilsp2); kch2=nch(klsp2) 
+        Do ilsp2=1,nphot; klsp2=IP_phot(ilsp2); kch2=nch(klsp2)
 
         Do ich2=1,kch2; if(iptar(klsp2,ich2).ne.it) Cycle
-           ILT2 = lpar(klsp2); l2 = lch(klsp2,ich2)        
+           ILT2 = lpar(klsp2); l2 = lch(klsp2,ich2)
            a2 = ALR(ie,ilsp2,ich2); b2 = ALI(ie,ilsp2,ich2)
            c2 = AVR(ie,ilsp2,ich2); d2 = AVI(ie,ilsp2,ich2)
 
           S = (l1+l1+1)*(l2+l2+1)*(ILT1+ILT1+1)*(ILT2+ILT2+1)
           S = sqrt(S)
-          S = S * Z_6jj(ILT1,ILT2,2,l2,l1,LF) &  
-                * Z_6jj(ILT1,ILT2,2, 1, 1,L0) & 
-                * Z_3j0(l1,l2,2)            
+          S = S * Z_6jj(ILT1,ILT2,2,l2,l1,LF) &
+                * Z_6jj(ILT1,ILT2,2, 1, 1,L0) &
+                * Z_3j0(l1,l2,2)
 
           if(S.eq.0.d0) Cycle
 
@@ -1531,7 +1531,7 @@ write(*,*) trim(AF)
 
           S = sqrt(30.d0) * (-1)**(L0+LF)
 
-          betaL(it) = betaL(it) / DENL * S  
+          betaL(it) = betaL(it) / DENL * S
           betaV(it) = betaV(it) / DENV * S
 
        End do  ! over target

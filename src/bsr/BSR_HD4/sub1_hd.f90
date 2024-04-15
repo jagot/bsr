@@ -1,5 +1,5 @@
 !=====================================================================
-      Subroutine SUB1_HD    
+      Subroutine SUB1_HD
 !=====================================================================
 !     calculations for given partial wave
 !---------------------------------------------------------------------
@@ -8,10 +8,10 @@
       Use channel
       Use spline_param, only: ns
       Use spline_grid,  only: t
-      
+
       Implicit none
       Integer :: i,j,k, i1,i2,i3
-      Integer, external :: Icheck_file      
+      Integer, external :: Icheck_file
 
       Call R_channel(nut,klsp)
       if(ncp.gt.0) ippert = ippert + ipconf(nch)
@@ -21,12 +21,12 @@
       write(ALSP,'(i3.3)') klsp
       i = INDEX(AF_log,'.'); AF=AF_log(1:i)//ALSP
       Open(pri,file=AF)
-      
+
       write(pri,'(a/a)') 'B S R _ H D ', &
                          '***********'
       write(pri,*)
       write(pri,'(a,i3)') 'calculations for partial wave:  klsp =',klsp
-	  
+
       write(pri,*)
 	     if(itype.eq.-1) &
        write(pri,'(a)') 'itype =   -1  -  bound-state calculations'
@@ -42,7 +42,7 @@
       write(pri,'(a,i5,a)') 'kcp   =',kcp,'  -  number of pertubers'
       write(pri,'(a,i5,a)') 'nhm   =',nhm,'  -  full size of matrix'
 
-!--------------------------------------------------------------------------------  
+!--------------------------------------------------------------------------------
 
       write(pri,*)
       if(iexp.eq.0) &
@@ -61,14 +61,14 @@
 
        Do j=1,ntarg; i=ip_exp(j)
         write(pri,'(2i6,2f16.8,f10.5)') &
-        j, i, Etarg(j), E_exp(j), (E_exp(j)-Etarg(j))*27.2112   
+        j, i, Etarg(j), E_exp(j), (E_exp(j)-Etarg(j))*27.2112
        End do
 
       end if
 
-!--------------------------------------------------------------------------------  
+!--------------------------------------------------------------------------------
 
-      if(iexp_pert.gt.0.and.kcp.gt.0) then 
+      if(iexp_pert.gt.0.and.kcp.gt.0) then
 
        if(allocated(E_pert)) Deallocate(E_pert); Allocate(E_pert(kcp))
        E_pert = 0.d0
@@ -76,7 +76,7 @@
        read(nut,*)
        i = 0
        Do j = 1, kpert
-        read(nut,*)  k, AF  
+        read(nut,*)  k, AF
         if(k.ne.klsp) Cycle
         i = i + 1
         AF = trim(AF)//'.c'
@@ -103,9 +103,9 @@
 
       write(pri,*)
       write(pri,'(a,i5,a)') 'jmvc  =',jmvc, &
-       '  -  number of channel orbitals for inclusion of' 
-      write(pri,'(17x,a)') 'mass-velocity corrections' 
-             
+       '  -  number of channel orbitals for inclusion of'
+      write(pri,'(17x,a)') 'mass-velocity corrections'
+
       write(pri,*)
       write(pri,'(a)') 'Restrictions on interaction matrix:'
       write(pri,*)
@@ -114,13 +114,13 @@
       write(pri,'(a,f10.5)') 'Egap  =',Egap
       write(pri,*)
       write(pri,'(a)') 'All one-channel solutions with &
-         &E<Emin, E>Emax or abs(E)<Egap will be deleted.' 
+         &E<Emin, E>Emax or abs(E)<Egap will be deleted.'
 
       if(itype.eq.-1) then
        write(pri,*)
        write(pri,'(a)') 'Restrictions for output of bound states:'
        write(pri,*)
-       write(pri,'(a,i5,a)') 'msol   =',msol,  '  - max. number of solutions' 
+       write(pri,'(a,i5,a)') 'msol   =',msol,  '  - max. number of solutions'
        write(pri,'(a,i5,a)') 'it_max =',it_max,'  - max. target threshold'
        write(pri,*)
        write(pri,'(a)') 'Zero value of any parameter means no restrictions.'
@@ -154,7 +154,7 @@
 ! ... diagonalize the matrix and get inner-region solutions:
 
       Call Diag_hd
- 
+
 !----------------------------------------------------------------------
 ! ... output of solutions and find the surface amplitudes:
 
@@ -183,7 +183,7 @@
 !----------------------------------------------------------------------
 ! ... output of bound states in bound.nnn:
 
-      if(itype.lt.0) Call B_out 
+      if(itype.lt.0) Call B_out
 
       End Subroutine SUB1_HD
 

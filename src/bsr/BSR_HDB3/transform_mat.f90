@@ -27,7 +27,7 @@
         ii=ipsol(ich-1)
         add = zero
         Do i=1,idim; add(i,i)=bval(i+ii); End do
-        read(nui) (S,i=1,ns*ns) 
+        read(nui) (S,i=1,ns*ns)
        end if
        Call BLACS_BARRIER (ctxt, 'All')
        Call pdgeadd ('notrans', idim,idim,      &
@@ -39,7 +39,7 @@
 
 !---------------------------------------------------------------------------
 
-      Do 
+      Do
        if(io_processor) read(nui) ic,jc
        Call br_ipar(ic)
        Call br_ipar(jc)
@@ -50,7 +50,7 @@
 
        if(io_processor) then
         read(nui) S
-        adp(ic-kch,jc-kch)=S 
+        adp(ic-kch,jc-kch)=S
        end if
 
       elseif(ic.gt.kch) then            !  ch-pert
@@ -59,7 +59,7 @@
         read(nui) w(1:ns)
         jdim = ipsol(jc)-ipsol(jc-1); jj = ipsol(jc-1)
         add = zero
-        Do j=1,jdim; add(1,j)=SUM(w(:)*bb(:,j+jj)); End do 
+        Do j=1,jdim; add(1,j)=SUM(w(:)*bb(:,j+jj)); End do
        end if
        i1=ic-kch+ipsol(kch); j1=ipsol(jc-1)+1
        jdim = ipsol(jc)-ipsol(jc-1)
@@ -70,15 +70,15 @@
 
        if(io_processor) then
         read(nui) cc(1:ns,1:ns)
-        i1=ipsol(ic-1)+1; i2=ipsol(ic); ii = ipsol(ic-1) 
-        j1=ipsol(jc-1)+1; j2=ipsol(jc); jj = ipsol(jc-1) 
+        i1=ipsol(ic-1)+1; i2=ipsol(ic); ii = ipsol(ic-1)
+        j1=ipsol(jc-1)+1; j2=ipsol(jc); jj = ipsol(jc-1)
         Do i=i1,i2
-         Do j=1,ns; w(j)=SUM(bb(:,i)*cc(:,j)); End do 
-         Do j=j1,j2; add(i-ii,j-jj)=SUM(w(:)*bb(:,j)); End do 
-        End do       
+         Do j=1,ns; w(j)=SUM(bb(:,i)*cc(:,j)); End do
+         Do j=j1,j2; add(i-ii,j-jj)=SUM(w(:)*bb(:,j)); End do
+        End do
        end if
-       i1=ipsol(ic-1)+1; idim=ipsol(ic)-ipsol(ic-1) 
-       j1=ipsol(jc-1)+1; jdim=ipsol(jc)-ipsol(jc-1) 
+       i1=ipsol(ic-1)+1; idim=ipsol(ic)-ipsol(ic-1)
+       j1=ipsol(jc-1)+1; jdim=ipsol(jc)-ipsol(jc-1)
        Call pdgeadd ('notrans',idim,jdim, one, add,  1, 1, descadd, &
                                          zero,   a, i1,j1, desca  )
        end if
@@ -92,7 +92,7 @@
                                        zero,  a, i,i, desca  )
       end if
 
-      if(io_processor) then           
+      if(io_processor) then
        Call CPU_time(t1)
        write (pri,'(/a,T30,f10.2,a)') 'Transform_mat:,', (t1-t0)/60, ' min.'
        write (*  ,'(/a,T30,f10.2,a)') 'Transform_mat:,', (t1-t0)/60, ' min.'

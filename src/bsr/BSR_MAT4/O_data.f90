@@ -12,11 +12,11 @@
 !     where .  denotes bound orbital, i,j - channels.
 !
 !     < i | j > elements are ignored becaUse we assume that target
-!     states are orthogonal. These elements are used to check this 
+!     states are orthogonal. These elements are used to check this
 !     orthogonality (see array 'to' in bsr_matrix).
 !----------------------------------------------------------------------
       Use bsr_mat
-      Use c_data  
+      Use c_data
 
       Implicit none
       Integer, intent(in) :: itype,kpol
@@ -25,8 +25,8 @@
 
       if(ncdata.le.0) Return
 !----------------------------------------------------------------------
-      if(itype.ne.1) Call Stop_mpi(0,0,' O-data: itype <> 1 ')                                  
-      if(kpol .ne.0) Call Stop_mpi(0,0,' O-data: kpol  <> 0 ')                                  
+      if(itype.ne.1) Call Stop_mpi(0,0,' O-data: itype <> 1 ')
+      if(kpol .ne.0) Call Stop_mpi(0,0,' O-data: kpol  <> 0 ')
 
       Do j=1,ncdata;  i=IPT(j)
 
@@ -53,9 +53,9 @@
         Call GET_V(j1,j2,w)
         ich = iech(i1); jch = iech(j1)
         v = v * C
-        Call UPDATE_HW(ich,jch,ns,v,w)         
+        Call UPDATE_HW(ich,jch,ns,v,w)
 
-       elseif(ic.lt.0.and.jc.eq.0) then            !    <i|j>         
+       elseif(ic.lt.0.and.jc.eq.0) then            !    <i|j>
 
         io = -ic;  i1=io/ibo; i2=mod(io,ibo)
 

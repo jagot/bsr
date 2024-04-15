@@ -30,10 +30,10 @@
         write(*,'(/a)') 'change target file to fit new experimental state energies'
         write(*,'(/a)') 'given in file thresholds'
         write(*,'(/a)') 'default:   target.theory + thrsholds => target.exp'
-        write(*,'(/a)') 'change default names as:' 
-        write(*,'(/a)') 'convert_target  [targ1=...  targ2=... thresholds=...]'  
-        Stop 
-      end if        
+        write(*,'(/a)') 'change default names as:'
+        write(*,'(/a)') 'convert_target  [targ1=...  targ2=... thresholds=...]'
+        Stop
+      end if
 
 
 
@@ -74,12 +74,12 @@
 
       Open(nu2,file=AF2);  nut=nu2
 
-      write(nut,'(a)') TITLE 
+      write(nut,'(a)') TITLE
       write(nut,'(72(''-''))')
       write(nut,'(a,a2,4x,a)') &
                 'coupling = ',coupling, '!   coupling scheme'
       write(nut,'(a,i5,T18,a)') &
-                'nz     =',nz,          '!   nuclear charge' 
+                'nz     =',nz,          '!   nuclear charge'
       write(nut,'(a,i5,T18,a)') &
                 'nelc   =',nelc,        '!   number of electrons'
       write(nut,'(72(''-''))')
@@ -94,13 +94,13 @@
       End do
       write(nut,'(72(''-''))')
       write(nut,'(a,i5,T18,a)') 'nct    =',nct, &
-       '!   total number of target configurations' 
+       '!   total number of target configurations'
       write(nut,'(a,i5,T18,a)') 'nwt    =',nwt, &
-       '!   total number of target orbitals' 
+       '!   total number of target orbitals'
 
       write(nut,'(72(''-''))')
       write(nut,'(a,i5,T18,a)') &
-           'nlsp   =',nlsp, '!   number of partial waves' 
+           'nlsp   =',nlsp, '!   number of partial waves'
       write(nut,'(72(''-''))')
 
       AFP = 'no';  BFP='no'
@@ -108,13 +108,13 @@
        if(AFP(i).ne.'no'.or.BFP(i).ne.'no') then
          write(nut,'(i3.3,3i5,3x,a20,1x,a10,2i5)') &
          i,lpar(i),ispar(i),ipar(i),AFP(i),BFP(i),ncp(i),nwp(i)
-       else 
+       else
          write(nut,'(i3.3,3i5)') i,lpar(i),ispar(i),ipar(i)
        end if
       End do
       write(nut,'(72(''-''))')
 
-      write(nut,'(a,i5)') 'channels:' 
+      write(nut,'(a,i5)') 'channels:'
       write(nut,'(80(''-''))')
 
       Do ilsp = 1,nlsp
@@ -126,7 +126,7 @@
        ! ... new channel order:
 
        k = 0
-       Do i=1,ntarg; it=ip_exp(i)      
+       Do i=1,ntarg; it=ip_exp(i)
         Do ich=1,nch(ilsp); if(iptar(ilsp,ich).ne.it) Cycle
          k=k+1; npch(k) = ich; nptar(k) = i
         End do

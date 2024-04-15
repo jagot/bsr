@@ -13,9 +13,9 @@
 !     hl and hl_dir have different representation !!!
 !
 !     hl_dir = [-1|1] - (not|yes) for done of hl_dir
-!     this parameter allows us to compute the hl_dir only once 
+!     this parameter allows us to compute the hl_dir only once
 !
-!     hl and hl_dir does not depend on l (can be calculated only once) 
+!     hl and hl_dir does not depend on l (can be calculated only once)
 !
 !     hl_exc(ns,ns) - exchange interaction with core
 !
@@ -35,8 +35,8 @@
       Real(8), allocatable :: vc(:,:),x(:,:),xx(:,:)
 
       Integer :: lz1,lz2      !  L_int under consideration
-      Real(8) :: cl 
-      
+      Real(8) :: cl
+
       Integer :: lv           !  L_vec under consideration
       Real(8), allocatable :: zl(:)
 
@@ -62,7 +62,7 @@
                 hl_full(ns,ns,0:mlh), &
                 x(ns,ks),xx(ns,ns),vc(ns,ks),zl(ns) )
        x=0.d0; xx=0.d0; zl=0.d0
-       lh_dir=-1; lv = -1; lz1=-1; lz2=-1 
+       lh_dir=-1; lv = -1; lz1=-1; lz2=-1
 
       else
 
@@ -80,7 +80,7 @@
 !======================================================================
       Subroutine Gen_Lval
 !======================================================================
-!     Generates the L-integrals <i|L|j> and vectors <.|L|j> 
+!     Generates the L-integrals <i|L|j> and vectors <.|L|j>
 !----------------------------------------------------------------------
       Use bsr_mat
       Use L_core
@@ -89,15 +89,15 @@
       Integer :: l
       Integer, external :: ipointer
 
-! ... find max.l and allocate arrays:      
+! ... find max.l and allocate arrays:
 
       mlh=maxval(lbs(1:nbf));   Call Alloc_Lcore(ns,ks,nbf)
 
-! ... generate L-data for given l: 
+! ... generate L-data for given l:
 
       Do l=0,mlh
-       if(ipointer(nbf,lbs,l).eq.0) Cycle 
-       Call INT_core(l);   hl_full(:,:,l) = hl_core(:,:)               
+       if(ipointer(nbf,lbs,l).eq.0) Cycle
+       Call INT_core(l);   hl_full(:,:,l) = hl_core(:,:)
       End do
 
       End Subroutine Gen_Lval
@@ -122,30 +122,30 @@
 
       C1=l*(l+1); C2=2*z; hl=db2-C1*rm2+C2*rm1
 
-! ... symmetrize hl by Bloch operator on right boder 
+! ... symmetrize hl by Bloch operator on right boder
 
       C1 = db2(1,1)-db2(ns,ks-1)
       hl(ns,ks-1) = hl(ns,ks-1) + C1
       hl(ns,ks  ) = hl(ns,ks  ) - C1
-      
-! ... symmetrize hl by Bloch operator on left boder 
 
-!      C2 = (ks-1)/(t(ks+1)-t(ks))         
-!      hl(2,ks-1) = hl(2,ks-1) + C2 
+! ... symmetrize hl by Bloch operator on left boder
+
+!      C2 = (ks-1)/(t(ks+1)-t(ks))
+!      hl(2,ks-1) = hl(2,ks-1) + C2
 !      hl(1,ks  ) = hl(1,ks)   - C2
-     
+
 ! ... relativistic shift:
 
       if(rel) then
        Call mvcv(l,vc,ilcorr); if(imvc.gt.0) hl=hl+vc
       end if
 
-! ... interaction with core:  
+! ... interaction with core:
 
       hl_exc = 0.d0
 
       if(kclosd.gt.0) then
-    
+
 ! ... direct interaction:
 
       if(lh_dir.eq.-1) then
@@ -160,7 +160,7 @@
       end if
 
 ! ... exchange interaction:
-      
+
       kmin = 1000; kmax = 0
       Do ip = 1,kclosd
        k = iabs(l-lbs(ip));  if(kmin.gt.k) kmin=k
@@ -172,15 +172,15 @@
        Do ip = 1,kclosd
         C1 = (4*lbs(ip)+2) * ZCB(l,k,lbs(ip))
         if(C1.eq.0.d0) Cycle
-        Call INT_de (pbs(1,ip),pbs(1,ip),xx,5,3,sym)       
+        Call INT_de (pbs(1,ip),pbs(1,ip),xx,5,3,sym)
         hl_exc(:,:) = hl_exc(:,:) + C1*xx
        End do
-      End do    
+      End do
 
       end if ! kclose > 0
 
 !----------------------------------------------------------------------
-! ... total hl:      
+! ... total hl:
 
       hl_core = hl_exc
 
@@ -201,7 +201,7 @@
         hl_core(j,i) = hl_core(i,j)
        End do
       End do
-     
+
       end if
 
       End Subroutine INT_core
@@ -212,18 +212,18 @@
       Real(8) Function L_int(i,j)
 !======================================================================
 ! ... define integral  <P_i|L|P_j>  for the given hl_core
-!---------------------------------------------------------------------    
-      Use bsr_mat;      Use L_core 
+!---------------------------------------------------------------------
+      Use bsr_mat;      Use L_core
       Use spline_param; Use spline_atomic; Use spline_orbitals
 
       Implicit none
       Integer, intent(in) :: i,j
       Integer :: m,k
-      Real(8), external :: BVMV 
+      Real(8), external :: BVMV
 
       if(i.eq.lz1.and.j.eq.lz2) then; L_int = cl; Return;  end if
 
-      cl = 0.d0 
+      cl = 0.d0
       Do m = 1,ns;  Do k = 1,m-1
        cl = cl + hl_core(m,k)*(pbs(m,i)*pbs(k,j)+pbs(k,i)*pbs(m,j))
       End do;  End do
@@ -235,10 +235,10 @@
 
       k=0
       if(rel.and.imvc.lt.0) k=1
-      if(nmvc.gt.0.and.nbs(i).gt.nmvc.and.nbs(j).gt.nmvc) k=0 
+      if(nmvc.gt.0.and.nbs(i).gt.nmvc.and.nbs(j).gt.nmvc) k=0
       if(k.gt.0) then
        Call mvcv(lbs(i),vc,ilcorr)
-       cl = cl + BVMV(ns,ks,vc,'s',pbs(1,i),pbs(1,j)) 
+       cl = cl + BVMV(ns,ks,vc,'s',pbs(1,i),pbs(1,j))
       end if
 
 ! ... save results
@@ -253,8 +253,8 @@
       Subroutine L_vec(i,v)
 !======================================================================
 ! ... define vector  <P_i|L|.>  for the given hl_core
-!---------------------------------------------------------------------    
-      Use bsr_mat;      Use L_core 
+!---------------------------------------------------------------------
+      Use bsr_mat;      Use L_core
       Use spline_param; Use spline_atomic; Use spline_orbitals
 
       Implicit none
@@ -270,14 +270,14 @@
 
       k=0
       if(rel.and.imvc.eq.-1) k=1
-      if(nmvc.gt.0.and.nbs(i).gt.nmvc) k=0 
+      if(nmvc.gt.0.and.nbs(i).gt.nmvc) k=0
       if(k.gt.0) then
        v = v + vc(1:ns,ks)*pbs(1:ns,i)
        Do m = 1,ks-1
        Do ii = ks-m+1,ns
          jj = ii-ks+m
-         v(ii) = v(ii) + vc(ii,m)*pbs(jj,i)     
-         v(jj) = v(jj) + vc(ii,m)*pbs(ii,i)     
+         v(ii) = v(ii) + vc(ii,m)*pbs(jj,i)
+         v(jj) = v(jj) + vc(ii,m)*pbs(ii,i)
         End do
        End do
       end if
@@ -298,12 +298,12 @@
 !                      (d^2/dr^2 - l(l+1)/r) B_j(r)  ] dr
 !--------------------------------------------------------------------
 !     on entry      l  -  the angular momentum
-!   
-!     on exit       vc -  the mass velocity correction 
+!
+!     on exit       vc -  the mass velocity correction
 !                         in symmetric storage mode
 !--------------------------------------------------------------------
       Use spline_param; Use spline_atomic;  Use spline_grid
-    
+
       Implicit none
       Integer, intent(in)  :: l,ilcorr
       Real(8), intent(out) :: vc(ns,ks)

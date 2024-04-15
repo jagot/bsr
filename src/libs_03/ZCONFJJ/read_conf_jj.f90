@@ -3,15 +3,15 @@
 !======================================================================
 !     read and add configurations to the list "conf_jj"
 !     job  =  'add'     -  just add
-!          =  'detect'  -  return -ic if exist and 
-!          =   others   -  add if not exist 
-!     check = 'check'   -  check the configurations for number of 
-!                          electrons and parity 
+!          =  'detect'  -  return -ic if exist and
+!          =   others   -  add if not exist
+!     check = 'check'   -  check the configurations for number of
+!                          electrons and parity
 !----------------------------------------------------------------------
       Use conf_jj
 
       Implicit none
-      Character(*), intent(in) :: job, check 
+      Character(*), intent(in) :: job, check
       Integer, intent(in) :: muc,kshift
       Integer, external :: Iadd_cfg_jj
       Integer :: nuc,i,ic

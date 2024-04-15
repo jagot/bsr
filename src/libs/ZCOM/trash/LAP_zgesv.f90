@@ -17,10 +17,10 @@
 
       Allocate(IPIV(m))
 
-      Call ZGESV( m,n, A, m, IPIV, B, m, INFO )    
- 
+      Call ZGESV( m,n, A, m, IPIV, B, m, INFO )
+
       if(info.ne.0) write(*,*) ' ZGESV(lapack) give INFO =',INFO
- 
+
       Deallocate(IPIV)
 
       End Subroutine LAP_ZGESV

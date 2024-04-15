@@ -7,7 +7,7 @@
 !                  Ifind_nlk    (n,l,k)
 !                  Read_bsw_orb (nu)
 !                  Get_nlki     (j,n,l,k,i)
-!                 
+!
 !---------------------------------------------------------------------
       Implicit none
 
@@ -17,7 +17,7 @@
       Integer :: nwf = 0                ! current number of orbitals
       Integer :: iwf = 512              ! initial prediction for mwf
       Integer :: nwf1, nwf2, kset1, kset2
-    
+
       Integer, allocatable :: NEF(:)    ! n-values
       Integer, allocatable :: LEF(:)    ! l-values
       Integer, allocatable :: KEF(:)    ! set number
@@ -27,7 +27,7 @@
 
 ! ... orbital orthogonality and AFTER conditions
 
-      Integer :: JORT = 1        
+      Integer :: JORT = 1
 
       End Module orb_LS
 
@@ -50,19 +50,19 @@
        if(m.lt.0) then
         mwf = iwf
         Allocate(NEF(mwf),LEF(mwf),KEF(mwf),IEF(mwf),ELF(mwf))
-        NEF = 0; LEF = -1; KEF = 0; IEF = 0; ELF = '    '  
-       end if  
+        NEF = 0; LEF = -1; KEF = 0; IEF = 0; ELF = '    '
+       end if
       elseif(.not.allocated(NEF)) then
        mwf = m
        Allocate(NEF(mwf),LEF(mwf),KEF(mwf),IEF(mwf),ELF(mwf))
-       NEF = 0; LEF = -1; KEF = 0; IEF = 0; ELF = '    '  
+       NEF = 0; LEF = -1; KEF = 0; IEF = 0; ELF = '    '
       elseif(m.le.mwf) then
        Return
       elseif(nwf.eq.0) then
        Deallocate (NEF,LEF,KEF,IEF,ELF)
        mwf = m
        Allocate(NEF(mwf),LEF(mwf),KEF(mwf),IEF(mwf),ELF(mwf))
-       NEF = 0; LEF = -1; KEF = 0; IEF = 0; ELF = '    '  
+       NEF = 0; LEF = -1; KEF = 0; IEF = 0; ELF = '    '
       else
        mwf = m
        Allocate(ia(nwf))
@@ -114,7 +114,7 @@
       if(job.eq.1) then
        write(*,'(a,a,3i5,a6)') 'Ifind_nlk can not find the orbital:',&
                                ' N,L,K = ',n,l,k,ELF4(n,l,k)
-       Stop 
+       Stop
       end if
 
       if(nwf.ge.mwf) Call Alloc_orb_LS(mwf+iwf)
@@ -159,7 +159,7 @@
     2 Close(nu)
 
       End Subroutine Read_bsw_orb_LS
-           
+
 
 !======================================================================
       Subroutine Read_orb_LS(nu,nclosd)
@@ -178,7 +178,7 @@
       read(nu) (ELF(i),i=1,nwf)
 
       End Subroutine Read_orb_LS
-           
+
 
 !======================================================================
       Subroutine write_orb_LS(nu,nclosd)
@@ -194,4 +194,4 @@
       write(nu) (ELF(i),i=1,nwf)
 
       End Subroutine write_orb_LS
-           
+

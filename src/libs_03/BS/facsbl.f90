@@ -8,7 +8,7 @@
 !     SUBROUTINES called:   DPBTRF (from LAPACK)
 !
 !--------------------------------------------------------------------
-    
+
       USE spline_param; USE spline_galerkin
 
       IMPLICIT NONE
@@ -36,7 +36,7 @@
       End do
       bs(ks,ns  ) = 1.d0
       bs(ks,ns-1) = 1.d0
- 
+
       Call DPBTRF('U',ns,ks-1,bs,ks,ierr)
       if (ierr .ne. 0 )  Stop 'facsbl: dpbtrf (LAPACK) failed'
 

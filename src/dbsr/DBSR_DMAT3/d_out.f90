@@ -13,7 +13,7 @@
       Real(8) :: S,SL,SV,E1
       Real(8), allocatable :: CL(:),CV(:)
       Real(8), allocatable :: eval(:)
- 
+
       if(ktype.ne.'E') Stop 'D_out: non-electric-transition case ? '
       if(kpol.ne.1) Stop 'D_out: kpol <> 1 --> non-dipole case ? '
 !----------------------------------------------------------------------
@@ -39,7 +39,7 @@
        End do
 
       elseif(ctype1.eq.'c') then
-	   
+
        C1=1.d0                       ! already in d-matrix
        rewind(nuc1)
        read(nuc1,'(15x,e16.8)') E1
@@ -47,7 +47,7 @@
 
       else
 
-       Stop 'dbsr_dmat: invalid initial state in d_out' 
+       Stop 'dbsr_dmat: invalid initial state in d_out'
 
       end if
 
@@ -61,7 +61,7 @@
       if(nhm.ne.kdm2)     Stop 'D_out, rsol: kdm2 --> ?'
       if(kch.ne.nch2)     Stop 'D_out, rsol: kch2 --> ?'
       if(kpert.ne.npert2) Stop 'D_out, rsol: npert2 --> ?'
-      Allocate(eval(nstate2)) 
+      Allocate(eval(nstate2))
       read(nur) eval
 
 !----------------------------------------------------------------------
@@ -85,13 +85,14 @@
       i=INDEX(AF_d,'.');  AF=AF_d(1:i)//ALS2
       Open(nud,file=AF,form='UNFORMATTED')
 
-      write(nud) jot2,0,parity2,Etarg(1),nstate2                 
-      write(nud) jot1,0,parity1,E1,       Label1                          
+      write(nud) jot2,0,parity2,Etarg(1),nstate2
+      write(nud) jot1,0,parity1,E1,       Label1
 
-      write(*,*) 'jot2,0,parity2,Etarg(1),nstate2',jot2,0,parity2,Etarg(1),nstate2                 
-      write(*,*) 'jot1,0,parity1,E1,       Label1',jot1,0,parity1,E1,       Label1                          
+      write(*,*) 'jot2,0,parity2,Etarg(1),nstate2',jot2,0,parity2,Etarg(1),nstate2
 
-      write(nud) (cl(i),cv(i),i=nstate2,1,-1)        
+      write(*,*) 'jot1,0,parity1,E1,Label1',jot1,0,parity1,E1, Label1
+
+      write(nud) (cl(i),cv(i),i=nstate2,1,-1)
 
       Deallocate(CL,CV,eval)
 

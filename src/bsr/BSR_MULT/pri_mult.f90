@@ -39,7 +39,7 @@
       if(idf.gt.0) then
        kd=KPF(idf);  ip=IPF(idf)
        Do i=1,kd
-        ns=mod(NPF(ip+i),ibf); ni=NPF(ip+i)/ibf; 
+        ns=mod(NPF(ip+i),ibf); ni=NPF(ip+i)/ibf;
         nd=KPD(ni); np=IPD(ni)
         ia=ia+1; A(ia:ia)='<'
        Do j=1,nd
@@ -91,7 +91,7 @@
       Integer(4), intent(in) :: i_max
       Integer(4), intent(out) :: k1,k2
 
-      Integer(4) :: i_min, i1,i2, m1,m2 
+      Integer(4) :: i_min, i1,i2, m1,m2
       Real(8) :: zz, s,ss, s1,s2
 
       k1=0

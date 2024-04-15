@@ -4,13 +4,13 @@
 ! ... defines scattering channels for one partial wave
 !----------------------------------------------------------------------
       Implicit none
-     
+
       Integer :: jpar =  0  !  2*J
       Integer :: ipar =  0  !  parity
       Integer :: nch  =  0  !  number of one-electron channels
       Integer :: mch  =  0  !  max. number of channels
       Integer :: imch =512  !  initial prediction(or incriment) for mch
-     
+
       Integer, allocatable :: kch(:)      ! kappa value for given channel
       Integer, allocatable :: lch(:)      ! l-value for given channel
       Integer, allocatable :: jjch(:)     ! l-value for given channel
@@ -18,18 +18,18 @@
       Integer, allocatable :: ipconf(:)   ! last configuration for given channel
       Integer, allocatable :: ipch(:)     ! additional pointer
       Character(5), allocatable :: ELC(:) ! channel spectroscopic symbol
-     
+
       Integer :: ncp	      !  number of configurations in perturber
       Integer :: nwp            !  number of orbitals in perturber
       Character(80) :: AFP,BFP  ! file-name for perturber
-     
+
       Integer :: npert=0        ! number of configurations in perturber
       Integer :: mpert=0
       Integer :: ipert=64
       Integer, allocatable :: ippert(:)  ! pointer to the last configuration
-     
+
       Character(4) :: Tpar !  some given notation for given partial wave
-     
+
       End Module channel_jj
 
 
@@ -39,12 +39,12 @@
 ! ... allocate, deallocate or reallocate arrays in module channel_jj
 !---------------------------------------------------------------------
       Use channel_jj
-    
+
       Implicit none
       Integer :: m,i
       Integer, allocatable :: iarr(:)
       Character(5), allocatable :: arr(:)
-    
+
       if(m.le.0) then
         if(allocated(iptar)) Deallocate(iptar,kch,lch,jjch,ipconf,ipch,ELC)
         mch = 0
@@ -78,7 +78,7 @@
         Deallocate(arr)
         mch = m
       end if
-    
+
       End Subroutine Alloc_channel_jj
 
 
@@ -95,17 +95,17 @@
       Character(80) :: line
       Integer :: i,j, nlsp, ncfg, nu
       Integer, external :: l_kappa, j_kappa, Ifind_position
-   
+
       Call Read_ipar(nut,'nlsp',nlsp); read(nut,*)
       if(nlsp.le.0) Stop 'R_channel: nlsp <= 0 '
       if(klsp.gt.nlsp) Stop 'R_channel: klsp > nlsp '
-   
+
       Do i = 1,klsp; read(nut,'(a)') line;  End do
       read(line,*) Tpar,jpar,ipar
       AFP = ' '; BFP = ' '; ncp=0; nwp=0
       if(LEN_TRIM(line).gt.12) read(line(13:),*) AFP,BFP,ncp,nwp
-   
-      i = Ifind_position(nut,'channels:'); read(nut,*) 
+
+      i = Ifind_position(nut,'channels:'); read(nut,*)
       Do
        read(nut,*); read(nut,'(a)') line; read(nut,*)
        read(line(1:3),*) i
@@ -122,16 +122,16 @@
        End do
        Exit
       End do
-   
+
       Call Allocate_pert(0)
       if(ncp.le.0) Return
       Call Find_free_unit(nu)
       i = LEN_TRIM(BFP); AF=BFP(1:i)//'.c'
       open(nu,file=AF)
       Call R_pert(nu)
-   
+
       Close(nu)
-   
+
       End Subroutine Read_channel_jj
 
 
@@ -206,13 +206,13 @@
       Ifind_channel_jj = 1
       Do ich = 1,nch
        if(ic.gt.ipconf(ich)) Ifind_channel_jj=ich+1
-      End do 
+      End do
 
       if(Ifind_channel_jj.le.nch) Return
 
       Do ich = 1,npert
-       if(ic.gt.ippert(ich)) Ifind_channel_jj=nch+ich+1   
-      End do 
+       if(ic.gt.ippert(ich)) Ifind_channel_jj=nch+ich+1
+      End do
 
       if(Ifind_channel_jj.gt.nch+npert) then
        write(*,*) 'npert=',npert

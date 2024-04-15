@@ -5,7 +5,7 @@
 !     prepares the text files suitable for plotting the rad. functions:
 !
 !     name.w  -->  name.nl1, name.nl1, name.nl1, ...
-!  
+!
 !                  where nl's - one-electron orbitals
 !
 !----------------------------------------------------------------------
@@ -26,7 +26,7 @@
        Stop 'enter name for w-file as argument'
       end if
 
-      ii = INDEX(AF,'.',BACK=.TRUE.); if(ii.eq.0) ii=LEN_TRIM(AF) 
+      ii = INDEX(AF,'.',BACK=.TRUE.); if(ii.eq.0) ii=LEN_TRIM(AF)
 
       inp =1;  Open(inp, file=AF,form='UNFORMATTED',status='OLD')
 
@@ -50,7 +50,7 @@
 
       Do i=1,npts
        write(iout,'(3d25.16)') R(i),P(i),Q(i)
-      End do       
+      End do
 
       Deallocate(R,P,Q)
 

@@ -12,8 +12,8 @@
       Integer :: i,j, m,mm, ich
       Integer, external :: Ifind_channel
 
-!---------------------------------------------------------------------- 
-! ... read configuration expansion and orbitals information: 
+!----------------------------------------------------------------------
+! ... read configuration expansion and orbitals information:
 
       Call Read_data
 
@@ -28,8 +28,8 @@
       Allocate(IP_channel(ncfg))
       Do i=1,ncfg; IP_channel(i)=Ifind_channel(i); End do
 
-      Call Allocate_ndets(-1)  
-      Call Allocate_ndefs(-1)  
+      Call Allocate_ndets(-1)
+      Call Allocate_ndefs(-1)
 
       Call Memory_estimations(mm)
 
@@ -43,7 +43,7 @@
 
       if(interrupt.eq.0) then
 
-       hcc = hcc * EC       
+       hcc = hcc * EC
        if(npert.gt.0) then;  hcb = hcb * EC;  hbb = hbb * EC;  end if
 
        Do ich = 1,nch
@@ -51,7 +51,7 @@
         if(icc(ich,ich).ne.0) Call UPDATE_HL(ich,ich,ns,ks,sb,C)
        End do
 
-      else 
+      else
 
        Call Allocate_matrix(m)
        Call Read_matrix
@@ -94,12 +94,12 @@
       if(myid.eq.0) &
       write(*  ,'( a,T20,f10.2,a)') 'BS_ORTH:',(t4-t3)/60,' min '
 
-! ... record interaction matrix: 
+! ... record interaction matrix:
 
    10 Call Record_matrix(nuj)
 
 !----------------------------------------------------------------------
-!                                              asymptotic coefficients:  
+!                                              asymptotic coefficients:
       if(interrupt.eq.0) Call SUB1_acf
 
       write(nuj) mk;  write(nuj) ACF
@@ -116,7 +116,7 @@
       close(nuj)
 
       if(interrupt.eq.0) Call Target_print(pri,eps_tar)
-      
+
       End Subroutine SUB1
 
 
@@ -145,7 +145,7 @@
       if(myid.eq.0) &
       write(*  ,'(a,T20,f10.2,a)') 'L-integrals:',(t2-t1)/60,' min '
 
-      End Subroutine SUB1_Lintegrals 
+      End Subroutine SUB1_Lintegrals
 
 
 !======================================================================
@@ -159,16 +159,16 @@
 
       if(intercase.gt.0.and.intercase.ne.7) Return
 
-      if(mso.le.0) Return    
+      if(mso.le.0) Return
 
       Call CPU_time(t1)
 
       l = maxval(lbs); if(l.gt.mlso) l = mlso;  Call Gen_Zval(l)
 
       icase=7;  Call State_res;   Call Alloc_zcore(0,0)
- 
+
       Call CPU_time(t2)
-      
+
       if(pri.gt.0)  &
       write(pri,'(a,T20,f10.2,a)') 'Z-integrals:',(t2-t1)/60,' min '
       if(myid.eq.0) &
@@ -230,8 +230,8 @@
       Allocate(IP_channel(ncfg))
       Do i=1,ncfg; IP_channel(i)=Ifind_channel(i); End do
 
-      Call Allocate_ndets(-1)  
-      Call Allocate_ndefs(-1)  
+      Call Allocate_ndets(-1)
+      Call Allocate_ndefs(-1)
 
       Call Memory_estimations(mm)
 
@@ -239,7 +239,7 @@
 
       rewind(nui);  read(nui) i,j,k;   Call Read_matrix
 
-      rewind(nuj);  write(nuj) ns,nch,npert;   Call Record_matrix(nuj)  
+      rewind(nuj);  write(nuj) ns,nch,npert;   Call Record_matrix(nuj)
 
 ! ... Interaction matrix:
 
@@ -261,16 +261,16 @@
        End do; End do
       End do
 
-! ... record interaction matrix: 
+! ... record interaction matrix:
 
       Call Record_matrix(nuj)
 
-! ... asymptotic coefficients:  
+! ... asymptotic coefficients:
 
       write(nuj) mk;  write(nuj) ACF
 
       close(nuj)
-      
+
       End Subroutine SUB1_mso
 
 
@@ -287,15 +287,15 @@
       Integer :: k,l, m,mm, npol
       Integer, external ::  memory_splines
 
-      mm = 0 
+      mm = 0
 
       if(pri.gt.0) write(pri,'(/a/)') 'Memory consuming:'
 
-      ! ... the < i | j > values: 
+      ! ... the < i | j > values:
 
-      m = mem_orb_overlaps 
+      m = mem_orb_overlaps
       if(pri.gt.0) &
-      write(pri,'(a,T33,f8.1,a)') 'Bound overlaps:', m*4.0/(1024*1024),'  Mb' 
+      write(pri,'(a,T33,f8.1,a)') 'Bound overlaps:', m*4.0/(1024*1024),'  Mb'
       mm = mm + m
 
       ! ... c_data arrays:
@@ -306,7 +306,7 @@
        nblock=k
        write(pri,'(/a,i8,a)') 'nblock = ',nblock,'  -  number of blocks re-assigned !!! '
       end if
-      Call Alloc_c_data(mtype,-1,npol,mblock,nblock,kblock,eps_c,m) 
+      Call Alloc_c_data(mtype,-1,npol,mblock,nblock,kblock,eps_c,m)
       if(pri.gt.0) &
       write(pri,'(a,T33,f8.1,a)')  'Memory for c_data:', m*4.0/(1024*1024),'  Mb'
       mm = mm + m
@@ -316,7 +316,7 @@
       if(.not.allocated(CBUF)) &
       Allocate(CBUF(maxnc),itb(maxnc),jtb(maxnc),intb(maxnc),idfb(maxnc))
       m = 6*maxnc
-      if(pri.gt.0) write(pri,'(a,T33,f8.1,a)')  'Buffer memory:', m*4.0/(1024*1024),'  Mb' 
+      if(pri.gt.0) write(pri,'(a,T33,f8.1,a)')  'Buffer memory:', m*4.0/(1024*1024),'  Mb'
       mm = mm + m
 
       ! ... splines:
@@ -337,7 +337,7 @@
       if(pri.gt.0)  &
       write(pri,'(a,T33,f8.1,a)')  'Total estimations:',mm*4.0/(1024*1024),'  Mb'
 
-      ! ... the < . | j > values: 
+      ! ... the < . | j > values:
 
       Call Check_orb_overlaps
       Call Get_orth_chan
@@ -360,14 +360,14 @@
 
       if(mode.ne.0) then
        rewind(nui);  read(nui) i,j,k;  Call Read_matrix
-      end if 
+      end if
 
       if(interrupt.gt.0.and.intercase.ne.11) then
        rewind(nuj);  write(nuj) ns,nch,npert;  Call Record_matrix(nuj);  Return
       end if
 
       flag = 0
-    1 Continue             ! the point to repeat overlaps calculations: 
+    1 Continue             ! the point to repeat overlaps calculations:
 
       ! ... B-spline overlaps: what if iitar=2  ???
 
@@ -406,9 +406,9 @@
 
     2 Continue
 
-      ! ... record overlap matrix: 
+      ! ... record overlap matrix:
 
-      rewind(nuj);    write(nuj) ns,nch,npert;  Call Record_matrix(nuj)  
+      rewind(nuj);    write(nuj) ns,nch,npert;  Call Record_matrix(nuj)
 
       Call CPU_time(t2)
       write(pri,'(a,T20,f10.2,a)') 'Overlaps:',(t2-t1)/60,' min '
@@ -421,7 +421,7 @@
       Subroutine SUB1_acf
 !======================================================================
 ! ... proceed the asymptotic coefficients
-!--------------------------------------------------------------------- 
+!---------------------------------------------------------------------
       Use bsr_mat
 
       Implicit none
@@ -459,16 +459,16 @@
        k=k+1
        write(pri,'(i5,2F15.6)') i,ACF(i,i,0)-2*nelc
       End do
-      
+
       if(pri_ac.gt.0) then
        write(pri,'(/a/)') 'Asymptotic coefficients: i,j, ACF(i,j,k)'
        Do k=0,mk
         if(SUM(acf(:,:,k)).eq.0) Cycle
         write(pri,'(a,i2)') 'k = ',k
         ii = 0
-        Do i=1,nch; Do j = 1,i      
+        Do i=1,nch; Do j = 1,i
          if(abs(acf(i,j,k)).lt.eps_acf) Cycle
-         i1=ii*20+1; i2=i1+19 
+         i1=ii*20+1; i2=i1+19
          write(line(i1:i2),'(2i4,E12.3)') j,i,acf(i,j,k)
          ii=ii+1
          if(ii.lt.5) Cycle

@@ -7,14 +7,14 @@
       USE spline_atomic
       USE spline_param
       USE spline_orbitals
-      
+
       IMPLICIT NONE
-      
-      Integer(4), Intent(in) :: nu
+
+      Integer, Intent(in) :: nu
       Character(4) :: el
       Real(8) :: zw,hw,hmw,rmw
-      Integer(4) :: ksw,nsw,mw,n,l,k,i
-      Integer(4), External :: Iadd_bsorb
+      Integer :: ksw,nsw,mw,n,l,k,i
+      Integer, external :: Iadd_bsorb
 
       rewind(nu)
     1 read(nu,end=2) el,zw,hw,hmw,rmw,ksw,nsw,mw
@@ -28,7 +28,7 @@
       i = Iadd_bsorb(n,l,k)
       read(nu) pbs(1:mw,i)
       mbs(i) = mw
-      if(mw.lt.ns) pbs(mw+1:ns,i) = 0.d0 
+      if(mw.lt.ns) pbs(mw+1:ns,i) = 0.d0
       go to 1
     2 Continue
 

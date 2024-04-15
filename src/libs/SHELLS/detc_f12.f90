@@ -3,27 +3,27 @@
 !=======================================================================
 ! coefficient for determinamt id and term it for subshell f12
 !-----------------------------------------------------------------------
- 
+
   Implicit none
- 
+
   Integer, intent(in)  :: id,it
- 
+
   Integer, parameter :: kd_f12 =  91
   Integer, parameter :: nt_f12 =   7
- 
+
   Integer :: INT_f12(kd_f12,nt_f12)
- 
+
   Integer :: Norm_f12 = 924
- 
+
   if(id.le.0.or.id.gt.kd_f12) Stop "detc_f12: index id is out of range"
   if(it.le.0.or.it.gt.nt_f12) Stop "detc_f12: index it is out of range"
- 
+
   detc_f12 = dfloat(INT_f12(id,it))/dfloat(Norm_f12)
- 
+
   detc_f12 = dsqrt(dabs(detc_f12))
- 
+
   if(INT_f12(id,it).lt.0) detc_f12=-detc_f12
- 
+
 
   Data INT_f12(:,   1)/ &
         0,        0,     -132,      132,        0,        0,        0,        0,        0,        0,        0,        0, &
@@ -94,5 +94,5 @@
         0,      378,        0,     -225,        0,     -420,        0,      -84,        0,      -84,        0,      224, &
         0,      224,        0,     -350,        0,     -350,       84,        0,       84,        0,     -224,        0, &
      -224,        0,      350,        0,      350,        0,     -400  /
- 
+
   End Function detc_f12

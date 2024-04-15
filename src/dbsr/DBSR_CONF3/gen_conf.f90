@@ -1,13 +1,13 @@
 !====================================================================
-      Subroutine Gen_Conf 
+      Subroutine Gen_Conf
 !====================================================================
-!     generates all configurations from configuration given in 
-!     module conf_jj by adding the orbital 'ie' 
+!     generates all configurations from configuration given in
+!     module conf_jj by adding the orbital 'ie'
 !--------------------------------------------------------------------
       Use dbsr_conf
 
       Implicit none
-      Integer :: ie,i,j,n,l,k,iset,ii, JP,JV, i1 
+      Integer :: ie,i,j,n,l,k,iset,ii, JP,JV, i1
       Integer, external :: j_kappa, l_kappa, Ifind_jjorb, after
 
       Call make_coupling
@@ -17,12 +17,12 @@
 
 ! ... find if the same orbital is already in the configuration:
 
-      ii=0                                
-      no=no-1         
+      ii=0
+      no=no-1
       Do i=1,no
        if(n.ne.nn(i)) Cycle
        if(k.ne.kn(i)) Cycle
-       if(iset.ne.in(i)) Cycle        
+       if(iset.ne.in(i)) Cycle
        ii=i; Exit
       End do
 
@@ -33,29 +33,29 @@
         JP=Jshell(ii); JV=Vshell(ii); JP_trap=JP
         insert = -ii; S_cfp = 1.d0; S_recup = 1.d0
         Call Sum_Term (ii,JP,JV)
-       end if 
-       
-! ... find the position for adding orbital using "AFTER" conditions: 
+       end if
 
-      else                   
+! ... find the position for adding orbital using "AFTER" conditions:
+
+      else
 
        Do i=1,no
         jp = Ifind_jjorb(nn(i),kn(i),in(i),1)
         if(AFTER(jp,ie).ge.0) Cycle
         ii=i; Exit
-       End do  
+       End do
 
-       if(ii.eq.0) then       ! ... add the new top shell        
+       if(ii.eq.0) then       ! ... add the new top shell
 
         no=no+1; nn(no)=n; in(no)=iset
-        insert = 0; S_cfp = 1.d0; S_recup = 1.d0 
+        insert = 0; S_cfp = 1.d0; S_recup = 1.d0
         Call Check_cfg
 
-       else         ! ... insert new shell                        
+       else         ! ... insert new shell
 
        Do i=no,ii,-1;  i1=i+1
-        nn(i1)=nn(i); kn(i1)=kn(i); jn(i1)=jn(i); ln(i1)=ln(i); 
-        iq(i1)=iq(i); in(i1)=in(i); Jshell(i1)=Jshell(i) 
+        nn(i1)=nn(i); kn(i1)=kn(i); jn(i1)=jn(i); ln(i1)=ln(i);
+        iq(i1)=iq(i); in(i1)=in(i); Jshell(i1)=Jshell(i)
         Vshell(i1)=Vshell(i); Jintra(i1)=Jintra(i)
        End do
        nn(ii)=n; kn(ii)=k; jn(ii)=j; ln(ii)=l; iq(ii)=1; in(ii)=iset
@@ -65,14 +65,14 @@
 
        end if   ! new shell case
       end if    ! trap case
-      
+
       End Subroutine Gen_Conf
 
 
 !=======================================================================
       Subroutine Sum_Term(i,JP,VP)
 !=======================================================================
-!     generates all terms for shell 'i' with parent term JP,JV 
+!     generates all terms for shell 'i' with parent term JP,JV
 !-----------------------------------------------------------------------
       Use dbsr_conf
 
@@ -80,7 +80,7 @@
       Integer :: i,j,ii,i1,i2,i3,i4,mt, JP,VP
       Integer, external :: Jterm
       Real(8), external :: cfp_jj
- 
+
       mt = Jterm(jn(i),iq(i),-1,i1,i2,i3,i4)
       Do j=1,mt
        ii=Jterm(jn(i),iq(i),j,Jshell(i),Vshell(i),i3,i4)
@@ -102,7 +102,7 @@
       Use dbsr_conf
 
       Implicit none
-      Integer, external :: Jadd_cfg_jj 
+      Integer, external :: Jadd_cfg_jj
       Integer :: Jmin(msh),Jmax(msh)
       Integer :: istart,i,ii,i1,i2,j1,j2
 
@@ -113,10 +113,10 @@
       end if
 
       if(no.eq.1) then
-       if(Jintra(no).eq.Jtotal)  Call Check_cfg    
+       if(Jintra(no).eq.Jtotal)  Call Check_cfg
        Return
       end if
-       
+
       i=i1
     1 j1=i-1
       j2=i
@@ -129,7 +129,7 @@
         i=i+1
         go to 1
       else
-        if(Jintra(no).eq.Jtotal) Call Check_cfg(ii)
+        if(Jintra(no).eq.Jtotal) Call Check_cfg
       end if
 
     3 if(Jintra(i).lt.Jmax(i)) then

@@ -1,29 +1,29 @@
 !======================================================================
       Subroutine Read_sol(ctype,nu,nc,C,Label,E,jot)
 !======================================================================
-!     read one solution from c-,l-,j- or b-files 
+!     read one solution from c-,l-,j- or b-files
 !
 !     nu    -  file unit
 !     ctype -  type of file (c,l,j,b)
 !     nc    -  dimention of solution
 !     C     -  solution
 !     Label -  spectroscopic notation
-!     E     -  energy 
+!     E     -  energy
 !     jot   -  (2J+1) for j-type calculations
 !
-!     the first line in files 'l,j,b' is supposed to have already 
+!     the first line in files 'l,j,b' is supposed to have already
 !     been read !
 !----------------------------------------------------------------------
       Implicit none
 
       Character(1), intent(in) :: ctype
-      Integer, intent(in) :: nu,nc 
-      Integer, intent(inout) :: jot 
+      Integer, intent(in) :: nu,nc
+      Integer, intent(inout) :: jot
       Character(64), intent(out) :: Label
       Real(8), intent(out) :: E
       Real(8), intent(out) :: C(nc)
       Integer i
- 
+
       Character(80) :: AS
 
       Select Case(ctype)
@@ -31,18 +31,18 @@
       Case('b')
 
         read(nu,'(7x,a64)') Label
-        read(nu,'(D15.8)') E  
+        read(nu,'(D15.8)') E
         read(nu,'(5D15.8)') C
 
        Case('c')
-	  
+
        Call R_expn(nu,nc,C)
-       Call Idef_LabelC(nu,0,0,Label)        
+       Call Idef_LabelC(nu,0,0,Label)
        rewind(nu); read(nu,'(a)') AS; read(AS,'(15x,f16.8)') E
        jot=0
        i=INDEX(AS,'='); if(i.gt.0) read(AS(i+1:),*) jot; jot=jot+1
 
-       Case('j') 
+       Case('j')
 
       1 read(nu,'(a80)',end=2) AS
        if(AS(14:14).eq.'.') then
@@ -57,7 +57,7 @@
       2 write(*,*) 'Read_sol: read the file end '
         Stop
 
-       Case('l') 
+       Case('l')
 
       3 read(nu,'(a80)',end=4) AS
       	if(AS(14:14).eq.'.') then
@@ -71,9 +71,9 @@
         Stop
 
        Case Default
-	    
+
     	Stop ' Read_sol: unknown case '
 
       End Select
- 
+
       End Subroutine Read_sol

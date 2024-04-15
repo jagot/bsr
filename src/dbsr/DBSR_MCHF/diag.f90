@@ -13,10 +13,9 @@
 
       Call CPU_time(t1)
 
-      if(icore.gt.0.and.all.eq.1) Call Gen_hd_core (ncore,mbreit,0)  
-
-      if(icore.gt.0) then 
-       Ecore = Ecore_df (ncore,mbreit) 
+      if(icore.gt.0) then
+       Call Gen_hd_core (ncore,mbreit,0)                  ! always ???
+       Ecore = Ecore_df (ncore)
        write(log,'(/a,f16.8)')  'Ecore  = ',Ecore
       end if
 
@@ -61,8 +60,8 @@
 ! ... L-intrgrals:
 
       Do i=1,Lint
-       S = L_int(i) 
-       Do j = ip_Lint(i-1)+1,ip_Lint(i) 
+       S = L_int(i)
+       Do j = ip_Lint(i-1)+1,ip_Lint(i)
         ic = ic_Lcoef(j)
         jc = jc_Lcoef(j)
         if(ic.lt.ic1.or.ic.gt.ic2) Cycle
@@ -76,8 +75,8 @@
 ! ... Rk-intrgrals:
 
       Do i=1,nint
-       S = Rk_int(i) 
-       Do j = ip_int(i-1)+1,ip_int(i) 
+       S = Rk_int(i)
+       Do j = ip_int(i-1)+1,ip_int(i)
         ic = ic_coef(j)
         jc = jc_coef(j)
         if(ic.lt.ic1.or.ic.gt.ic2) Cycle
@@ -124,13 +123,13 @@
       Integer, Intent(in) :: i,nc,jj
       Integer :: ip(nc), j,ii
       Real(8) :: CP(nc)
-     
-      CP = -abs(coefs(ip_level(i)+1:ip_level(i)+nc)) 
+
+      CP = -abs(coefs(ip_level(i)+1:ip_level(i)+nc))
       Call Sortr(nc,CP,ip)
-      CP = coefs(ip_level(i)+1:ip_level(i)+nc) 
-      ii = min(5,nc)      
+      CP = coefs(ip_level(i)+1:ip_level(i)+nc)
+      ii = min(5,nc)
       write(log,'(i5,i6,i4,f16.8,5(i4,f8.4))') &
-        block(i),level(i),jj,elevel(i),(ip(j),CP(ip(j)),j=1,ii) 
+        block(i),level(i),jj,elevel(i),(ip(j),CP(ip(j)),j=1,ii)
 
       End Subroutine print_level
 
@@ -145,7 +144,7 @@
 
       Implicit none
       Integer :: i,k,nu
-      Real(8), external :: dhc_value, rk_df 
+      Real(8), external :: dhc_value, rk_df
 
       ! clean rk arrays in module df_orbitals:
       ii1=0;ii2=0;jj1=0;jj2=0;kk=-100
@@ -167,12 +166,12 @@
        Call Find_free_unit(nu)
        AF = trim(name)//'.int_value'
        open(nu,file=AF)
-       Call Print_int_value(nu) 
+       Call Print_int_value(nu)
   Call Print_int_value(log)                 ! ???
        Close(nu)
       end if
 
- 
+
       End Subroutine Update_int
 
 
@@ -183,7 +182,7 @@
 !----------------------------------------------------------------------
       Use dbsr_mchf
       Use df_orbitals
- 
+
       Implicit none
       Integer :: k,j1,j2,j3,j4, i, nu
 

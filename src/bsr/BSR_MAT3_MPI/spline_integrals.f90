@@ -1,11 +1,11 @@
-!====================================================================    
+!====================================================================
     MODULE spline_integrals
 !====================================================================
 !
 !   contains the B-spline representation of two-electron integral
 !   rkb(i,j;i',j') in symmetric or non-symmetric column storage mode:
 !
-!            rkb(1:ns, 1:ns, 1:2*ks-1, 1:2*ks-1) 
+!            rkb(1:ns, 1:ns, 1:2*ks-1, 1:2*ks-1)
 !
 !   itype - character (rk, rk1, rk2, ...) which indicates the type
 !           of integral and method of calculation for integral storing
@@ -21,16 +21,16 @@
     INTEGER(4) :: krk = -100
 
     CHARACTER(3) :: itype='aaa'
-    
+
     REAL(8), ALLOCATABLE, DIMENSION(:,:,:,:) :: rkb
-    
+
 
     END MODULE spline_integrals
 
 
-!====================================================================    
+!====================================================================
       SUBROUTINE allocate_integrals
-!====================================================================    
+!====================================================================
 !
 ! ... allocates space for spline integrals
 !
@@ -53,9 +53,9 @@
       END SUBROUTINE allocate_integrals
 
 
-!====================================================================    
+!====================================================================
       SUBROUTINE dealloc_integrals
-!====================================================================    
+!====================================================================
 !
 ! ... deallocates arrays in module "spline_integrals"
 !

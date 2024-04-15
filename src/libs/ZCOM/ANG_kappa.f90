@@ -1,15 +1,15 @@
 !=======================================================================
       Real(8) Function Cjkj (j1,k,j2)
 !=======================================================================
-!     Computes the relativistic reduced matrix element                    
+!     Computes the relativistic reduced matrix element
 !     (see Eq.15, Grant and Pyper, J.Phys.B9,761,1976)
 !
-!             k                                                        
-!     (j1 || C  || j2)  = 
+!             k
+!     (j1 || C  || j2)  =
 !
 !                                       (j1   k  j2 )
-!         (-1)^(j1+1/2) sqrt([j1][j2])      
-!                                       (1/2  0 -1/2)                       
+!         (-1)^(j1+1/2) sqrt([j1][j2])
+!                                       (1/2  0 -1/2)
 !
 !     C(j,0,j) = sqrt([j])
 !----------------------------------------------------------------------
@@ -21,15 +21,15 @@
       Cjkj = Z_3j2(j1,1,k+k,0,j2,-1) * &
             sqrt(real((j1+1)*(j2+1))) * (-1)**((j1+1)/2)
 
-      End Function Cjkj 
+      End Function Cjkj
 
 
 !=======================================================================
       Real(8) Function Ckap (kap1,k,kap2)
 !=======================================================================
-!     Computes the relativistic reduced matrix element                    
-!                          k                                                        
-!                (kap1 || C  || kap2)  
+!     Computes the relativistic reduced matrix element
+!                          k
+!                (kap1 || C  || kap2)
 !
 !     see Cjkj as origin
 !----------------------------------------------------------------------
@@ -37,14 +37,14 @@
       Implicit None
       Integer, intent(in) :: kap1,k,kap2
       Integer, external :: j_kappa
-      Real(8), external :: Cjkj 
+      Real(8), external :: Cjkj
       Integer :: j1,j2
 
       j1 = j_kappa(kap1)
       j2 = j_kappa(kap1)
       Ckap = Cjkj(j1,k,j2)
 
-      End Function Ckap 
+      End Function Ckap
 
 !=======================================================================
       Integer Function kappa_lj(l,jj)
@@ -65,10 +65,10 @@
 
       if(kappa.eq.0) Stop 'l_kappa: kappa=0'
       if(kappa.gt.0) then
-       l_kappa =  kappa 
+       l_kappa =  kappa
       else
        l_kappa = -kappa-1
-      end if 
+      end if
 
       End Function l_kappa
 
@@ -85,7 +85,7 @@
        j_kappa =  kappa+kappa-1
       else
        j_kappa = -kappa-kappa-1
-      end if 
+      end if
 
       End Function j_kappa
 

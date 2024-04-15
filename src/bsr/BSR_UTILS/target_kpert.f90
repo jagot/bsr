@@ -2,7 +2,7 @@
 !     UTILITY  target_kpert
 !=====================================================================
 !
-!     target_LS -> target in LSJ scheme with the kpert list 
+!     target_LS -> target in LSJ scheme with the kpert list
 !
 !---------------------------------------------------------------------
       Use target; Use channels
@@ -34,14 +34,14 @@
 !----------------------------------------------------------------------
 ! ... output target file:
 
-      open(nu2,file=AF_LSJ) 
+      open(nu2,file=AF_LSJ)
 
-      write(nu2,'(a)') 'target file for pertuber calculations' 
+      write(nu2,'(a)') 'target file for pertuber calculations'
       write(nu2,'(80(''-''))')
       write(nu2,'(a,a2,4x,a)') &
                 'coupling = ',coupling, ' !   coupling scheme'
       write(nu2,'(a,i4,5x,a)') &
-                'nz     = ',nz,   '!   nuclear charge' 
+                'nz     = ',nz,   '!   nuclear charge'
       write(nu2,'(a,i4,5x,a)') &
                 'nelc   = ',nelc-1, '!   number of electrons'
 
@@ -51,12 +51,12 @@
       write(nu2,'(80(''-''))')
       write(nu2,'(a)') 'any ion state'
       write(nu2,'(80(''-''))')
-      
+
 !----------------------------------------------------------------------
 ! ... find all possible J-values:
 
       JJ_min = 1000; JJ_max = 0
-      Do it = 1,ntarg 
+      Do it = 1,ntarg
        JJ = abs(2*ltarg(it)+1-istarg(it))
        if(JJ.lt.JJ_min) JJ_min=JJ
        JJ = 2*ltarg(it)+istarg(it)-1
@@ -66,7 +66,7 @@
       nlsp1 = JJ_max-JJ_min + 2
 
       write(nu2,'(a,i4,5x,a)') &
-           'nlsp  = ',nlsp1,' !   number of partial waves' 
+           'nlsp  = ',nlsp1,' !   number of partial waves'
       write(nu2,'(80(''-''))')
       i = 0
       Do JJ = JJ_min,JJ_max,2
@@ -78,7 +78,7 @@
 !----------------------------------------------------------------------
 ! ... find all kpert:
 
-      open(nu3,file=AF_pert) 
+      open(nu3,file=AF_pert)
 
       kpert = 0; ilsp = 0
       Do JJ = JJ_min, JJ_max, 2
@@ -94,7 +94,7 @@
 
       write(nu2,'(a,i4,5x,a)') 'kpert = ',kpert,' !    number of perturbers'
       write(nu2,'(80(''-''))')
-                                                                                     
+
       Allocate(index_kpert(nlsp1,ntarg)); index_kpert=0
 
       rewind(nu3)
@@ -121,14 +121,14 @@
 
       Do it = 1,ntarg
        write(nu3,'(a,T30,f16.8,f10.3)') BFT(it),etarg(it),0.0
-      End do 
+      End do
       write(nu3,'(/a,i5)') 'units = eV    -  units for corrections, column 3'
       write(nu3,'(/a,2i5)') 'nperts = ', ntarg, nlsp1
       Do i=1,nlsp1
        write(nu3,'(10i7)') index_kpert(i,:)
       End do
 
-      open(nu4,file=AF_thresholds) 
+      open(nu4,file=AF_thresholds)
       write(nu4,'(f16.8)') etarg(1)
-      
+
       End ! program

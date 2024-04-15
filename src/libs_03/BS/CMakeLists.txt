@@ -31,3 +31,4 @@ add_library(bs
   wk.f90                   wky.f90                  wk_moments.f90
   ykf.f90                  yval.f90                 zeta_y.f90
   zinty.f90                memory_splines.f90)
+set_target_properties(bs PROPERTIES Fortran_MODULE_DIRECTORY ${GLOBAL_Fortran_MODULE_DIRECTORY})

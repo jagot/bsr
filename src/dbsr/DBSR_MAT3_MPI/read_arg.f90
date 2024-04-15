@@ -7,7 +7,7 @@
       Use DBS_dhl_pq
       Use c_data, only: mem_cdata
 
-      Implicit none 
+      Implicit none
       Integer, intent(in) :: nu
       Integer :: i,itype
       Integer, external :: Icheck_file
@@ -102,43 +102,39 @@
       if(prj.gt.0) then
        write(prj,'(a)') 'DBSR_MAT parameters:'
 
-       write(prj,'(/a/)') 'Partial waves:' 
+       write(prj,'(/a/)') 'Partial waves:'
        write(prj,'(a,i10,T20,a)') 'klsp1  =',klsp1,'- initial index'
        write(prj,'(a,i10,T20,a)') 'klsp2  =',klsp2,'- final index'
 
-       if(mbreit.gt.0) & 
+       if(mbreit.gt.0) &
        write(prj,'(/a,i10,T20,a)') 'mbreit =',mbreit,'- Breit interaction is included'
-       if(mbreit.eq.0) & 
+       if(mbreit.eq.0) &
        write(prj,'(/a,i10,T20,a)') 'mbreit =',mbreit,'- Breit interaction is exluded'
 
-       if(iitar.eq.0) & 
+       if(iitar.eq.0) &
        write(prj,'(/a,i10,T20,a)') 'iitar  =',iitar,&
                                    '- target states are supposed to be orthogonal'
-       if(iitar.eq.1) & 
+       if(iitar.eq.1) &
        write(prj,'(/a,i10,T20,a)') 'iitar  =',iitar,&
                                    '- target states may be non-orthogonal'
-       if(iitar.eq.2) & 
+       if(iitar.eq.2) &
        write(prj,'(/a,i10,T20,a)') 'iitar  =',iitar,&
                                    '- target states may not diagonalized the Hamiltonian'
 
        write(prj,'(/a,F10.5,T20,a)') 's_ovl  =',s_ovl,'- tollerence for channel overlaps'
 
-       write(prj,'(/a/)') 'Bloch operator:' 
+       write(prj,'(/a/)') 'Bloch operator:'
        write(prj,'(a,i10  ,T20,a)') 'mbloch =',mbloch,'- flag for Bloch operator'
        write(prj,'(a,F10.5,T20,a)') 'RB     =',RB,    '- b-parameter (derivative at r=a)'
        write(prj,'(a,F10.5,T20,a)') 'pnu    =',pnu,   '- "nu"-parameter (rotation)'
 
-       write(prj,'(/a/)') 'Boundary conditions:' 
+       write(prj,'(/a/)') 'Boundary conditions:'
        write(prj,'(a,i10,T20,a)')  'ilzero =',ilzero,&
                                    '- zero B-splines for large component at r=0'
-       if(jlzero.lt.0) jlzero=ilzero
        write(prj,'(a,i10,T20,a)')  'jlzero =',jlzero,&
                                    '- zero B-splines for small component at r=0'
-!       if(mbloch.gt.0) ibzero = 0
        write(prj,'(a,i10,T20,a)')  'ibzero =',ibzero,&
                                    '- zero B-splines for large component at r=a'
-!       if(mbloch.ge.0) jbzero = 0
-       if(jbzero.lt.0) jbzero=ibzero
        write(prj,'(a,i10,T20,a)')  'jbzero =',jbzero,&
                                    '- zero B-splines for small component at r=a'
 
@@ -151,27 +147,26 @@
        write(prj,'(/a/)') 'All one-channel solutions with &
          &E<Edmin, E>Edmax or abs(E)<Egap will be disregaded.'
 
-       i = ntype_S*(mk+2)*2 + 1
-       if(nblock.lt.i) nblock=i
-       write(prj,'(/a/)') 'Module cdata parameters:' 
+       i = ntype_S*(mk+2)*2 + 1;  if(nblock.lt.i) nblock=i
+       write(prj,'(/a/)') 'Module cdata parameters:'
        write(prj,'(a,i10,T20,a)') 'mk     =',mk,'- max. multipol index'
        write(prj,'(a,i10,T20,a)') 'mblock =',mblock,'- size of block'
-       write(prj,'(a,i10,T20,a)') 'nblock =',nblock,'- number of blocks' 
-       write(prj,'(a,i10,T20,a)') 'kblock =',nblock,'- number of blocks for one type' 
+       write(prj,'(a,i10,T20,a)') 'nblock =',nblock,'- number of blocks'
+       write(prj,'(a,i10,T20,a)') 'kblock =',nblock,'- number of blocks for one type'
        if(mbreit.eq.0) Call alloc_c_data(ntype_R,0,mk,  mblock,nblock,kblock,eps_C)
        if(mbreit.gt.0) Call alloc_c_data(ntype_S,0,mk+1,mblock,nblock,kblock,eps_C)
        write(prj,'(a,T40,f8.1,a)') 'memory of cdata module', mem_cdata,' Mb'
 
-       write(prj,'(/a/)') 'Buffer parameters:' 
+       write(prj,'(/a/)') 'Buffer parameters:'
        mem_buffer = 24.d0 * mcbuf / (1024*1024)
        write(prj,'(a,i10,T20,a)') 'mcbuf  =',mcbuf,'- buffer dimension'
        write(prj,'(a,T40,f8.1,a)') 'memory of the buffer:', mem_buffer,' Mb'
 
-       write(prj,'(/a/)') 'Cut-off parameters:' 
+       write(prj,'(/a/)') 'Cut-off parameters:'
        write(prj,'(a,1Pd10.1,T20,a)') 'eps_c  =',eps_c,  '- tollerance for coefficients'
        write(prj,'(a,1Pd10.1,T20,a)') 'eps_det=',eps_det,'- tollerance for det.overlaps'
        write(prj,'(a,1Pd10.1,T20,a)') 'eps_v  =',eps_v,  '- tollerance for <nl|kl>'
-       write(prj,*) 
+       write(prj,*)
 
        write(prj,*)
        write(prj,'(a)') 'Additional debug output:'

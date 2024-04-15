@@ -6,7 +6,7 @@
 !
 !     nub, nui - file units for old and new results, respectively
 !----------------------------------------------------------------------
-      Use param_br 
+      Use param_br
       Use symc_list_LS
       Use symt_list_LS
       Use conf_LS
@@ -37,14 +37,14 @@
 ! ... define new symmetries from c-file:
 
       rewind(nuc); parity=0
-      Do 
+      Do
        read(nuc,'(a)') CONFIG
        if(CONFIG(1:1).eq.'*') Exit
        if(CONFIG(5:5).ne.'(') Cycle
        read(nuc,'(a)') COUPLE
        Call Decode_c;  Call TEST_C
 
-       Call Decode_c;  Call TEST_C; i=Iadd_cfg_LS() 
+       Call Decode_c;  Call TEST_C; i=Iadd_cfg_LS()
 
       End do  ! on ic
 
@@ -77,6 +77,6 @@
 
       Call alloc_it_oper_LS(1)
       Call Load_oper_LS(nub)
-      
+
       End Subroutine RR_conf
 

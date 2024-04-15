@@ -1,5 +1,5 @@
 !======================================================================
-!     zf_cc_bsr - utility for the f-value calculations 
+!     zf_cc_bsr - utility for the f-value calculations
 !                 between set of c-files   (mpi version)
 !======================================================================
 !     INPUT:    zf_cc_bsr.inp
@@ -29,7 +29,7 @@
       Character(4) :: gf = 'f'
       Character(80) :: AS,AI,AJ, AF, param, label
       Character(5) ::  AC='a.c', AW ='a.bsw'
-      Character(80), allocatable :: files(:) 
+      Character(80), allocatable :: files(:)
       Integer, allocatable :: ILT(:),IST(:),parity(:)
 
       Integer :: myid, ierr, nprocs
@@ -42,23 +42,23 @@
 
 ! ... data
 
-      if(myid.eq.0) then 
+      if(myid.eq.0) then
 
       iarg = COMMAND_ARGUMENT_COUNT()
-      if(iarg.gt.0) Call GET_COMMAND_ARGUMENT(1,AF) 
-     
+      if(iarg.gt.0) Call GET_COMMAND_ARGUMENT(1,AF)
+
       if(AF.eq.'?') then
         write(*,'(/a)') 'zf_cc_bsr  calculates f-values between set of (c+bsw)-files'
         write(*,'(/a)') 'Call as:   zf_cc_bsr  inp=name, default: zf_cc_bsr.inp'
         write(*,'(/a)') 'input file contains:'
-        write(*,'(/a)') 'atype = E1 |E2,M1,... - multipole index' 
+        write(*,'(/a)') 'atype = E1 |E2,M1,... - multipole index'
         write(*,'(/a)') 'gf    = f  |g         - output f- or gf-values'
         write(*,'(/a)') 'param =               - additional parameters for bsr_dmat3'
         write(*,'(/a)') 'nfiles= ...           - number of c-files'
         write(*,'(/a)') 'followed by list of c-files'
         write(*,'(/a)') 'Results are appended to zf_res'
         write(*,'(/a)') 'Program makes SYSTEM CALLS to MULT3 and BSR_DMAT3'
-        Stop 
+        Stop
       end if
 
       Call Read_aarg('inp',AF_inp)
@@ -69,7 +69,7 @@
       Call Read_aarg('atype',atype)
       Read(atype,'(1x,i1)') kpol
 
-      Call Read_apar(inp,'gf',gf)                                     
+      Call Read_apar(inp,'gf',gf)
       Call Read_aarg('gf',gf)
 
       param = ' '
@@ -80,7 +80,7 @@
       if(nfiles.le.0) Stop 'nfiles = 0'
 
       end if
- 
+
 ! ...
 
       Call MPI_BCAST(nfiles,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
@@ -97,7 +97,7 @@
         read(inp,*) files(i)
         Call Check_file(files(i))
         open(nuc,file=files(i))
-        Call Def_term(nuc,ILT(I),IST(i),parity(i)) 
+        Call Def_term(nuc,ILT(I),IST(i),parity(i))
         close(nuc)
        End do
       end if
@@ -110,7 +110,7 @@
 !----------------------------------------------------------------------
       k = 0
 
-      Do i=1,nfiles-1; AI=files(i); ii=LEN_TRIM(AI) 
+      Do i=1,nfiles-1; AI=files(i); ii=LEN_TRIM(AI)
       Do j=i+1,nfiles; AJ=files(j); jj=LEN_TRIM(AJ)
 
        k = k + 1
@@ -129,18 +129,18 @@
        if(IST(i).ne.IST(j)) Cycle
 
        if(AI.eq.AJ) then
-        AS = 'cp '//AJ(1:jj)//blank//AC 
+        AS = 'cp '//AJ(1:jj)//blank//AC
         Call System(AS)
         AF = AJ(1:jj-1)//'bsw'
-        AS = 'cp '//AF(1:jj+2)//blank//AW 
+        AS = 'cp '//AF(1:jj+2)//blank//AW
         Call System(AS)
         AJ=AC; jj=LEN_TRIM(AJ)
-       end if 
+       end if
 
        kk=kpol+kpol+1; if(IST(I).eq.0) kk=kpol+kpol
        if(ITRA(ILT(i),kk,ILT(j)).eq.0) Cycle
        write(label,'(i4.4)') myid
-      
+
        AS = 'mult3 '//AI(1:ii)//blank//AJ(1:jj)//blank//atype//' mult_bnk label='//trim(label)
 
        Call System(AS)
@@ -151,7 +151,7 @@
        Call System(AS)
 
       End do
-      End do 
+      End do
 
       Call MPI_BCAST(k,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
 
@@ -179,6 +179,6 @@
       Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
 
       Call MPI_FINALIZE(ierr)
-       
+
       End ! program zf_cc_bsr
 

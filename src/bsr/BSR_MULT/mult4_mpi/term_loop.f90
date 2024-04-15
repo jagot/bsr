@@ -1,7 +1,7 @@
 !======================================================================
       Subroutine TERM_loop
 !======================================================================
-!     Add  the coeff.s between two determinants (zoef_list), 
+!     Add  the coeff.s between two determinants (zoef_list),
 !     weighted with term-dependent factors, to the common list (coef_list).
 !----------------------------------------------------------------------
       USE mult_par
@@ -30,7 +30,7 @@
 
        Ctrm(1:ntrm) = C*CT_oper(1:ntrm)
 
-       Call Add_coef 
+       Call Add_coef
       End do
 
 ! ... nulify ZOEF list:

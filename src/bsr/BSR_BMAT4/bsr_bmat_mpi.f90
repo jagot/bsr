@@ -6,52 +6,52 @@
 !     Written by:   Oleg Zatsarinny
 !                   email: oleg_zoi@yahoo.com
 !======================================================================
-!    generates angular coefficient in non-orthogonal mode 
-!    for the given set of ACS with simultanious evaluation of all 
+!    generates angular coefficient in non-orthogonal mode
+!    for the given set of ACS with simultanious evaluation of all
 !    overlap factors
 !----------------------------------------------------------------------
 !
 !    INPUT ARGUMENTS:
-!    
+!
 !    klsp1,klsp2  - range of partial wave in BSR calculations,
 !                   then cfg.001, cfg.002, ..., are input files
 !                   (default -> 0, with input file is cfg.inp)
-!   
+!
 !    oper  - character(7), where each position can be 0 or 1,
 !            and indicate the operator under consideration:
-!            oper(1) - OVERLAPS       
+!            oper(1) - OVERLAPS
 !            oper(2) - KINATIC ENERGY
 !            oper(3) - TWO-ELECTRON ELECTROSTATIC
-!            oper(4) - SPIN ORBIT       
+!            oper(4) - SPIN ORBIT
 !            oper(5) - SPIN-OTHER-ORBIT
 !            oper(6) - SPIN-SPIN
-!            oper(7) - ORBIT-ORBIT       
+!            oper(7) - ORBIT-ORBIT
 !            Default -> 1110000 - non-relativistic calculations
 !
 !    mk    - max.multipole index (default -> 9, see module param_br)
 !
 !----------------------------------------------------------------------
 !
-!    example:    1.  bsr_bmat 
-!                2.  bsr_bmat klsp=5 oper=1111110  
+!    example:    1.  bsr_bmat
+!                2.  bsr_bmat klsp=5 oper=1111110
 !                3.  bsr_bmat km=5
-!            
+!
 !----------------------------------------------------------------------
 !
 !    INPUT FILES:
-!    
+!
 !    cfg.nnn      -  configuration list for partial wave nnn = klsp
 !                   (cfg.inp in case klsp = 0, default)
-!                  
+!
 !    int_list.nnn -  input data bank for angular coefficients
 !                   (optional; int_list in case klsp = 0)
-!                   
-!    
+!
+!
 !    OUTPUT FILES:
-!    
+!
 !    int_list.nnn  - output data bank for angular coefficients
-!                   
-!---------------------------------------------------------------------     
+!
+!---------------------------------------------------------------------
       Use MPI
 
       Use bsr_mat
@@ -59,7 +59,7 @@
       Use conf_LS,       only: ne, ncfg
       Use term_exp,      only: ic_case,IS_need
 
-      Implicit none 
+      Implicit none
       Integer :: l,i,j,mls_max
       Integer, external :: Ifind_channel
       Character(80) :: AAS,BBS,CCS
@@ -90,7 +90,7 @@
 !----------------------------------------------------------------------
 ! ... read arguments from command line:
 
-      if(myid.eq.0) Call Read_arg;    Call br_arg   
+      if(myid.eq.0) Call Read_arg;    Call br_arg
 
       if(myid.gt.0) then
        write(AF_p,'(a,i4.4)') 'debug_',myid
@@ -103,7 +103,7 @@
 
       if(myid.eq.0) Call define_grid(z)
       Call br_grid
-      Call define_spline        
+      Call define_spline
 
 !----------------------------------------------------------------------
 ! ... target information:
@@ -119,15 +119,15 @@
 
       t1 = MPI_WTIME()
 
-      if(myid.eq.0) Call open_c_file       
+      if(myid.eq.0) Call open_c_file
       if(myid.eq.0) Call Read_conf(nuc)
 
        Call br_symc_LS
        Call br_symt_LS
        Call br_conf_LS
- 
+
        Call MPI_BCAST(ne,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
- 
+
        Call Def_maxl(l);  mls_max=4*l+2
        Call Alloc_spin_orbitals(ne,mls_max)
 
@@ -141,7 +141,7 @@
        if(myid.eq.0) then
         Call open_det_exp
         Call open_det_done
-        i = count(IS_need(:).gt.0); S = i 
+        i = count(IS_need(:).gt.0); S = i
         SS = ic_case; SS = (SS-1.d0)*SS/2.d0
         write(pri,'(/a,f5.2,a)')  'Needed matrix elements: ',S/SS*100,' %'
         if(i.eq.0) go to 100
@@ -152,8 +152,8 @@
        write(pri,'(/a,F12.2,a)') 'Det_exp is done:',(t3-t2)/60,' min'
        Call MPI_BCAST(ic_case,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
        Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
-       if(ic_case.eq.0) go to 100  
- 
+       if(ic_case.eq.0) go to 100
+
 ! ... read target information, radial orbitals and define overlaps:
 
       if(myid.eq.0)  Call Read_data
@@ -180,19 +180,19 @@
 
       if(myid.eq.0) Call open_int_list     ! data bank name
 
-      i=Index(BF_b,'.'); write(BF_b(i+1:),'(i3.3)') klsp 
+      i=Index(BF_b,'.'); write(BF_b(i+1:),'(i3.3)') klsp
 
 ! ... nulify data in c_blocks module
 
-      Call alloc_c_blocks(0,mb,nb,kb,eps_c) 
+      Call alloc_c_blocks(0,mb,nb,kb,eps_c)
 
 ! ... calculations for new angular symmetries:
 
       if(myid.eq.0) open(nuf,file=AF_f)
 
-      if(myid.eq.0)     Call Conf_loop 
+      if(myid.eq.0)     Call Conf_loop
       if(myid.gt.0)     Call Conf_calc
-      
+
 ! ... time for one partial wave:
 
   100  t2=MPI_WTIME()

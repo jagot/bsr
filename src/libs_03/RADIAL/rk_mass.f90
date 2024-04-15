@@ -9,10 +9,10 @@
       USE RADIAL
 
       IMPLICIT NONE
-      Integer(4), Intent(in) :: i1,i2,i3,i4,k 
+      Integer(4), Intent(in) :: i1,i2,i3,i4,k
       Real(8), Intent(inout) :: RK
       Real(8), External :: GRAD, QUADR
-     
+
       IF (MASS .GT. 0) THEN
          IF (MASS .EQ. 1) THEN
             IF (K .EQ. 1) RK = RK - RMASS*GRAD(i1,i3)*GRAD(i2,i4)

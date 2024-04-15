@@ -1,7 +1,7 @@
 !====================================================================
     MODULE spline_slater
 !====================================================================
-!   contains arrays and variables needed for calculations of 
+!   contains arrays and variables needed for calculations of
 !   Breit-Pauli integrals by direct integration in B-spline basis
 !--------------------------------------------------------------------
     IMPLICIT NONE
@@ -53,7 +53,7 @@
       fc1 = 0.d0; fc2 = 0.d0; fy1 = 0.d0; fy2 = 0.d0
       fc = 0.d0; yk = 0.d0; fyk = 0.d0
       ic1=0; ic2=0; iy1=0; iy2=0; ky=-100; kz=-100
-      
+
       END SUBROUTINE allocate_slater
 
 
@@ -68,6 +68,6 @@
                                     dyk,ipvtd, dzk,ipvtz)
 
       ic1=0; ic2=0; iy1=0; iy2=0; ky=-100; kz=-100; ktx = 0
-      
+
       END SUBROUTINE dealloc_slater
 

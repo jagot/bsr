@@ -3,7 +3,7 @@
 !=======================================================================
 !     output full d-matrix
 !-----------------------------------------------------------------------
-      Use bsr_dmat 
+      Use bsr_dmat
       Use dmatrix
 
       Implicit none
@@ -15,7 +15,7 @@
       Integer :: i,n,m,nhm,khm,kch,kcp,noterm, n1,n2, m1,m2, ik,jk
       Integer :: JLT1,JST1,JLT2,JST2,JPT1,JPT2
 
-      write(AF,'(a,i3.3,a,i3.3)') 'd.',ilsp1,'_',ilsp2      
+      write(AF,'(a,i3.3,a,i3.3)') 'd.',ilsp1,'_',ilsp2
 
       Call Read_aarg('AF_dd',AF)
 
@@ -31,10 +31,10 @@
       if(nhm.ne.kdm1) Stop 'DD_out, rsol: nhm <> kdm1 '
       if(kch.ne.kch1) Stop 'DD_out, rsol: kch <> kch1 '
       if(kcp.ne.kcp1) Stop 'DD_out, rsol: kcp <> kcp1 '
-      if(allocated(eval)) Deallocate(eval);  Allocate(eval(khm)) 
+      if(allocated(eval)) Deallocate(eval);  Allocate(eval(khm))
       read(nuo) eval
       nstate1 = khm
-      Allocate(rsol1(nstate1,kdm1)) 
+      Allocate(rsol1(nstate1,kdm1))
       Do i = 1,nstate1
        read(nuo) rsol1(i,:)
       End do
@@ -50,10 +50,10 @@
       if(nhm.ne.kdm2) Stop 'DD_out, rsol: nhm <> kdm2 '
       if(kch.ne.kch2) Stop 'DD_out, rsol: kch <> kch2 '
       if(kcp.ne.kcp2) Stop 'DD_out, rsol: kcp <> kcp2 '
-      if(allocated(eval)) Deallocate(eval);  Allocate(eval(khm)) 
+      if(allocated(eval)) Deallocate(eval);  Allocate(eval(khm))
       read(nuo) eval
       nstate2 = khm
-      Allocate(rsol2(kdm2,nstate2)) 
+      Allocate(rsol2(kdm2,nstate2))
       Do i = 1,nstate2
        read(nuo) rsol2(:,i)
       End do
@@ -65,8 +65,8 @@
       JPT1 = (IPT1-1)/2
       JPT2 = (IPT2-1)/2
       if(jmode.eq.0) then
-       JLT1 = (ILT1-1)/2; JST1 = IST1 
-       JLT2 = (ILT2-1)/2; JST2 = IST2 
+       JLT1 = (ILT1-1)/2; JST1 = IST1
+       JLT2 = (ILT2-1)/2; JST2 = IST2
       else
        JLT1 = JOT1-1; JLT2 = JOT2-1; JST1=0; JST2=0
       end if
@@ -75,7 +75,7 @@
       if(noterm.gt.nstate1) noterm=nstate1
       if(noterm.gt.nstate2) noterm=nstate2
 
-      write(nudd) noterm,nstate2,kch2,JLT2,JPT2,JST2,nstate1,kch1,JLT1                          
+      write(nudd) noterm,nstate2,kch2,JLT2,JPT2,JST2,nstate1,kch1,JLT1
 
 !-----------------------------------------------------------------------
 ! ... D(kdm1,kdm2) * rsol2(kdm2,nstate2)
@@ -86,7 +86,7 @@
       BBV = MATMUL (DV,rsol2)
       Deallocate (rsol2,DL,DV)
 
-! ... rsol1(nstate1,kdm1) * BB(kdm1,nstate2)  
+! ... rsol1(nstate1,kdm1) * BB(kdm1,nstate2)
 
       Allocate (AAL(nstate1,nstate2),AAV(nstate1,nstate2))
 
@@ -144,4 +144,3 @@
       Close(nudd)
 
       End Subroutine DD_out
-

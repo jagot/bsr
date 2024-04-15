@@ -10,7 +10,7 @@
       Integer :: mdata = 0       ! current dimentsion of list
       Integer :: idata = 2**10   ! supposed max. dimentsion
 
-      Integer, Allocatable :: jjpar(:),ip(:),l1(:),l2(:),jk1(:),jk2(:)   
+      Integer, Allocatable :: jjpar(:),ip(:),l1(:),l2(:),jk1(:),jk2(:)
       Real(8), Allocatable :: EK(:),TR(:),TI(:)
 
       End Module tmat_ion
@@ -69,7 +69,7 @@
 !=======================================================================
       Subroutine Add_tmat_ion(e,ar,ai,jj,ii,m1,m2,k1,k2)
 !=======================================================================
-!     add (sum to) data to the list 
+!     add (sum to) data to the list
 !     we may need summation due to transition to other coupling
 !-----------------------------------------------------------------------
       Use tmat_ion
@@ -89,7 +89,7 @@
        if(m2.ne.l2(i)) Cycle
        if(k1.ne.jk1(i)) Cycle
        if(k2.ne.jk2(i)) Cycle
-       if(e.ne.EK(i)) Cycle             
+       if(e.ne.EK(i)) Cycle
        TR(i)=TR(i)+ar
        TI(i)=TI(i)+ai
        Return
@@ -99,7 +99,7 @@
 
       if(ndata.eq.mdata) Call Alloc_tmat_ion(mdata+idata)
 
-      ndata = ndata+1 
+      ndata = ndata+1
       jjpar(ndata) = jj
       ip(ndata) = ii
       l1(ndata) = m1
@@ -115,9 +115,9 @@
 
 !======================================================================
       Subroutine Sort_tmat_ion
-!====================================================================== 
-!     sortin data in tmat_ion 
-!---------------------------------------------------------------------- 
+!======================================================================
+!     sortin data in tmat_ion
+!----------------------------------------------------------------------
       Use tmat_ion
 
       Implicit none
@@ -152,7 +152,7 @@ CONTAINS
 
 !=======================================================================
       Subroutine Change_ij(i,j)
-!======================================================================= 
+!=======================================================================
 !     exchange two records "i" and "j" in tmat_lis
 !------------------------------------------------------------------------
       Use tmat_ion

@@ -46,7 +46,7 @@
       write(pri,'(a,i10,a)')  'jpar   = ',jpar-1, '  -  total 2J'
 
 ! ... read B-spline expantions for bound orbitals:
-   
+
       Call Allocate_bsorb(nwf)
       nbf = nwf
       Do i = 1,nbf
@@ -69,12 +69,12 @@
        Call Read_bsw(nuw)
        Close(nuw)
       end if
-      
+
 ! ... correction of pertuber pointer:
 
       if(ncp.gt.0) ippert = ippert + ipconf(nch)
 
-! ... check the correspondence between c- and bsw-files: 
+! ... check the correspondence between c- and bsw-files:
 
       j = 0
       Do i = 1,nwf
@@ -98,14 +98,14 @@
       Call alloc_file(0)
       rewind(nuc)
     1 read(nuc,'(a)',end=2) line
-      if(line(1:1).ne.'<') go to 1 
+      if(line(1:1).ne.'<') go to 1
       i = Iadd_line(line)
       go to 1
     2 Continue
 
-! ... the < p | p > values 
+! ... the < p | p > values
 
       Call Alloc_orb_overlaps(nbf,lbs,iech,kclosd)
 
       End Subroutine Read_data
-    
+

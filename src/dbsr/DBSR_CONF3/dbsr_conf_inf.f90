@@ -5,7 +5,7 @@
 !---------------------------------------------------------------------
       Implicit none
       Character ::  name = ' '
-      
+
       Call Read_name(name)
       if(name.ne.'?') Return
       write(*,'(a)') &
@@ -28,6 +28,6 @@
 'max_ka  [-1]    - restiction on min. kappa for channel orbitals            ', &
 'kort    [-1]    - if > 0, the orth.conditions from cfg-files are in play   ', &
 '                                                                           '
-      Stop 
-                                                                             
-      End Subroutine dbsr_conf_inf                                             
+      Stop
+
+      End Subroutine dbsr_conf_inf

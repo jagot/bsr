@@ -1,7 +1,7 @@
 !=======================================================================
       Subroutine Conf_calc
 !=======================================================================
-!     calculations for given <ic|H|jc> and waiting to other case if any 
+!     calculations for given <ic|H|jc> and waiting to other case if any
 !-----------------------------------------------------------------------
       Use mult_par
       Use spin_orbitals
@@ -10,14 +10,14 @@
       Use zoef_list, only: nzoef
       Use coef_list, only: ntrm, ctrm
 
-      Implicit none 
+      Implicit none
       Integer :: i,m,k,k1,k2,it,jt,ic,jc
-      Real(8) :: C_ee,C_so,C_ss, zero=0.d0, one=1.d0  
+      Real(8) :: C_ee,C_so,C_ss, zero=0.d0, one=1.d0
       Real(8), external ::  Z_3j, Clebsh
 
 ! ... get the job:
 
-    1 Call Get_det_exp(ic,jc)  
+    1 Call Get_det_exp(ic,jc)
 
       Call Alloc_coef(-1)
 
@@ -35,7 +35,7 @@
 
       if(ktype.eq.'E') then
        CNB = zero
-      else  
+      else
        CNB =  Z_3j(ILT1,-MLT1+2,2*kpol-1,MLT1-MLT2+1,ILT2,MLT2) &
 	        * (-1)**((ILT1-MLT1)/2) &
 	      		* Z_3j(IST1,-MST1+2,3,MST1-MST2+1,IST2,MST2) &
@@ -49,8 +49,8 @@
         go to 1
       end if
 
-      if(CNA.ne.0.d0) CNA = one/CNA  
-      if(CNB.ne.0.d0) CNB = one/CNB  
+      if(CNA.ne.0.d0) CNA = one/CNA
+      if(CNB.ne.0.d0) CNB = one/CNB
 
 !----------------------------------------------------------------------
 ! ...  calculations:
@@ -61,24 +61,24 @@
         Ssym1(1:ne)=IS_det1(1:ne,kd1)
 
         Call Det_mult1
- 
+
        Do kd2 = 1,kdt2
 
         k = 0; m = 0; nzoef = 0; CT_oper = 0.d0
-        Do k1=1,kt1; it=IP_kt1(k1) 
-        Do k2=1,kt2; jt=IP_kt2(k2)  
+        Do k1=1,kt1; it=IP_kt1(k1)
+        Do k2=1,kt2; jt=IP_kt2(k2)
          if(ic.eq.jc.and.it.gt.jt) Cycle
          k = k + 1
          CT_oper(k) = JT_oper(k)*C_det1(k1,kd1)*C_det2(k2,kd2)
          if(CT_oper(k).ne.0.d0) m=1
-        End do; End do 
+        End do; End do
 
         if(m.eq.0) Cycle
- 
+
         Msym2(1:ne)=IM_det2(1:ne,kd2)
         Ssym2(1:ne)=IS_det2(1:ne,kd2)
 
-        Call Det_mult2; Call Term_loop 
+        Call Det_mult2; Call Term_loop
 
        End do;  End do
 

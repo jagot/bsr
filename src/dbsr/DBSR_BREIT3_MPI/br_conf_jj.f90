@@ -6,10 +6,10 @@
       USE conf_jj
       USE symc_list
       USE symt_list
-      USE param_jj, only: new, icalc
+      USE dbsr_breit, only: new, icalc
 
       Implicit none
-      
+
       Integer :: myid,ierr, nc,nt
 
       Call MPI_COMM_RANK(MPI_COMM_WORLD, myid, ierr)
@@ -44,7 +44,7 @@
       Call MPI_BCAST(ksymt,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
       Call MPI_BCAST(lsymt,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
 
-    
+
       if(myid.ne.0) then
        if(allocated(IT_conf)) Deallocate(IT_conf); Allocate(IT_conf(msymt))
        if(allocated(ip_term)) Deallocate(ip_term); Allocate(ip_term(msymt))

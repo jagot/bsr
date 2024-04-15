@@ -1,13 +1,13 @@
 !======================================================================
       Subroutine Read_cfgu(nu)
 !======================================================================
-!     Read the configuration list and auxiliary arrays from unformatted 
-!     c-file  
+!     Read the configuration list and auxiliary arrays from unformatted
+!     c-file
 !----------------------------------------------------------------------
       Use symc_list_LS
       Use symt_list_LS
       Use conf_LS
-      Use orb_LS  
+      Use orb_LS
 
       Implicit none
       Integer, intent(in) :: nu
@@ -36,7 +36,7 @@
       read(nu) (IT_state1(i),i=1,nsymt)
       read(nu) (IT_state2(i),i=1,nsymt)
 
-      End Subroutine Read_cfgu  
+      End Subroutine Read_cfgu
 
 
 

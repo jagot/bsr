@@ -1,5 +1,5 @@
 !=====================================================================
-      Module jj2ls     
+      Module jj2ls
 !=====================================================================
 !     Contains common variable and arrays used in program jj2ls
 !---------------------------------------------------------------------
@@ -18,13 +18,13 @@
       Integer :: num = 10; Character(ma) :: AF_cm   = 'name.m'
       Integer :: nuo = 11; Character(ma) :: AF_ovl  = 'name.ovl'
 
-      Integer :: nua = 21    ! scratch file 
+      Integer :: nua = 21    ! scratch file
 
 ! ... re-coupling parameters and arrays:
 
       Integer, parameter :: mshells = 8
-      Integer, parameter :: mcup=2*mshells  
-      Integer, parameter :: mmom=6*mshells  
+      Integer, parameter :: mcup=2*mshells
+      Integer, parameter :: mmom=6*mshells
       Integer :: JJ_coupling(3,mcup)
       Integer :: LS_coupling(3,mcup)
       Integer :: moments(mmom)
@@ -33,14 +33,14 @@
 ! ... subshells arrays:
 
       Integer, parameter :: mn = mshells
-      Integer :: n                             
-      Integer :: ncase(mn)  
+      Integer :: n
+      Integer :: ncase(mn)
       Integer :: jot1(mn),jot2(mn),jot3(mn),jotp(mn),jot(mn),JT(mn)
       Integer :: jq1(mn),jq2(mn),kt1(mn),kt2(mn)
 
 ! ... working arrays:
 
-      Real(8), Allocatable :: C_term(:,:), C_trans(:,:), C1(:),C2(:)  
+      Real(8), Allocatable :: C_term(:,:), C_trans(:,:), C1(:),C2(:)
       Real(8), Allocatable :: S_ovl(:,:), C_ovl(:,:), CJ(:), CI(:)
 
 ! ... other parameters:
@@ -52,6 +52,6 @@
 
       Integer :: debug = 0
 
-      End module jj2ls  
+      End module jj2ls
 
 

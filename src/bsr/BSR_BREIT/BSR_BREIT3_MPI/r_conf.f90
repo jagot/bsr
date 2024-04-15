@@ -8,7 +8,7 @@
 !     nub, nui - file units for old and new results, respectively
 !----------------------------------------------------------------------
 
-      USE bsr_breit,  only: nuc,nub,pri,new,icalc,ioper,joper  
+      USE bsr_breit,  only: nuc,nub,pri,new,icalc,ioper,joper
 
       Use symc_list_LS
       Use symt_list_LS
@@ -40,7 +40,7 @@
 ! ... define new symmetries from c-file:
 
       rewind(nuc); parity=0
-      Do 
+      Do
        read(nuc,'(a)') CONFIG
        if(CONFIG(1:1).eq.'*') Exit
        if(CONFIG(5:5).ne.'(') Cycle
@@ -51,7 +51,7 @@
 
        iconf = Iadd_symc_LS(Ltotal,Stotal,no,iq,ln)
        iterm = Iadd_symt_LS(iconf,no,LS)
-       IT_stat(iterm)=1  
+       IT_stat(iterm)=1
 
       End do  ! on ic
 
@@ -86,13 +86,13 @@
 
       IT_oper = 0;   if(new.eq.0) Call Read_oper_LS(nub)
 
-! ... define strong orthogonality (repeated at every call?):      
+! ... define strong orthogonality (repeated at every call?):
 
        Do ic = 1,nsymc
-        Call Get_symc_LS(ic,Ltotal1,Stotal1,no1,nn1,ln1,iq1,kn1) 
+        Call Get_symc_LS(ic,Ltotal1,Stotal1,no1,nn1,ln1,iq1,kn1)
        Do jc = 1,ic
-        Call Get_symc_LS(jc,Ltotal2,Stotal2,no2,nn2,ln2,iq2,kn2) 
-       
+        Call Get_symc_LS(jc,Ltotal2,Stotal2,no2,nn2,ln2,iq2,kn2)
+
         Call Jort_conf(joper)
 
         Do ik=IC_term1(ic),IC_term2(ic);  it=IT_sort(ik)
@@ -105,7 +105,7 @@
       End do
       End do
 
-		 
+
 ! ... define if we need additional calculations
 
       if(allocated(IT_need)) Deallocate(IT_need)
@@ -115,7 +115,7 @@
 
        IT_need=0; JT_need=0
        Do it=1,nsymt; Do jt=1,it; ij=it*(it-1)/2+jt
-        ii = IT_stat(it)*IT_stat(jt)        
+        ii = IT_stat(it)*IT_stat(jt)
 	      Do i=1,noper
          if(IT_oper(i,ij).eq.1) Cycle
          if(ioper(i).eq.0.or.ii.eq.0) then

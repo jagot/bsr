@@ -3,60 +3,60 @@
 !
 !               C O P Y R I G H T -- 2018
 !
-!     Written by:   Oleg Zatsarinny 
+!     Written by:   Oleg Zatsarinny
 !                   email: oleg_zoi@yahoo.com
 !======================================================================
-!     RESULTS: angular coefficient in the non-orthogonal mode 
+!     RESULTS: angular coefficient in the non-orthogonal mode
 !----------------------------------------------------------------------
 !
 !     INPUT ARGUMENTS:
-!     
+!
 !     klsp,klsp1,klsp2  - range of partial wave in BSR calculations,
 !                         with cfg.001, cfg.002, ..., as input files
 !                         (default -> klsp=0, with cfg.inp as input file)
-!     
+!
 !     oper  - character(7), where each position can be 0 or 1,
 !             and indicate the operator under consideration:
-!             oper(1) - OVERLAPS       
+!             oper(1) - OVERLAPS
 !             oper(2) - KINATIC ENERGY
 !             oper(3) - TWO-ELECTRON ELECTROSTATIC
-!             oper(4) - SPIN ORBIT       
+!             oper(4) - SPIN ORBIT
 !             oper(5) - SPIN-OTHER-ORBIT
 !             oper(6) - SPIN-SPIN
-!             oper(7) - ORBIT-ORBIT       
+!             oper(7) - ORBIT-ORBIT
 !             Default -> 1110000 - non-relativistic calculations
-!     
+!
 !      mk    - max.multipole index (default -> 9)
-!     
+!
 !----------------------------------------------------------------------
 !
-!     example:    1.  bsr_breit 
-!                 2.  bsr_breit klsp1=1 klsp2=5 oper=1111110  
+!     example:    1.  bsr_breit
+!                 2.  bsr_breit klsp1=1 klsp2=5 oper=1111110
 !                 3.  bsr_breit km=5
-!            
+!
 !----------------------------------------------------------------------
 !
 !     INPUT FILES:
-!     
+!
 !     cfg.nnn     -  configuration list for partial wave nnn = klsp
 !                    (cfg.inp in case klsp = 0, default)
-!                   
+!
 !     int_inf.nnn -  description of existing angular coefficients
 !                    (optional; int_inf in case klsp = 0)
-!                    
+!
 !     OUTPUT FILES:
-!     
+!
 !     int_int.nnn  - output data bank for angular coefficients
 !                    (int_int in case klsp = 0)
-!                    
-!---------------------------------------------------------------------     
+!
+!---------------------------------------------------------------------
       Use bsr_breit
       Use conf_LS,      only: ne
       Use det_list,     only: ndet,ldet
       Use def_list,     only: ndef,ldef
 
-      Implicit none 
-      Integer :: i,ii,l,ml 
+      Implicit none
+      Integer :: i,ii,l,ml
       Real(8) :: tt1,tt2, ttt, total_time
 
       Call CPU_TIME(t0)
@@ -72,7 +72,7 @@
 
 ! ... read arguments from command line:
 
-      Call Read_arg 
+      Call Read_arg
 
 !----------------------------------------------------------------------
 !                                             cycle over partial waves:
@@ -81,11 +81,11 @@
 
        Call CPU_TIME(tt1)
 
-       write(pri,'(80(''-''))') 
+       write(pri,'(80(''-''))')
        if(klsp.gt.0) write(pri,'(/a,i5)') 'Partial wave: ',klsp
        if(klsp.gt.0) write(*  ,'(/a,i5)') 'Partial wave: ',klsp
 
-! ... open relevant files: 
+! ... open relevant files:
 
        Call open_c_file
        Call open_int_inf
@@ -97,12 +97,12 @@
 
        Call Read_conf;    if(icalc.eq.0) Cycle
 
-! ...  load the old det.factors: 
+! ...  load the old det.factors:
 
        Call Read_dets(nub,new)
 
 ! ... define possible mls orbitals:
-      
+
        Call Def_maxl(l);  ml=4*l+2
        Call Alloc_spin_orbitals(ne,ml)
 
@@ -122,14 +122,14 @@
 
        Call Record_int_inf
 
-! ... print some main dimensions:      
-      
+! ... print some main dimensions:
+
        write(pri,'(/a/)') &
           'Results for new angular symmetry calculations:'
        write(pri,'(a,i10,f10.1)') &
           'number of overlap determinants =', ndet,adet
        write(pri,'(a,i10,f10.1)') &
-          'number of overlap factors      =', ndef,adef 
+          'number of overlap factors      =', ndef,adef
        write(pri,'(a,i10,f10.1)') &
           'new ang. coeff.s               =', nc_new
 
@@ -161,7 +161,7 @@
 
       Integer :: nub, new
 
-      if(new.eq.1) then 
+      if(new.eq.1) then
        Call Alloc_det(-1)
        Call Alloc_def(-1)
       else
@@ -192,7 +192,7 @@
 
       close(nub)
       close(nur)
-            
+
       End Subroutine Record_int_inf
 
 

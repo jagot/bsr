@@ -1,7 +1,7 @@
 !=======================================================================
       Subroutine Conf_loop
 !=======================================================================
-!     run loop over configurations 
+!     run loop over configurations
 !-----------------------------------------------------------------------
       Use bsr_breit,     only: pri,nui,nud, is_conf, js_conf, &
                                noper,joper,coper,JT_oper,CT_oper
@@ -16,9 +16,9 @@
       Use coef_list,     only: ntrm
       Use zoef_list,     only: nzoef
 
-      Implicit none 
+      Implicit none
       Integer :: k1,k2, it,jt, ij, MLT2,MST2, is,js,ic,jc
-      Real(8) :: t1,t2, C_ee,C_so,C_ss, zero=0.d0, one=1.d0  
+      Real(8) :: t1,t2, C_ee,C_so,C_ss, zero=0.d0, one=1.d0
       Integer, external :: IDEF_cme, DEF_ij
       Real(8), external :: Z_3j
       Character(80) :: conf
@@ -81,23 +81,23 @@
 
        if(MLT2.ne.MLT.or.MST2.ne.MST) Cycle
        if(MLT.ne.min(ILT1,ILT2).or.MST.ne.min(IST1,IST2)) Cycle
-       ij=DEF_ij(ic,jc);  if(JC_need(ij).eq.0) Cycle      
+       ij=DEF_ij(ic,jc);  if(JC_need(ij).eq.0) Cycle
 
 !----------------------------------------------------------------------
 ! ...  define number of terms:
 
        ntrm = 0
-       Do k1=1,kt1; it=IP_kt1(k1) 
-       Do k2=1,kt2; jt=IP_kt2(k2)  
+       Do k1=1,kt1; it=IP_kt1(k1)
+       Do k2=1,kt2; jt=IP_kt2(k2)
         if(is.eq.js.and.it.gt.jt) Cycle;  ntrm = ntrm + 1
-       End do; End do 
+       End do; End do
 
 !----------------------------------------------------------------------
 ! ...  joper and JT_oper:
 
        if(allocated(JT_oper)) Deallocate(JT_oper,CT_oper)
        Allocate(JT_oper(ntrm,noper),CT_oper(ntrm,noper))
-       if(IDEF_cme(is,js).eq.0) Cycle 
+       if(IDEF_cme(is,js).eq.0) Cycle
 
 !----------------------------------------------------------------------
 ! ... define the normalization constants for different operators:
@@ -144,16 +144,16 @@
         Ssym1(1:ne)=IS_det1(1:ne,kd1)
 
         Call Det_breit1
- 
+
        Do kd2 = 1,kdt2
 
         Msym2(1:ne)=IM_det2(1:ne,kd2)
         Ssym2(1:ne)=IS_det2(1:ne,kd2)
 
         nzoef = 0;      Call Det_breit2
-        if(nzoef.gt.0)  Call Term_loop(is,js) 
+        if(nzoef.gt.0)  Call Term_loop(is,js)
 
-       End do 
+       End do
        End do
 
 ! ...  store results for given config.s:

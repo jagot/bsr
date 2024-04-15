@@ -10,7 +10,7 @@
       Real(8), intent(out) :: TR,TI
       Integer, intent(in)  :: l1,l2
       Integer :: ll, k
-      
+
       ll = l1-l2; k = mod(ll,4)
 
       Select case(k)
@@ -27,4 +27,4 @@
 
 
 
- 
+

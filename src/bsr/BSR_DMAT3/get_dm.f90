@@ -1,7 +1,7 @@
 !======================================================================
       Subroutine  Get_dm(i,j,cl,cv,xl,xv)
 !======================================================================
-!     provide d-matrix 
+!     provide d-matrix
 !
 !     kpol=1:  <i|dv|j> = INT{ P_j(r) [d/dr + fl/r] P_i(r); dr}
 !                         fl = (l_j*(l_j+1) - l_i*(l_i+1))/2
@@ -27,7 +27,7 @@
       xl = cl * rrbs
 
       if(ktype.eq.'M') then;  xv = cv * rrbs; Return; end if
-        
+
       Call FL_kpol(kpol,lbs(i),lbs(j),fl); fl=fl*cv
 
       xv = cv*ddbs + fl*ttbs

@@ -12,7 +12,7 @@
       JJ_coupling(1,1) = 1
       JJ_coupling(2,1) = 2
       JJ_coupling(3,1) = n+2
-	  
+
       Do i=2,n-1
        JJ_coupling(1,i) = n+i
        JJ_coupling(2,i) = i+1
@@ -22,7 +22,7 @@
 ! ... moments (in 2J+1 representation)
 
       Do i=1,n
-       moments(i)  =  Jshell(i) + 1        
+       moments(i)  =  Jshell(i) + 1
        moments(i+n) = Jintra(i) + 1
       End do
 
@@ -38,11 +38,11 @@
 !     prepare coupling scheme, J2_coupling, for state in module conf_jj
 !     in case when outer orbital is going to new shell 'ii'
 !----------------------------------------------------------------------
-      Use dbsr_conf,  JJ_coupling => J2_coupling, n=>no   
+      Use dbsr_conf,  JJ_coupling => J2_coupling, n=>no
 
       Implicit none
       Integer :: i,ii,m,ipos(mshells)
- 
+
       if(n.gt.mshells) Stop 'make_coupling: no > mshells'
 
       Do i=1,n
@@ -58,7 +58,7 @@
       JJ_coupling(1,1) = ipos(1)
       JJ_coupling(2,1) = ipos(2)
       JJ_coupling(3,1) = m+2
-	  
+
       Do i=2,n-1
        JJ_coupling(1,i) = i+m
        JJ_coupling(2,i) = ipos(i+1)
@@ -70,7 +70,7 @@
       Do i=1,n;  moments(i+m) = Jintra(i) + 1;  End do
 
       JJ_coupling(3,ncup)=J1_coupling(3,ncup)
- 
+
       End Subroutine make_coupling_insert
 
 
@@ -80,11 +80,11 @@
 !     prepare coupling scheme, J2_coupling, for state in module conf_jj
 !     in case when outer orbital is traped to shell 'ii'
 !----------------------------------------------------------------------
-      Use dbsr_conf,  JJ_coupling => J2_coupling   
+      Use dbsr_conf,  JJ_coupling => J2_coupling
 
       Implicit none
       Integer :: i,ii,n,m
- 
+
       n = ncup + 1
       m = n + n
 
@@ -99,7 +99,7 @@
       JJ_coupling(1,2) = 1
       JJ_coupling(2,2) = 2
       JJ_coupling(3,2) = m+2
-	  
+
       if(ii.eq.1) then
        JJ_coupling(1,2) = m+1
        JJ_coupling(2,2) = 2

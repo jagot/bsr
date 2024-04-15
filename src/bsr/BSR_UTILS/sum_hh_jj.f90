@@ -3,13 +3,13 @@
 !----------------------------------------------------------------------
 
       Implicit real(8) (A-H,O-Z)
- 
+
       Real(8),allocatable :: ENAT(:), ENAT1(:), VALUE(:)
       Integer,allocatable :: LAT(:), LAT1(:), ISAT(:), ISAT1(:), &
                              NCONAT(:), L2P(:), K2P(:), PAT(:), jptar(:)
       Real(8),allocatable :: COEFF(:,:), WMAT(:,:), CF(:,:,:)
 
-      Integer, allocatable :: jpar(:), ipar(:),  nch(:), lch(:,:), kch(:,:), iptar(:,:)  
+      Integer, allocatable :: jpar(:), ipar(:),  nch(:), lch(:,:), kch(:,:), iptar(:,:)
 
       Integer :: ih1 = 1
       Integer :: ih2 = 999
@@ -25,11 +25,11 @@
       iout=2; Open(iout,file='H.DAT',form='UNFORMATTED')
       isch=3; Open(isch,status='SCRATCH',form='UNFORMATTED')
       ipri=9; Open(ipri,file='sum_hh.log')
-  
+
 ! ... Check the arguments:
 
-      Call get_command_argument(1,AF)  
-      if(AF.eq.'?') then    !  help section 
+      Call get_command_argument(1,AF)
+      if(AF.eq.'?') then    !  help section
        write(*,*)
        write(*,*) 'sum_hh_jj merges the different h.nnn files after DBSR calculations: '
        write(*,*)
@@ -56,7 +56,7 @@
 
        if(Icheck_file(AF).eq.0) Cycle
        write(*,*) trim(AF)
-       write(ipri,'(a)') trim(AF) 
+       write(ipri,'(a)') trim(AF)
        Open(in,file=AF,form='UNFORMATTED',status='OLD')
 
 !----------------------------------------------------------------------
@@ -76,31 +76,31 @@
         LM = min(MRANG2,LRANG2)
         read(in) ((COEFF(K,L),K=1,3),L=1,LM)
 
-        NELC1=NELC; NZ1=NZ; NAST1=NAST; ENAT1=ENAT; LAT1=LAT; ISAT1=ISAT 
+        NELC1=NELC; NZ1=NZ; NAST1=NAST; ENAT1=ENAT; LAT1=LAT; ISAT1=ISAT
         LAMAX1=LAMAX; RA1=RA; BSTO1=BSTO
 
         write(iout) NELC, NZ, MRANG2, LAMAX, NAST, RA, BSTO
         write(iout) ENAT
         write(iout) LAT
         write(iout) ISAT
-        write(iout) ((COEFF(K,L),K=1,3),L=1,MRANG2)  
+        write(iout) ((COEFF(K,L),K=1,3),L=1,MRANG2)
         istart=0
 
        else
 
-        if(NAST1.ne.NAST) then 
+        if(NAST1.ne.NAST) then
           write(*,*) ' NAST <> NAST1 for  ',AF; Stop
         end if
-        if(NZ1.ne.NZ) then 
+        if(NZ1.ne.NZ) then
           write(*,*) ' NZ <> NZ1 for  ',AF; Stop
         end if
-        if(LAMAX1.ne.LAMAX) then 
+        if(LAMAX1.ne.LAMAX) then
           write(*,*) ' LAMAX <> LAMAX1 for  ',AF; Stop
         end if
-        if(RA1.ne.RA) then 
+        if(RA1.ne.RA) then
           write(*,*) ' RA <> RA1 for  ',AF; Stop
         end if
-        if(BSTO1.ne.BSTO) then 
+        if(BSTO1.ne.BSTO) then
           write(*,*) ' BSTO <> BSTO1 for  ',AF; Stop
         end if
 
@@ -111,10 +111,10 @@
         read(in) ((COEFF(K,L),K=1,3),L=1,LM)
 
         Do N=1,NAST
-         if(ENAT1(N).ne.ENAT(N)) then 
+         if(ENAT1(N).ne.ENAT(N)) then
           write(*,*) ' ENAT <> ENAT1 for  ',AF; Stop
          end if
-         if(LAT1(N).ne.LAT(N)) then 
+         if(LAT1(N).ne.LAT(N)) then
           write(*,*) ' LAT <> LAT1 for  ',AF; Stop
          end if
         End do
@@ -190,7 +190,7 @@
       PAT = 0
       Do i=1,nlsp
        Do ich=1,nch(i); it=iptar(i,ich)
-        ip = ipar(i); 
+        ip = ipar(i);
         if(mod(lch(i,ich),2).eq.1) then
          if(ip.eq.0) then; ip=1; else; ip=0; end if
         end if
@@ -208,9 +208,9 @@
       write(ires,'(a)') '   e + ...   '
       write(ires,'(80(''-''))')
 
-      write(ires,'(a,a2)') 'coupling = ','JJ'    
+      write(ires,'(a,a2)') 'coupling = ','JJ'
 
-      write(ires,'(a,i3,T19,a)') 'nz    =',nz,    '!   nuclear charge'    
+      write(ires,'(a,i3,T19,a)') 'nz    =',nz,    '!   nuclear charge'
 
       write(ires,'(a,i3,T19,a)') 'nelc  =',nelc,  '!   number of electrons'
       write(ires,'(80(''-''))')
@@ -247,17 +247,17 @@
 
       Do ilsp = 1,nlsp
        write(ires,'(i3,a,i3.3,a,i4,a,2i6)')  ilsp,'.  ',ilsp,'  nch =',nch(ilsp), &
-            '  nc =',0,0 
+            '  nc =',0,0
        Do i = 1,nch(ilsp)
         write(ires,'(2x,a1,a1,3i5,i10,i5)') &
-              'k',AL(lch(ilsp,i),1),lch(ilsp,i),iptar(ilsp,i),i,0,j_kappa(kch(ilsp,i)) 
+              'k',AL(lch(ilsp,i),1),lch(ilsp,i),iptar(ilsp,i),i,0,j_kappa(kch(ilsp,i))
        End do
        write(ires,'(80(''-''))')
       End do
 
       write(ires,'(a,i5,T20,a)')   'max_ch =',mch,   '!  max. number of channels'
-      write(ires,'(a,f8.3,T20,a)') 'RA = ',RA,       '!  bouder radius'    
-      write(ires,'(a,i2,T20,a)')   'lamax = ',lamax, '!  max. multipole index'    
+      write(ires,'(a,f8.3,T20,a)') 'RA = ',RA,       '!  bouder radius'
+      write(ires,'(a,i2,T20,a)')   'lamax = ',lamax, '!  max. multipole index'
 
 
 !----------------------------------------------------------------------
@@ -265,10 +265,10 @@
 
       nut=12; Open(nut,file='target_jj.hhh')
 
-      write(nut,'(a)') '  e + ...' 
+      write(nut,'(a)') '  e + ...'
       write(nut,'(80(''-''))')
       write(nut,'(a,i4,5x,a)') &
-                'nz    = ',nz,   ' !   nuclear charge' 
+                'nz    = ',nz,   ' !   nuclear charge'
       write(nut,'(a,i4,5x,a)') &
                 'nelc  = ',nelc, ' !   number of electrons'
       write(nut,'(80(''-''))')
@@ -293,23 +293,23 @@
 
 ! ... partial waves:
 
-      write(nut,'(a,i4,5x,a)') 'nlsp  = ',nlsp,' !   number of partial waves' 
+      write(nut,'(a,i4,5x,a)') 'nlsp  = ',nlsp,' !   number of partial waves'
       write(nut,'(80(''-''))')
 
       Do i = 1,nlsp
        write(nut,'(i3,a,2i4)') i,'.',jpar(i),1-2*ipar(i)  ! ,'no','no',0,0
       End do
       write(nut,'(80(''-''))')
- 
+
 ! ... channels:
 
-      write(nut,'(a,i5)') 'channels:' 
+      write(nut,'(a,i5)') 'channels:'
       write(nut,'(80(''-''))')
 
       Do ilsp = 1,nlsp
 
        write(nut,'(i3,a,i3.3,a,i4,a,2i6)')  ilsp,'.  ',ilsp,'  nch =',nch(ilsp), &
-            '  nc =',0,0 
+            '  nc =',0,0
        write(nut,'(80(''-''))')
 
        Do i = 1,nch(ilsp)
@@ -321,8 +321,8 @@
       End do ! ilsp
 
       write(nut,'(a,i5,T20,a)')   'max_ch =',mch,   '!  max. number of channels'
-      write(nut,'(a,f8.3,T20,a)') 'RA = ',RA,       '!  bouder radius'    
-      write(nut,'(a,i2,T20,a)')   'lamax = ',lamax, '!  max. multipole index'    
+      write(nut,'(a,f8.3,T20,a)') 'RA = ',RA,       '!  bouder radius'
+      write(nut,'(a,i2,T20,a)')   'lamax = ',lamax, '!  max. multipole index'
       write(nut,'(80(''-''))')
 
       End  ! sum_hh_jj

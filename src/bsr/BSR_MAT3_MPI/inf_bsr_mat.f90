@@ -3,14 +3,14 @@
 !======================================================================
 !     provide screen information about bsr_mat program
 !----------------------------------------------------------------------
-       
+
       Implicit real(8) (a-h,o-z)
 
       Character(80) :: A
 
       iarg = IARGC()
       if(iarg.eq.0) Return
-      Call GETARG(1,A)      
+      Call GETARG(1,A)
       if(A.ne.'?') Return
 
       write(*,*) &
@@ -72,13 +72,13 @@
 '                                                                            ',&
 'EC = ...   - core energy (if needed to change)                              ',&
 '                                                                            '
-                                                                            
-      Stop ' '                                                              
-                                                                            
-      End Subroutine inf_bsr_mat                                          
-                                                                            
-                                                                            
-                                                                            
+
+      Stop ' '
+
+      End Subroutine inf_bsr_mat
+
+
+
 
 
 

@@ -4,21 +4,21 @@
 !
 !   Defines moments for Tk-integrals in the B-spline cells
 !
-!   Calling sequence:          tk_moments             
-!                              ----------             
-!                               /    \\           
-!                           moments tk_pdiag      
-!                                     ||          
-!                                   tk_triang     
-!                                    /   \        
-!                                 gauss  vbsplvb  
-! 
+!   Calling sequence:          tk_moments
+!                              ----------
+!                               /    \\
+!                           moments tk_pdiag
+!                                     ||
+!                                   tk_triang
+!                                    /   \
+!                                 gauss  vbsplvb
+!
 !-------------------------------------------------------------------------
 !
 !   on entry    k  -  multipole index
 !   --------
-!       
-!   on exit     rkd1,rkd2,rkd - off-diagonal and diagonal moments 
+!
+!   on exit     rkd1,rkd2,rkd - off-diagonal and diagonal moments
 !   -------                     (in module spline_moments)
 !
 !-------------------------------------------------------------------------
@@ -29,7 +29,7 @@
     USE spline_moments
 
     IMPLICIT NONE
-    INTEGER(4), INTENT(in) :: k  
+    INTEGER(4), INTENT(in) :: k
 
     ! .. check the need of calculations
 
@@ -107,16 +107,16 @@
 !                                  _    _
 !         <B_i B_j| r2^k/r1^(k+1) |B_i' B_j'>
 !
-!   over the given triangle diagonal cell 
-!                                                           
+!   over the given triangle diagonal cell
+!
 !   Calls:   gauss, vbsplvd
 !
 !   On entry   iv  -  the index of the diagonal cell
 !   --------
 !
-!   On exit    rkd(.,.,iv) - arrays of B-spline Tk-integrals for given 
+!   On exit    rkd(.,.,iv) - arrays of B-spline Tk-integrals for given
 !   --------                 interval iv in the reduced-dimension mode
-!                            (in module spline_moments)      
+!                            (in module spline_moments)
 !----------------------------------------------------------------------
 
       IMPLICIT NONE
@@ -140,7 +140,7 @@
 
       CALL gauss(ks,x,w)
 
-! .. first integration 
+! .. first integration
 
       DO m=1,ks
 
@@ -194,7 +194,7 @@
           a(ii,jj) = SUM(gx(1:ks)*INT(j,jp,1:ks))
          END DO
         END DO
- 
+
        END DO
       END DO
 

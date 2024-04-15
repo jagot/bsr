@@ -5,14 +5,12 @@
 !     define there angular symmetries and compare with existing ones.
 !     Prepare the angular arrays.
 !----------------------------------------------------------------------
-      Use dbsr_ci
-      Use conf_jj
-      Use symc_list
-      Use symt_list
+      Use dbsr_ci;    Use symc_list
+      Use conf_jj;    Use symt_list
 
       Implicit none
       Integer, external :: Jdef_ncfg, Iadd_cfg_jj
-      Integer :: i,j,k,it,jt,ij,nsymc0,nsymt0
+      Integer :: i,k,it,jt,ij,nsymc0,nsymt0
 
 ! ... define ncfg:
 
@@ -36,11 +34,11 @@
 
       Call Decode_cj;  Call Test_cj
 
-      i = Iadd_cfg_jj('detect') 
+      i = Iadd_cfg_jj('detect')
       if(i.lt.0) Stop 'R_confj: repeated states?'
 
       go to 1
-    2 Continue     
+    2 Continue
 
       if(nsymt.gt.nsymt0.or.nsymc.gt.nsymc0) &
        Stop 'bnk-fail is not complete; run bj first!'
@@ -58,7 +56,7 @@
 
       Do i=1,ncfg
        it=IS_term(IS_order(i))
-       if(IT_state1(it).eq.0) IT_state1(it)=i; IT_state2(it)=i 
+       if(IT_state1(it).eq.0) IT_state1(it)=i; IT_state2(it)=i
       End do
 
 !----------------------------------------------------------------------
@@ -77,7 +75,7 @@
        End do
         if(k.eq.1) Exit
       End do
-      if(k.eq.1) Stop 'bnk-fail is not complete; run bj first!'
+      if(k.eq.1) Stop 'bnk-fail is not complete; run DBSR_BREIT first!'
 
       End Subroutine read_conf_jj
 

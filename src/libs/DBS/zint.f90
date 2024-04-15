@@ -2,7 +2,7 @@
 !======================================================================
       Real(8) Function zint(int,i1,j1,i2,j2,k)
 !======================================================================
-!     selects different types of two-electron integrals      
+!     selects different types of two-electron integrals
 !----------------------------------------------------------------------
       Implicit none
       Integer, intent(in) :: int,k,i1,j1,i2,j2
@@ -25,7 +25,7 @@
 !======================================================================
       Real(8) Function zint_pq(int,i1,j1,i2,j2,k)
 !======================================================================
-!     selects different types of two-electron integrals      
+!     selects different types of two-electron integrals
 !----------------------------------------------------------------------
       Use DBS_orbitals_pq
 

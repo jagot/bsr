@@ -13,7 +13,7 @@
 !     8. Backtransform eigenvectors to the original problem.
 !        Results in array "a".
 !----------------------------------------------------------------------
-      Use dbsr_hd 
+      Use dbsr_hd
 
       Implicit none
       Character(1) :: uplo, job, trans

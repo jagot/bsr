@@ -2,7 +2,7 @@
       Subroutine LAP_DSYEV(job,UPLO,n,m,A,eval,info)
 !======================================================================
 !
-!     Call LAPACK procedure DSYEV to obtain the eigenvalues (eval) and 
+!     Call LAPACK procedure DSYEV to obtain the eigenvalues (eval) and
 !     eigenvectors (A) for real symmetric matrix A(n,n)
 !
 !     job = 'V' or 'N' - compute or not the eigenvectors

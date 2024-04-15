@@ -6,4 +6,3 @@
 
       Subroutine Br_barrier
       End Subroutine Br_barrier
-      

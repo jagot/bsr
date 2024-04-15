@@ -7,7 +7,7 @@
 
       USE bsr_breit,    only: noper, ioper, joper, JT_oper
       USE term_exp,     only: kt1, kt2, IP_kt1, IP_kt2
-      USE symt_list_LS, only: IT_oper 
+      USE symt_list_LS, only: IT_oper
 
       Implicit none
       Integer :: is,js, it,jt,ik,jk, i,ij, k
@@ -25,7 +25,7 @@
        End do
 
        Do i=1,noper; joper(i)=maxval(JT_oper(:,i)); End do
-       
+
        IDEF_cme=maxval(joper(:))
 
-      End function IDEF_cme 
+      End function IDEF_cme

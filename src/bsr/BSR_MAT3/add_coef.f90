@@ -12,8 +12,8 @@
 
 ! ... add coefficient to list:
 
-      i = iblk(kpol,itype); ip = ipblk(i); jp = jpblk(i) 
-      Call Add_cdata(ip,jp,C,j1,j2,j3,j4)                    
+      i = iblk(kpol,itype); ip = ipblk(i); jp = jpblk(i)
+      Call Add_cdata(ip,jp,C,j1,j2,j3,j4)
       jpblk(i) = jp
 
 ! ... check if the block full:
@@ -33,7 +33,7 @@
       End do
       if(m.ne.0) Return
       end if
-     
+
 ! ... everything is full - it is time to generate matrix:
 
       jtype=itype; jpol=kpol; n = nblk(kpol,itype)
@@ -55,5 +55,5 @@
        m = 1; Exit
       End do
       if(m.eq.0) Stop ' Add_coef: problems with new block '
-      
-      End Subroutine Add_coef 
+
+      End Subroutine Add_coef

@@ -1,14 +1,14 @@
 !======================================================================
       Subroutine Read_arg
 !----------------------------------------------------------------------
-! ... read arguments from the command line and open some main files 
+! ... read arguments from the command line and open some main files
 !----------------------------------------------------------------------
       Use dbsr_dmat
 
 ! ... read first four basic "position" parameters:
 
-      iarg = IARGC()
-      
+      iarg = command_argument_count()
+
       if(iarg.lt.4) then
        write(*,*) 'DBSR_DMAT: number of arguments  <  4'
        write(*,*)
@@ -22,10 +22,10 @@
       end if
 
       Call GETARG(1,name1)
-      Call Check_file(name1);  Open(nuc1,file=name1) 
+      Call Check_file(name1);  Open(nuc1,file=name1)
 
       Call GETARG(2,name2)
-      Call Check_file(name2);  Open(nuc2,file=name2) 
+      Call Check_file(name2);  Open(nuc2,file=name2)
 
       Call GETARG(3,ctype1)
       i1 = LEN_TRIM(name1)

@@ -13,8 +13,8 @@
 !     zl and zl_dir have different representation !!!
 !
 !     lz_dir = [-1|1] - (not|yes) for Done of zl_dir
-!     (this parameter allows us to compute the zl_dir only once because 
-!!     zl_dir does not depend on l) 
+!     (this parameter allows us to compute the zl_dir only once because
+!!     zl_dir does not depend on l)
 !
 !     zl_exc(ns,ns) - exchange interaction with core
 !
@@ -26,7 +26,7 @@
 !     zl_full(ns,ns,mlz) - all z-matreces
 !
 !     Z_int - Z-integrals <P_i| Z |P_j>
-! 
+!
 !     Z_vec - vectors  < . | Z | P_i>
 !
 !     d,x - auxiliary arrays
@@ -81,10 +81,10 @@
 !======================================================================
       SUBROUTINE Gen_Zval
 !======================================================================
-!     Generates the Z-integrals and vectors 
+!     Generates the Z-integrals and vectors
 !----------------------------------------------------------------------
       Use bsr_mat
-      Use Z_core 
+      Use Z_core
       Use spline_param; Use spline_atomic; Use spline_orbitals
 
       Implicit none
@@ -94,16 +94,16 @@
       mlz=maxval(lbs(1:nbf));  if(mlz.gt.mlso) mlz=mlso
       Call Alloc_zcore(ns,ks,nbf)
 
-! ... generate Z-data for given l: 
+! ... generate Z-data for given l:
 
       Do l=1,mlz
 
        Call INTZ_core(l)
 
-       Do i = kclosd+1,nbf;  if(lbs(i).ne.l.or.iech(i).ne.0) Cycle 
-        Do j = i,nbf;        if(lbs(j).ne.l.or.iech(j).ne.0) Cycle 
+       Do i = kclosd+1,nbf;  if(lbs(i).ne.l.or.iech(i).ne.0) Cycle
+        Do j = i,nbf;        if(lbs(j).ne.l.or.iech(j).ne.0) Cycle
 
-         C = 0.d0 
+         C = 0.d0
          Do m = 1,ns;  Do k = 1,m-1
           C = C + zl_core(m,k)*(pbs(m,i)*pbs(k,j)+pbs(k,i)*pbs(m,j))
          End do;  End do
@@ -113,18 +113,18 @@
 
 !         if(lbs(i).eq.1) C = C * zcorr           !  ???
          C = C * zcorr           !  ???
- 
+
          Z_int(i,j) = C;  Z_int(j,i) = C
- 
+
          if(nud.gt.0) Call pri_int(nud,7,0,i,j,i,j,C)
 
         End do
         Do m=1,ns; Z_vec(m,i)=SUM(zl_core(:,m)*pbs(:,i)); End do
        End do
 
-       zl_full(:,:,l) = zl_core(:,:)               
+       zl_full(:,:,l) = zl_core(:,:)
 
-      End do 
+      End do
 
       End Subroutine Gen_Zval
 
@@ -132,8 +132,8 @@
 !=====================================================================
       Subroutine INTZ_core(l)
 !=====================================================================
-!     generate B-splne representation in array zl_core 
-!     for Z-integrals with core interaction for given l 
+!     generate B-splne representation in array zl_core
+!     for Z-integrals with core interaction for given l
 !---------------------------------------------------------------------
       Use bsr_mat;  Use Z_core
       Use spline_param; Use spline_atomic; Use spline_orbitals
@@ -150,7 +150,7 @@
 
       if(lz_dir .eq. -1) then
 
-       Call Gen_zzeta(zl,izcorr) 
+       Call Gen_zzeta(zl,izcorr)
 
        zl_dir = 0.0d0
        if(kclosd.gt.0) then
@@ -158,18 +158,18 @@
         Do ip = 1,kclosd
          C = -(4*lbs(ip)+2)
          Call Density (ns,ks,d,pbs(1,ip),pbs(1,ip),'s')
-         Call Convol  (ns,ks,x,d,1,'s','s')               
+         Call Convol  (ns,ks,x,d,1,'s','s')
          zl_dir = zl_dir + C*x
         End do
        end if
 
-       lz_dir = 1       
+       lz_dir = 1
 
       end if
 
 !----------------------------------------------------------------------
 ! ... exchange interaction ...
-      
+
       zl_exc = 0.d0
       if(kclosd.gt.0) then
 
@@ -183,16 +183,16 @@
        Call MMK_cell(k)
        Do ip = 1,kclosd
         lp = lbs(ip)
-        C = 3 * (4*lp+2) * ZCB(lp,k,l) / (8*l*(l+1)) 
+        C = 3 * (4*lp+2) * ZCB(lp,k,l) / (8*l*(l+1))
         if(C.eq.0.d0) Cycle
         C = ( (l*(l+1)-lp*(lp+1)) * (l*(l+1)-lp*(lp+1)+k*(k+1)) &
           +   ((l+lp+1)**2-(k+1)**2) * ((k+1)**2-(l-lp)**2) )*C/(k+1)
         if(C.eq.0.d0) Cycle
         Call Density (ns,ks,dd,pbs(1,ip),pbs(1,ip),'x')
-        Call Convol  (ns,ks,xx,dd,3,'s','s')               
+        Call Convol  (ns,ks,xx,dd,3,'s','s')
         zl_exc = zl_exc + C*xx
        End do
-      End do    
+      End do
 
       Do k = kmin,kmax                    ! M(k-2) - integrals
        if(k.le.0) Cycle
@@ -204,10 +204,10 @@
         C = -( (l*(l+1)-lp*(lp+1)) * (l*(l+1)-lp*(lp+1)+k*(k+1)) &
             +  ((l+lp+1)**2-k**2) * (k**2-(l-lp)**2) )*C/k
         Call Density (ns,ks,dd,pbs(1,ip),pbs(1,ip),'x')
-        Call Convol  (ns,ks,xx,dd,3,'s','s')               
-        zl_exc = zl_exc + C*xx       
+        Call Convol  (ns,ks,xx,dd,3,'s','s')
+        zl_exc = zl_exc + C*xx
        End do
-      End do    
+      End do
 
       Do k = kmin,kmax                     ! W(k-1) - integrals
        if(k.le.0) Cycle
@@ -216,26 +216,26 @@
         lp = lbs(ip)
         C = 3 * (4*lp+2) * ZCB(lp,k,l) / (8*l*(l+1))
         if(C.eq.0.d0) Cycle
-        C = C * (l*(l+1)-lp*(lp+1)+k*(k+1)) 
+        C = C * (l*(l+1)-lp*(lp+1)+k*(k+1))
         if(C.eq.0.d0) Cycle
         Call Density (ns,ks,dd,pbs(1,ip),pbs(1,ip),'x')
-        Call Convol  (ns,ks,xx,dd,3,'n','s')               
-        Call Convol  (ns,ks,yy,dd,4,'n','s')               
+        Call Convol  (ns,ks,xx,dd,3,'n','s')
+        Call Convol  (ns,ks,yy,dd,4,'n','s')
         zl_exc = zl_exc + C*(xx-Transpose(yy))
        End do
-      End do    
+      End do
 
       end if ! over kclosd
 
 !----------------------------------------------------------------------
-! ... total zl:      
+! ... total zl:
 
       zl_core = zl_exc
 
       Do jp = 1,ks
        Do i = ks+1-jp,ns
         j = jp+i-ks
-        zl_core(i,j) = zl_core(i,j) + zl(i,jp) 
+        zl_core(i,j) = zl_core(i,j) + zl(i,jp)
         zl_core(j,i) = zl_core(i,j)
        End do
       End do
@@ -274,7 +274,7 @@
           B = gr(i,m)/(gr(i,m)+2*fine*Z)
           S = grw(i,m)*bsp(i,m,ith)*grm(i,m)**3*bsp(i,m,jth)
           if(izcorr.gt.0) S = S * B * B
-          rm(irow,jcol)=rm(irow,jcol)  + S  
+          rm(irow,jcol)=rm(irow,jcol)  + S
          End do
         End do
        End do

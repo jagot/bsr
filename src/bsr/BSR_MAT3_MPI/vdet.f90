@@ -7,11 +7,11 @@
 
       USE spline_orbitals, ONLY: OBS
       USE target, only: nelc
-      
+
       Implicit none
 
       Integer, Intent(in) :: kd, N1(kd), N2(kd)
-      Integer :: i,j 
+      Integer :: i,j
       Real(8) :: ADET((nelc+1)*(nelc+1))
       Real(8), External :: DET
 
@@ -27,7 +27,7 @@
 
        VDET = OBS(N1(1),N2(1))*OBS(N1(2),N2(2)) -  &
               OBS(N1(1),N2(2))*OBS(N1(2),N2(1))
-      
+
       elseif(kd.eq.3) then
 
        VDET = OBS(N1(1),N2(1))*OBS(N1(2),N2(2))*OBS(N1(3),N2(3)) +  &
@@ -35,15 +35,15 @@
               OBS(N1(1),N2(3))*OBS(N1(2),N2(1))*OBS(N1(3),N2(2)) -  &
               OBS(N1(1),N2(3))*OBS(N1(2),N2(2))*OBS(N1(3),N2(1)) -  &
               OBS(N1(1),N2(2))*OBS(N1(2),N2(1))*OBS(N1(3),N2(3)) -  &
-              OBS(N1(1),N2(1))*OBS(N1(2),N2(3))*OBS(N1(3),N2(2)) 
+              OBS(N1(1),N2(1))*OBS(N1(2),N2(3))*OBS(N1(3),N2(2))
 
-      else                
-      
+      else
+
        Do i=1,kd;  Do j=1,kd
          adet((i-1)*kd+j)=OBS(N1(i),N2(j))
        End do; End do
 
-       VDET = DET(kd,adet)      
+       VDET = DET(kd,adet)
 
       end if
 

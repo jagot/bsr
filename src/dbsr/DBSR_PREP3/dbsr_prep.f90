@@ -8,8 +8,8 @@
 !
 !======================================================================
 !
-!  This proram analyzes the orthogonality conditions for one-electron 
-!  orbitals and generates new c- and bsw-files for target states with 
+!  This program analyzes the orthogonality conditions for one-electron
+!  orbitals and generates new c- and bsw-files for target states with
 !  consistent orbital set-indexes and sorted according to their energy.
 !
 !  In order to define the same orbitals, the following criteria are
@@ -62,7 +62,7 @@
        Open(nut,file=AF_tar)
       else
        Open(nut,file=AF_tar)
-       Call Write_target_jj_example(nut)       
+       Call Write_target_jj_example(nut)
        write(*  ,*) 'Prepare file "target" - see created example'
        write(pri,*) 'Prepare file "target" - see created example'
        Stop
@@ -97,21 +97,23 @@
       Call Read_core_jj(nuc)
       write(pri,'(80(''-''))')
       write(pri,'(a,i5/)') 'CORE:  ncore =', ncore
+
       if(ncore.gt.0) then
+
        write(pri,'(10a8)') (ELF(j),j=1,nwf)
        AFW = trim(AFT(1))//'.bsw'
        Open(nuw,file=AFW,form='UNFORMATTED')
        Call read_dbsw(nuw,0,0)
        Do i=1,ncore
         Do j=1,ncore
-        if(kbs(i).ne.kbs(j)) Cycle
-        S = QUADR_00(i,j,0)
-        if(abs(S).lt.eps_core) Cycle 
-        Call Iadd_obs(i,j,S) 
+         if(kbs(i).ne.kbs(j)) Cycle
+         S = QUADR_00(i,j,0)
+         if(abs(S).lt.eps_core) Cycle
+         Call Iadd_obs(i,j,S)
+        End do
+        OBS1(i) = QUADR_pq(i,i,1)
+        OBS2(i) = QUADR_pq(i,i,2)
        End do
-       OBS1(i) = QUADR_pq(i,i,1)
-       OBS2(i) = QUADR_pq(i,i,2)
-      End do
 
       end if
 
@@ -128,7 +130,7 @@
        if(CLOSED.ne.core)  then
         write(pri,'(/a,a,a)') 'target ',AFT(it),' has different core'
         write(*,'(/a,a,a)') 'target ',AFT(it),' has different core'
-        Stop 
+        Stop
        end if
        Close(nuc)
       End do
@@ -166,7 +168,9 @@
 
       end if
 
-      nwt = nbf;  ipbs = 0; ipbs(1:nbf) = 1  ! sub. orb. pointer
+      if(nbf.gt.0) then
+       nwt = nbf;  ipbs = 0; ipbs(1:nbf) = 1  ! sub. orb. pointer
+      end if
 
 !-----------------------------------------------------------------------
 ! ... check orbitals in target states:
@@ -192,29 +196,29 @@
          Stop 'Stop in bsr_prep:  ntarg > 100000 '
        end if
        BFT(it) = BFC;  BFC = trim(BFT(it))//'.c';  BFW = 'no'
- 
+
        kshift=0; ipef=0;    CALL SUB_check_orb
- 
+
       ! ... write new c-file:
 
        if(allocated(ipt)) deallocate(ipt); Allocate(ipt(ncfg))
        Call SORTA(ncfg,WC,ipt)
 
        Open(muc,file=BFC)
-       write(muc,'(a,f16.8)') 'Core subshells:',Etarg(it)  
+       write(muc,'(a,f16.8)') 'Core subshells:',Etarg(it)
        write(muc,'(a)') core(1:ncore*5)
        write(muc,'(a)') 'Peel subshells:'
        write(muc,'(20a5)') ELF(ncore+1:nwf)
        write(muc,'(a)') 'CSF(s):'
- 
+
        ncfg1 = 0
-       Do jc=1,ncfg; ic=ipt(jc); 
+       Do jc=1,ncfg; ic=ipt(jc);
         if(abs(WC(ic)).lt.eps_targ) Cycle
         Call Print_conf_jj(muc,ic,WC(ic))
         ncfg1 = ncfg1 + 1
        End do
        write(muc,'(a)') '*'
- 
+
       ! ... define substitution orbitals:
 
        write(nuo,'(a,3x,i3.3,6x,a)') 'target',it,AFT(it)
@@ -288,7 +292,7 @@
        write(91) (pq(j,2,i),j=1,mbs(i))
       End do
       Close(91)
- 
+
 !=====================================================================
 ! ... define number of partial waves:
 
@@ -312,8 +316,8 @@
 
       else               ! define range of partial waves
 
-      if(JJ_min.lt.0) JJ_min = mod(nelc+1,2)  
-      if(JJ_max.lt.0) JJ_max = mod(nelc+1,2) + 50 
+      if(JJ_min.lt.0) JJ_min = mod(nelc+1,2)
+      if(JJ_max.lt.0) JJ_max = mod(nelc+1,2) + 50
 
        nlsp = JJ_max-JJ_min + 2
        Allocate(jpar(nlsp),ipar(nlsp), &
@@ -345,18 +349,16 @@
 ! ... proceed perturbers if any:
 
       Do ilsp=1,nlsp
-       
-       BFC = 'no'; BFW = 'no'
-       nbf = nwt; ncfg = 0; lcfg = 0; nwf = ncore  
-       if(mbf.gt.nwt) ipbs(nwt+1:mbf) = 0
 
+       BFC = 'no'; BFW = 'no'
+       nbf = nwt; ncfg = 0; lcfg = 0; nwf = ncore
+       if(mbf.gt.nwt) ipbs(nwt+1:mbf) = 0
        npert = 0;  Call Allocate_pert(0)
 
 ! ... usual perturber (as list of separate configurations) :
 
        if(LEN_TRIM(AFP(ilsp)).gt.0.and.AFP(ilsp).ne.'no') then
-
-        AFC = trim(AFP(ilsp))//'.c'  
+        AFC = trim(AFP(ilsp))//'.c'
         write(pri,'(a,i6,T24,a/)') 'perturber', ilsp, trim(AFC)
         Call Check_file(AFC)
         Open(nuc,file=AFC)
@@ -365,9 +367,9 @@
         ncp(ilsp) = ncfg
 
         Call Allocate_pert(ncfg+ipert); npert=ncfg
- 
+
         Do i=1,npert; ippert(i)=i; End do
-        
+
         AFW = trim(AFP(ilsp))//'.bsw';
 
         Call Check_file(AFW)
@@ -386,20 +388,20 @@
         write(pri,'(/a,i5,5x,a/)') 'perturber', ilsp, trim(AFK(iip))
         Open(nuc,file=AFC)
 
-        kshift = maxval(KEF(1:nwf))
+        kshift = maxval(IEF(1:nbf))
 
         Call Read_conf_jj(nuc,kshift,'add','check')
 
         if(npert+1.gt.mpert) Call Allocate_pert(mpert+ipert)
-        npert = npert + 1        
+        npert = npert + 1
         ippert(npert)=ncfg
         ncp(ilsp) = ncfg
         AFW = trim(AFK(iip))//'.bsw'
         Call Check_file(AFW)
 
         CALL SUB_check_orb
-   
-       End do 
+
+       End do
 
 ! ... collective perturber configurations:
 
@@ -437,7 +439,7 @@
         End do
         Close(muw)
        end if
- 
+
        write(pri,'(/a,i8,T24,a)') 'ncp  = ',ncp(ilsp),'number of configurations'
        write(pri,'( a,i8,T24,a)') 'nwp  = ',nwp(ilsp),'number of new orbitals'
        write(pri,'(80(''-''))')
@@ -454,15 +456,15 @@
       Call write_channels_jj(nut,0)
       if(kpert.gt.0) then
        write(nut,'(a,i4,5x,a)') &
-        'kpert = ',kpert,' !   number of additional perturbers' 
+        'kpert = ',kpert,' !   number of additional perturbers'
       write(nut,'(80(''-''))')
       Do i = 1,kpert
        write(nut,'(i3,5x,a)') klsp(i),trim(AFK(i))
-      End do 
+      End do
       write(nut,'(80(''-''))')
       end if
 
-! ... information for target_orb file:      
+! ... information for target_orb file:
 
       write(nuo,'(/a,a)') &
  'This file contains the list of physical oritals along with:', &
