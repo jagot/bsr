@@ -1,48 +1,104 @@
 cmake_minimum_required(VERSION 3.22)
 project(bsr)
 
+IF(NOT CMAKE_BUILD_TYPE)
+  set (CMAKE_BUILD_TYPE Release CACHE STRING
+       CACHE STRING "Choose the type of build : None Debug Release Coverage."
+       FORCE)
+ENDIF(NOT CMAKE_BUILD_TYPE)
+message("Build type: ${CMAKE_BUILD_TYPE}")
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 set(GLOBAL_Fortran_MODULE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/mods)
 include_directories(${GLOBAL_Fortran_MODULE_DIRECTORY})
 
 enable_language(Fortran)
 
-if (NOT CMAKE_BUILD_TYPE)
-  set (CMAKE_BUILD_TYPE Release CACHE STRING
-    "Choose the type of build, options are: None Debug Release."
-    FORCE)
-endif (NOT CMAKE_BUILD_TYPE)
-
-get_filename_component (Fortran_COMPILER_NAME ${CMAKE_Fortran_COMPILER} NAME)
-
-if (Fortran_COMPILER_NAME MATCHES "gfortran.*")
-  # gfortran
-  set (CMAKE_Fortran_FLAGS_RELEASE "-funroll-all-loops -fno-automatic -fcray-pointer -fno-f2c -O2 -march=native -fallow-argument-mismatch")
-  set (CMAKE_Fortran_FLAGS_DEBUG   "-fno-f2c -O0 -g -fcheck=all -fbacktrace")
-elseif (Fortran_COMPILER_NAME MATCHES "ifort.*")
-  # ifort (untested)
-  set (CMAKE_Fortran_FLAGS_RELEASE "-f77rtl -O2")
-  set (CMAKE_Fortran_FLAGS_DEBUG   "-f77rtl -O0 -g")
-elseif (Fortran_COMPILER_NAME MATCHES "g77")
-  # g77
-  set (CMAKE_Fortran_FLAGS_RELEASE "-funroll-all-loops -fno-f2c -O2 -m32")
-  set (CMAKE_Fortran_FLAGS_DEBUG   "-fno-f2c -O0 -g -m32")
-else (Fortran_COMPILER_NAME MATCHES "gfortran.*")
+if (CMAKE_Fortran_COMPILER_ID MATCHES "GNU")
+  set (Fortran_RELEASE_FLAGS  "-funroll-all-loops -fno-automatic -fcray-pointer -fno-f2c -O2 -march=native -fallow-argument-mismatch")
+  set (Fortran_DEBUG_FLAGS    "-fno-f2c -O0 -g -fcheck=all -fbacktrace")
+  set (Fortran_COVERAGE_FLAGS "-fprofile-arcs -ftest-coverage")
+else (CMAKE_Fortran_COMPILER_ID MATCHES "GNU")
   message ("CMAKE_Fortran_COMPILER full path: " ${CMAKE_Fortran_COMPILER})
-  message ("Fortran compiler: " ${Fortran_COMPILER_NAME})
+  message ("Fortran compiler: " ${CMAKE_Fortran_COMPILER_ID})
   message ("No optimized Fortran compiler flags are known, we just try -O2...")
-  set (CMAKE_Fortran_FLAGS_RELEASE "-O2")
-  set (CMAKE_Fortran_FLAGS_DEBUG   "-O0 -g")
-endif (Fortran_COMPILER_NAME MATCHES "gfortran.*")
+  set (Fortran_RELEASE_FLAGS "-O2")
+  set (Fortran_DEBUG_FLAGS   "-O0 -g")
+  set (Fortran_COVERAGE_FLAGS "")
+endif (CMAKE_Fortran_COMPILER_ID MATCHES "GNU")
 
-set(CMAKE_CXX_FLAGS "--std=c++11 -Wall -Wextra")
-if("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
-else()
-  set(CMAKE_BUILD_TYPE "Debug")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -g")
+if (CMAKE_C_COMPILER_ID MATCHES "GNU")
+  set (C_RELEASE_FLAGS  "-O3 -march=native -Wall -Wextra")
+  set (C_DEBUG_FLAGS    "-O0 -g -Wall -Wextra")
+  set (C_COVERAGE_FLAGS "-fprofile-arcs -ftest-coverage")
+elseif (CMAKE_C_COMPILER_ID MATCHES "Clang|AppleClang")
+  set (C_RELEASE_FLAGS "-O3 -march=native -Wall -Wextra")
+  set (C_DEBUG_FLAGS   "-O0 -g -Wall -Wextra")
+  set (C_COVERAGE_FLAGS "-fprofile-instr-generate -fcoverage-mapping")
+else (CMAKE_C_COMPILER_ID MATCHES "GNU")
+  message ("CMAKE_C_COMPILER full path: " ${CMAKE_C_COMPILER})
+  message ("C compiler: " ${CMAKE_C_COMPILER_ID})
+  message ("No optimized C compiler flags are known, we just try -O2...")
+  set (C_RELEASE_FLAGS "-O2")
+  set (C_DEBUG_FLAGS   "-O0 -g -DDEBUG")
+  set (C_COVERAGE_FLAGS "")
+endif (CMAKE_C_COMPILER_ID MATCHES "GNU")
+
+if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+  set (CXX_RELEASE_FLAGS  "-O3 --std=c++11 -march=native")
+  set (CXX_DEBUG_FLAGS    "-O0 -g")
+  set (CXX_COVERAGE_FLAGS "-fprofile-arcs -ftest-coverage")
+elseif (CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang")
+  set (CXX_RELEASE_FLAGS "-O3 --std=c++11 -march=native")
+  set (CXX_DEBUG_FLAGS   "-O0 -g")
+  set (CXX_COVERAGE_FLAGS "-fprofile-instr-generate -fcoverage-mapping")
+else (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+  message ("CMAKE_CXX_COMPILER full path: " ${CMAKE_CXX_COMPILER})
+  message ("C compiler: " ${CMAKE_CXX_COMPILER_ID})
+  message ("No optimized C compiler flags are known, we just try -O2...")
+  set (CXX_RELEASE_FLAGS "-O2")
+  set (CXX_DEBUG_FLAGS   "-O0 -g")
+  set (CXX_COVERAGE_FLAGS "")
+endif (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+
+if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
   add_definitions("-DDEBUG")
 endif()
+
+set(CMAKE_Fortran_FLAGS_RELEASE "${Fortran_RELEASE_FLAGS}")
+set(CMAKE_Fortran_FLAGS_DEBUG   "${Fortran_DEBUG_FLAGS}")
+set(CMAKE_C_FLAGS_RELEASE "${C_RELEASE_FLAGS}")
+set(CMAKE_C_FLAGS_DEBUG   "${C_DEBUG_FLAGS}")
+set(CMAKE_CXX_FLAGS_RELEASE "${CXX_RELEASE_FLAGS}")
+set(CMAKE_CXX_FLAGS_DEBUG   "${CXX_DEBUG_FLAGS}")
+
+# https://stackoverflow.com/a/11437693
+SET(CMAKE_Fortran_FLAGS_COVERAGE
+    "${Fortran_DEBUG_FLAGS} ${Fortran_COVERAGE_FLAGS}"
+    CACHE STRING "Flags used by the C++ compiler during coverage builds."
+    FORCE )
+SET(CMAKE_C_FLAGS_COVERAGE
+    "${C_DEBUG_FLAGS} ${C_COVERAGE_FLAGS}"
+    CACHE STRING "Flags used by the C compiler during coverage builds."
+    FORCE )
+SET(CMAKE_CXX_FLAGS_COVERAGE
+    "${CXX_DEBUG_FLAGS} ${CXX_COVERAGE_FLAGS}"
+    CACHE STRING "Flags used by the C++ compiler during coverage builds."
+    FORCE )
+SET(CMAKE_EXE_LINKER_FLAGS_COVERAGE
+    ""
+    CACHE STRING "Flags used for linking binaries during coverage builds."
+    FORCE )
+SET(CMAKE_SHARED_LINKER_FLAGS_COVERAGE
+    ""
+    CACHE STRING "Flags used by the shared libraries linker during coverage builds."
+    FORCE )
+MARK_AS_ADVANCED(
+    CMAKE_Fortran_FLAGS_COVERAGE
+    CMAKE_CXX_FLAGS_COVERAGE
+    CMAKE_C_FLAGS_COVERAGE
+    CMAKE_EXE_LINKER_FLAGS_COVERAGE
+    CMAKE_SHARED_LINKER_FLAGS_COVERAGE )
 
 find_package(BLAS)
 find_package(LAPACK)
