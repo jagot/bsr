@@ -137,7 +137,7 @@
 
        js = jst(i); is = ist(i)
 
-       write(nu,'(2i5,3x,a,2i3,f10.5,F15.5,f12.1,f20.8,f15.5,2i6)') &
+       write(nu,'(2i5,3x,a,2i3,5g24.16,2i6)') &
         ilsp(is),js,label1(1:imax),JT(is),JP(is), &
         ee,e_eV,e_cm,E(i), Ebind(i), it_state(i), ich_state(i)
        isf = isf + 1
@@ -146,20 +146,20 @@
 
       write(nu,'(a)') '*'
       write(nu,*)
-      write(nu,'(a,f7.3)')  'Z    = ',Z
-      write(nu,'(a,f7.3)')  'AWT  = ',AWT
+      write(nu,'(a,f24.16)')  'Z    = ',Z
+      write(nu,'(a,f24.16)')  'AWT  = ',AWT
       write(nu,*)
-      write(nu,'(a,f18.8)') 'E0   = ',E0
-      write(nu,'(a,f18.8)') 'Emin = ',Emin
-      write(nu,'(a,f18.8)') 'Emax = ',Emax
+      write(nu,'(a,f24.16)') 'E0   = ',E0
+      write(nu,'(a,f24.16)') 'Emin = ',Emin
+      write(nu,'(a,f24.16)') 'Emax = ',Emax
       write(nu,*)
       write(nu,'(a,i3)')    'klsp1 = ',klsp1
       write(nu,'(a,i3)')    'klsp2 = ',klsp2
       write(nu,'(a,i3)')    'klsp3 = ',klsp3
       write(nu,*)
-      write(nu,'(a,f16.6)') 'au_eV= ',au_eV
-      write(nu,'(a,f16.6)') 'au_cm= ',au_cm
-      write(nu,'(a,f16.6)') 'cm_ev= ',au_cm/au_ev
+      write(nu,'(a,f24.16)') 'au_eV= ',au_eV
+      write(nu,'(a,f24.16)') 'au_cm= ',au_cm
+      write(nu,'(a,f24.16)') 'cm_ev= ',au_cm/au_ev
       write(nu,*)
       write(nu,'(a,i5)')    'nstate = ',isf
 
