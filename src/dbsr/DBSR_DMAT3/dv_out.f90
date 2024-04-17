@@ -88,4 +88,6 @@
 
       Deallocate(C1,C2)
 
+      close(nuv)
+
       End Subroutine dv_out

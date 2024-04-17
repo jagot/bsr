@@ -82,11 +82,16 @@
        Call Gen_zf
       end if
 
+      if(dd.eq.'y') then
+         if(ctype1.eq.'b'.and.ctype2.eq.'b') then
+            Call dd_out
+         else
+            stop 'Both bra and ket sets of states must be of bound type'
+         end if
+      end if
+
       Call CPU_time(t2)
       write(pri,'(a,T30,f10.2,a)') 'DBSR_DMAT:  ',(t2-t1)/60,' min '
       write(*  ,'(a,T30,f10.2,a)') 'DBSR_DMAT:  ',(t2-t1)/60,' min '
 
       End ! program DBSR_DMAT
-
-
-

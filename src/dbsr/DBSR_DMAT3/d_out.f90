@@ -96,4 +96,6 @@
 
       Deallocate(CL,CV,eval)
 
+      close(nud)
+
       End Subroutine D_out
