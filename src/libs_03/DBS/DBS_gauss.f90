@@ -77,7 +77,8 @@
      Integer :: i,m,nw
 
      if(allocated(bsp)) &
-      Deallocate(bsp,bsq,bspd,bspdd,gr,grm,grw,dbiatx)
+          Deallocate(bsp,bsq,bspd,bspdd,gr,grm,grw,ygw,dbiatx, &
+          gx, gw)
      nw = nv+1
      Allocate(bsp (nw,ks,ks), bsq  (nw,ks,ks), &
               bspd(nw,ks,ks), bspdd(nw,ks,ks), &

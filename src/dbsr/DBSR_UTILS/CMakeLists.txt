@@ -42,3 +42,6 @@ target_link_libraries(rw123 zconfjj zcom)
 
 add_executable(rw_dat rw_dat.f90)
 target_link_libraries(rw_dat zconfjj zcom)
+
+add_executable(dbsw_regrid dbsw_regrid.f90)
+target_link_libraries(dbsw_regrid dbs zconfjj zcom)
