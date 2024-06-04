@@ -305,7 +305,7 @@ contains
     Character(40), intent(in) :: filename
     real(8), intent(in) :: e_orb(:)
 
-    Integer :: nu, i
+    Integer :: nu=1, i
 
     open(nu, file=trim(filename), form='UNFORMATTED')
     write(nu) grid_type,ns,ks,t(1:ns+ks),ksp,ksq
