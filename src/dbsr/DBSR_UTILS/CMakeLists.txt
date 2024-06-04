@@ -10,8 +10,8 @@ target_link_libraries(dbound_tab zcom)
 add_executable(dbsr_merge dbsr_merge.f90)
 target_link_libraries(dbsr_merge dbs zconfjj zcom)
 
-# add_executable(dbsw_tab dbsw_tab.f90)
-# target_link_libraries(dbsw_tab dbs zconfjj zcom)
+add_executable(dbsw_tab dbsw_tab.f90)
+target_link_libraries(dbsw_tab dbs zconfjj zcom)
 
 add_executable(mult_jj mult_jj.f90)
 target_link_libraries(mult_jj zconfjj zcom)
