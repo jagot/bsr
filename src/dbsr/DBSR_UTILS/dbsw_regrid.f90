@@ -225,7 +225,7 @@ contains
     call alloc_DBS_orbitals_pq(0, ns)
     call alloc_DBS_orbitals_pq(norb, ns)
     nbf = norb
-    mbs(1:norb) = tmp_mbs(:)
+    mbs(1:norb) = ns
     ebs(1:norb) = tmp_ebs(:)
 
     deallocate(tmp_mbs, tmp_ebs)
@@ -246,8 +246,6 @@ contains
 
     Real(8) :: Pcoef(ns), Qcoef(ns), a(ns,ns)
     Real(8) :: pm, qm, d, PP, QQ, PN
-
-    write(*,*) "nbf = ", nbf, "mbf = ", mbf
 
     do io = 1,nbf
        Pcoef = 0.d0
