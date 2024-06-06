@@ -80,7 +80,7 @@ program dbsw_tab
 
   ! ... Cycle over nl in input:
 
-  BF=AF; iaf=iaf+1; BF(iaf:iaf)='.'
+  BF=AF
 
   Do i=1,nbf
      ii = 1
@@ -92,11 +92,9 @@ program dbsw_tab
         end do
      end do
 
-     k=iaf; EL='     '; EL=ebs(i)
-     Do j=1,5
-        if(EL(j:j).eq.' ') Cycle
-        k=k+1; BF(k:k)=EL(j:j)
-     End do
+
+     write(BF,'(a,".",a)') trim(AF), adjustl(trim(ebs(i)))
+     write(*,*) BF
      iout=2; Open(iout,file=BF)
      write(iout,'(3(5x,a,10x))') 'R','P','Q'
 
