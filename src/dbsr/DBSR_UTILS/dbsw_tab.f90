@@ -64,7 +64,6 @@ program dbsw_tab
   Open(nuw,file=AF,status='OLD',form='UNFORMATTED')
   Call Read_pqbs(nuw)
   Close(nuw)
-  iaf = LEN_TRIM(AF)
 
   ! ... sets up grid points and initializes the values of the spline:
 
