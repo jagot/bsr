@@ -29,7 +29,7 @@ program dbsw_grid
   Implicit none
   Integer, External :: Icheck_file
 
-  character(80) :: src_wfn_file="", dst_wfn_file="", &
+  character(256) :: src_wfn_file="", dst_wfn_file="", &
        src_grid_file="", dst_grid_file="", &
        name=""
 
@@ -95,7 +95,7 @@ contains
     use DBS_gauss
 
     implicit none
-    Character(40), intent(in) :: filename
+    Character(256), intent(in) :: filename
     Character(40) :: name = ' '
     Real(8) :: z = 0.d0, awt = 0.d0
 
@@ -117,7 +117,7 @@ contains
     use DBS_orbitals_pq
 
     Implicit none
-    character(80), intent(in) :: filename
+    character(256), intent(in) :: filename
     real(8), intent(out) :: e_orb(:)
 
     Integer :: nu = 1
@@ -128,53 +128,6 @@ contains
 
     write(*,'("Number of orbitals: ",i10)') nbf
   end subroutine load_source_orbitals
-
-  !======================================================================
-  Subroutine read_pqbs(nu, e_orb)
-    !======================================================================
-    !     read B-spline w.f. from bsw-file (unit nu)
-    !     stolen from bsw_rw.f90
-    !----------------------------------------------------------------------
-    Use DBS_grid
-    Use DBS_gauss
-    Use DBS_orbitals_pq
-
-    Implicit none
-    Integer, intent(in) :: nu
-    real(8), intent(out) :: e_orb(:)
-
-    Integer :: i,j,k,l,n,m,itype,nsw,ksw,mw,kp,kq
-    Character(5) :: elw
-    Integer, external :: Ifind_bsorb
-    Real(8) :: tt(ns+ks), S
-
-    rewind(nu)
-    read(nu) itype,nsw,ksw,tt,kp,kq
-    if(grid_type.gt.0.and.itype.ne.grid_type) &
-         Stop 'Stop in read_dbsw: another grid_type ?'
-    if(ksw.ne.ks) Stop ' Read_pqbs:  ksw <> ks'
-    if(nsw.ne.ns) Stop ' Read_pqbs:  nsw <> ns'
-    if(ksp.ne.kp) Stop ' Read_pqbs:  ksp <> kp'
-    if(ksq.ne.kq) Stop ' Read_pqbs:  ksq <> kq'
-    k=1
-    Do i=1,ns+ks
-       if(abs(t(i)-tt(i)).lt.1.d-12) Cycle; k=0; Exit
-    End do
-    if(k.eq.0) Stop 'Stop in read_pqbs: another knot grid ?'
-
-1   read(nu,end=2) elw,mw,S
-    Call EL_NLJK(elw,n,k,l,j,i)
-    m = Ifind_bsorb(n,k,i,2)
-    e_orb(m) = S
-    mbs(m)=mw
-    pq(1:ns,1,m)=0.d0; read(nu) pq(1:mw,1,m)
-    pq(1:ns,2,m)=0.d0; read(nu) pq(1:mw,2,m)
-    bpq(:,1,m) = MATMUL(fpbs,pq(:,1,m))
-    bpq(:,2,m) = MATMUL(fqbs,pq(:,2,m))
-    go to 1
-2   Close(nu)
-
-  End subroutine read_pqbs
 
   subroutine evaluate_orbitals(dst_gr, pr, qr, dst_nv, dst_ks)
     Use DBS_grid
@@ -300,7 +253,7 @@ contains
 
     Implicit none
 
-    Character(40), intent(in) :: filename
+    Character(256), intent(in) :: filename
     real(8), intent(in) :: e_orb(:)
 
     Integer :: nu=1, i

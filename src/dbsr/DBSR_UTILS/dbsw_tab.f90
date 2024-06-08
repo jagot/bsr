@@ -26,7 +26,7 @@ program dbsw_tab
   Implicit real(8) (A-H,O-Z)
   Character(1) :: ans
   Character(5) :: EL
-  Character(40) :: AF,BF,knot_file
+  Character(256) :: AF,BF,knot_file
   Real(8), allocatable ::  R(:),P(:),Q(:)
 
   Integer i1,j1
@@ -59,9 +59,9 @@ program dbsw_tab
   ! Call alloc_DBS_galerkin
 
   ! ... radial w.f.:
-
+  write(*,'("Loading orbitals from ",a)') trim(AF)
   nuw=1
-  Open(nuw,file=AF,status='OLD',form='UNFORMATTED')
+  Open(nuw,file=trim(AF),status='OLD',form='UNFORMATTED')
   Call Read_pqbs(nuw)
   Close(nuw)
 
@@ -93,8 +93,8 @@ program dbsw_tab
 
 
      write(BF,'(a,".",a)') trim(AF), adjustl(trim(ebs(i)))
-     write(*,*) BF
-     iout=2; Open(iout,file=BF)
+     write(*,*) trim(BF)
+     iout=2; Open(iout,file=trim(BF))
      write(iout,'(3(5x,a,10x))') 'R','P','Q'
 
      S=1.d0
@@ -114,58 +114,15 @@ contains
     use DBS_gauss
 
     implicit none
-    Character(40), intent(in) :: filename
-    Character(40) :: name = ' '
+    Character(256), intent(in) :: filename
+    Character(256) :: name = ' '
     Real(8) :: z = 0.d0, awt = 0.d0
 
-    write(*,'("Loading knot set from ",a)') filename
+    write(*,'("Loading knot set from ",a)') trim(filename)
 
     call Check_file(filename)
     call def_grid(filename, name, z, awt)
     call alloc_DBS_gauss
 
   end subroutine load_grid
-
-
-  !======================================================================
-  Subroutine Read_pqbs(nu)
-    !======================================================================
-    !
-    !     read B-spline w.f. from bsw-file (unit nu) only those orbitals
-    !     which labels are already in the list
-    !
-    !----------------------------------------------------------------------
-
-    USE DBS_grid
-    USE DBS_gauss
-    USE DBS_orbitals_pq
-
-    Implicit none
-
-    Integer, intent(in) :: nu
-    Integer :: i,j,k,l,n,m,itype,nsw,ksw,mw,kp,kq
-    Character(5) :: elw
-    Integer, External :: Ifind_bsorb,Iadd_bsorb
-    Real(8) :: tt(ns+ks)
-
-    rewind(nu)
-    read(nu) itype,nsw,ksw,tt,kp,kq
-    if(itype.ne.grid_type) Stop ' Read_pqbs:  another grid_type'
-    if(ksw.ne.ks) Stop ' Read_pqbs:  ksw <> ks'
-    if(nsw.ne.ns) Stop ' Read_pqbs:  nsw <> ns'
-    if(ksp.ne.kp) Stop ' Read_pqbs:  ksp <> kp'
-    if(ksq.ne.kq) Stop ' Read_pqbs:  ksq <> kq'
-    Do i=1,ns+ks
-       if(tt(i).ne.t(i)) Stop ' Read_pqbs:  t <> tt'
-    End do
-
-1   read(nu,end=2) elw,mw
-    Call EL_NLJK(elw,n,k,l,j,i)
-    m = Ifind_bsorb(n,k,i,2)
-    mbs(m)=mw
-    pq(1:ns,1,m)=0.d0; read(nu) pq(1:mw,1,m)
-    pq(1:ns,2,m)=0.d0; read(nu) pq(1:mw,2,m)
-    go to 1
-2   Close(nu)
-  End subroutine Read_pqbs
 end program dbsw_tab

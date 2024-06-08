@@ -32,7 +32,7 @@
 
 ! ... where to look for the grid:
 
-      Character(80) :: AF_grid = 'knot.dat'
+      Character(512) :: AF_grid = 'knot.dat'
 
       End Module DBS_grid
 
@@ -64,12 +64,12 @@
 
       if(len_trim(knot).ne.0) then
        AF_grid = knot
-       Inquire(file=AF_grid,exist=EX)
+       Inquire(file=trim(AF_grid),exist=EX)
        if(EX) Call Find_free_unit(nug)
-       if(INDEX(knot,'.bsw').eq.0) then
+       if(INDEX(trim(knot),'.bsw').eq.0) then
         if(nug.gt.0) Open(nug,file=AF_grid)
        else
-        if(nug.gt.0) Open(nug,file=AF_grid,form='UNFORMATTED')
+        if(nug.gt.0) Open(nug,file=trim(AF_grid),form='UNFORMATTED')
         grid_type = -2
        end if
       end if
@@ -77,7 +77,7 @@
       if(nug.eq.0.and.len_trim(name).ne.0) then
        AF_grid = trim(name)//'.knot'
        Call Find_free_unit(nug)
-       Open(nug,file=AF_grid)
+       Open(nug,file=trim(AF_grid))
       end if
 
 ! ... create knot.dat as example:
@@ -87,7 +87,8 @@
        Call Read_nuclear(0,z,atw)
        Call mkgrid_01
        Call Write_knotdat
-       Stop 'check knot.dat file first'
+       write(*,*) 'check knot.dat file first'
+       Stop 1
       end if
 
 ! ... check nuclear parameters first:
@@ -235,7 +236,7 @@
       Integer :: i, nug
 
       Call Find_free_unit(nug)
-      Open(nug,file=AF_grid)
+      Open(nug,file=trim(AF_grid))
       rewind(nug)
 
       write(nug,'(a,i3,6x)') 'grid_type = ',grid_type

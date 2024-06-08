@@ -52,7 +52,7 @@
       Implicit none
       Character(*) :: name, avalue
       Integer :: iarg,i,i1,i2,iname
-      Character(80) :: AS
+      Character(512) :: AS
 
       iarg = command_argument_count(); if(iarg.eq.0) Return
       iname=LEN_TRIM(name)
@@ -119,7 +119,7 @@
       Implicit none
       Character(*) :: name
       Integer :: iarg,i
-      Character(80) :: AS
+      Character(512) :: AS
 
       iarg = command_argument_count(); if(iarg.eq.0) Return
       Do i=1,iarg

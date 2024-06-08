@@ -26,7 +26,7 @@ program grid_tab
   Implicit none
   Integer, External :: Icheck_file
 
-  character(80) :: grid_file="knot.dat", tab_file="",  name=""
+  character(256) :: grid_file="knot.dat", tab_file="",  name=""
 
   Real(8), allocatable :: r(:),cp(:),cq(:),chip(:,:),chiq(:,:)
   Real(8) :: tr, dr
@@ -108,6 +108,7 @@ program grid_tab
   end do
 
   nu = 1
+  write(*,*) "grid_file = ", grid_file
   write(tab_file,'(a,".tab")') trim(grid_file)
   open(nu, file=trim(tab_file), form='FORMATTED')
   write(nu, '("nr = ",i5)') nr
