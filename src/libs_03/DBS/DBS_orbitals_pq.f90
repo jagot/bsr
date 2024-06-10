@@ -42,64 +42,128 @@ Module DBS_orbitals_pq
 contains
 
   !======================================================================
-  Subroutine read_pqbs(nu, e_orb)
+  Subroutine read_pqbs(nu, e_orb, convert)
     !======================================================================
     !     read B-spline w.f. from bsw-file (unit nu) only those orbitals
     !     which labels are already in the list
     !----------------------------------------------------------------------
     Use DBS_grid
     Use DBS_gauss
+    Use, intrinsic :: iso_fortran_env, only : iostat_end
 
     Implicit none
 
     Integer, intent(in) :: nu
     real(8), optional, intent(out) :: e_orb(:)
-    Integer :: i,j,k,l,n,m,itype,nsw,ksw,mw,kp,kq
+    Logical, optional, intent(in) :: convert
+
+    Integer :: i,j,k,l,n,m,itype,nsw,ksw,mw,kp,kq,ikp,ikq
     Character(5) :: elw
     Integer, external :: Ifind_bsorb
-    Real(8) :: tt(ns+ks), S
+    Real(8) :: S
+    Real(8), allocatable :: tw(:),pw(:),qw(:)
+    Logical :: convert_ = .false., need_conversion = .false.
+    Integer :: error
+
+    if(present(convert)) convert_ = convert
 
     rewind(nu)
-    read(nu) itype,nsw,ksw,tt,kp,kq
+    read(nu) itype,nsw,ksw
+    backspace(nu)
+    allocate(tw(nsw+ksw),pw(nsw),qw(nsw))
+    read(nu) itype,nsw,ksw,tw,kp,kq
+    ikp = ksw - kp
+    ikq = ksw - kq
+
     if(itype.ne.grid_type) then
-       write(*,'(" Read_pqbs:  another grid_type: itype = ",i15," <> grid_type = ",i15)') itype, grid_type
-       Stop 1
+       if(.not.convert_) then
+          write(*,'(" Read_pqbs:  another grid_type: itype = ",i15," <> grid_type = ",i15)') itype, grid_type
+          Stop 1
+       else
+          need_conversion = .true.
+       end if
     end if
     if(ksw.ne.ks) then
-       write(*,'(" Read_pqbs:  ksw =",i15," <> ks = ",i15)') ksw, ks
-       Stop 1
+       if(.not.convert_) then
+          write(*,'(" Read_pqbs:  ksw =",i15," <> ks = ",i15)') ksw, ks
+          Stop 1
+       else
+          need_conversion = .true.
+       end if
     end if
     if(nsw.ne.ns) then
-       write(*,'(" Read_pqbs:  nsw =",i15," <> ns = ",i15)') nsw, ns
-       Stop 1
+       if(.not.convert_) then
+          write(*,'(" Read_pqbs:  nsw =",i15," <> ns = ",i15)') nsw, ns
+          Stop 1
+       else
+          need_conversion = .true.
+       end if
     end if
     if(ksp.ne.kp) then
-       write(*,'(" Read_pqbs:  ksp =",i15," <> kp = ",i15)') ksp, kp
-       Stop 1
+       if(.not.convert_) then
+          write(*,'(" Read_pqbs:  ksp =",i15," <> kp = ",i15)') ksp, kp
+          Stop 1
+       else
+          need_conversion = .true.
+       end if
     end if
     if(ksq.ne.kq) then
-       write(*,'(" Read_pqbs:  ksq =",i15," <> kq = ",i15)') ksq, kq
-       Stop 1
-    end if
-    Do i=1,ns+ks
-       if(abs(t(i)-tt(i)) > 1.d-12) then
-          write(*,'(" Read_pqbs:  t =",1e20.13," <> tt =",1e20.13)') t(i), tt(i)
+       if(.not.convert_) then
+          write(*,'(" Read_pqbs:  ksq =",i15," <> kq = ",i15)') ksq, kq
           Stop 1
+       else
+          need_conversion = .true.
        end if
-    End do
+    end if
+    do i=1,ns+ks
+       if(abs(t(i)-tw(i)) > 1.d-12) then
+          if(.not.convert_) then
+             write(*,'(" Read_pqbs:  t - tw =",1e20.13,1e20.13," =",1e20.13)') t(i), tw(i), (t(i)-tw(i))
+             Stop 1
+          else
+             need_conversion = .true.
+             exit
+          end if
+       end if
+    end do
 
-1   read(nu,end=2) elw,mw,S
-    Call EL_NLJK(elw,n,k,l,j,i)
-    m = Ifind_bsorb(n,k,i,2)
-    if(present(e_orb)) e_orb(m) = S
-    mbs(m)=mw
-    pq(1:ns,1,m)=0.d0; read(nu) pq(1:mw,1,m)
-    pq(1:ns,2,m)=0.d0; read(nu) pq(1:mw,2,m)
-    bpq(:,1,m) = MATMUL(fpbs,pq(:,1,m))
-    bpq(:,2,m) = MATMUL(fqbs,pq(:,2,m))
-    go to 1
-2   Close(nu)
+    do
+       read(nu, iostat = error) elw,mw,S
+       select case(error)
+       case(0)
+       case(iostat_end)
+          exit
+       case Default
+          write(*, *) 'Error in reading file'
+          stop 1
+       end select
 
+       pw=0.d0; read(nu) pw(1:mw)
+       qw=0.d0; read(nu) qw(1:mw)
+
+       Call EL_NLJK(elw,n,k,l,j,i)
+       m = Ifind_bsorb(n,k,i,2)
+       if(m == 0) exit ! skip that orbital
+
+       if(present(e_orb)) e_orb(m) = S
+
+       if(.not.need_conversion) then
+          mbs(m)=mw
+          pq(:,1,m) = pw
+          pq(:,2,m) = qw
+          write(*,'(a," - read from file")') ebs(m)
+       else
+          Call Convert_pq(nsw-ikp,kp,tw(1+ikp),pw,nsp,ksp,pq(1,1,m),pbsp,fpbs,1,0)
+          Call Convert_pq(nsw-ikq,kq,tw(1+ikq),qw,nsq,ksq,pq(1,2,m),qbsp,fqbs,1,0)
+          mbs(m) = nsp-1
+          write(*,'(a," - read from file and converted")') ebs(m)
+       end if
+       bpq(:,1,m) = MATMUL(fpbs,pq(:,1,m))
+       bpq(:,2,m) = MATMUL(fqbs,pq(:,2,m))
+    end do
+    close(nu)
+
+    if(allocated(tw)) deallocate(tw,pw,qw)
   End subroutine read_pqbs
 
 

@@ -60,29 +60,12 @@ program dbsw_grid
   !    stop 1
   ! end if
 
-  ! We first need to load the destination grid, to generate the
-  ! quadrature nodes, on which we evaluate the orbitals.
   call load_grid(dst_grid_file)
-  dst_nv = nv
-  dst_ks = ks
-  allocate(dst_gr(dst_nv,dst_ks))
-  dst_gr(:,:) = gr(:,:)
-
-  ! We then load the source grid, so we may evaluate the orbitals.
-  call load_grid(src_grid_file)
   call load_source_orbitals(src_wfn_file, e_orb)
-  norb = nbf
-  call evaluate_orbitals(dst_gr, pr, qr, dst_nv, dst_ks)
-
-  ! Finally, we load the destination grid again, to perform the
-  ! inner products and solve the equation systems.
-  call load_grid(dst_grid_file)
-  call reallocate_orbitals(norb, ns)
-  call project_orbitals(pr, qr)
-  deallocate(dst_gr,pr,qr)
 
   ! Save the regridded orbitals to file
   call save_orbitals(dst_wfn_file, e_orb)
+
 contains
 
   subroutine print_help
@@ -99,18 +82,10 @@ contains
     Character(40) :: name = ' '
     Real(8) :: z = 0.d0, awt = 0.d0
 
-    write(*,'("Loading knot set from ",a)') filename
+    write(*,'("Loading knot set from ",a)') trim(filename)
 
     call def_grid(filename, name, z, awt)
     call alloc_DBS_gauss
-
-    ! write(*,*) "Knot set:"
-    ! write(*,'(5(1F26.14))') t
-    ! ! write(*,*) "Quadrature points:"
-    ! ! write(*,'(5(1F26.14))') gr
-    ! ! write(*,*) "Quadrature weights:"
-    ! ! write(*,'(5(1F26.14))') grw
-
   end subroutine load_grid
 
   subroutine load_source_orbitals(filename, e_orb)
@@ -123,129 +98,11 @@ contains
     Integer :: nu = 1
 
     open(nu, file=trim(filename), form='UNFORMATTED', status='OLD')
-    call read_pqbs(nu, e_orb)
+    call read_pqbs(nu, e_orb, .true.)
     close(nu)
 
     write(*,'("Number of orbitals: ",i10)') nbf
   end subroutine load_source_orbitals
-
-  subroutine evaluate_orbitals(dst_gr, pr, qr, dst_nv, dst_ks)
-    Use DBS_grid
-    Use DBS_gauss
-    Use DBS_orbitals_pq
-
-    Implicit none
-
-    Real(8), allocatable, intent(in) :: dst_gr(:,:)
-    Real(8), allocatable, intent(out) :: pr(:,:,:), qr(:,:,:)
-    Integer, intent(in) :: dst_nv, dst_ks
-
-    Integer :: io, i, j, m
-
-    Real(8), external :: bvalu2
-
-    allocate(pr(dst_nv,dst_ks,nbf),qr(dst_nv,dst_ks,nbf))
-
-    pr = 0.d0
-    qr = 0.d0
-
-    write(*,*) "nbf = ", nbf, "mbf = ", mbf
-    do io=1,nbf
-       m = mbs(io)
-       do i=1,dst_nv
-          do j=1,dst_ks
-             pr(i,j,io) = bvalu2(tp, pq(1,1,io), nsp, ksp, dst_gr(i,j), 0)
-             qr(i,j,io) = bvalu2(tq, pq(1,2,io), nsq, ksq, dst_gr(i,j), 0)
-          end do
-       end do
-    end do
-  end subroutine evaluate_orbitals
-
-  subroutine reallocate_orbitals(norb, ns)
-    Use DBS_orbitals_pq
-
-    Implicit none
-
-    Integer, intent(in) :: norb, ns
-
-    Integer, allocatable :: tmp_mbs(:)      ! number of splines
-    Character(5), allocatable :: tmp_ebs(:) ! spectroscopic notation
-
-    allocate(tmp_mbs(norb), tmp_ebs(norb))
-    tmp_mbs(:) = mbs(1:norb)
-    tmp_ebs(:) = ebs(1:norb)
-
-    call alloc_DBS_orbitals_pq(0, ns)
-    call alloc_DBS_orbitals_pq(norb, ns)
-    nbf = norb
-    mbs(1:norb) = ns
-    ebs(1:norb) = tmp_ebs(:)
-
-    deallocate(tmp_mbs, tmp_ebs)
-  end subroutine reallocate_orbitals
-
-  subroutine project_orbitals(pr, qr)
-    Use DBS_grid
-    Use DBS_gauss
-    Use DBS_orbitals_pq
-
-    Implicit none
-
-    Real(8), allocatable, intent(in) :: pr(:,:,:), qr(:,:,:)
-
-    Integer :: io, i, j, iv, ip
-
-    Real(8), external :: bvalu2, QUADR
-
-    Real(8) :: Pcoef(ns), Qcoef(ns), a(ns,ns)
-    Real(8) :: pm, qm, d, PP, QQ, PN
-
-    do io = 1,nbf
-       Pcoef = 0.d0
-       Qcoef = 0.d0
-       do iv = 1,nv
-          do ip = 1,ksp
-             i = iv+ip-1
-             do j = 1,ks
-                Pcoef(i) = Pcoef(i) + pr(iv,j,io)*grw(iv,j)*pbsp(iv,j,ip)
-                Qcoef(i) = Qcoef(i) + qr(iv,j,io)*grw(iv,j)*qbsp(iv,j,ip)
-             end do
-          end do
-       end do
-
-       a(1:nsp-1,1:nsp-1)=fpbs(2:nsp,2:nsp)
-       Call gaussj (a,nsp-1,ns,Pcoef(2),1,ns)
-       Pcoef(1)=0.d0
-
-       a(1:nsq-1,1:nsq-1)=fqbs(2:nsq,2:nsq)
-       Call gaussj (a,nsq-1,ns,Qcoef(2),1,ns)
-       Qcoef(1)=0.d0
-
-       pq(:,1,io) = Pcoef
-       pq(:,2,io) = Qcoef
-
-       ! ... check the normalization
-
-       PN = sqrt(QUADR(pq(1,1,io),pq(1,1,io),0))
-       pq(:,:,io)=pq(:,:,io)/PN
-
-       ! ... max.deviation from original orbital:
-
-       pm = 0.d0
-       do i = 1,nv
-          do j = 1,ks
-             PP = bvalu2(tp,pq(1,1,io),nsp,ksp,gr(i,j),0)
-             d = abs(PP-pr(i,j,io));  if(d.gt.pm) pm = d
-
-             QQ = bvalu2(tq,pq(1,2,io),nsq,ksq,gr(i,j),0)
-             d = abs(QQ-qr(i,j,io)); if(d.gt.qm) qm = d
-          end do
-       end do
-
-       write(*,'(a5,4(a,E12.3))')  &
-            ebs(io), '  diff_p =',pm,'   diff_q =',qm,'   (norm -1) =',PN-1.d0
-    end do
-  end subroutine project_orbitals
 
   subroutine save_orbitals(filename, e_orb)
     Use DBS_grid

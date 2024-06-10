@@ -108,7 +108,6 @@ program grid_tab
   end do
 
   nu = 1
-  write(*,*) "grid_file = ", grid_file
   write(tab_file,'(a,".tab")') trim(grid_file)
   open(nu, file=trim(tab_file), form='FORMATTED')
   write(nu, '("nr = ",i5)') nr
@@ -143,12 +142,12 @@ contains
     use DBS_gauss
 
     implicit none
-    Character(40), intent(in) :: filename
+    Character(256), intent(in) :: filename
     Integer, intent(in) :: verbosity
-    Character(40) :: name = ' '
+    Character(256) :: name = ' '
     Real(8) :: z = 0.d0, awt = 0.d0
 
-    if(verbosity>0) write(*,'("Loading knot set from ",a)') filename
+    if(verbosity>0) write(*,'("Loading knot set from ",a)') trim(filename)
 
     call def_grid(filename, name, z, awt)
     call alloc_DBS_gauss
