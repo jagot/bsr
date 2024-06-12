@@ -101,7 +101,7 @@ program dbsw_tab
      !       S = c_au * 2.d0 * t(ns+1) / kbs(i)
 
      Do j=1,nr
-        write(iout,'(3D16.8)') R(j),P(j),Q(j)*S
+        write(iout,'(3E26.16e3)') R(j),P(j),Q(j)*S
      End do
 
   End do
