@@ -13,12 +13,11 @@
 !  INPUT FILES:
 !
 !     src_wfn  -  w.f. file on source grid
-!     src_grid -  B-spline parameters of source grid
-!     dst_grid -  B-spline parameters of destination grid
+!     grid     -  B-spline parameters of destination grid
 !
 !  OUTPUT FILES:
 !
-!     new.bsw     -  w.f. on destination grid
+!     new.bsw  -  w.f. on destination grid
 !
 !======================================================================
 program dbsw_grid
@@ -30,10 +29,9 @@ program dbsw_grid
   Integer, External :: Icheck_file
 
   character(256) :: src_wfn_file="", dst_wfn_file="", &
-       src_grid_file="", dst_grid_file="", &
+       grid_file="knot.dat", &
        name=""
 
-  Real(8), allocatable :: dst_gr(:,:), pr(:,:,:), qr(:,:,:)
   Real(8) :: e_orb(1000)
   Integer :: dst_nv, dst_ks, norb
 
@@ -42,25 +40,23 @@ program dbsw_grid
 
   Call Read_aarg('src_wfn', src_wfn_file)
   Call Read_aarg('dst_wfn', dst_wfn_file)
-  Call Read_aarg('src_grid', src_grid_file)
-  Call Read_aarg('dst_grid', dst_grid_file)
+  Call Read_aarg('grid', grid_file)
 
   if(src_wfn_file == "" .or. dst_wfn_file == "" .or. &
-       src_grid_file == "" .or. dst_grid_file == "") then
+       grid_file == "") then
      call print_help
   end if
 
   call check_file(src_wfn_file)
-  call check_file(src_grid_file)
-  call check_file(dst_grid_file)
+  call check_file(grid_file)
 
-  ! if(Icheck_file(dst_wfn_file) == 1) then
-  !    write(*,'("Destination wfn already exists at ",a)') dst_wfn_file
-  !    write(*,*) "Please delete the file, if you wish to regrid again"
-  !    stop 1
-  ! end if
+  if(Icheck_file(dst_wfn_file) == 1) then
+     write(*,'("Destination wfn already exists at ",a)') trim(dst_wfn_file)
+     write(*,*) "Please delete the file, if you wish to regrid again"
+     stop
+  end if
 
-  call load_grid(dst_grid_file)
+  call load_grid(grid_file)
   call load_source_orbitals(src_wfn_file, e_orb)
 
   ! Save the regridded orbitals to file
@@ -69,7 +65,7 @@ program dbsw_grid
 contains
 
   subroutine print_help
-    write(*,*) "Usage: dbsw_regrid src_wfn= dst_wfn= src_grid= dst_grid="
+    write(*,*) "Usage: dbsw_regrid src_wfn= dst_wfn= grid="
     stop ''
   end subroutine print_help
 
