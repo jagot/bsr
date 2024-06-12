@@ -78,7 +78,7 @@ contains
     if(itype.ne.grid_type) then
        if(.not.convert_) then
           write(*,'(" Read_pqbs:  another grid_type: itype = ",i15," <> grid_type = ",i15)') itype, grid_type
-          Stop 1
+          error stop
        else
           need_conversion = .true.
        end if
@@ -86,7 +86,7 @@ contains
     if(ksw.ne.ks) then
        if(.not.convert_) then
           write(*,'(" Read_pqbs:  ksw =",i15," <> ks = ",i15)') ksw, ks
-          Stop 1
+          error stop
        else
           need_conversion = .true.
        end if
@@ -94,7 +94,7 @@ contains
     if(nsw.ne.ns) then
        if(.not.convert_) then
           write(*,'(" Read_pqbs:  nsw =",i15," <> ns = ",i15)') nsw, ns
-          Stop 1
+          error stop
        else
           need_conversion = .true.
        end if
@@ -102,7 +102,7 @@ contains
     if(ksp.ne.kp) then
        if(.not.convert_) then
           write(*,'(" Read_pqbs:  ksp =",i15," <> kp = ",i15)') ksp, kp
-          Stop 1
+          error stop
        else
           need_conversion = .true.
        end if
@@ -110,7 +110,7 @@ contains
     if(ksq.ne.kq) then
        if(.not.convert_) then
           write(*,'(" Read_pqbs:  ksq =",i15," <> kq = ",i15)') ksq, kq
-          Stop 1
+          error stop
        else
           need_conversion = .true.
        end if
@@ -119,7 +119,7 @@ contains
        if(abs(t(i)-tw(i)) > 1.d-12) then
           if(.not.convert_) then
              write(*,'(" Read_pqbs:  t - tw =",1e20.13,1e20.13," =",1e20.13)') t(i), tw(i), (t(i)-tw(i))
-             Stop 1
+             error stop
           else
              need_conversion = .true.
              exit
@@ -135,7 +135,7 @@ contains
           exit
        case Default
           write(*, *) 'Error in reading file'
-          stop 1
+          error stop
        end select
 
        pw=0.d0; read(nu) pw(1:mw)

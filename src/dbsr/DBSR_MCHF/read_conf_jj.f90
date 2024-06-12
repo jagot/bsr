@@ -18,7 +18,7 @@
       if(Icheck_file(AF_cfg).eq.0) then
        write(scr,'(/a,a,a/)') 'c-file ',trim(AF_cfg),' is absent'
        write(log,'(/a,a,a/)') 'c-file ',trim(AF_cfg),' is absent'
-       Stop 'DBSR_MCHF: stop in Read_conf_jj routine'
+       error stop 'DBSR_MCHF: stop in Read_conf_jj routine'
       else
        Open(nuc,file=AF_cfg)
        write(log,'(/a,T35,a)') 'Configuration file: ',trim(AF_cfg)
@@ -36,7 +36,7 @@
       else
        write(scr,'(/a/)') 'angular-coef-bank file is absent'
        write(log,'(/a/)') 'angular-coef-bank file is absent'
-       Stop 'DBSR_MCHF: stop in Read_conf_jj routine'
+       error stop 'DBSR_MCHF: stop in Read_conf_jj routine'
       end if
 
       write(log,'(/a,T35,a)') 'Angular-coefficients file: ',trim(AF_bnk)
@@ -47,7 +47,7 @@
       if(ncfg.eq.0) then
        write(scr,'(/a/)') 'Number of configuration ncfg = 0'
        write(log,'(/a/)') 'Number of configuration ncfg = 0'
-       Stop 'DBSR_MCHF: stop in Read_conf_jj routine'
+       error stop 'DBSR_MCHF: stop in Read_conf_jj routine'
       end if
 
       Call Read_core_jj(nuc)
@@ -75,7 +75,7 @@
     2 Continue
 
       if(nsymt.gt.nsymt0.or.nsymc.gt.nsymc0) &
-       Stop 'bnk-file is not complete - run dbsr_breit first!'
+       error stop 'bnk-file is not complete - run dbsr_breit first!'
 !----------------------------------------------------------------------
 ! ... define connection between states and symmetries:
 
@@ -108,7 +108,7 @@
        End do
        if(k.eq.1) Exit
       End do
-      if(k.eq.1) Stop 'bnk-file is not complete - run dbsr_breit first!'
+      if(k.eq.1) error stop 'bnk-file is not complete - run dbsr_breit first!'
 
       write(log,'(/80(''-''))')
       write(log,*)
