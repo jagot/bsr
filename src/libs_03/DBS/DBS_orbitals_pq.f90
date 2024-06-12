@@ -153,8 +153,8 @@ contains
           pq(:,2,m) = qw
           write(*,'(a," - read from file")') ebs(m)
        else
-          Call Convert_pq(nsw-ikp,kp,tw(1+ikp),pw,nsp,ksp,pq(1,1,m),pbsp,fpbs,1,0)
-          Call Convert_pq(nsw-ikq,kq,tw(1+ikq),qw,nsq,ksq,pq(1,2,m),qbsp,fqbs,1,0)
+          Call Convert_pq(nsw-ikp,kp,tw(1+ikp),pw,nsp,ksp,pq(1,1,m),pbsp,fpbs,1,1)
+          Call Convert_pq(nsw-ikq,kq,tw(1+ikq),qw,nsq,ksq,pq(1,2,m),qbsp,fqbs,1,1)
           mbs(m) = nsp-1
           write(*,'(a," - read from file and converted")') ebs(m)
        end if
