@@ -129,7 +129,7 @@ contains
 
     do
        if(present(e_orb)) then
-          read(nu, iostat = error) elw,mw,e_orb(m)
+          read(nu, iostat = error) elw,mw,S
        else
           read(nu, iostat = error) elw,mw
        end if
@@ -148,6 +148,8 @@ contains
        Call EL_NLJK(elw,n,k,l,j,i)
        m = Ifind_bsorb(n,k,i,2)
        if(m == 0) exit ! skip that orbital
+
+       if(present(e_orb)) e_orb(m) = S
 
        if(.not.need_conversion) then
           mbs(m)=mw
