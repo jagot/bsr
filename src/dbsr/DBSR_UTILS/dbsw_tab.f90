@@ -28,6 +28,7 @@ program dbsw_tab
   Character(5) :: EL
   Character(256) :: AF,BF,knot_file
   Real(8), allocatable ::  R(:),P(:),Q(:)
+  Real(8) :: e_orb(1000)
 
   Integer i1,j1
 
@@ -62,7 +63,7 @@ program dbsw_tab
   write(*,'("Loading orbitals from ",a)') trim(AF)
   nuw=1
   Open(nuw,file=trim(AF),status='OLD',form='UNFORMATTED')
-  Call Read_pqbs(nuw)
+  Call Read_pqbs(nuw, e_orb)
   Close(nuw)
 
   ! ... sets up grid points and initializes the values of the spline:

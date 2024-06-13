@@ -128,7 +128,11 @@ contains
     end do
 
     do
-       read(nu, iostat = error) elw,mw,S
+       if(present(e_orb)) then
+          read(nu, iostat = error) elw,mw,e_orb(m)
+       else
+          read(nu, iostat = error) elw,mw
+       end if
        select case(error)
        case(0)
        case(iostat_end)
@@ -144,8 +148,6 @@ contains
        Call EL_NLJK(elw,n,k,l,j,i)
        m = Ifind_bsorb(n,k,i,2)
        if(m == 0) exit ! skip that orbital
-
-       if(present(e_orb)) e_orb(m) = S
 
        if(.not.need_conversion) then
           mbs(m)=mw

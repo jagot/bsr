@@ -61,3 +61,12 @@ easy. Create a `build/` subdirectory, and compile from there:
 modules interdependencies).
 
 All executables can then be found under `build/bin/`.
+
+# Warnings
+
+The code is very complex and there are very few tests. It is very
+possible that due to refactoring of the code, it is no longer
+compatible with binary files created with earlier versions. The input
+format has not changed though, so the preferred way to store a
+calculation for future reuse is to version-control the input files and
+possibly the textual output.
