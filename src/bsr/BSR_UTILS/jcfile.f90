@@ -19,7 +19,7 @@
 
       Implicit none
 
-      Character(80) :: AF,BF,CF,name,out
+      Character(256) :: AF,BF,CF,name,out
 
       Integer :: nuc =1       !   name.c
       Integer :: nuj =2       !   name.m or name.bm
