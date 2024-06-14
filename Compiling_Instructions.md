@@ -10,8 +10,8 @@ ssh -XY x-ampuser@anvil.rcac.purdue.edu
 cd apps
 mkdir bsr && cd bsr
 git clone https://github.com/jagot/bsr
-git checkout fix-compile
 cd bsr
+git checkout fix-compile
 mkdir build && cd build
 module load intel/19.1.3.304
 export FC=$(which mpiifort)
@@ -38,10 +38,11 @@ ssh ampuser@bridges2.psc.edu
 cd apps
 mkdir bsr && cd bsr
 git clone https://github.com/jagot/bsr
-git checkout fix-compile
 cd bsr
+git checkout fix-compile
 mkdir build && cd build
-module load intel
+module load intel/2021.3.0
+module load intel-mpi
 export FC=$(which ifort)
 export CC=$(which icc)
 export CXX=$(which icpc)
@@ -66,8 +67,8 @@ ssh ampuser@frontera.tacc.utexas.edu
 cd apps
 mkdir bsr && cd bsr
 git clone https://github.com/jagot/bsr
-git checkout fix-compile
 cd bsr
+git checkout fix-compile
 mkdir build && cd build
 module load intel
 export FC=$(which mpif90)
@@ -97,8 +98,8 @@ ssh amos@login.ookami.stonybrook.edu
 cd apps
 mkdir bsr && cd bsr
 git clone https://github.com/jagot/bsr
-git checkout fix-compile
 cd bsr
+git checkout fix-compile
 mkdir build && cd build
 ssh fj-epyc
 module load intel/compiler
