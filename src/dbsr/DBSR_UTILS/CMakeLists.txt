@@ -1,3 +1,6 @@
+add_library(grid_tools tabulation_grid.f90)
+set_target_properties(grid_tools PROPERTIES Fortran_MODULE_DIRECTORY ${GLOBAL_Fortran_MODULE_DIRECTORY})
+
 add_executable(coef_jj coef_jj.f90)
 target_link_libraries(coef_jj zconfjj zcom)
 
@@ -11,7 +14,7 @@ add_executable(dbsr_merge dbsr_merge.f90)
 target_link_libraries(dbsr_merge dbs zconfjj zcom)
 
 add_executable(dbsw_tab dbsw_tab.f90)
-target_link_libraries(dbsw_tab dbs zconfjj zcom)
+target_link_libraries(dbsw_tab dbs zconfjj zcom grid_tools)
 
 add_executable(mult_jj mult_jj.f90)
 target_link_libraries(mult_jj zconfjj zcom)
@@ -47,4 +50,4 @@ add_executable(dbsw_regrid dbsw_regrid.f90)
 target_link_libraries(dbsw_regrid dbs zconfjj zcom)
 
 add_executable(grid_tab grid_tab.f90)
-target_link_libraries(grid_tab dbs zcom)
+target_link_libraries(grid_tab dbs zcom grid_tools)

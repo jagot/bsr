@@ -22,39 +22,36 @@ program dbsw_tab
   Use DBS_gauss
   Use DBS_orbitals_pq
   Use zconst, only: c_au
+  use grid_tools
 
-  Implicit real(8) (A-H,O-Z)
+  Implicit none
   Character(1) :: ans
   Character(5) :: EL
-  Character(256) :: AF,BF,knot_file
+  Character(256) :: AF="",BF="",knot_file="knot.dat"
   Real(8), allocatable ::  R(:),P(:),Q(:)
   Real(8) :: e_orb(1000)
+  Real(8) :: S
 
-  Integer i1,j1
+  Real(8) :: tr, dr
+  Integer :: nr = 101, i, j, nu, distribution=1, verbosity=0
+
+  Integer :: iout, nuw
+
+  Real(8), external :: bvalu2
 
   ! ... input data:
 
   AF = '?'
   call Read_name(AF)
 
-  if(AF.eq.'?') then
-     write(*,*)
-     write(*,*) 'dbsw_tab connverts the B-spline radial orbital wbs-files into'
-     write(*,*) 'text files suitable for grafic display'
-     write(*,*)
-     write(*,*) 'Call as:   dbsw_tab  name.bsw'
-     write(*,*)
-     write(*,*) 'file will be created for each orbital'
-     Stop ' '
-  end if
+  if(AF.eq.'?') call print_help
+
+  Call Read_aarg('grid', knot_file)
+  Call Read_iarg('nr', nr)
+  Call Read_iarg('distribution', distribution)
+  Call Read_iarg('verbosity', verbosity)
 
   ! ... set up B-splines:
-
-  knot_file = ""
-  Call Read_aarg('grid', knot_file)
-  if(knot_file == "") then
-     knot_file = 'knot.dat'
-  end if
 
   Call load_grid(knot_file)
   ! Call alloc_DBS_galerkin
@@ -67,31 +64,18 @@ program dbsw_tab
   Close(nuw)
 
   ! ... sets up grid points and initializes the values of the spline:
-
-  NR = nv*ks+2; Allocate(R(NR),P(NR),Q(NR))
-  ii=1; R(1)=0.d0
-  Do i=1,nv
-     Do j=1,ks
-        ii=ii+1
-        R(ii) = gr(i,j)
-     End do
-  End do
-  ii=ii+1; R(ii) = t(ns+1)
+  allocate(R(NR),P(NR),Q(NR))
+  call tabulation_grid(R, tmax, distribution)
 
   ! ... Cycle over nl in input:
 
   BF=AF
 
   Do i=1,nbf
-     ii = 1
-     do i1=1,nv
-        do j1=1,ks
-           P(ii) = bvalu2(tp, pq(1,1,i), nsp, ksp, gr(i1,j1), 0)
-           Q(ii) = bvalu2(tq, pq(1,2,i), nsq, ksq, gr(i1,j1), 0)
-           ii = ii + 1
-        end do
+     do j=1,nr
+        P(j) = bvalu2(tp, pq(1,1,i), nsp, ksp, R(j), 0)
+        Q(j) = bvalu2(tq, pq(1,2,i), nsq, ksq, R(j), 0)
      end do
-
 
      write(BF,'(a,".",a)') trim(AF), adjustl(trim(ebs(i)))
      write(*,*) trim(BF)
@@ -104,11 +88,24 @@ program dbsw_tab
      Do j=1,nr
         write(iout,'(3E26.16e3)') R(j),P(j),Q(j)*S
      End do
-
   End do
-
-
 contains
+  subroutine print_help
+    use grid_tools
+
+    implicit none(external)
+
+    write(*,*)
+    write(*,*) 'dbsw_tab converts the B-spline radial orbital wbs-files into'
+    write(*,*) 'text files suitable for graphic display'
+    write(*,*)
+    write(*,*) 'Call as:   dbsw_tab name.bsw  grid= nr= distribution='
+    write(*,*)
+    write(*,*) 'file will be created for each orbital'
+    write(*,*) ""
+    call print_distribution_help
+    stop
+  end subroutine print_help
 
   subroutine load_grid(filename)
     use DBS_grid
