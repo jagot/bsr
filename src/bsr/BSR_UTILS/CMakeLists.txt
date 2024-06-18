@@ -115,6 +115,9 @@ target_link_libraries(zf_bb_bsr zconfls zcom)
 add_executable(target_kpert target_kpert.f90)
 target_link_libraries(target_kpert zconfls zcom)
 
+add_executable(h_targb h_targb.f90)
+target_link_libraries(h_targb zconfls zcom)
+
 add_executable(add_farm add_farm.f90)
 target_link_libraries(add_farm zconfls zcom)
 
