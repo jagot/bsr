@@ -71,23 +71,35 @@
       Integer, intent(in) :: ncore,mbreit,kappa
       Integer :: k,ik
 
+      Real(8) :: t0, t1
+
       Call Alloc_dhl_core(ms,ncore)
       Call Alloc_bk4_data(0)
 
 ! ... set up hd matrix ...
 
+      call CPU_time(t0)
       Do ik = 1,nkap;  k=kap_list(ik)
        if(kappa.ne.0.and.kappa.ne.k) Cycle
+       call CPU_time(t1)
        Call MAT_dhl_pq(k)
        hd(1:ms,1:ms,ik) = dhl(1:ms,1:ms)
+       call timed_section_now(t1, "MAT_dhl_pq")
       End do  ! over kappa
+      call timed_section_now(t0, "Gen_dhl_core: setup hd matrix")
 
 ! ... core contribution:
 
+      call CPU_time(t0)
       if(ncore.gt.0) then
-       Call Add_int_core(ncore,mbreit,kappa)
-       Call Load_int_core
+         call CPU_time(t1)
+         Call Add_int_core(ncore,mbreit,kappa)
+         call timed_section_now(t0, "Gen_dhl_core: Add_int_core")
+         call CPU_time(t1)
+         Call Load_int_core
+         call timed_section_now(t0, "Gen_dhl_core: Load_int_core")
       end if
+      call timed_section_now(t0, "Gen_dhl_core: core contribution")
 
       End Subroutine Gen_dhl_core
 

@@ -49,21 +49,29 @@
 
 ! ... target information:
 
+      call CPU_time(t2)
       Call Check_file(AF_tar);  Open(nut,file=AF_tar)
       Call Read_target_jj(nut)
+      call timed_section_now(t2, "Read target")
 
 ! ... prepare B-splines and other relevant arrays:
 
+      call CPU_time(t2)
       Call read_knot_dat
       Call alloc_DBS_gauss
       Call Def_Vnucl
+      call timed_section_now(t2, "Prepare B-splines")
 
+      call CPU_time(t2)
       Call alloc_Rk_integrals(ns,ks,0,mk,ntype_R)
       if(mbreit.gt.0)  Call alloc_Sk_integral(ns,ks)
+      call timed_section_now(t2, "Allocate multipole integrals")
 
 ! ... find number of closed shells and core energy:
 
+      call CPU_time(t2)
       Call Def_core
+      call timed_section_now(t2, "Def_core")
 
 ! ... loop over partial waves:
 
@@ -96,23 +104,31 @@
       Integer, external :: Ifind_bsorb
       Real(8), external :: Ecore_dbs
 
+      Real(8) :: t0
+
 ! ... find nclosd and core energy:
 
       Ecore = 0
 
       i=LEN_TRIM(AF_cfg); write(AF_cfg(i-2:i),'(i3.3)') klsp1
       Call Check_file(AF_cfg); Open(nuc,file=AF_cfg)
+      call CPU_time(t0)
       Call Read_core_jj(nuc)
+      call timed_section_now(t0, "Read_core_jj")
 
       if(ncore.eq.0) Return
 
       Do i=1,nwf; j=Ifind_bsorb(NEF(i),KEF(i),IEF(i),2); End do
       mbs = 0
       Open(nuw, file=AF_bsw, STATUS='OLD', form='UNFORMATTED')
+      call CPU_time(t0)
       Call Read_dbsw(nuw,0,0)
+      call timed_section_now(t0, "Read_dbsw")
       Close(nuw)
 
+      call CPU_time(t0)
       Ecore = Ecore_dbs(ncore,mbreit,kbs)
+      call timed_section_now(t0, "Ecore_dbs")
 
       write(prj,'(/a,i10,T20,a)')  'ntarg  =',ntarg,'- number of target states'
       write(prj,'(/a,i10,T20,a)')  'ncore  =',ncore,'- number of core subshells'

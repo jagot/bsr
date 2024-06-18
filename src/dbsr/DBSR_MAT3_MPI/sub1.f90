@@ -9,18 +9,22 @@
 
       Implicit none
       Integer :: i,j, ich,jch, k, it, is,js, nelc_core
-      Real(8) :: C,t0,t1,t2
+      Real(8) :: C,t0,t1,t2,ta
       Integer, external :: Ifind_channel_jj, no_ic_jj
 
       Call CPU_time(t0)
 
 ! ... read configuration expansion and orbitals information:
 
+      Call CPU_time(ta)
       Call Read_data
+      call timed_section_now(ta, "Read_data")
 
 ! ... L-integrals for bound orbitals:
 
+      Call CPU_time(ta)
       Call Gen_dhl_core(ncore,mbreit,0)
+      call timed_section_now(ta, "Gen_dhl_core")
 
 ! ... initialize arrays:
 
@@ -81,13 +85,17 @@
 
 ! ... update <.|p> vectors:
 
+      Call CPU_time(ta)
       Call Get_v_ch(1)
+      call timed_section_now(ta, "Get_v_ch")
 
 ! ... diagonal overlap matrix:
 
+      Call CPU_time(ta)
       icase=0; Call Alloc_c_data(ntype_O,0,0,mblock,nblock,kblock,eps_c)
       Do ich=1,nch;  Call UPDATE_HX(ich,ich,fppqq,1.d0);  End do
       Call State_res
+      call timed_section_now(ta, "Update_HX + State_res")
 
 ! ... save overlaps diagonal blocks:
 

@@ -11,7 +11,7 @@
 
       Implicit none
       Integer :: i,j, ich,jch,  k, is,js, it, met, nelc_core
-      Real(8) :: C,CO,t0,t1,t2
+      Real(8) :: C,CO,t0,t1,t2,ta
       Real(8), allocatable :: btarg(:)
       Integer, external :: Ifind_channel_jj, no_ic_jj
       Integer :: status(MPI_STATUS_SIZE)
@@ -71,7 +71,9 @@
 
 ! ... L-integrals for bound orbitals:
 
+      ta = MPI_WTIME()
       Call Gen_dhl_core(ncore,mbreit,0)
+      call timed_section(ta, MPI_WTIME(), "Gen_dhl_core")
 
       t1 = MPI_WTIME()
       if(pri.ne.0) &
@@ -135,18 +137,24 @@
 
 ! ... update <.|p> vectors:
 
+      ta = MPI_WTIME()
       Call Get_v_ch(1)
+      call timed_section(ta, MPI_WTIME(), "Get_v_ch")
 
 ! ... calculate overlap matrix (diagonal blocks):
 
+      ta = MPI_WTIME()
       icase=0; Call Alloc_c_data(ntype_O,0,0,mblock,nblock,kblock,eps_c)
       Call State_res
+      call timed_section(ta, MPI_WTIME(), "State_res")
 
 ! ... B-spline overlaps:
 
+      ta = MPI_WTIME()
       Do ich=1,nch; if(icc(ich,ich).eq.0) Cycle
        Call UPDATE_HX(ich,ich,fppqq,1.d0)
       End do
+      call timed_section(ta, MPI_WTIME(), "Update_HX")
 
 ! ... save overlaps diagonal blocks:
 

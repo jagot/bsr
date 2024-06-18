@@ -45,10 +45,12 @@
 
 ! ... target:
 
+      t2 = MPI_WTIME()
       if(myid.eq.0) then
        Call Check_file(AF_tar);  Open(nut,file=AF_tar);  Call Read_target_jj(nut)
       end if
       Call br_target_jj
+      if(myid.eq.0) call timed_section(t2, MPI_WTIME(), "Read target")
 
 ! ... define arguments:
 
@@ -72,7 +74,9 @@
 
 ! ... find nclosd and core energy:
 
+      t2 = MPI_WTIME()
       Call Def_core
+      if(myid == 0) call timed_section(t2, MPI_WTIME(), "Def_core")
 
 ! ... loop over partial waves:
 

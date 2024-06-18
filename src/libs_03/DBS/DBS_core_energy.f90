@@ -211,17 +211,22 @@
       Integer, intent(in) :: ncore, mbreit, kbs(*)
       Integer :: i, int,k, i1,i2,j1,j2
       Real(8), external :: zint_pq
+      Real(8) :: t0
 
       Ecore_dbs = 0.d0;  if(ncore.eq.0) Return
 
+      call CPU_time(t0)
       if(nbk.eq.0) Call Get_core_coef (ncore,mbreit,kbs)
+      call timed_section_now(t0, "Ecore_dbs: Get_core_coef")
 
 ! ... evaluate the integrals:
 
+      call CPU_time(t0)
       Do i = 1,nbk; int=kr1(i); k=kr2(i)
        if(abs(cbk(i)).lt.eps_C) Cycle
        i1=kr3(i)/ibi; i2=mod(kr3(i),ibi)
        j1=kr4(i)/ibi; j2=mod(kr4(i),ibi)
        Ecore_dbs = Ecore_dbs + cbk(i)*zint_pq(int,i1,j1,i2,j2,k)
       End do
+      call timed_section_now(t0, "Ecore_dbs: zint_pq")
       End Function Ecore_dbs
