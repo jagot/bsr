@@ -363,7 +363,7 @@
 
       Call SUB_JJ
 
-      if(nch.ne.nch_save) Stop 'nch <> nch_save'
+      if(nch.ne.nch_save) Error Stop 'nch <> nch_save'
 
       ncfg_sct=ncfg; lcfg_sct=lcfg; nwf_sct=nwf
 

@@ -120,7 +120,7 @@
       Open(nuw,file=AF_wfn,form='UNFORMATTED')
       Call Read_bsw_orb_jj(nuw)
       Close(nuw)
-      if(nwf.ne.nwt) Stop 'nwf in target.bsw <> nwt'
+      if(nwf.ne.nwt) Error Stop 'nwf in target.bsw <> nwt'
       write(pri,'(/a,T33,i8)') 'number of target orbital:',nwf
       max_ll_targ = maxval(lef(1:nwf))
 
@@ -146,7 +146,7 @@
       End do
       write(pri,'(/a,T33,i8)') &
        'number of target configurations:',ncfg-ncfg_phys
-      if(ncfg-ncfg_phys.ne.nct) Stop 'ncfg_target <> nct from target'
+      if(ncfg-ncfg_phys.ne.nct) Error Stop 'ncfg_target <> nct from target'
       ncfg_targ=ncfg; lcfg_targ=lcfg; nwf_targ=nwf
 
 !      Call Test_ac  ???
@@ -155,7 +155,7 @@
 
       kpert=0; Call Read_ipar(nut,'kpert',kpert)
       Call Read_ipar(nut,'nlsp',nlsp)
-      if(nlsp.le.0) Stop 'dbsr_conf: nlsp <= 0 ? '
+      if(nlsp.le.0) Error Stop 'dbsr_conf: nlsp <= 0 ? '
       read(nut,*)
       Allocate(line(nlsp))
       Do i=1,nlsp;  read(nut,'(a)') line(i);  End do
@@ -277,7 +277,7 @@
 
       Call SUB_JJ
 
-      if(nch.ne.nch_save) Stop 'nch <> nch_save'
+      if(nch.ne.nch_save) Error Stop 'nch <> nch_save'
 
       ncfg_sct=ncfg; lcfg_sct=lcfg; nwf_sct=nwf
 

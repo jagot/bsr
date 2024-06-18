@@ -25,7 +25,7 @@
         ipef(ii)=jj
        else
         if(ipef(ii).ne.jj) &
-         Stop 'troubles with sustitution orbitals for pertuber'
+         Error Stop 'troubles with sustitution orbitals for pertuber'
        end if
       End do
       end if
@@ -83,7 +83,7 @@
       if(ncfg-ncfg_sct.ne.npert) then
        write(pri,'(/a,i5)') &
         'Check the double pertubers for given partial wave'
-        Stop 'Check the double pertubers'
+        Error Stop 'Check the double pertubers'
       end if
 
       write(pri,'(/a,T40,i8)') 'Number of perturber configurations:', ncp

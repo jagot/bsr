@@ -5,7 +5,7 @@
 !----------------------------------------------------------------------
       Use dbsr_conf,  JJ_coupling => J1_coupling, n=>no
 
-      if(n.gt.mshells) Stop 'make_coupling: no > mshells'
+      if(n.gt.mshells) Error Stop 'make_coupling: no > mshells'
 
 ! ... JJ-coupling:
 
@@ -43,7 +43,7 @@
       Implicit none
       Integer :: i,ii,m,ipos(mshells)
 
-      if(n.gt.mshells) Stop 'make_coupling: no > mshells'
+      if(n.gt.mshells) Error Stop 'make_coupling: no > mshells'
 
       Do i=1,n
        if(i.lt.ii) then;       ipos(i)=i

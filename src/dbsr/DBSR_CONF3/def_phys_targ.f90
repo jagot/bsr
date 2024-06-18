@@ -95,7 +95,7 @@
 
       if(ic1.gt.ic2) then
        write(pri,*) 'Can not find physical configuration for target ',it
-       Stop 'Can not find physical configuration'
+       Error Stop 'Can not find physical configuration'
       end if
 
       WW = sqrt(WW)

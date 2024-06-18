@@ -11,7 +11,7 @@
       Call MPI_COMM_RANK(MPI_COMM_WORLD, myid, ierr)
       Call MPI_BCAST(nphys_orb,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
 
-      if(nphys_orb.eq.0) Stop 'nphys_orb=0'
+      if(nphys_orb.eq.0) Error Stop 'nphys_orb=0'
 
       m = nphys_orb
       if(myid.ne.0) then

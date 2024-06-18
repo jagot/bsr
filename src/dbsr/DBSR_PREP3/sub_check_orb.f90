@@ -22,16 +22,16 @@
       rewind(nuw)
       read(nuw) igrid,nsw,ksw,tw(1:nsw+ksw),kp,kq
       ! ... check consistence of B-spline basis:
-      if(grid_type.gt.0.and.igrid.ne.grid_type) Stop 'Another knot grid?'
-      if(ksw.ne.ks) Stop ' Read_bsw:  ksw <> ks'
-      if(nsw.ne.ns) Stop ' Read_bsw:  nsw <> ns'
-      if(ksp.ne.kp) Stop ' Read_bsw:  ksp <> kp'
-      if(ksq.ne.kq) Stop ' Read_bsw:  ksq <> kq'
+      if(grid_type.gt.0.and.igrid.ne.grid_type) Error Stop 'Another knot grid?'
+      if(ksw.ne.ks) Error Stop ' Read_bsw:  ksw <> ks'
+      if(nsw.ne.ns) Error Stop ' Read_bsw:  nsw <> ns'
+      if(ksp.ne.kp) Error Stop ' Read_bsw:  ksp <> kp'
+      if(ksq.ne.kq) Error Stop ' Read_bsw:  ksq <> kq'
       k=1
       Do i=1,ns+ks
        if(abs(t(i)-tw(i)).lt.1.d-10) Cycle; k=0; Exit
       End do
-      if(k.eq.0) Stop 'Another knot grid t(1:ns+ks) ?'
+      if(k.eq.0) Error Stop 'Another knot grid t(1:ns+ks) ?'
 
     1 m=nbf+1; if(m.gt.mbf) CALL Alloc_DBS_orbitals_pq (mbf+ibf,ns)
       Call Idel_obs(m)
@@ -94,7 +94,7 @@
       if(ii.le.ncore) then
        write(pri,'(a,a,3E12.1)') elw,ebs(i),S,S1,S2
        write(pri,'(a,a,a)') 'file ',trim(AFW),'  has another core orbital'
-       Stop 'another core orbital ? '
+       Error Stop 'another core orbital ? '
       end if
 
 ! ... check orthogonality to core:
@@ -103,7 +103,7 @@
         if(abs(OBS(i,m)).gt.eps_core) then
         write(pri,'(a,a,a,E12.3)') &
         '  orbital ', elw, ' does not orthogonal to core:', OBS(i,m)
-        Stop 'problem with orthogonality to core'
+        Error Stop 'problem with orthogonality to core'
         end if
        end if
 
@@ -121,7 +121,7 @@
       Do i=ncore+1,nwf; ii=ipef(i)
        if(ii.eq.0) then
         write(pri,'(a,a,a)') 'orbital ',ELF(i),' not found in the bsw-file'
-        Stop ' unknown orbitals ! '
+        Error Stop ' unknown orbitals ! '
        else
         NEF(i)=nbs(ii);  KEF(i)=kbs(ii); IEF(i)=ibs(ii); ELF(i)=ebs(ii)
        end if
