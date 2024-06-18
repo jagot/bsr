@@ -106,7 +106,7 @@
       write(nuh) nelc,nz,LRANG2,km,ntarg,RA,RB
       write(nuh) (E_exp(ip_exp(i)),i=1,ntarg)
       write(nuh) (jtarg(ip_exp(i)),i=1,ntarg)
-      write(nuh) (0,i=1,ntarg)
+      write(nuh) (0,i=1,ntarg),(ptarg(ip_exp(i)),i=1,ntarg)
 
 ! ... Buttle corrections - don't Used in BSR !
 

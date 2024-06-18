@@ -156,3 +156,6 @@ target_link_libraries(mix_c zconfjj zcom)
 
 add_executable(order_jj order_jj.f90)
 target_link_libraries(order_jj zconfjj zcom)
+
+add_executable(h_txt h_txt.f90)
+target_link_libraries(h_txt zcom)
