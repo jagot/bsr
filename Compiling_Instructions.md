@@ -59,6 +59,35 @@ scp ampuser@login.expanse.sdsc.edu:/home/ampuser/apps/BSR/bsr/build/bin/*.sh /lo
 scp /local/spot/on/machine/*.sh /the/super/computer/used/:.../build/bin
 ```
 
+## Expanse
+```bash
+ssh -X ampuser@login.expanse.sdsc.edu
+
+# set up directories/modules/compilers
+cd apps
+mkdir BSR_updated && cd BSR_updated
+git clone https://github.com/jagot/bsr
+cd bsr
+git checkout fix-compile
+mkdir build && cd build
+module load intel/19.1.3.304
+module load intel-mpi/2019.10.317
+module load intel-mkl/2020.4.304
+export FC=$(which ifort)
+export CC=$(which icc)
+export CXX=$(which icpc)
+export PATH=$HOME/cmake/bin:$PATH
+export CMAKE_ROOT=$HOME/cmake/share/cmake-3.22
+export CMAKE_MODULE_PATH=$HOME/cmake/share/cmake-3.22/Modules
+
+# compile
+cmake -DCMAKE_C_COMPILER=mpiicc -DCMAKE_CXX_COMPILER=mpiicpc -DCMAKE_Fortran_COMPILER=mpiifort ../src/
+make
+
+# information about getting .sh files in /build/bin
+cp ~/apps/BSR/bsr/build/bin/*.sh ~/apps/BSR_updatead/bsr/build/bin
+```
+
 ## Frontera
 ```bash
 ssh ampuser@frontera.tacc.utexas.edu
@@ -95,7 +124,7 @@ scp /local/spot/on/machine/*.sh /the/super/computer/used/:.../build/bin
 ssh amos@login.ookami.stonybrook.edu
 
 # set up directories/modules/compilers
-cd apps
+cd apps2
 mkdir bsr && cd bsr
 git clone https://github.com/jagot/bsr
 cd bsr
