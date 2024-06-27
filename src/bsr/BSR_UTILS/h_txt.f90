@@ -132,11 +132,18 @@ contains
     end do
 
     write(out%unit,*)
-    write(out%unit,'("# Channel asymptotic multipoles:")')
+    write(out%unit,'("# Channel asymptotic multipoles (only non-zero values):")')
     write(out%unit,'("#",3a5,a26)') "i", "j", "k", "cf(i,j,k)"
     do i=1,nch
        do j=1,nch
+          ! k starts at 1, since there is no monopole in the
+          ! channel-off-diagonal scattering potential, cf. eq. (5) of
+          !
+          ! - Burke, V., & Noble, C. (1995). FARM --- a flexible asymptotic
+          !   $R$-matrix package. Computer Physics Communications, 85(3),
+          !   471–500. http://dx.doi.org/10.1016/0010-4655(94)00178-5
           do k=1,km
+             if(cf(i,j,k) == 0) cycle
              write(out%unit,'(" ",3i5,e26.16e3)') i, j, k, cf(i,j,k)
           end do
        end do
