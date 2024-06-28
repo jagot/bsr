@@ -6,6 +6,7 @@
       Use dbsr_mat
       Use c_data
       Use DBS_integrals, only: memory_DBS_integrals
+      Use Timer
 
       Implicit none
       Integer :: i,j, ich,jch, k, it, is,js, nelc_core

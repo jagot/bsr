@@ -75,7 +75,7 @@ program grid_tab
 
   allocate(r(nr),cp(nsp),cq(nsq),chip(nr,nsp),chiq(nr,nsq))
 
-  call tabulation_grid(r, tmax, distribution)
+  call tabulation_grid(r, rmax, distribution)
 
   do j=1,nsp
      cp = 0

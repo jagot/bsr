@@ -206,6 +206,7 @@
 !     compute energy of the common closed shells (core)
 !----------------------------------------------------------------------
       Use DBS_core_energy
+      Use Timer
 
       Implicit none
       Integer, intent(in) :: ncore, mbreit, kbs(*)
