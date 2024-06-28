@@ -54,6 +54,7 @@
       Call Read_aarg('gf'      ,gf     )
       Call Read_aarg('dd'      ,dd     )
       Call Read_iarg('debug'   ,debug  )
+      Call Read_rarg('eps_de'  ,eps_de )
 
       Call Read_aarg('atype'   ,atype  )
       Read(atype,'(1x,i1)') kpol; ktype = atype(1:1)

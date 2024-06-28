@@ -67,6 +67,7 @@
       Real(8), parameter :: eps_c    = 1.d-8
       Real(8), parameter :: eps_ndet = 1.d-8
       Real(8), parameter :: eps_ovl  = 1.d-8
+      Real(8), parameter :: eps_de   = 2.d-8
 
 ! ... packing number for overlaps:
       Integer :: ibo = 2**15
@@ -84,4 +85,3 @@
       Integer :: debug = 0
 
       End Module dbsr_dmat
-
