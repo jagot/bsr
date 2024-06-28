@@ -88,6 +88,13 @@ contains
     read(in%unit)
 
     read(in%unit) jpar, spar, par, nch, khm, more
+    ! The H.DAT format uses 0 for even and 1 for odd, we want +1 and
+    ! -1, respectively.
+    if(par == 0) then
+       par = 1
+    elseif(par == 1) then
+       par = -1
+    end if
 
     allocate(lch(nch),kch(nch),iptar(nch), &
          cf(nch,nch,km),eval(khm),wmat(nch,khm))
