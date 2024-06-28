@@ -12,6 +12,8 @@
       if(itype.eq.1) then
        i = INDEX(AF_rsol,'.'); AF = AF_rsol(1:i)//ALSP
        Open(nur,file=AF,form='UNFORMATTED')
+       write(*,'(7a10)') "mhm","khm","nch","npert","ms","nsp","nsq"
+       write(*,'(7i10)') mhm,khm,nch,npert,ms,nsp,nsq
        write(nur) mhm,khm,nch,npert,ms,nsp,nsq
        write(nur) eval(1:khm)
       end if

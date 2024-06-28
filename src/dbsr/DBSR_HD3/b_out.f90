@@ -35,6 +35,8 @@
 !----------------------------------------------------------------------
 !                                                  store the solutions:
 
+      write(*,'(7a10)') "mhm","nch","npert","ns","jpar","ipar","nbound"
+      write(*,'(7i10)') mhm,nch,npert,ns,jpar,ipar,nbound
       write(nuu) mhm,nch,npert,ns,jpar,ipar,nbound
 
       js = 0
