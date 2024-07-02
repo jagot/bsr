@@ -70,18 +70,12 @@ git clone https://github.com/jagot/bsr
 cd bsr
 git checkout fix-compile
 mkdir build && cd build
-module load intel/19.1.3.304
-module load intel-mpi/2019.10.317
-module load intel-mkl/2020.4.304
-export FC=$(which ifort)
-export CC=$(which icc)
-export CXX=$(which icpc)
-export PATH=$HOME/cmake/bin:$PATH
-export CMAKE_ROOT=$HOME/cmake/share/cmake-3.22
-export CMAKE_MODULE_PATH=$HOME/cmake/share/cmake-3.22/Modules
+module load cpu/0.15.4
+module load intel/19.1.1.217
+module load intel-mkl/2019.1.144
 
 # compile
-cmake -DCMAKE_C_COMPILER=mpiicc -DCMAKE_CXX_COMPILER=mpiicpc -DCMAKE_Fortran_COMPILER=mpiifort ../src/
+cmake ../src/
 make
 
 # information about getting .sh files in /build/bin
