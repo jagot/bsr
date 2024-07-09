@@ -93,9 +93,9 @@
       j = j_kappa(kappa)
 
       if(n.le.0.or.l.lt.0.or.j.le.0.or.k.lt.0) then
-       write(*,'(a,4i5)') &
-           ' ELj: parmeters are out of limits: n,l,j,k=',n,l,j,k
-       Stop 'Stop in Elj'
+       write(*,'(a,4i26)') &
+           ' ELi: parmeters are out of limits: n,l,j,k=',n,l,j,k
+       Error Stop 'Stop in Eli'
       end if
 
       EL='    '; i=5
@@ -149,9 +149,9 @@
       Character(1), external :: AL
 
       if(n.le.0.or.l.lt.0.or.j.le.0.or.k.lt.0) then
-       write(*,'(a,4i5)') &
+       write(*,'(a,4i10)') &
            ' ELj: parmeters are out of limits: n,l,j,k=',n,l,j,k
-       Stop 'Stop in Elj'
+       Error Stop 'Stop in Elj'
       end if
 
       EL='    '; i=5

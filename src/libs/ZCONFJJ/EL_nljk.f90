@@ -95,7 +95,7 @@
       if(n.le.0.or.l.lt.0.or.j.le.0.or.k.lt.0) then
        write(*,'(a,4i5)') &
            ' ELj: parmeters are out of limits: n,l,j,k=',n,l,j,k
-       Stop 'Stop in Elj'
+       Error Stop 'Stop in Elj'
       end if
 
       EL='    '; i=5
@@ -151,7 +151,7 @@
       if(n.le.0.or.l.lt.0.or.j.le.0.or.k.lt.0) then
        write(*,'(a,4i5)') &
            ' ELj: parmeters are out of limits: n,l,j,k=',n,l,j,k
-       Stop 'Stop in Elj'
+       Error Stop 'Stop in Elj'
       end if
 
       EL='    '; i=5
