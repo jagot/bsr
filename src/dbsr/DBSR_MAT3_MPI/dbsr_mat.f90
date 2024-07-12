@@ -33,6 +33,7 @@
 !=====================================================================
       Use dbsr_mat
       Use Timer
+      use, intrinsic :: iso_fortran_env, only : stdout=>output_unit
 
       Implicit none
       Real(8) :: t1,t2,t3
@@ -59,6 +60,10 @@
 
       call CPU_time(t2)
       Call read_knot_dat
+      if(debug > 0) then
+         write(*,*) "Knot file:"
+         call write_knotdat_header(stdout)
+      end if
       Call alloc_DBS_gauss
       Call Def_Vnucl
       call timed_section_now(t2, "Prepare B-splines")

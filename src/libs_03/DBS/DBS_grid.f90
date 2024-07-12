@@ -222,7 +222,46 @@
 
       End Subroutine read_grid_bsw
 
+      subroutine write_knotdat_header(nug)
+        Use DBS_grid
+        Use DBS_nuclear
 
+        implicit none
+        integer, intent(in) :: nug
+
+        write(nug,'(a,i3,6x)') 'grid_type = ',grid_type
+        write(nug,*)
+        write(nug,'(a,i5,15x,a)') 'ks =',ks,'!  order  of splines'
+        write(nug,'(a,i5,15x,a)') 'ns =',ns,'!  number of splines'
+        write(nug,'(a,i5,15x,a)') 'nv =',nv,'!  number of intervals'
+        write(nug,'(a,i5,15x,a)') 'ml =',ml,'!  number of initial equal-spaced intervals'
+        write(nug,*)
+        write(nug,'(a,i5,15x,a)') 'ksp=',ksp
+        write(nug,'(a,i5,15x,a)') 'ksq=',ksq
+        write(nug,*)
+        write(nug,'(a,f16.8,2x,a)') 'hi =   ',hi,  '!  initial step for r*zg '
+        write(nug,'(a,f16.8,2x,a)') 'he =   ',he,  '!  exponetial step size '
+        write(nug,'(a,f16.8,2x,a)') 'hmax = ',hmax,'!  maximum step size for r, given'
+        write(nug,'(a,f16.8,2x,a)') 'rmax = ',rmax,'!  maximum radius, given'
+        write(nug,'(a,f16.8,2x,a)') 'tmax = ',tmax,'!  maximum radius, actual'
+        write(nug,*)
+        write(nug,'(a,f8.4)') 'atomic_number = ',atomic_number
+        write(nug,'(a,f8.4)') 'atomic_weight = ',atomic_weight
+        write(nug,'(a,f8.4)') 'rrms          = ',rrms
+        write(nug,*)
+        write(nug,'(a,a)') 'nuclear =  ',nuclear
+
+        if(nuclear.eq.'Fermi') then
+           write(nug,*)
+           write(nug,'(a,d24.16,a)') 'c_fermi =   ',c_fermi,' !  in a.u.'
+           write(nug,'(a,d24.16,a)') 'a_fermi =   ',a_fermi,' !  in a.u.'
+        end if
+
+        if(nuclear.eq.'uniform') then
+           write(nug,*)
+           write(nug,'(a,E16.8,a)') 'r_uniform = ',r_uniform
+        end if
+      end subroutine write_knotdat_header
 
 !======================================================================
       Subroutine Write_knotdat
@@ -239,38 +278,7 @@
       Open(nug,file=trim(AF_grid))
       rewind(nug)
 
-      write(nug,'(a,i3,6x)') 'grid_type = ',grid_type
-      write(nug,*)
-      write(nug,'(a,i5,15x,a)') 'ks =',ks,'!  order  of splines'
-      write(nug,'(a,i5,15x,a)') 'ns =',ns,'!  number of splines'
-      write(nug,'(a,i5,15x,a)') 'nv =',nv,'!  number of intervals'
-      write(nug,'(a,i5,15x,a)') 'ml =',ml,'!  number of initial equal-spaced intervals'
-      write(nug,*)
-      write(nug,'(a,i5,15x,a)') 'ksp=',ksp
-      write(nug,'(a,i5,15x,a)') 'ksq=',ksq
-      write(nug,*)
-      write(nug,'(a,f16.8,2x,a)') 'hi =   ',hi,  '!  initial step for r*zg '
-      write(nug,'(a,f16.8,2x,a)') 'he =   ',he,  '!  exponetial step size '
-      write(nug,'(a,f16.8,2x,a)') 'hmax = ',hmax,'!  maximum step size for r, given'
-      write(nug,'(a,f16.8,2x,a)') 'rmax = ',rmax,'!  maximum radius, given'
-      write(nug,'(a,f16.8,2x,a)') 'tmax = ',tmax,'!  maximum radius, actual'
-      write(nug,*)
-      write(nug,'(a,f8.4)') 'atomic_number = ',atomic_number
-      write(nug,'(a,f8.4)') 'atomic_weight = ',atomic_weight
-      write(nug,'(a,f8.4)') 'rrms          = ',rrms
-      write(nug,*)
-      write(nug,'(a,a)') 'nuclear =  ',nuclear
-
-      if(nuclear.eq.'Fermi') then
-       write(nug,*)
-       write(nug,'(a,d24.16,a)') 'c_fermi =   ',c_fermi,' !  in a.u.'
-       write(nug,'(a,d24.16,a)') 'a_fermi =   ',a_fermi,' !  in a.u.'
-      end if
-
-      if(nuclear.eq.'uniform') then
-       write(nug,*)
-       write(nug,'(a,E16.8,a)') 'r_uniform = ',r_uniform
-      end if
+      call write_knotdat_header(nug)
 
       write(nug,*)
       write(nug,'(a)') 'grid points:'
@@ -394,6 +402,3 @@
       hmax = t(ns+1)-t(ns)
 
       End Subroutine mkgrid_02
-
-
-
