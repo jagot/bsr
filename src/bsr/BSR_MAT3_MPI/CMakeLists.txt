@@ -1,4 +1,4 @@
-if(${MPI_Fortran_FOUND})
+if(${BUILD_MPI_PROGRAMS})
   add_executable(bsr_mat3_mpi
     spline_moments.f90       spline_integrals.f90     rk_moments.f90  mrk_cell.f90
     mod_param_mpi.f90        mod_dets.f90             mod_ndef.f90

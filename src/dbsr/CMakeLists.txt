@@ -14,7 +14,7 @@ else()
   add_subdirectory(DBSR_UTILS)
   add_subdirectory(DBSR_jj2ls)
 
-  if(${MPI_Fortran_FOUND})
+  if(${BUILD_MPI_PROGRAMS})
     add_subdirectory(DBSR_BREIT3_MPI)
     add_subdirectory(DBSR_HD3_MPI)
   endif()

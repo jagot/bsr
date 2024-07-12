@@ -1,4 +1,4 @@
-if(${MPI_Fortran_FOUND})
+if(${BUILD_MPI_PROGRAMS})
   add_executable(bsr_breit4_mpi
     MOD_bsr_breit.f90        bsr_breit_mpi.f90
     add_it_oper.f90          add_res.f90              br_arg.f90

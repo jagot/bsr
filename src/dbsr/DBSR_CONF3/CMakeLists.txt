@@ -7,7 +7,7 @@ set(DBSR_CONF_COMMON_SOURCES
 add_executable(dbsr_conf3 ${DBSR_CONF_COMMON_SOURCES} dbsr_conf.f90)
 target_link_libraries(dbsr_conf3 zconfjj zcom)
 
-if(${MPI_Fortran_FOUND})
+if(${BUILD_MPI_PROGRAMS})
    add_executable(dbsr_conf3_mpi ${DBSR_CONF_COMMON_SOURCES}
     dbsr_conf_mpi.f90   br_arg.f90  br_conf_jj.f90  br_phys_orb_jj.f90  br_target_jj.f90)
    target_link_libraries(dbsr_conf3_mpi zconfjj zcom bsr_mpi)

@@ -11,7 +11,7 @@ add_executable(bsr_recoup4
   sub1.f90)
 target_link_libraries(bsr_recoup4 zconfls zcom shells)
 
-if(${MPI_Fortran_FOUND})
+if(${BUILD_MPI_PROGRAMS})
   add_executable(bsr_recoup4_mpi
     ${BSR_RECOUP4_COMMON_SOURCES}
     bsr_recoup_mpi.f90

@@ -25,7 +25,7 @@ add_executable(dbsr_mat3a
   sub1.f90)
 target_link_libraries(dbsr_mat3a dbs zconfjj zcom ${BLAS_LAPACK_LIBRARIES})
 
-if(${MPI_Fortran_FOUND})
+if(${BUILD_MPI_PROGRAMS})
   add_executable(dbsr_mat3a_mpi
     ${DBSR_MAT3A_SOURCE_COMMON}
     dbsr_mat_mpi.f90

@@ -21,7 +21,7 @@ add_executable(bsr_bmat4
 # We need to link as "zcom bs zcom" because of a circular dependency (full_mat_sym).
 target_link_libraries(bsr_bmat4 zconfls shells zcom bs zcom ${BLAS_LAPACK_LIBRARIES})
 
-if(${MPI_Fortran_FOUND})
+if(${BUILD_MPI_PROGRAMS})
   add_executable(bsr_bmat4_mpi
     ${BSR_BMAT4_COMMON_SOURCES}
     br_arg.f90

@@ -18,8 +18,10 @@ add_executable(bsr_conf3
   bsr_conf.f90)
 target_link_libraries(bsr_conf3 zconfls zcom shells)
 
-add_executable(bsr_conf3_mpi
-  ${BSR_CONF_COMMON_SOURCES}
-  bsr_conf_mpi.f90
-  br_arg.f90)
-target_link_libraries(bsr_conf3_mpi bsr_mpi zconfls zcom shells MPI::MPI_Fortran)
+if(${BUILD_MPI_PROGRAMS})
+  add_executable(bsr_conf3_mpi
+    ${BSR_CONF_COMMON_SOURCES}
+    bsr_conf_mpi.f90
+    br_arg.f90)
+  target_link_libraries(bsr_conf3_mpi bsr_mpi zconfls zcom shells MPI::MPI_Fortran)
+endif()

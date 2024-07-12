@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.22)
 project(bsr)
 
-IF(NOT CMAKE_BUILD_TYPE)
+IF(NOT DEFINED CMAKE_BUILD_TYPE)
   set (CMAKE_BUILD_TYPE Release CACHE STRING
-       CACHE STRING "Choose the type of build : None Debug Release Coverage."
+       "Choose the type of build : None Debug Release Coverage."
        FORCE)
-ENDIF(NOT CMAKE_BUILD_TYPE)
+ENDIF(NOT DEFINED CMAKE_BUILD_TYPE)
 message("Build type: ${CMAKE_BUILD_TYPE}")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
@@ -100,10 +100,16 @@ MARK_AS_ADVANCED(
     CMAKE_EXE_LINKER_FLAGS_COVERAGE
     CMAKE_SHARED_LINKER_FLAGS_COVERAGE )
 
+IF(NOT DEFINED BUILD_MPI_PROGRAMS)
+  set (BUILD_MPI_PROGRAMS ON CACHE BOOL
+       "Should MPI versions of the codes be builts? Default: ON"
+       FORCE)
+ENDIF(NOT DEFINED BUILD_MPI_PROGRAMS)
+
 find_package(BLAS)
 find_package(LAPACK)
 find_package(MPI)
-if(${MPI_Fortran_FOUND})
+if(${MPI_Fortran_FOUND} AND ${BUILD_MPI_PROGRAMS})
   find_package(SCALAPACK) # This defined an imported target
                           # "scalapack" which we can simply link to.
   message("MPI implementation found, enabling build of MPI executables")
@@ -111,6 +117,9 @@ if(${MPI_Fortran_FOUND})
     message("MPI and Scalapack found - enabling MPI Fortran")
     include_directories(${MPI_Fortran_INCLUDE_PATH})
   endif()
+else()
+  message("Disabling build of MPI executables")
+  set(BUILD_MPI_PROGRAMS OFF)
 endif()
 
 set(FC_MALLOC LINUX)
