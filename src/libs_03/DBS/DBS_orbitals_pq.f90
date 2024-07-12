@@ -41,6 +41,16 @@ Module DBS_orbitals_pq
 
 contains
 
+  subroutine read_error(nu, message)
+    implicit none
+    integer, intent(in) :: nu
+    character(len=*), intent(in) :: message
+    character(256) :: filename
+    inquire(unit=nu, name=filename)
+    write(*,'("Error when reading from ",a,":")') trim(filename)
+    error stop trim(message)
+  end subroutine read_error
+
   !======================================================================
   Subroutine read_pqbs(nu, e_orb, convert)
     !======================================================================
@@ -64,6 +74,7 @@ contains
     Real(8), allocatable :: tw(:),pw(:),qw(:)
     Logical :: convert_ = .false., need_conversion = .false.
     Integer :: error
+    character(256) :: error_message
 
     if(present(convert)) convert_ = convert
 
@@ -77,40 +88,40 @@ contains
 
     if(itype.ne.grid_type) then
        if(.not.convert_) then
-          write(*,'(" Read_pqbs:  another grid_type: itype = ",i15," <> grid_type = ",i15)') itype, grid_type
-          error stop
+          write(error_message, '(" Read_pqbs:  another grid_type: itype = ",i15," <> grid_type = ",i15)') itype, grid_type
+          call read_error(nu, error_message)
        else
           need_conversion = .true.
        end if
     end if
     if(ksw.ne.ks) then
        if(.not.convert_) then
-          write(*,'(" Read_pqbs:  ksw =",i15," <> ks = ",i15)') ksw, ks
-          error stop
+          write(error_message, '(" Read_pqbs:  ksw =",i15," <> ks = ",i15)') ksw, ks
+          call read_error(nu, error_message)
        else
           need_conversion = .true.
        end if
     end if
     if(nsw.ne.ns) then
        if(.not.convert_) then
-          write(*,'(" Read_pqbs:  nsw =",i15," <> ns = ",i15)') nsw, ns
-          error stop
+          write(error_message, '(" Read_pqbs:  nsw =",i15," <> ns = ",i15)') nsw, ns
+          call read_error(nu, error_message)
        else
           need_conversion = .true.
        end if
     end if
     if(ksp.ne.kp) then
        if(.not.convert_) then
-          write(*,'(" Read_pqbs:  ksp =",i15," <> kp = ",i15)') ksp, kp
-          error stop
+          write(error_message, '(" Read_pqbs:  ksp =",i15," <> kp = ",i15)') ksp, kp
+          call read_error(nu, error_message)
        else
           need_conversion = .true.
        end if
     end if
     if(ksq.ne.kq) then
        if(.not.convert_) then
-          write(*,'(" Read_pqbs:  ksq =",i15," <> kq = ",i15)') ksq, kq
-          error stop
+          write(error_message, '(" Read_pqbs:  ksq =",i15," <> kq = ",i15)') ksq, kq
+          call read_error(nu, error_message)
        else
           need_conversion = .true.
        end if
@@ -118,8 +129,8 @@ contains
     do i=1,ns+ks
        if(abs(t(i)-tw(i)) > 1.d-12) then
           if(.not.convert_) then
-             write(*,'(" Read_pqbs:  t - tw =",1e20.13,1e20.13," =",1e20.13)') t(i), tw(i), (t(i)-tw(i))
-             error stop
+             write(error_message, '(" Read_pqbs:  t - tw =",1e20.13,1e20.13," =",1e20.13)') t(i), tw(i), (t(i)-tw(i))
+             call read_error(nu, error_message)
           else
              need_conversion = .true.
              exit
@@ -138,8 +149,8 @@ contains
        case(iostat_end)
           exit
        case Default
-          write(*, *) 'Error in reading file'
-          error stop
+          write(error_message, *) 'Error in reading file'
+          call read_error(nu, error_message)
        end select
 
        pw=0.d0; read(nu) pw(1:mw)
@@ -189,16 +200,23 @@ contains
     Integer :: i,j,k,l,n,m,itype,nsw,ksw,mw
     Integer, External :: Ifind_bsorb
     Character(5) :: elw
+    character(80) :: error_message
     Real(8) :: x
 
     if(mode.eq.0)  Call alloc_DBS_orbitals_pq(0,ns)
 
     rewind(nu)
     read(nu) itype,nsw,ksw
-    if(ksw.ne.ks) Stop ' Read_dbsw:  ksw <> ks'
-    if(nsw.ne.ns) Stop ' Read_dbsw:  nsw <> ns'
+    if(ksw.ne.ks) then
+       write(error_message,'(" Read_dbsw:  ksw = ",i10," <> ks = ",i10)') ksw, ks
+       call read_error(nu, error_message)
+    end if
+    if(nsw.ne.ns) then
+       write(error_message,'(" Read_dbsw:  nsw = ",i10," <> ns = ",i10)') nsw, ns
+       call read_error(nu, error_message)
+    end if
     if(grid_type.gt.0.and.itype.ne.grid_type) &
-         Stop 'Stop in read_dbsw: another grid_type ?'
+         call read_error(nu, 'Stop in read_dbsw: another grid_type ?')
 
 1   read(nu,end=2) elw,mw
     Call EL_NLJK(elw,n,k,l,j,i); i=i+ishift; if(ishift.eq.-1) i=0
