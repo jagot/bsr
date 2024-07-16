@@ -106,8 +106,7 @@ IF(NOT DEFINED BUILD_MPI_PROGRAMS)
        FORCE)
 ENDIF(NOT DEFINED BUILD_MPI_PROGRAMS)
 
-find_package(BLAS)
-find_package(LAPACK)
+find_package(BLAS REQUIRED)
 find_package(MPI)
 if(${MPI_Fortran_FOUND} AND ${BUILD_MPI_PROGRAMS})
   find_package(SCALAPACK) # This defined an imported target
@@ -123,7 +122,7 @@ else()
 endif()
 
 set(FC_MALLOC LINUX)
-set(BLAS_LAPACK_LIBRARIES ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
+set(BLAS_LAPACK_LIBRARIES ${BLAS_LIBRARIES})
 
 if (NOT BSR_VERSION)
   set(BSR_VERSION 3)
