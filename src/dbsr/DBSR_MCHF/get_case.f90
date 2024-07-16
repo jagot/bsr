@@ -75,6 +75,9 @@
        Call Read_ipar(inp,'rotate' ,rotate )
        Call Read_ipar(inp,'debug'  ,debug  )
 
+       Call Read_ipar(inp,'mblock' ,mblock )
+       Call Read_ipar(inp,'nblock' ,nblock )
+
        Call Read_ipar(inp,'ipzero' ,ipzero )
        Call Read_ipar(inp,'iqzero' ,iqzero )
        Call Read_ipar(inp,'jpzero' ,jpzero )
@@ -108,6 +111,9 @@
       Call Read_iarg('newton' ,newton )
       Call Read_iarg('rotate' ,rotate )
       Call Read_iarg('debug'  ,debug  )
+
+      Call Read_iarg('mblock' ,mblock )
+      Call Read_iarg('nblock' ,nblock )
 
       Call Read_iarg('ipzero' ,ipzero )
       Call Read_iarg('iqzero' ,iqzero )
