@@ -55,6 +55,7 @@ program dbsw_grid
      write(*,*) "Please delete the file, if you wish to regrid again"
      stop
   end if
+  write(*,'("Regridding wfn to ",a)') trim(dst_wfn_file)
 
   call load_grid(grid_file)
   call load_source_orbitals(src_wfn_file, e_orb)

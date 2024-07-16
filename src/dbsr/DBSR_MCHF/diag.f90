@@ -52,6 +52,7 @@
       Integer :: i,j,k,ic,jc,info
       Real(8) :: HM(nc,nc),eval(nc),S
       Real(8), external :: rk_df, dhl_value
+      Character(256) :: error_msg
 
 ! ... set-up Hamitonian matrix for given block:
 
@@ -100,9 +101,13 @@
       Do i=1,nlevels; if(block(i).ne.ib) Cycle
        if(level(i).gt.k) k=level(i)
       End do
+      if(k < 0) then
+         write(error_msg, '("k = ", i10, " < 1 solutions requested for block #", i10)') k, ib
+         error stop trim(error_msg)
+      end if
 
       Call LAP_DSYEVX('V','L',nc,nc,HM,eval,k,info)
-      if(info.ne.0) Stop "Diag_block: DSYEVX failed"
+      if(info.ne.0) Error Stop "Diag_block: DSYEVX failed"
 
       Do i=1,nlevels; if(block(i).ne.ib) Cycle
        elevel(i) = eval(level(i))

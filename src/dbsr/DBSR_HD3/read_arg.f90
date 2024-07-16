@@ -48,9 +48,13 @@
 
       Allocate(E_exp(ntarg));  E_exp = etarg
 
+      write(*,'(i10," targets with energies:")') ntarg
+      write(*, '(1(e26.16))') E_exp
+
       if(iexp.gt.0) then
        i=Icheck_file(AF_exp)
-       if(i.eq.0) Stop 'iexp >0 but no file for exp. energies'
+       if(i.eq.0) Error Stop 'iexp >0 but no file for exp. energies'
+       write(*,'("Reading experimental thresholds from ",a)') AF_exp
        Open(nue,file=AF_exp)
        Do i=1,ntarg; read(nue,*) E_exp(i); End do
        Call Read_apar(nue,'unit',unit)
@@ -59,6 +63,8 @@
        if(unit.eq.'cm') E_exp = E_exp / au_cm + Etarg(it)
        if(unit.eq.'eV') E_exp = E_exp / au_eV + Etarg(it)
        Close(nue)
+       write(*,'(i10," targets with modified energies:")') ntarg
+       write(*, '(1(e26.16))') E_exp
       end if
 
       Allocate(ip_exp(ntarg))

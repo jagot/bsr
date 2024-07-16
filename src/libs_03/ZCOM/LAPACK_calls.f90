@@ -95,6 +95,17 @@
       Integer :: kk, lwork
       Real(8) :: ABSTOL, VL =0.d0, VU = 0.d0
       Real(8), external :: DLAMCH
+      Character(256) :: error_msg
+
+      if(m<n) then
+         write(error_msg, '("m = ",i10," < n = ",i10, ", m >= n required")') m, n
+         error stop trim(error_msg)
+      end if
+
+      if(k<1) then
+         write(error_msg, '("k = ",i10," < 1, k >= 1 required")') k
+         error stop trim(error_msg)
+      end if
 
       ABSTOL = 4*DLAMCH('S')
       lwork = 10*n
@@ -106,7 +117,7 @@
       if(kk.ne.k) then
        write(*,*) ' DSYEVX(lapack) provides',kk,' eigenvectors'
        write(*,*) ' when we ordered', k,'  ones'
-       Stop ' Stop in LAP_DSYEVX'
+       Error Stop ' Stop in LAP_DSYEVX'
       end if
 
       if(INFO.ne.0) write(*,*) 'DSYEVX(lapack) gives INFO = ',INFO

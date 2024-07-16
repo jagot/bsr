@@ -29,6 +29,8 @@
       Integer :: i,j,k,m,ic,ic1,ic2,nsol,isol,iarg,  IARGC, SYSTEM
       Integer, external :: Ifind_position, Icheck_file
 
+      Character(256) :: error_msg
+
 !----------------------------------------------------------------------
 !                                                           input data:
       iarg = IARGC()
@@ -72,10 +74,18 @@
 
       Call Check_file(AF); Open(nuj,file=AF)
 
+      write(*,'("Extracting solution #",i10," from ",a)') isol, trim(AF)
+
       Call Read_ipar(nuj,'ncfg',ic     )
-      if(ic.ne.ncfg) Stop 'jc: ncfg in j-file <> ncfg in c-file'
+      if(ic.ne.ncfg) then
+         write(error_msg, '("jc: ncfg in j-file = ",i10," <> ncfg in c-file = ",i10)') ic, ncfg
+         Stop trim(error_msg)
+      end if
       Call Read_ipar(nuj,'nsol',nsol)
-      if(isol.gt.nsol) Stop 'jc: # of solution > nsol'
+      if(isol.gt.nsol) then
+         write(error_msg, '("jc: # of solution =",i10," > nsol = ",i10)') isol, nsol
+         Error Stop trim(error_msg)
+      end if
 
       i=Ifind_position(nuj,'Solutions');  read(nuj,*)
 

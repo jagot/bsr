@@ -66,6 +66,8 @@
       Integer, intent(in) :: nt,kp1,kp2,mblock,nblock
       Real(8), intent(in) :: eps_c
       Integer :: m,i,j,k
+      Real(8) :: mr
+      Character(256) :: error_msg
 
       if(allocated(CDATA)) Deallocate(CDATA,K1,K2,K3,K4,IPT, &
                            ipblk,jpblk,ipi,ipj,iblk,nblk,kblk)
@@ -82,13 +84,25 @@
       eps_cdata = eps_c
 
       m = mb*nb
+      write(*,'("alloc_c_data: mb = ",i0,", nb = ",i0,", m = ",i0,", kpol1 = ",i0,", kpol2 = ",i0)') &
+           mb, nb, m, kpol1, kpol2
       Allocate(CDATA(m),K1(m),K2(m),K3(m),K4(m),IPT(m))
       Allocate(ipblk(nb),jpblk(nb),ipi(nb),ipj(nb), &
                iblk(kpol1:kpol2,ntype),nblk(kpol1:kpol2,ntype), &
                kblk(kpol1:kpol2,ntype,nb) )
 
       m = 7*m + 4*nb + (kpol2-kpol1+1)*(2+nb)*ntype
-      mem_cdata = m * 4.0 / (1024 * 1024)
+      mr = 7.d0*m + 4.d0*nb + (kpol2-kpol1+1.d0)*(2.d0+nb)*ntype
+      mem_cdata = mr * 4.0 / (1024 * 1024)
+
+      write(*,'("m = ",i0," mr = ",f0.0,", mem_cdata = ",f0.0)')  m, mr, mem_cdata
+
+      if(m /= mr) then
+         write(error_msg,'("m = ",i0," <> mr = ",f0.0,", type overflow?")')  m, mr
+         ! error stop trim(error_msg)
+         write(*, '("Big fat scary WARNING: ", a)') trim(error_msg)
+      end if
+
 
 ! ... initilize all blocks:
 
@@ -141,7 +155,7 @@
         kblk(kpol,itype,nblk(kpol,itype)) = i
         m = 1; Exit
        End do
-       if(m.eq.0) Stop 'c_data: not enough memory'
+       if(m.eq.0) Error Stop 'c_data: not enough memory'
 
       End Subroutine Add_coef
 
@@ -169,7 +183,7 @@
       k=ip; l=jp;
     1 if(k.gt.l) go to 2
       m=(k+l)/2
-      if(m.lt.ip.or.m.gt.jp) Stop 'Promlems with m in Add_cdata'
+      if(m.lt.ip.or.m.gt.jp) Error Stop 'Promlems with m in Add_cdata'
       if    (j1.lt.K1(m)) then;       l = m - 1
       elseif(j1.gt.K1(m)) then;       k = m + 1
       else
@@ -192,8 +206,8 @@
 
 ! ... shift the rest of data up:
 
-      if(k.lt.ip.or.k.gt.jp+1) Stop 'Promlems with k in Add_cdata'
-      if(jp-ip+1.ge.mb) Stop 'Promlems with jp in Add_cdata'
+      if(k.lt.ip.or.k.gt.jp+1) Error Stop 'Promlems with k in Add_cdata'
+      if(jp-ip+1.ge.mb) Error Stop 'Promlems with jp in Add_cdata'
       if(jp.ge.k) then
       Do i=jp,k,-1
        ii = i + 1
@@ -347,6 +361,6 @@
        nc = nc + jpblk(i) - ipblk(i) + 1
       End do
 
-      S = nc; S = S / (nb*mb)
+      S = nc; S = S / ((1.d0*nb)*mb)
 
       End Subroutine nc_c_data

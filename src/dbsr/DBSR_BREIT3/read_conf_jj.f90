@@ -20,7 +20,7 @@
       Call Alloc_symt(0)
 
       ncfg=Jdef_ncfg(nuc);
-      if(ncfg.eq.0) Stop ' ncfg = 0, nothing to do '
+      if(ncfg.eq.0) Error Stop ' ncfg = 0, nothing to do '
 
 ! ... read old information, if any:
 

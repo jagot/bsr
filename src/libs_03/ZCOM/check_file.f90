@@ -5,9 +5,11 @@
 !----------------------------------------------------------------------
       Character(*), Intent(in) :: AF
       Logical :: EX
+      Character(256) :: error_msg
       Inquire(file=AF,exist=EX)
       if(.not.EX) then
-       write(*,*) ' can not find file  ',AF;  Stop
+         write(error_msg, '(" can not find file  ",a)') AF
+         Error Stop error_msg
       end if
       End Subroutine Check_file
 
@@ -40,5 +42,5 @@
        nu = i
        Exit
       End do
-      if(nu.eq.0) Stop 'Find_free_unit: nu = 0'
+      if(nu.eq.0) Error Stop 'Find_free_unit: nu = 0'
       End Subroutine Find_free_unit
