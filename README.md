@@ -62,6 +62,22 @@ modules interdependencies).
 
 All executables can then be found under `build/bin/`.
 
+## Compiler flags
+
+Toolchain-specific compiler flags are supported through the `*.cmake`
+files found in the [`src`](src) directory; by adding
+e.g. `-DCMAKE_TOOLCHAIN_FILE=../src/gcc.cmake` to the `cmake`
+invocation above, optimization and debug flags appropriate for GCC
+will be applied. Additional CMake flags of interest are
+- `-DBUILD_MPI_PROGRAMS=[ON]|OFF`, turn on (default)/off building of
+  MPI versions of some of the codes.
+- `-DBLAS_ROOT=...`, useful if your BLAS/LAPACK installation is in a
+  non-standard location.
+- `-DBLA_VENDOR=OpenBLAS`, or whichever BLAS version you prefer.
+- `-DBLA_STATIC=1`, if you prefer static linkage of BLAS/LAPACK.
+- `-DCMAKE_EXE_LINKER_FLAGS=...`, useful for e.g. hardcoding paths to
+  libraries (`"-Wl,-rpath,/path/to/libs"`).
+
 # Warnings
 
 The code is very complex and there are very few tests. It is very
