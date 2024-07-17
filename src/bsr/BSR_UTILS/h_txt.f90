@@ -32,8 +32,16 @@ program h_txt
   Call read_name(name)
   if(name == "?") call print_help
 
+  Call Read_iarg('klsp', klsp)
   Call Read_iarg('klsp1', klsp1)
   Call Read_iarg('klsp2', klsp2)
+
+  if(klsp.gt.0) then
+     klsp1=klsp; klsp2=klsp
+  else
+     if(klsp1.le.0) klsp1=1
+     if(klsp2.lt.klsp1) klsp2=klsp1
+  end if
 
   do klsp = klsp1,klsp2
      call translate(klsp)

@@ -61,7 +61,7 @@
       call CPU_time(t2)
       Call read_knot_dat
       if(debug > 0) then
-         write(*,*) "Knot file:"
+         write(stdout,*) "Knot file:"
          call write_knotdat_header(stdout)
       end if
       Call alloc_DBS_gauss
@@ -83,12 +83,14 @@
 
       Do klsp = klsp1,klsp2
 
-       write(*,'(/a,i3/)') 'DBSR_MAT:  klsp =', klsp
+       write(stdout,'(/a,i3/)') 'DBSR_MAT:  klsp =', klsp
+       call flush(stdout)
 
        Call CPU_time(t2);  Call SUB1;  Call CPU_time(t3)
 
        write(pri,'(/a,T40,f10.2,a)') 'total time:', (t3-t2)/60, ' min'
-       write(*  ,'(/a,T40,f10.2,a)') 'total time:', (t3-t2)/60, ' min'
+       write(stdout  ,'(/a,T40,f10.2,a)') 'total time:', (t3-t2)/60, ' min'
+       call flush(stdout)
 
       End do  ! over klsp
 

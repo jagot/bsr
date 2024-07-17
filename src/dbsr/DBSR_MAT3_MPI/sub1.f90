@@ -13,6 +13,8 @@
       Real(8) :: C,t0,t1,t2,ta
       Integer, external :: Ifind_channel_jj, no_ic_jj
 
+      Character(256) :: message
+
       Call CPU_time(t0)
 
 ! ... read configuration expansion and orbitals information:
@@ -70,6 +72,8 @@
           mem_cdata + mem_buffer + mem_mat + memory_conf_jj
       write(pri,'(a,T40,f10.2,a)') 'total_estimations:', C,' Mb'
 
+      call flush(pri)
+
 !-----------------------------------------------------------------------
     1 Continue
 
@@ -92,11 +96,16 @@
 
 ! ... diagonal overlap matrix:
 
-      Call CPU_time(ta)
       icase=0; Call Alloc_c_data(ntype_O,0,0,mblock,nblock,kblock,eps_c)
-      Do ich=1,nch;  Call UPDATE_HX(ich,ich,fppqq,1.d0);  End do
+      Do ich=1,nch
+         Call CPU_time(ta)
+         Call UPDATE_HX(ich,ich,fppqq,1.d0)
+         write(message, '("Update_HX: ",i0,"/",i0)') ich, nch
+         call timed_section_now(ta, trim(message))
+      End do
+      Call CPU_time(ta)
       Call State_res
-      call timed_section_now(ta, "Update_HX + State_res")
+      call timed_section_now(ta, "State_res")
 
 ! ... save overlaps diagonal blocks:
 
@@ -109,41 +118,54 @@
 
       Call CPU_time(t2)
       write(pri,'(/a,T40,f10.2,a)') 'diag.block O-integrals:',(t2-t1)/60,' min'
+      call flush(pri)
 
 ! ... L-integrals:
 
       Call CPU_time(t1)
 
       icase=1; Call Alloc_c_data(ntype_L,0,0,mblock,nblock,kblock,eps_c)
+      Call CPU_time(ta)
       Call State_res
+      call timed_section_now(ta, "State_res: L-integrals")
 
       Call CPU_time(t2)
       write(pri,'(/a,T40,f10.2,a)') 'diag.block L-integrals:',(t2-t1)/60,' min'
+      call flush(pri)
 
 ! ... R-integrals:
 
       Call CPU_time(t1)
 
       icase=2; Call Alloc_c_data(ntype_R,0,mk,mblock,nblock,kblock,eps_c)
+      Call CPU_time(ta)
       Call State_res
+      call timed_section_now(ta, "State_res: R-integrals")
 
       Call CPU_time(t2)
       write(pri,'(/a,T40,f10.2,a)') 'diag.block R-integrals:',(t2-t1)/60,' min'
+      call flush(pri)
 
 ! ... S-integrals:
 
       if(mbreit.eq.1) then
        Call CPU_time(t1)
        icase=3; Call Alloc_c_data(ntype_S,0,mk+1,mblock,nblock,kblock,eps_c)
+       Call CPU_time(ta)
        Call State_res
+       call timed_section_now(ta, "State_res: S-integrals")
        Call CPU_time(t2)
        write(pri,'(/a,T40,f10.2,a)') 'diag.block S-integrals:',(t2-t1)/60,' min'
+       call flush(pri)
       end if
 
 ! ... target energy part:
 
       Do ich = 1,nch;  it=iptar(ich); C=Etarg(it)-Ecore
+       Call CPU_time(ta)
        Call UPDATE_HX(ich,ich,fppqq,C)
+       write(message, '("Update_HX: ",i0,"/",i0)') ich, nch
+       call timed_section_now(ta, trim(message))
       End do
 
 ! ... orthogonal conditions:
@@ -155,6 +177,7 @@
       Call CPU_time(t1);  Call Diag_channels;  Call CPU_time(t2)
 
       write(pri,'(/a,T40,f10.2,a)') 'diagonalization:',(t2-t1)/60,' min '
+      call flush(pri)
 
       nsol = SUM(ipsol)
       write(pri,'(/72("-"))')
@@ -198,7 +221,9 @@
       idiag=-1;  Call Alloc_dbsr_matrix
 
       icase=0; Call Alloc_c_data(ntype_O,0,mk,mblock,nblock,kblock,eps_c)
+      Call CPU_time(ta)
       Call State_res
+      call timed_section_now(ta, "State_res")
 
 ! ... tranform and record overlap matrix:
 
@@ -216,7 +241,7 @@
          'Checking overlap matrix: s_ovl =', s_ovl,'   k =',k
 
       Call CPU_time(t2)
-      write(pri,'(/a,T40,f10.2,a)') 'none-diag.block O-integrals:',(t2-t1)/60,' min'
+      write(pri,'(/a,T40,f10.2,a)') 'non-diag.block O-integrals:',(t2-t1)/60,' min'
 
       if(k.gt.0) go to 1
 
@@ -233,29 +258,35 @@
 ! ... L-integrals:
 
       icase=1; Call Alloc_c_data(ntype_L,0,0,mblock,nblock,kblock,eps_c)
+      Call CPU_time(ta)
       Call State_res
+      call timed_section_now(ta, "State_res: non-diag L-integrals")
 
       Call CPU_time(t2)
-      write(pri,'(/a,T40,f10.2,a)') 'none-diag.block L-integrals:',(t2-t1)/60,' min'
+      write(pri,'(/a,T40,f10.2,a)') 'non-diag.block L-integrals:',(t2-t1)/60,' min'
 
 ! ... R-integrals:
 
       Call CPU_time(t1)
 
       icase=2; Call Alloc_c_data(ntype_R,0,mk,mblock,nblock,kblock,eps_c)
+      Call CPU_time(ta)
       Call State_res
+      call timed_section_now(ta, "State_res: non-diag R-integrals")
 
       Call CPU_time(t2)
-      write(pri,'(/a,T40,f10.2,a)') 'none-diag.block R-integrals:',(t2-t1)/60,' min'
+      write(pri,'(/a,T40,f10.2,a)') 'non-diag.block R-integrals:',(t2-t1)/60,' min'
 
 ! ... S-integrals:
 
       if(mbreit.eq.1) then
        Call CPU_time(t1)
        icase=3; Call Alloc_c_data(ntype_S,0,mk+1,mblock,nblock,kblock,eps_c)
+       Call CPU_time(ta)
        Call State_res
+       call timed_section_now(ta, "State_res: non-diag S-integrals")
        Call CPU_time(t2)
-       write(pri,'(/a,T40,f10.2,a)') 'none-diag.block S-integrals:',(t2-t1)/60,' min'
+       write(pri,'(/a,T40,f10.2,a)') 'non-diag.block S-integrals:',(t2-t1)/60,' min'
       end if
 
 ! ... orthogonal conditions:
