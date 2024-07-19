@@ -179,42 +179,36 @@
       End Subroutine UPDATE_HS
 
 
-!======================================================================
+      !======================================================================
       Subroutine UPDATE_HW (ich,jch,v,w,C)
-!======================================================================
-!     update matrix  by  direct product of vectors:  v * w^T
-!-----------------------------------------------------------------------
-      Use dbsr_mat
+        !======================================================================
+        !     update matrix  by  direct product of vectors:  v * w^T
+        !-----------------------------------------------------------------------
+        Use dbsr_mat
+        Use BLAS
 
-      Implicit none
-      Integer, intent(in) :: ich,jch
-      Real(8), intent(in) :: C
-      Real(8), intent(in) :: v(ms),w(ms)
-      Real(8) :: x(ms,ms),xx(ms,ms)
-      Integer ::  i,j
+        Implicit none
+        Integer, intent(in) :: ich,jch
+        Real(8), intent(in) :: C
+        Real(8), intent(in) :: v(ms),w(ms)
+        Integer ::  i,j
 
-      if(ich.lt.0)   Stop 'UPDATE_HW: ich < 0'
-      if(jch.lt.0)   Stop 'UPDATE_HW: jch < 0'
-      if(ich.gt.nch) Stop 'UPDATE_HW: ich > nch'
-      if(jch.gt.nch) Stop 'UPDATE_HW: jch > nch'
+        if(ich.lt.0)   Error Stop 'UPDATE_HW: ich < 0'
+        if(jch.lt.0)   Error Stop 'UPDATE_HW: jch < 0'
+        if(ich.gt.nch) Error Stop 'UPDATE_HW: ich > nch'
+        if(jch.gt.nch) Error Stop 'UPDATE_HW: jch > nch'
+        i=icc(ich,jch)
+        if(i.lt.0.or.i.gt.iicc) Error Stop 'UPDATE_HX: i out of range'
 
-      Do i=1,ms; Do j=1,ms; x(i,j)=v(i)*w(j); End do; End do
-
-      if(ich.gt.jch) then
-       xx = C * x
-      elseif(jch.gt.ich) then
-       xx = C * TRANSPOSE(x)
-      else
-       xx = TRANSPOSE(x)
-       xx = (C/2.d0)*(x+xx)
-      end if
-
-      i=icc(ich,jch)
-      if(i.lt.0.or.i.gt.iicc) Stop 'UPDATE_HX: i out of range'
-      hch(:,:,i) = hch(:,:,i) + xx
-
+        if(ich.gt.jch) then
+           call general_rank_update(C, v, w, hch(:,:,i))
+        elseif(jch.gt.ich) then
+           call general_rank_update(C, w, v, hch(:,:,i))
+        else
+           call general_rank_update(C/2.d0, v, w, hch(:,:,i))
+           call general_rank_update(C/2.d0, w, v, hch(:,:,i))
+        end if
       End Subroutine UPDATE_HW
-
 
 !======================================================================
       Subroutine UPDATE_HV(ich,ip,v,C)
