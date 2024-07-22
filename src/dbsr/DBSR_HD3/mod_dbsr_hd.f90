@@ -82,6 +82,14 @@
       Integer :: iwt   = -1       ! print channel weights in w.nnn
       Real(8) :: cwt   = -0.01d0  ! cut of for weights' printing in log file
 
-      End Module dbsr_hd
-
-
+contains
+  subroutine read_error(nu, message)
+    implicit none
+    integer, intent(in) :: nu
+    character(len=*), intent(in) :: message
+    character(256) :: filename
+    inquire(unit=nu, name=filename)
+    write(*,'("Error when reading from ",a,":")') trim(filename)
+    error stop trim(message)
+  end subroutine read_error
+End Module dbsr_hd

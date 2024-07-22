@@ -79,7 +79,10 @@ contains
 
     write(infilename, '("h.",i0.3)') klsp
     write(outfilename, '(a,".txt")') trim(infilename)
-    if(Icheck_file(trim(infilename)) == 0) return
+    if(Icheck_file(trim(infilename)) == 0) then
+       write(*,'("Could not find input file ",a)') trim(infilename)
+       return
+    end if
 
     write(*,'("Translating partial-wave surface data from ",a," to ",a)') &
          trim(infilename), trim(outfilename)

@@ -137,7 +137,7 @@
         k=k+1; npch(k)=ich
        End do
       End do
-      if(k.ne.nch) Stop 'Problems with npch in H_OUT_exp'
+      if(k.ne.nch) Error Stop 'Problems with npch in H_OUT_exp'
 
 ! ... angular momentum of continuum electron:
 

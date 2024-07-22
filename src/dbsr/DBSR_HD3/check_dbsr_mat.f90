@@ -10,6 +10,8 @@
       Integer :: i, i1,i2,i3
       Integer, external :: Icheck_file
 
+      Character(256) :: error_msg
+
 !----------------------------------------------------------------------
 ! ... open log file and print main parameters:
 
@@ -23,7 +25,7 @@
       write(pri,'(a,i3)') 'calculations for partial wave:  klsp =',klsp
 
       write(pri,*)
-	  if(itype.eq.-1) &
+          if(itype.eq.-1) &
        write(pri,'(a)') 'itype  =   -1  -  bound-state calculations'
       if(itype.eq. 0) &
        write(pri,'(a)') 'itype  =    0  -  scattering calculations'
@@ -60,7 +62,7 @@
       i = Icheck_file(AF)
       if(i.eq.0) then
        write(pri,*) 'there is no dbsr_mat.nnn file for given partial wave'
-       Stop         'there is no dbsr_mat.nnn file for given partial wave'
+       Error Stop         'there is no dbsr_mat.nnn file for given partial wave'
       end if
 
       Open(nui,file=AF,status='OLD',form='UNFORMATTED')
@@ -68,9 +70,18 @@
 ! ... check the dimensions:
 
       read(nui) i1,i2,i3
-      if(i1.ne.ns )   Stop ' DBSR_HD: different ns  in DBSR_MAT file'
-      if(i2.ne.nch)   Stop ' DBSR_HD: different kch in DBSR_MAT file'
-      if(i3.ne.npert) Stop ' DBSR_HD: different kcp in DBSR_MAT file'
+      if(i1.ne.ns ) then
+         write(error_msg, '(" DBSR_HD: different ns  in DBSR_MAT file, expected ",i0,", got ",i0)') ns , i1
+         call read_error(nui, error_msg)
+      end if
+      if(i2.ne.nch) then
+         write(error_msg, '(" DBSR_HD: different kch in DBSR_MAT file, expected ",i0,", got ",i0)') nch, i2
+         call read_error(nui, error_msg)
+      end if
+      if(i3.ne.npert) then
+         write(error_msg, '(" DBSR_HD: different kcp in DBSR_MAT file, expected ",i0,", got ",i0)') npert, i3
+         call read_error(nui, error_msg)
+      end if
 
 ! ... allocate common working arrays:
 

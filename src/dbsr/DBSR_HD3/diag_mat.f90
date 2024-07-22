@@ -100,7 +100,7 @@
 
        Call DPOTRF (uplo, khm, b, khm, info)
 
-       if(info.ne.0) Stop 'DPOTRF info > 0 - Cholesky factorization failed'
+       if(info.ne.0) Error Stop 'DPOTRF info > 0 - Cholesky factorization failed'
 
       end if
 !----------------------------------------------------------------------
@@ -112,7 +112,7 @@
 
        Call DSYGST( ibtype, uplo, khm, A, khm, B, khm, INFO )
 
-       if(info.ne.0) Stop 'DSYGST: info > 0 '
+       if(info.ne.0) Error Stop 'DSYGST: info > 0 '
 
       end if
 
@@ -132,7 +132,7 @@
 
       Call LAP_DSYEV(job,uplo,khm,khm,A,eval,INFO)
 
-      if(info.ne.0) Stop 'DSYEV: info > 0 '
+      if(info.ne.0) Error Stop 'DSYEV: info > 0 '
 
       write(*  ,'(/a,5f15.5)') 'Eval(1:5) =',eval(1:5)
       write(pri,'(/a,5f15.5)') 'Eval(1:5) =',eval(1:5)
