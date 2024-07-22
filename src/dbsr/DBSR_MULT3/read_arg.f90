@@ -46,6 +46,8 @@
       if(iarg.ge.4)  Call get_command_argument(4,AF_bnk)
       Inquire (file=AF_bnk, exist=EX)
 
+      write(AF_res, '(a,".tmp")') trim(AF_bnk)
+
       if(EX) then
        Open(nub,file=AF_bnk,form='UNFORMATTED',status='OLD')
        read(nub) ktype_old,kpol_old
@@ -64,5 +66,3 @@
       Open(nur,file=AF_res,form='UNFORMATTED')
 
       End Subroutine Read_arg
-
-

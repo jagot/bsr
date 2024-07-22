@@ -59,6 +59,7 @@
       Call Read_aarg('atype'   ,atype  )
       Read(atype,'(1x,i1)') kpol; ktype = atype(1:1)
       AF_bnk = 'mult_bnk_'//atype
+      Call Read_aarg('mult_bnk',AF_bnk  )
       Call Check_file(AF_bnk);  Open(nub,file=AF_bnk,form='UNFORMATTED')
 
       End Subroutine Read_arg
