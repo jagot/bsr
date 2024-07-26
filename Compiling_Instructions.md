@@ -73,6 +73,9 @@ mkdir build && cd build
 module load cpu/0.15.4
 module load intel/19.1.1.217
 module load intel-mkl/2019.1.144
+export FC=$(which ifort)
+export CC=$(which icc)
+export CXX=$(which icpc)
 
 # compile
 cmake ../src/
