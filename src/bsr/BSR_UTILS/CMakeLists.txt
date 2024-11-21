@@ -148,6 +148,8 @@ target_link_libraries(genjconf zconfjj zcom)
 add_executable(genjterm genjterm.f90)
 target_link_libraries(genjterm zconfjj zcom)
 
+add_executable(cfile cfile.f90)
+
 add_executable(jcfile jcfile.f90)
 target_link_libraries(jcfile zconfjj zcom)
 
