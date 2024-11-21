@@ -136,6 +136,12 @@ target_link_libraries(ak_tab_jj zconfjj zcom)
 add_executable(cm_j cm_j.f90)
 target_link_libraries(cm_j zconfjj zcom)
 
+add_executable(zgenconf zgenconf.f90)
+target_link_libraries(zgenconf zconfls zcom)
+
+add_executable(zgenterm zgenterm.f90)
+target_link_libraries(zgenterm zconfls zcom)
+
 add_executable(genjconf genjconf.f90)
 target_link_libraries(genjconf zconfjj zcom)
 
