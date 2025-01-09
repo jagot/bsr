@@ -84,7 +84,7 @@
 	       Call Det_expn (nua,kt,kdt,MLT,MST)
        rewind(nua)
 
-       if(kdt.eq.0) Stop 'Pre_detexp: kdt = 0'
+       if(kdt.eq.0) Error Stop 'Pre_detexp: kdt = 0'
 
        if(1.d0*kt*kt*kdt.gt.1d9) then
         write(*,'(a,i10)') 'kt  =',kt

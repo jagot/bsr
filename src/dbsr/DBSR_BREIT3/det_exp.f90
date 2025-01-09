@@ -58,7 +58,7 @@
 ! ... define the det.expansions:
 
        rewind(nua)
-       Call Det_expn_jj;  if(kdt.eq.0) Stop 'Pre_detexp: kdt = 0'
+       Call Det_expn_jj;  if(kdt.eq.0) Error Stop 'Pre_detexp: kdt = 0'
 
 ! ... record results (re-write from 'nua' to 'nud'):
 
