@@ -37,7 +37,6 @@
       Implicit none
       Integer :: klsp, ii
       Real(8) :: t1,t2
-      Character(80) :: cline
 
       Call Inf_dbsr_breit
 
@@ -134,8 +133,7 @@
 
        Close(nui); Close(nur); Close(nub)
 
-       write(cline,'(a,a,a,a)') 'cat ',trim(BF_i),' >> ',trim(BF_r)
-       Call System(cline)
+       call merge_files(BF_i, BF_r)
 
        write(pri,'(/a/)')   'Data-bank contains:'
        write(pri,'(a,i10)') 'number of overlap determinants =', ndet
@@ -144,10 +142,8 @@
 
 ! ...  rename results as new data bank (int_res -> int_bnk):
 
-       write(cline,'(a,a,a,a)') 'mv ',trim(BF_r),'  ',trim(BF_b)
-       Call System(cline)
-
-       write(cline,'(a,a,a,a)') 'rm ',trim(BF_i);  Call System(cline)
+       call move_file(BF_r, BF_b)
+       call delete_file(BF_i)
 
 ! ...  time for one case:
 
@@ -191,5 +187,3 @@
       Deallocate(C,K1,K2,K3,K4)
 
       End Subroutine RW
-
-

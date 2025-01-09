@@ -4,7 +4,7 @@ add_executable(dbsr_breit3
   dbsr_breit.f90       add_res.f90          conf_loop.f90
   det_exp.f90          det_me.f90           read_conf_jj.f90
   term_loop.f90        inf_dbsr_breit.f90   me_jj.f90
-  read_arg.f90)
+  read_arg.f90         file_utils.f90)
 target_link_libraries(dbsr_breit3 zconfjj zcom)
 
 # # Conflict with utils?
