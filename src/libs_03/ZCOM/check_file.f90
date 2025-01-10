@@ -6,9 +6,9 @@
       Character(*), Intent(in) :: AF
       Logical :: EX
       Character(256) :: error_msg
-      Inquire(file=AF,exist=EX)
+      Inquire(file=trim(AF),exist=EX)
       if(.not.EX) then
-         write(error_msg, '(" can not find file  ",a)') AF
+         write(error_msg, '(" can not find file  ",a)') trim(AF)
          Error Stop error_msg
       end if
       End Subroutine Check_file
@@ -21,7 +21,7 @@
 !----------------------------------------------------------------------
       Character(*), Intent(in) :: AF
       Logical :: EX
-      Inquire(file=AF,exist=EX)
+      Inquire(file=trim(AF),exist=EX)
       Icheck_file = 1
       if(.not.EX) Icheck_file = 0
       End Function Icheck_file
