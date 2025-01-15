@@ -1,3 +1,19 @@
+subroutine assert_different_files(src, dst, action, preposition)
+  Implicit none
+
+  Character(len=*) :: src, dst, action, preposition
+  Character(256) error_msg
+
+  ! This does not cover the possibility of one file being a symlink to
+  ! the other.
+  if(trim(src) == trim(dst)) then
+     write(error_msg, '("Cannot ",a," ",a," ",a," identical file ",a)') &
+          trim(action), trim(src), trim(preposition), trim(dst)
+     error stop error_msg
+  end if
+
+end subroutine assert_different_files
+
 subroutine copy_file_data(us, ud)
   Implicit none
 
@@ -34,6 +50,8 @@ subroutine merge_files(src, dst)
 
   Integer :: us, ud
 
+  call assert_different_files(src, dst, 'merge', 'with')
+
   ! write(*,'(a,": ",a," >> ",a)') 'We are trying to merge files here', &
   !      trim(src), trim(dst)
 
@@ -54,6 +72,8 @@ subroutine move_file(src, dst)
   Character(len=*) :: dst, src
 
   Integer :: us, ud
+
+  call assert_different_files(src, dst, 'move', 'to')
 
   ! write(*,'(a,": ",a," -> ",a)') 'We are trying to move a file here', &
   !      trim(src), trim(dst)
