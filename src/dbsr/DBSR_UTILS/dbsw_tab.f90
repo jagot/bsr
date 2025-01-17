@@ -32,7 +32,7 @@ program dbsw_tab
   Real(8) :: e_orb(1000)
   Real(8) :: S
 
-  Real(8) :: tr, dr
+  Real(8) :: tr, dr, rmax_tab
   Integer :: nr = 101, i, j, nu, distribution=1, verbosity=0
 
   Integer :: iout, nuw
@@ -47,14 +47,20 @@ program dbsw_tab
   if(AF.eq.'?') call print_help
 
   Call Read_aarg('grid', knot_file)
-  Call Read_iarg('nr', nr)
-  Call Read_iarg('distribution', distribution)
-  Call Read_iarg('verbosity', verbosity)
 
   ! ... set up B-splines:
 
   Call load_grid(knot_file)
   ! Call alloc_DBS_galerkin
+
+  rmax_tab = tmax
+
+  Call Read_iarg('nr', nr)
+  Call Read_iarg('distribution', distribution)
+  Call Read_rarg('rmax_tab', rmax_tab)
+  Call Read_iarg('verbosity', verbosity)
+
+  write(*,'("Tabulating orbitals for r = 0.0 .. ",f10.5)') rmax_tab
 
   ! ... radial w.f.:
   write(*,'("Loading orbitals from ",a)') trim(AF)
@@ -65,7 +71,7 @@ program dbsw_tab
 
   ! ... sets up grid points and initializes the values of the spline:
   allocate(R(NR),P(NR),Q(NR))
-  call tabulation_grid(R, tmax, distribution)
+  call tabulation_grid(R, rmax_tab, distribution)
 
   ! ... Cycle over nl in input:
 
@@ -99,9 +105,11 @@ contains
     write(*,*) 'dbsw_tab converts the B-spline radial orbital wbs-files into'
     write(*,*) 'text files suitable for graphic display'
     write(*,*)
-    write(*,*) 'Call as:   dbsw_tab name.bsw  grid= nr= distribution='
+    write(*,*) 'Call as:   dbsw_tab name.bsw  grid= nr= distribution= rmax_tab='
     write(*,*)
     write(*,*) 'file will be created for each orbital'
+    write(*,*)
+    write(*,*) 'rmax_tab is by default tmax, i.e. the end of the B-spline knot set'
     write(*,*) ""
     call print_distribution_help
     stop
