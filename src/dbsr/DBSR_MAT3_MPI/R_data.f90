@@ -45,6 +45,10 @@
       Use dbsr_mat
       Use c_data
 
+#ifdef DEBUG_SPEEDUPS
+      Use Timer
+#endif
+
       Implicit none
       Integer, intent(in) :: btype, itype, kpol
       Integer :: i,j, i1,i2,j1,j2, ii,jj, iii,jjj, ich,jch, int,  &
@@ -75,6 +79,9 @@
 
 ! ... define the big (1) or small (2) components involved:
 
+#ifdef DEBUG_SPEEDUPS
+      call TimerStart('R_data B-spline ERIs')
+#endif
       atype = btype
       Select case(atype)
        Case(0);  Call mrk_pppp(kpol); ip1=1; ip2=1; jp1=1; jp2=1
@@ -84,6 +91,9 @@
        Case(3);  Call mrk_qpqp(kpol); ip1=2; ip2=2; jp1=1; jp2=1
                  if(itype.eq.4) then; ip1=2; ip2=1; jp1=2; jp2=1; end if
       End Select
+#ifdef DEBUG_SPEEDUPS
+      call TimerStop('R_data B-spline ERIs')
+#endif
 
 ! ... select structure:
 

@@ -6,4 +6,4 @@ add_executable(dbsr_dmat3
   gen_matrix.f90           gen_zf.f90
   get_Vdip.f90             idef_type.f90            gen_dbs.f90
   read_arg.f90             read_data.f90            updates.f90)
-target_link_libraries(dbsr_dmat3 dbs zconfjj zcom)
+target_link_libraries(dbsr_dmat3 dbs zconfjj zcom ${BLAS_LAPACK_LIBRARIES})

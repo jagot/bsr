@@ -230,7 +230,10 @@
       if(allocated(overlaps)) Deallocate(overlaps)
       allocate(overlaps(nch+npert,nch+npert)); overlaps = 0.d0
 
-      icase=0;  Call record_matrix
+      icase=0
+      call TimerStart('record_matrix')
+      Call record_matrix
+      call TimerStop('record_matrix')
 
 ! ... check big overlaps:
 
@@ -298,7 +301,11 @@
 
 ! ... transform and record interaction matrix:
 
-      Call CPU_time(t1);   Call Record_matrix;   Call CPU_time(t2)
+      Call CPU_time(t1)
+      call TimerStart('record_matrix')
+      Call Record_matrix
+      call TimerStop('record_matrix')
+      Call CPU_time(t2)
 
       write(pri,'(/a,T40,f10.2,a)') 'transform and record matrix:',(t2-t1)/60,' min '
       write(*  ,'( a,T40,f10.2,a)') 'transform and record matrix:',(t2-t1)/60,' min '

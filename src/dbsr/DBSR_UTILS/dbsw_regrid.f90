@@ -25,6 +25,10 @@ program dbsw_grid
   use DBS_gauss
   use DBS_orbitals_pq
 
+#ifdef DEBUG_SPEEDUPS
+      Use Timer
+#endif
+
   Implicit none
   Integer, External :: Icheck_file
 
@@ -34,6 +38,10 @@ program dbsw_grid
 
   Real(8) :: e_orb(1000)
   Integer :: dst_nv, dst_ks, norb
+
+#ifdef DEBUG_SPEEDUPS
+  Call TimerStart('DBSW_REGRID')
+#endif
 
   call read_name(name)
   if(name == "?") call print_help
@@ -62,6 +70,11 @@ program dbsw_grid
 
   ! Save the regridded orbitals to file
   call save_orbitals(dst_wfn_file, e_orb)
+
+#ifdef DEBUG_SPEEDUPS
+  Call TimerStop('DBSW_REGRID')
+  Call TimerReport(.true.)
+#endif
 
 contains
 

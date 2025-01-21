@@ -20,6 +20,10 @@
       Use DBS_integrals, only: rkb
       Use DBS_debug
 
+#ifdef DEBUG_SPEEDUPS
+      Use Timer
+#endif
+
       Implicit none
       Integer, intent(in) :: ns,ks,icase
       Character, intent(in) :: sym_i,sym_j
@@ -28,6 +32,17 @@
       ! local variables
       Integer :: i,j, ip,jp, imin,imax, jmin,jmax, ii,jj
       Real(8) :: c,t1,t2
+
+#ifdef DEBUG_SPEEDUPS
+      Real(8), allocatable :: a_ref(:,:)
+      Real(8) :: discrepancy
+      Real(8), parameter :: tolerance = sqrt(epsilon(1.d0))
+      Character(256) :: timer_label
+
+      write(timer_label, '("convol c=",i0," si=",a," sj=",a)') &
+           icase, sym_i, sym_j
+      call TimerStart(trim(timer_label))
+#endif
 
       Call CPU_time(t1)
 
@@ -46,13 +61,51 @@
         end do; end do
 
       elseif(sym_i.eq.'n'.and.sym_j.eq.'n') then
+#ifdef DEBUG_SPEEDUPS
+         call TimerStart('convol: I(.a;.b) n n')
+#endif
+         !$omp parallel do default(none) private(ip,imin,imax,i,c,jp,jmin,jmax) shared(ks,a)
+         do ip=1,ks+ks-1
+            imin=max(1,1+ks-ip)
+            imax=min(ns,ns+ks-ip)
+            do i =imin,imax
+               c=0.d0
+               do jp=1,ks+ks-1
+                  jmin=max(1,1+ks-jp)
+                  jmax=min(ns,ns+ks-jp)
+                  c = c + sum(d(jmin:jmax,jp)*rkb(i,jmin:jmax,ip,jp))
+               end do
+               a(i,ip)=c
+            end do
+         end do
+         !$omp end parallel do
 
-        do ip=1,ks+ks-1;  imin=max(1,1+ks-ip); imax=min(ns,ns+ks-ip)
-        do i =imin,imax;  c=0.d0
-        do jp=1,ks+ks-1;  jmin=max(1,1+ks-jp); jmax=min(ns,ns+ks-jp)
-        do j =jmin,jmax;  c=c+d(j,jp)*rkb(i,j,ip,jp)
-        end do; end do;   a(i,ip)=c
-        end do; end do
+#ifdef DEBUG_SPEEDUPS
+         call TimerStop('convol: I(.a;.b) n n')
+
+         call TimerStart('convol: I(.a;.b) n n, old')
+         allocate(a_ref(1:ns,1:ks))
+         do ip=1,ks+ks-1
+            imin=max(1,1+ks-ip)
+            imax=min(ns,ns+ks-ip)
+            do i =imin,imax
+               c=0.d0
+               do jp=1,ks+ks-1
+                  jmin=max(1,1+ks-jp)
+                  jmax=min(ns,ns+ks-jp)
+                  do j =jmin,jmax
+                     c=c+d(j,jp)*rkb(i,j,ip,jp)
+                  end do
+               end do
+               a(i,ip)=c
+            end do
+         end do
+         deallocate(a_ref)
+         call TimerStop('convol: I(.a;.b) n n, old')
+         discrepancy = sum(abs(a(1:ns,1:ks) - a_ref(1:ns,1:ks)))
+         write(*,'("Discrepancy: ",e26.16,", tolerance: ",e26.16)') discrepancy, tolerance
+         if(discrepancy > tolerance) error stop "Discrepancy exceeds tolerance"
+#endif
 
       elseif(sym_i.eq.'l'.and.sym_j.eq.'l') then
 
@@ -257,12 +310,17 @@
 !----------------------------------------------------------------------
       Case default
 
-       Stop 'convol: unknown case'
+       Error Stop 'convol: unknown case'
 
       End Select
 
       Call CPU_time(t2)
       ic_convol = ic_convol + 1
       if(icase.le.2) time_convol=time_convol + (t2-t1)
+
+#ifdef DEBUG_SPEEDUPS
+      call TimerStop(trim(timer_label))
+#endif
+
 
       End Subroutine convol

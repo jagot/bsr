@@ -14,5 +14,5 @@ add_library(dbs
   tvm.f90                  update_hs.f90            zbsplvd.f90
   zint.f90                 zinty.f90                vinty.f90
   DBS_mult.f90             gen_hd.f90)
-target_link_libraries(dbs zcom)
+target_link_libraries(dbs zcom ${BLAS_LAPACK_LIBRARIES})
 set_target_properties(dbs PROPERTIES Fortran_MODULE_DIRECTORY ${GLOBAL_Fortran_MODULE_DIRECTORY})

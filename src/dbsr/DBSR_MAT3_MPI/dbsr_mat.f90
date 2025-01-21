@@ -38,6 +38,8 @@
       Implicit none
       Real(8) :: t1,t2,t3
 
+      Call TimerStart('DBSR_MAT')
+
       Call CPU_time(t1)
 
 ! ... file for general log-output:
@@ -97,7 +99,10 @@
       Call CPU_time(t2)
       write(prj,'(/a,T40,f10.2,a)') 'total time:  ', (t2-t1)/60, ' min'
 
-      End ! program dbsr_mat
+      Call TimerStop('DBSR_MAT')
+      Call TimerReport(.true.)
+
+      End program ! program dbsr_mat
 
 
 !======================================================================

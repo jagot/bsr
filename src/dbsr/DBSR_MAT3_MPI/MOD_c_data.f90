@@ -362,8 +362,9 @@ write(*,*) 'Add_matrix: jtype, jpol = ', jtype, jpol
       iblk(k,j)=i; nblk(k,j)=1; jpblk(i)=0
 
 ! ... generate matrix:
-
+      call TimerStart('Gen_matrix')
       Call Gen_matrix(itype,kpol)
+      call TimerStop('Gen_matrix')
 
       End Subroutine Add_matrix
 

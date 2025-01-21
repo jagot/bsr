@@ -43,6 +43,7 @@ program dbsw_tab
 
   AF = '?'
   call Read_name(AF)
+  write(*,*) "AF = ", AF
 
   if(AF.eq.'?') call print_help
 
