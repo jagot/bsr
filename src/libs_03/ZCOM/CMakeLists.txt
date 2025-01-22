@@ -39,6 +39,7 @@ if (Fortran_COMPILER_NAME MATCHES "gfortran.*")
 endif()
 
 set_source_files_properties(FUN_zcfg.f90 PROPERTIES COMPILE_OPTIONS "-std=legacy")
+set_source_files_properties(blas.f90 PROPERTIES COMPILE_DEFINITIONS "BLA_VENDOR=${BLA_VENDOR}")
 add_library(zcom ${ZCOM_SOURCES})
 target_link_libraries(zcom zconfls)
 set_target_properties(zcom PROPERTIES Fortran_MODULE_DIRECTORY ${GLOBAL_Fortran_MODULE_DIRECTORY})
