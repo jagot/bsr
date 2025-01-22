@@ -8,6 +8,7 @@
       USE DBS_gauss
       USE DBS_moments
       USE DBS_integrals
+      Use Timer
 
       Implicit none
       Integer, intent(in) :: k
@@ -38,16 +39,23 @@
        met = 1
       end if
 
+      call TimerStart('mrk_qpqp')
+
 ! ... compute the spline moments:
 
+      call TimerStart('mrk_qpqp: moments')
       Call moments_pp(  k   ,kk,nv,rkd1)
       Call moments_qq(-(k+1),kk,nv,rkd2)
       Call moments_qq(  k   ,kk,nv,rkd3)
       Call moments_pp(-(k+1),kk,nv,rkd4)
-
+      call TimerStop('mrk_qpqp: moments')
+      call TimerStart('mrk_qpqp: diag')
       Call diag_qpqp(k)
+      call TimerStop('mrk_qpqp: diag')
 
 ! ... generate the rkb array
+
+      call TimerStart('mrk_qpqp: generate array')
 
       rkb=0.d0
 
@@ -74,6 +82,9 @@
       if(met.eq.0) irka(k,4)=1
       if(met.eq.1) then; krk1=k; itype1 = 'qpqp'; end if
       krk=k; itype = 'qpqp'
+      call TimerStop('mrk_qpqp: generate array')
+
+      call TimerStop('mrk_qpqp')
 
       End Subroutine mrk_qpqp
 
@@ -112,6 +123,7 @@
       Use DBS_grid
       Use DBS_gauss
       Use DBS_moments
+      Use Timer
 
       Implicit none
       Integer :: iv,i,j, ip,jp, ii,jj, m, left, k
@@ -127,6 +139,7 @@
       Call gauleg(0.d0,1.d0,x,w,ks)
 
 ! ... first integration:
+      Call TimerStart("mrk_qpqp: First integration")
 
       left=iv+ks-1;  xbase=t(left)
 
@@ -168,8 +181,10 @@
       End do
 
       END DO    !  over m
+      Call TimerStop("mrk_qpqp: First integration")
 
 ! ... second integration
+      Call TimerStart("mrk_qpqp: Second integration")
 
       gx(:) = grw(iv,:)*grm(iv,:)**(k+1)
 
@@ -188,5 +203,6 @@
               rkd(ii,jj,iv) = rkd(ii,jj,iv) + SUM(bq(:)*INTP(j,jp,:))
              END DO; END DO
              END DO; END DO
+      Call TimerStop("mrk_qpqp: Second integration")
 
       End Subroutine triang_qpqp

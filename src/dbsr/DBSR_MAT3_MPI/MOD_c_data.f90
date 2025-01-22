@@ -348,7 +348,9 @@ write(*,*) 'Add_matrix: jtype, jpol = ', jtype, jpol
         ipi(i) = ipblk(j)
         ipj(i) = jpblk(j)
        End do
+       call TimerStart('Merge_cdata')
        Call Merge_cdata(n, ipi, ipj, nc)
+       call TimerStop('Merge_cdata')
 
        ! .. release the blocks:
 

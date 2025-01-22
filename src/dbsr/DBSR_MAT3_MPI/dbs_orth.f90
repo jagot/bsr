@@ -26,30 +26,47 @@
 !     j also includes the block for interaction with perturbers
 !---------------------------------------------------------------------
       Use dbsr_mat
+      Use Timer
+      Use accuracy, only: rk
 
       Implicit none
       Real(8) :: S, vv(ms),ww(ms), aa(ms,ms), bb(ms,ms),cc(ms,ms), x(ms,ms)
       Integer :: i,j,ich,jch,ii,jj,ij,ic,jc, nort
       Integer, external :: IBORT
+      real(rk) :: starting_time
 
-      Do ich = 1,nch; i = ipch(ich)
+      write(*,'("DBS_ORTH, nch = ",i0,", nbf = ",i0)') nch, nbf
 
-       nort = 0; aa = 0.d0;  bb = 0.d0
+      starting_time = simple_progress_start()
+      Do ich = 1,nch
+        if (mod(ich,10)==0) call simple_progress_header
+        call simple_progress(ich, nch, starting_time)
 
-       Do j = 1,nbf
-        if(ipbs(j).gt.0) Cycle
-        if(kbs(j).ne.kbs(i)) Cycle
-        if(IBORT(i,j).ne.0) Cycle
-        nort = nort + 1
-        Call Get_pv(j,vv,ns)
-        Call Get_qv(j,ww,ns)
-        Do ii=1,ms; Do jj=1,ms
-         S = ww(ii)*vv(jj); aa(ii,jj) = aa(ii,jj)+S; bb(jj,ii) = bb(jj,ii)+S
-        End do; End do
-       End do
+        i = ipch(ich)
+
+        nort = 0; aa = 0.d0;  bb = 0.d0
+
+        call TimerStart('DBSR_ORTH: nbf loop')
+        Do j = 1,nbf
+           if(ipbs(j).gt.0) Cycle
+           if(kbs(j).ne.kbs(i)) Cycle
+           if(IBORT(i,j).ne.0) Cycle
+           nort = nort + 1
+           Call Get_pv(j,vv,ns)
+           Call Get_qv(j,ww,ns)
+           Do ii=1,ms
+              Do jj=1,ms
+                 S = ww(ii)*vv(jj)
+                 aa(ii,jj) = aa(ii,jj)+S
+                 bb(jj,ii) = bb(jj,ii)+S
+              End do
+           End do
+        End do
+        call TimerStop('DBSR_ORTH: nbf loop')
 
        if(nort.eq.0) Cycle
 
+       call TimerStart('DBSR_ORTH: inner nch loop')
        Do jch = 1,nch
 
         if(idiag.eq.+1.and.ich.ne.jch) Cycle
@@ -72,11 +89,14 @@
         hch(:,:,ij) = x
 
        End do ! over channels (jch)
+        call TimerStop('DBSR_ORTH: inner nch loop')
 
        if(npert.gt.0.and.idiag.eq.0) then
+        call TimerStart('DBSR_ORTH: npert loop')
         Do ic = 1,npert;  jc = icb(ich,ic); if(jc.eq.0) Cycle
          vv = matmul(hcp(:,jc),bb); hcp(:,jc)=hcp(:,jc)-vv
         End do
+        call TimerStop('DBSR_ORTH: npert loop')
        end if
 
       End do ! over channels (ich)
@@ -120,6 +140,3 @@
       End do ! over channels (ich)
 
       End Subroutine Pri_orth
-
-
-

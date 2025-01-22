@@ -45,6 +45,8 @@
       Use dbsr_mat
       Use c_data
 
+      Use accuracy, only: rk
+
 #ifdef DEBUG_SPEEDUPS
       Use Timer
 #endif
@@ -60,9 +62,15 @@
       Real(8), external :: Sum_AmB, QUADR_PQ
       Integer, external :: KBORT
 
+      real(rk) :: starting_time
+
       if(ncdata.eq.0) Return
 
       Call CPU_time(t1)
+
+      write(*,'("R_data itype = ",i0,", kpol = ",i0,", btype = ",i0)') &
+           itype, kpol, btype
+
 
       message = ' '
 !----------------------------------------------------------------------
@@ -83,6 +91,10 @@
       call TimerStart('R_data B-spline ERIs')
 #endif
       atype = btype
+      ! The following routines populate the arrays pointed to by rkb
+      ! with the multipole components of the ERIs in the B-spline
+      ! basis. btype chooses which block is computed,
+      ! i.e. combinations of upper and lower components.
       Select case(atype)
        Case(0);  Call mrk_pppp(kpol); ip1=1; ip2=1; jp1=1; jp2=1
        Case(1);  Call mrk_qqqq(kpol); ip1=2; ip2=2; jp1=2; jp2=2
@@ -95,6 +107,8 @@
       call TimerStop('R_data B-spline ERIs')
 #endif
 
+      starting_time = simple_progress_start()
+
 ! ... select structure:
 
       Select Case(itype)
@@ -102,7 +116,11 @@
       Case(1)                                         ! Rk( . . ; . . )
 
        iii=0; jjj=0; S=0.d0
-       Do j=1,ncdata;  i=IPT(j)
+       Do j=1,ncdata
+        if (mod(j,600)==0) call simple_progress_header
+        if (mod(j,30)==0) call simple_progress(j, ncdata, starting_time)
+
+        i=IPT(j)
 
         if(K1(i).ne.iii) then
          i1 = K1(i)/ibo; i2 = mod(K1(i),ibo)
@@ -177,7 +195,11 @@
       Case(2)
 
        jjj=0; iii=0
-       Do j=1,ncdata; i=IPT(j)
+       Do j=1,ncdata
+        if (mod(j,600)==0) call simple_progress_header
+        if (mod(j,30)==0) call simple_progress(j, ncdata, starting_time)
+
+        i=IPT(j)
         jj=k1(i); ii=k2(i); ich=k3(i); io=k4(i)
 
         if(jj.ne.jjj.or.ii.ne.iii) then
@@ -224,7 +246,11 @@
       Case(3)                                   !    RK ( i . ; j . )
 
        xx=0.d0;  CA=0.d0
-       Do j=1,ncdata;  i=IPT(j); j1=k2(i); j2=k3(i)
+       Do j=1,ncdata
+        if (mod(j,600)==0) call simple_progress_header
+        if (mod(j,30)==0) call simple_progress(j, ncdata, starting_time)
+
+        i=IPT(j); j1=k2(i); j2=k3(i)
 
         Call Density(ns,ks,dd,pq(1,jp1,j1),pq(1,jp2,j2),sym_d)
         xx = xx + cdata(i)*dd
@@ -260,7 +286,11 @@
       Case(4)                                     !    RK ( i . ; . j )
 
        xx=0.d0
-       Do j=1,ncdata;  i=IPT(j); j1=k2(i); j2=k3(i)
+       Do j=1,ncdata
+        if (mod(j,600)==0) call simple_progress_header
+        if (mod(j,30)==0) call simple_progress(j, ncdata, starting_time)
+
+        i=IPT(j); j1=k2(i); j2=k3(i)
 
         Call Density(ns,ks,dd,pq(1,jp1,j1),pq(1,jp2,j2),sym_d)
         xx = xx + cdata(i)*dd
@@ -288,7 +318,7 @@
 
       Case Default
 
-       Stop ' R_data: unknown itype '
+       Error Stop ' R_data: unknown itype '
 
       End Select    ! over itype
 
@@ -398,5 +428,3 @@
       End Select
 
       End Subroutine pri_Rk_coef
-
-

@@ -33,11 +33,13 @@
       Use DBS_nuclear, Z => atomic_number, a => a_fermi, c => c_fermi
       Use DBS_grid
       Use DBS_gauss
+      Use Timer
 
       Implicit none
       Integer :: i,j
       Real(8) :: S
 
+      call TimerStart('Def_ro_fermi')
       Do i=1,nv
        Do j=1,ks
         ygw(i,j) = one/(one+exp((gr(i,j)-c)/a)) * grw(i,j) * gr(i,j) * gr(i,j)
@@ -46,6 +48,7 @@
       S =  SUM(ygw(:,:))
 
       ro_fermi = Z / (S * 4 * pi)
+      call TimerStop('Def_ro_fermi')
 
       End Subroutine Def_ro_fermi
 

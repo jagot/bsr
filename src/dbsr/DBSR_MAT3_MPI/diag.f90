@@ -5,6 +5,7 @@
 !     DIAG array then will contain solutions and energies
 !----------------------------------------------------------------------
       Use dbsr_mat
+      Use Timer
 
       Implicit none
 
@@ -23,7 +24,7 @@
       Do ich = 1,nch;  k=icc(ich,ich); if(k.eq.0) Cycle
 
        ! ... apply boundary conditions (delete extra B-splines)
-
+       call TimerStart('Diag_channels: boundary conditions')
        ishift=(ich-1)*ms;  jj=0
        Do j=1,ms
         if(iprm(j+ishift).eq.0) Cycle; jj=jj+1
@@ -34,13 +35,18 @@
         End do
         ach(1:ii,jj)=w(1:ii); bch(1:ii,jj)=v(1:ii)
        End do
+       call TimerStop('Diag_channels: boundary conditions')
 
        ! ... diagonalization
 
+       call TimerStart('Diag_channels: diagonalization')
        lwork = 3*ms
+       write(*,'("Diagonalization of symmetric matrix of size ",i0)') ii
        Call DSYGV(1,'V','L',ii,ach,ms,bch,ms,w,WORK,LWORK,INFO)
        if(info.ne.0) Stop 'channel diagonalization failed'
+       call TimerStop('Diag_channels: diagonalization')
 
+       call TimerStart('Diag_channels: back-xform')
        ksol = 0
        Do i=1,ii
         if(w(i).lt.Edmin) Cycle
@@ -62,6 +68,7 @@
         diag(ksol,ns,k) = w(i)
 
        End do
+       call TimerStop('Diag_channels: back-xform')
 
        ipsol(ich) = ksol
 

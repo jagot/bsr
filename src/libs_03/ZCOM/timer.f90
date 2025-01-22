@@ -342,7 +342,7 @@ contains
 
   subroutine simple_progress_header
     write(out, '(a10, a10, a29, a10)') &
-         "Time step", "Elapsed", "Performance", "ETA"
+         "Step", "Elapsed", "Performance", "ETA"
   end subroutine simple_progress_header
 
   function simple_progress_start() result(now)

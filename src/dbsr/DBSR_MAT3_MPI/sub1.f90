@@ -170,11 +170,20 @@
 
 ! ... orthogonal conditions:
 
+      Call CPU_time(ta)
+      call TimerStart("DBS_ORTH")
       Call DBS_ORTH
+      call TimerStop("DBS_ORTH")
+      call timed_section_now(ta, "DBS_ORTH")
 
 ! ... diagonalize the diagonal blocks:
 
-      Call CPU_time(t1);  Call Diag_channels;  Call CPU_time(t2)
+      Call CPU_time(t1)
+      call TimerStart("Diag_channels")
+      Call Diag_channels
+      call TimerStop("Diag_channels")
+      Call CPU_time(t2)
+      call timed_section_now(t1, "Diag_channels")
 
       write(pri,'(/a,T40,f10.2,a)') 'diagonalization:',(t2-t1)/60,' min '
       call flush(pri)
@@ -212,6 +221,10 @@
       Call CPU_time(t2)
       write(pri,'(/a,T40,f10.2,a)') 'diagonal blocks:',(t2-t0)/60,' min '
       write(*  ,'( a,T40,f10.2,a)') 'diagonal blocks:',(t2-t0)/60,' min '
+
+      call TimerReport(.true.)
+
+      write(*,*)
 
 !--------------------------------------------------------------------------------
 ! ... non-diagonal overlap matrix:

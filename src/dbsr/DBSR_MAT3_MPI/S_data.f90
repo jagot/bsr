@@ -49,6 +49,9 @@
       Use dbsr_mat
       Use c_data
 
+      Use accuracy, only: rk
+      Use Timer
+
       Implicit none
       Integer :: itype, kpol, ktype
       Integer :: i,j, i1,i2, j1,j2, ii,jj, iii,jjj, ich,jch, int, k, &
@@ -60,7 +63,11 @@
       Integer, external :: KBORT
       Real(8), external :: Sum_AmB, QUADR_qp
 
+      real(rk) :: starting_time
+
       if(ncdata.eq.0) Return
+
+      write(*,'("S_data ktype = ",i0,", kpol = ",i0)') ktype, kpol
 
       Call CPU_time(t1)
 
@@ -105,6 +112,8 @@
        Case(4); sym_d='x';   sym_r='x'
       End Select
 
+      starting_time = simple_progress_start()
+
 !----------------------------------------------------------------------
 ! ... select structure:
 
@@ -115,7 +124,10 @@
       Case(1)
 
        iii=0; jjj=0; S=0.d0
-       Do j=1,ncdata;  i=IPT(j)
+       Do j=1,ncdata
+        if (mod(j,600)==0) call simple_progress_header
+        if (mod(j,30)==0) call simple_progress(j, ncdata, starting_time)
+        i=IPT(j)
 
         if(K1(i).ne.iii) then
          i1 = K1(i)/ibo; i2 = mod(K1(i),ibo)
@@ -191,7 +203,10 @@
       Case(2,3,4,5)
 
        jjj=0; iii=0
-       Do j=1,ncdata; i=IPT(j)
+       Do j=1,ncdata
+        if (mod(j,600)==0) call simple_progress_header
+        if (mod(j,30)==0) call simple_progress(j, ncdata, starting_time)
+        i=IPT(j)
         jj=k1(i); ii=k2(i); ich=k3(i); io=k4(i)
 
         if(jj.ne.jjj.or.ii.ne.iii) then
@@ -240,7 +255,10 @@
       Case(6,7,8,9)
 
        xx=0.d0;  CA=0.d0
-       Do j=1,ncdata;  i=IPT(j); i1=k2(i); j1=k3(i)
+       Do j=1,ncdata
+        if (mod(j,600)==0) call simple_progress_header
+        if (mod(j,30)==0) call simple_progress(j, ncdata, starting_time)
+        i=IPT(j); i1=k2(i); j1=k3(i)
 
         Call Density(ns,ks,dd,pq(1,jp1,i1),pq(1,jp2,j1),sym_d)
         xx = xx + cdata(i)*dd
@@ -445,5 +463,3 @@
       End Select
 
       End Subroutine pri_Sk_coef
-
-

@@ -7,11 +7,14 @@
 !     Gauss-Legendre n-point quadrature formula.
 !     (from numerical recipe,  www.nr.com)
 !-----------------------------------------------------------------------
+      Use Timer
       Integer n
       Double precision :: x1,x2,x(n),w(n)
       Double precision, parameter :: EPS=1.d-14 ! the relative precision.
       Integer :: i,j,m
       Double precision :: p1,p2,p3,pp,xl,xm,z,z1
+
+      call TimerStart('gauleg')
 
       !  High precision is a good idea for this routine.
 
@@ -47,6 +50,7 @@
         w(i)=2.d0*xl/((1.d0-z*z)*pp*pp)  !  Compute the weight
         w(n+1-i)=w(i)                    !  and its symmetric counterpart.
       End do
+      call TimerStop('gauleg')
 
       End Subroutine gauleg
 

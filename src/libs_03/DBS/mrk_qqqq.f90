@@ -8,6 +8,7 @@
       Use DBS_gauss
       Use DBS_moments
       Use DBS_integrals
+      Use Timer
 
       Implicit none
       Integer, intent(in) :: k
@@ -38,14 +39,21 @@
        met = 1
       end if
 
+      call TimerStart('mrk_qqqq')
+
 ! ... compute the spline moments:
 
+      call TimerStart('mrk_qqqq: moments')
       Call moments_qq(  k   ,kk,nv,rkd1)
       Call moments_qq(-(k+1),kk,nv,rkd2)
+      call TimerStop('mrk_qqqq: moments')
+      call TimerStart('mrk_qqqq: diag')
       Call diag_qqqq(k)
+      call TimerStop('mrk_qqqq: diag')
 
 ! ... generate the rkb array
 
+      call TimerStart('mrk_qqqq: generate array')
       rkb=0.d0
 
       DO jv=1,nv;    jj = 0
@@ -71,6 +79,9 @@
       if(met.eq.0) irka(k,2)=1
       if(met.eq.1) then; krk1=k; itype1 = 'qqqq'; end if
       krk=k; itype = 'qqqq'
+      call TimerStop('mrk_qqqq: generate array')
+
+      call TimerStop('mrk_qqqq')
 
       END Subroutine mrk_qqqq
 
@@ -109,6 +120,7 @@
     Use DBS_grid
     Use DBS_gauss
     Use DBS_moments
+    Use Timer
 
     Implicit none
     Integer, intent(in) :: k,iv
@@ -125,6 +137,7 @@
 
     Call gauleg(0.d0,1.d0,x,w,ks)
 
+    Call TimerStart("mrk_qqqq: First integration")
     DO m=1,ks
 
 ! .. the absolute coordinate at the new gaussian point
@@ -157,9 +170,10 @@
       End do
 
     END DO   !  over m
+    Call TimerStop("mrk_qqqq: First integration")
 
 ! .. second integration
-
+    Call TimerStart("mrk_qqqq: Second integration")
     IF(k/=0) then;   gx(:) = grw(iv,:)*grm(iv,:)**(k+1)
     else;            gx(:) = grw(iv,:)*grm(iv,:)
     end if
@@ -176,5 +190,6 @@
              END DO; END DO
 
     ik = ksq*(ksq+1)/2;  rkd(1:ik,1:ik,iv) = a + TRANSPOSE(a)
+    Call TimerStop("mrk_qqqq: Second integration")
 
     End Subroutine triang_qqqq
