@@ -17,8 +17,9 @@
 !     combination of sym_i and sym_j leads to different represantation
 !     for a and d:   a(ns,ks),  a(ns,2*ks+1),  a(ns,ns)
 !----------------------------------------------------------------------
-      Use DBS_integrals, only: rkb
+      Use DBS_integrals, only: rkb, itype, d24_rk
       Use DBS_debug
+      Use BLAS
 
 #ifdef DEBUG_SPEEDUPS
       Use Timer
@@ -32,6 +33,7 @@
       ! local variables
       Integer :: i,j, ip,jp, imin,imax, jmin,jmax, ii,jj
       Real(8) :: c,t1,t2
+      Integer :: num_blas_threads
 
 #ifdef DEBUG_SPEEDUPS
       Real(8), allocatable :: a_ref(:,:)
@@ -52,19 +54,63 @@
       Select case(icase)
 !----------------------------------------------------------------------
       Case(1)                                          !  I( . a ; . b)
+         write(*,'("convol: I(.a;.b) ",a," ",a,", ks = ",i0,", ns = ",i0,", itype = ",a)') &
+              sym_i, sym_j, ks, ns, itype
 
       if(sym_i.eq.'s'.and.sym_j.eq.'s') then
+#ifdef DEBUG_SPEEDUPS_CONVOL_PAPB_SS
+         call TimerStart('convol: I(.a;.b) s s, step 1')
+#endif
+         ! Compared to the old implementation, we do not limit the
+         ! contraction over i to 1,ns-ip+1, where ip = 1,ks then has
+         ! to be the outer loop. Instead we use the fact that the
+         ! array storing the Rk-integrals, rkb, is zero outside that
+         ! boundary, and let i run freely all the way to ns.
 
-        do ip=1,ks
-        do i=1,ns-ip+1
-           a(i,ip) = SUM(d(1:ns,1:ks)*rkb(i,1:ns,ip,1:ks))
-        end do; end do
+         num_blas_threads = blas_get_num_threads()
+         call blas_set_num_threads(1)
+         !$omp parallel do collapse(2) default(none) private(ip,jp) shared(ks,ns,rkb,d24_rk)
+         do ip=1,ks
+            do jp=1,ks
+               d24_rk(:,ip,jp) = matmul(rkb(1:ns,1:ns,ip,jp), d(1:ns,jp))
+            end do
+         end do
+         !$omp end parallel do
+         call blas_set_num_threads(num_blas_threads)
+#ifdef DEBUG_SPEEDUPS_CONVOL_PAPB_SS
+         call TimerStop('convol: I(.a;.b) s s, step 1')
+         call TimerStart('convol: I(.a;.b) s s, step 2')
+#endif
+         !$omp parallel do default(none) private(ip,i) shared(ks,ns,a,d24_rk)
+         do ip=1,ks
+            do i=1,ns-ip+1
+               a(i,ip) = sum(d24_rk(i,ip,:))
+            end do
+         end do
+         !$omp end parallel do
+#ifdef DEBUG_SPEEDUPS_CONVOL_PAPB_SS
+        call TimerStop('convol: I(.a;.b) s s, step 2')
+
+        call TimerStart('convol: I(.a;.b) s s, old')
+        allocate(a_ref(1:ns,1:ks))
+        a_ref = 0.d0
+         do ip=1,ks
+            do i=1,ns-ip+1
+               a_ref(i,ip) = SUM(d(1:ns,1:ks)*rkb(i,1:ns,ip,1:ks))
+            end do
+         end do
+        call TimerStop('convol: I(.a;.b) s s, old')
+        discrepancy = sum(abs(a(1:ns,1:ks) - a_ref(1:ns,1:ks)))
+        write(*,'("Discrepancy: ",e26.16,", tolerance: ",e26.16)') discrepancy, tolerance
+        if(discrepancy > tolerance) error stop "Discrepancy exceeds tolerance"
+        deallocate(a_ref)
+#endif
 
       elseif(sym_i.eq.'n'.and.sym_j.eq.'n') then
 #ifdef DEBUG_SPEEDUPS
          call TimerStart('convol: I(.a;.b) n n')
 #endif
-         !$omp parallel do default(none) private(ip,imin,imax,i,c,jp,jmin,jmax) shared(ks,a)
+         !$omp parallel do default(none) private(ip,imin,imax,i,c,jp,jmin,jmax) shared(ns,ks,a,d,rkb)
          do ip=1,ks+ks-1
             imin=max(1,1+ks-ip)
             imax=min(ns,ns+ks-ip)
@@ -97,14 +143,14 @@
                      c=c+d(j,jp)*rkb(i,j,ip,jp)
                   end do
                end do
-               a(i,ip)=c
+               a_ref(i,ip)=c
             end do
          end do
-         deallocate(a_ref)
          call TimerStop('convol: I(.a;.b) n n, old')
          discrepancy = sum(abs(a(1:ns,1:ks) - a_ref(1:ns,1:ks)))
          write(*,'("Discrepancy: ",e26.16,", tolerance: ",e26.16)') discrepancy, tolerance
          if(discrepancy > tolerance) error stop "Discrepancy exceeds tolerance"
+         deallocate(a_ref)
 #endif
 
       elseif(sym_i.eq.'l'.and.sym_j.eq.'l') then
@@ -137,13 +183,58 @@
       end if
 !----------------------------------------------------------------------
       Case(2)                                         !  I( a . ; b . )
+         write(*,'("convol: I(a.;b.) ",a," ",a,", ks = ",i0,", ns = ",i0,", itype = ",a)') &
+              sym_i, sym_j, ks, ns, itype
 
       if(sym_i.eq.'s'.and.sym_j.eq.'s') then
+#ifdef DEBUG_SPEEDUPS_CONVOL_APBP_SS
+         call TimerStart('convol: I(a.;b.) s s, step 1')
+#endif
+         ! Compared to the old implementation, we do not limit the
+         ! contraction over i to 1,ns-ip+1, where ip = 1,ks then has
+         ! to be the outer loop. Instead we use the fact that the
+         ! array storing the Rk-integrals, rkb, is zero outside that
+         ! boundary, and let i run freely all the way to ns.
+
+         num_blas_threads = blas_get_num_threads()
+         call blas_set_num_threads(1)
+         !$omp parallel do collapse(2) default(none) private(ip,jp) shared(ks,ns,rkb,d24_rk)
+         do ip=1,ks
+            do jp=1,ks
+               d24_rk(:,ip,jp) = matmul(transpose(rkb(1:ns,1:ns,ip,jp)), d(1:ns,ip))
+            end do
+         end do
+         !$omp end parallel do
+         call blas_set_num_threads(num_blas_threads)
+#ifdef DEBUG_SPEEDUPS_CONVOL_APBP_SS
+         call TimerStop('convol: I(a.;b.) s s, step 1')
+         call TimerStart('convol: I(a.;b.) s s, step 2')
+#endif
+         !$omp parallel do default(none) private(ip,i) shared(ks,ns,a,d24_rk)
+         do ip=1,ks
+            do i=1,ns-ip+1
+               a(i,ip) = sum(d24_rk(i,:,ip))
+            end do
+         end do
+         !$omp end parallel do
+#ifdef DEBUG_SPEEDUPS_CONVOL_APBP_SS
+        call TimerStop('convol: I(a.;b.) s s, step 2')
+
+        call TimerStart('convol: I(a.;b.) s s, old')
+        allocate(a_ref(1:ns,1:ks))
+        a_ref = 0.d0
 
         do ip=1,ks
-        do i=1,ns-ip+1
-           a(i,ip) = SUM(d(1:ns,1:ks)*rkb(1:ns,i,1:ks,ip))
-        end do; end do
+           do i=1,ns-ip+1
+              a_ref(i,ip) = SUM(d(1:ns,1:ks)*rkb(1:ns,i,1:ks,ip))
+           end do
+        end do
+        call TimerStop('convol: I(a.;b.) s s, old')
+        discrepancy = sum(abs(a(1:ns,1:ks) - a_ref(1:ns,1:ks)))
+        write(*,'("Discrepancy: ",e26.16,", tolerance: ",e26.16)') discrepancy, tolerance
+        if(discrepancy > tolerance) error stop "Discrepancy exceeds tolerance"
+        deallocate(a_ref)
+#endif
 
       elseif(sym_i.eq.'n'.and.sym_j.eq.'n') then
 
@@ -184,7 +275,10 @@
       end if
 
 !----------------------------------------------------------------------
-      Case(3);  a(1:ns,1:ns) = 0.d0                    ! I( . a ; b . )
+      Case(3)                                         ! I( . a ; b . )
+         write(*,'("convol: I(.a;b.) ",a," ",a,", ks = ",i0,", ns = ",i0,", itype = ",a)') &
+              sym_i, sym_j, ks, ns, itype
+         a(1:ns,1:ns) = 0.d0
 
       if(sym_i.eq.'s'.and.sym_j.eq.'s') then
 
@@ -246,7 +340,10 @@
 
       end if
 !----------------------------------------------------------------------
-      Case(4);  a(1:ns,1:ns) = 0.d0                    ! I( a . ; . b )
+   Case(4)                                         ! I( a . ; . b )
+      write(*,'("convol: I(.a;b.) ",a," ",a,", ks = ",i0,", ns = ",i0,", itype = ",a)') &
+           sym_i, sym_j, ks, ns, itype
+      a(1:ns,1:ns) = 0.d0
 
       if(sym_i.eq.'s'.and.sym_j.eq.'s') then
 

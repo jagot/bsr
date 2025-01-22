@@ -9,9 +9,7 @@
       Use DBS_grid,   only: ns,ks,nv
       Use DBS_gauss,  only: gr, grw
 
-#ifdef DEBUG_SPEEDUPS
       Use Timer
-#endif
 
       Implicit none
       Integer, intent(in)  :: nsw,ksw, nsv,ksv, ll,mm
@@ -23,7 +21,7 @@
       Real(8) :: a(ns,ns), ygw(nv,ks)
       Real(8), external :: bvalu2
       Integer :: ipiv(ns), info
-#ifdef DEBUG_SPEEDUPS
+#ifdef DEBUG_SPEEDUPS_CONVERT_PQ
       Real(8) :: cv_ref(ns)
       Real(8) :: discrepancy
       Real(8), parameter :: tolerance = sqrt(epsilon(1.d0))
@@ -52,16 +50,6 @@
 ! ... form the vector of inner products of the radial function
 ! ... and the spline basis functions:
 
-      call TimerStart('Convert_pq: inner products, old')
-      cv_ref = 0.d0
-      Do iv = 1,nv
-         Do ip = 1,ksv
-            i = iv+ip-1
-            cv_ref(i) = cv_ref(i) + SUM(ygw(iv,:)*bsp(iv,:,ip))
-         End do
-      End do
-      call TimerStop('Convert_pq: inner products, old')
-
       call TimerStart('Convert_pq: inner products, new')
       ! To parallelize the below loop, one would introduce a temporary
       ! matrix for cv and reduce over the extraneous dimension
@@ -72,22 +60,33 @@
       End do
       call TimerStop('Convert_pq: inner products, new')
 
+#ifdef DEBUG_SPEEDUPS_CONVERT_PQ
+      call TimerStart('Convert_pq: inner products, old')
+      cv_ref = 0.d0
+      Do iv = 1,nv
+         Do ip = 1,ksv
+            i = iv+ip-1
+            cv_ref(i) = cv_ref(i) + SUM(ygw(iv,:)*bsp(iv,:,ip))
+         End do
+      End do
+      call TimerStop('Convert_pq: inner products, old')
       discrepancy = sum(abs(cv - cv_ref))
       write(*,'("Discrepancy: ",e26.16,", tolerance: ",e26.16)') discrepancy, tolerance
       if(discrepancy > tolerance) error stop "Discrepancy exceeds tolerance"
+#endif
 
 ! ... B-spline overlap matrix:
 
       a(1:nsv-ll-mm,1:nsv-ll-mm) = fbs(ll+1:nsv-mm,ll+1:nsv-mm)
 
 ! ... solve the equation:  a cv = <B|cw>
-#ifdef DEBUG_SPEEDUPS
+#ifdef DEBUG_SPEEDUPS_CONVERT_PQ
       call TimerStart('Convert_pq: DGESV')
       cv_ref(:) = cv(:)
 #endif
       Call dgesv(nsv-ll-mm, 1, a, ns, ipiv, cv(ll+1), ns, info)
 
-#ifdef DEBUG_SPEEDUPS
+#ifdef DEBUG_SPEEDUPS_CONVERT_PQ
       call TimerStop('Convert_pq: DGESV')
       write(*,*) "Running old implementation (Gauss-Jordan elimination) for comparison"
 

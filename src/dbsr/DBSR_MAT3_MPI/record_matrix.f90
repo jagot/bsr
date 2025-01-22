@@ -4,7 +4,7 @@
 !     record the overlap or Hamiltonian matrix to unit nui
 !----------------------------------------------------------------------
       Use dbsr_mat
-#ifdef DEBUG_SPEEDUPS
+#ifdef DEBUG_SPEEDUPS_RECORD_MATRIX
       Use Timer
 #endif
 
@@ -12,7 +12,7 @@
       Integer :: i,j,k, ni,nj, ip,jp, ich,jch
       Real(8) :: S, w(ns,ms), c(ns,ns)
 
-#ifdef DEBUG_SPEEDUPS
+#ifdef DEBUG_SPEEDUPS_RECORD_MATRIX
       Real(8) :: w_ref(ms), c_ref(ns,ns)
       Real(8) :: discrepancy
       Real(8), parameter :: tolerance = sqrt(epsilon(1.d0))
@@ -26,13 +26,14 @@
        if(maxval(abs(hch(:,:,k))).lt.1.d-20) Cycle
        c = 0.d0
 
-#ifdef DEBUG_SPEEDUPS
+#ifdef DEBUG_SPEEDUPS_RECORD_MATRIX
+       write(*,'("Record_matrix")')
        call TimerStart('Record_matrix: new way 1')
 #endif
        w(1:ni,:) = matmul(transpose(diag(:,1:ni,ich)), hch(:,:,k))
        c(1:ni,1:nj) = matmul(w(1:ni,:), diag(:,1:nj,jch))
 
-#ifdef DEBUG_SPEEDUPS
+#ifdef DEBUG_SPEEDUPS_RECORD_MATRIX
        call TimerStop('Record_matrix: new way 1')
 
        c_ref = 0.d0
@@ -71,12 +72,12 @@
        if(S.lt.1.d-20) Cycle
        w = 0.d0
 
-#ifdef DEBUG_SPEEDUPS
+#ifdef DEBUG_SPEEDUPS_RECORD_MATRIX
        call TimerStart('Record_matrix: new way 2')
 #endif
        w(1:ni,1) = matmul(transpose(diag(:,1:ni,ich)), hcp(:,k))
 
-#ifdef DEBUG_SPEEDUPS
+#ifdef DEBUG_SPEEDUPS_RECORD_MATRIX
        call TimerStop('Record_matrix: new way 2')
        w_ref = 0.d0
 

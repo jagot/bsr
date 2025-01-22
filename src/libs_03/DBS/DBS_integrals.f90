@@ -27,6 +27,12 @@
       Integer :: krk1 = -100
       Character(4) :: itype1='aaaa'
 
+      ! Storage for Rk-integrals partially contracted with density
+      ! matrices. The integers after "d" indicate which indices of the
+      ! Rk-integrals the density matrix is contracted with, for use
+      ! with this particular storage.
+      Real(8), allocatable :: d24_rk(:,:,:)
+
       ! storage for Sk-integrals if any
 
       Integer :: krs_min = -100
@@ -74,12 +80,14 @@
       if(ktype.gt.0) then
        Allocate(irka(kmin:kmax,ktype))
        Allocate(rka(ns,ns,ks,ks,kmin:kmax,ktype))
+       Allocate(d24_rk(ns,ks,ks))
        kra_min = kmin
        kra_max = kmax
        irka = -100
        ntype = ktype
        memory_Rk_integrals = ((kmax-kmin+1)*ntype*4 + &
-        ns*ns*ks*ks*(kmax-kmin+1)*ktype*8)/(1024d0*1024d0)
+        ns*ns*ks*ks*(kmax-kmin+1)*ktype*8 + &
+        ns*ks*ks*8)/(1024d0*1024d0)
        Call alloc_DBS_moments
       end if
 
