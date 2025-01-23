@@ -6,12 +6,15 @@
 !-----------------------------------------------------------------------
       Use dbsr_breit; Use conf_jj;  Use symc_list; Use symt_list
       Use term_exp;   Use nljm_orbitals
+      Use Timer
 
       Implicit none
       Integer, allocatable :: IP_kt(:),IP_det(:,:),JTs(:,:),JTi(:,:),IPs(:,:)
       Real(8), allocatable :: C_det(:), CC_det(:,:)
       Integer :: i,j, k,kt,kdt,ktm, it,it1,it2, JW,JQ
       Integer, external :: Ndets_jq, Jterm, mj_value
+
+      Call TimerStart('Pre_det_exp')
 
       Call Alloc_nljm(ne,msh)
       rewind(nud)
@@ -84,6 +87,8 @@
       Allocate(mj_orb(mj_max+1))
       Do i=1,mj_max+1;  mj_orb(i) = mj_value(i);  End do
 
+      Call TimerStop('Pre_det_exp')
+
 Contains
 
 !======================================================================
@@ -94,9 +99,13 @@ Contains
 !
 !     Calls: Det_sh_jq, DETC_jq, Clebsh2
 !----------------------------------------------------------------------
+      Use Timer
+
       Implicit none
       Real(8) :: C
       Real(8), external :: DETC_jq, Clebsh2
+
+      Call TimerStart('Det_expn_jj')
 
       kdt=0; i=1; nd(i)=1
     1 Call DET_sh_jq(jn(i),iq(i),nd(i),MJs(i),Idet(ipn(i)))
@@ -145,6 +154,7 @@ Contains
 
     3 Continue
 
+      Call TimerStop('Det_expn_jj')
       End Subroutine Det_expn_jj
 
       End Subroutine Pre_det_exp

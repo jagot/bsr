@@ -9,11 +9,14 @@
       Use term_exp
       Use symc_list; Use symt_list
       Use coef_list; Use zoef_list; Use boef_list
+      Use Timer
 
       Implicit none
       Integer :: i,j,k,k1,k2,is,js, it,jt, ij
       Real(8) :: t1,t2
       Integer, external :: DEF_ij
+
+      Call TimerStart('Conf_loop')
 
 !----------------------------------------------------------------------
 ! ... cycle 1 over configurations:
@@ -132,4 +135,5 @@
 
       End do    ! over ic
 
+      Call TimerStop('Conf_loop')
       End Subroutine Conf_loop

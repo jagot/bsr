@@ -7,12 +7,14 @@
 !----------------------------------------------------------------------
       Use dbsr_breit
       Use conf_jj;  Use symc_list;  Use symt_list
+      Use Timer
 
       Implicit none
       Integer :: i,k,ic,jc,ik,jk,it,jt,ij,iort_c
       Integer, external :: Jdef_ncfg, Iadd_symc, Iadd_symt, &
                            Iort_conf_jj, DEF_ij
 
+      Call TimerStart('Read_conf_jj')
 ! ... define ncfg:
 
       Call Alloc_cfg (0)
@@ -132,6 +134,7 @@
 
       Deallocate(IT_stat)
 
+      Call TimerStop('Read_conf_jj')
       End Subroutine Read_conf_jj
 
 

@@ -33,6 +33,7 @@
       Use dbsr_breit
       Use symt_list; Use conf_jj; Use det_list; Use def_list
       Use coef_list
+      Use Timer
 
       Implicit none
       Integer :: klsp, ii
@@ -40,6 +41,7 @@
 
       Call Inf_dbsr_breit
 
+      Call TimerStart('DBSR_BREIT')
 !----------------------------------------------------------------------
 ! ... read arguments if any from command line:
 
@@ -153,7 +155,9 @@
 
       End do  ! over klsp
 
-      End ! Program dbsr_breit
+      Call TimerStop('DBSR_BREIT')
+      Call TimerReport(.true.)
+    End program ! Program dbsr_breit
 
 
 !======================================================================

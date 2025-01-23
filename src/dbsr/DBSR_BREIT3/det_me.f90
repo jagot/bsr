@@ -6,10 +6,13 @@
 !     m.e. between possible combinations of nj-orbitals
 !----------------------------------------------------------------------
       Use nljm_orbitals;  Use conf_jj, only: ne
+      Use Timer
 
       Implicit none
       Integer :: i,i1,i2, j,j1,j2, k,k1,k2
       Integer, external :: isort
+
+      Call TimerStart('Det_me')
 !----------------------------------------------------------------------
 ! ... creat common list of orbital symmetries:
 
@@ -50,7 +53,7 @@
 
       End do
 
-      if(k1.ne.ne) Stop 'Det_me: k1 <> ne '
+      if(k1.ne.ne) Error Stop 'Det_me: k1 <> ne '
 
 ! ... exzaust the 2-st configuration:
 
@@ -73,7 +76,7 @@
 
       End do
 
-      if(k2.ne.ne) Stop 'Det_breit: k2 <> ne '
+      if(k2.ne.ne) Error Stop 'Det_breit: k2 <> ne '
 
       Jdet=Isym1(1:ne);  kz1 = Isort(ne,Jdet)
       Jdet=Isym2(1:ne);  kz2 = Isort(ne,Jdet)
@@ -97,7 +100,10 @@
        if(N1(i).gt.0) k = k + N1(i)
       End do
 
-      if(k.gt.2) Return
+      if(k.gt.2) then
+         Call TimerStop('Det_me')
+         Return
+      end if
 
       Select case(k)
 
@@ -157,6 +163,7 @@
 
       End Select
 
+      Call TimerStop('Det_me')
       End Subroutine DET_me
 
 
@@ -168,11 +175,14 @@
 !     Calls: Idet_fact, Incode_int, Iadd_zoef
 !--------------------------------------------------------------------
       Use nljm_orbitals
+      Use Timer
 
       Implicit none
       Integer :: idf,int
       Real(8) :: C
       Integer, external :: Idet_fact, Incode_int
+
+      Call TimerStart('ZNO_0ee')
 
       C = (-1)**(kz1+kz2)
       idf = Idet_fact (0,0,0,0)
@@ -180,6 +190,7 @@
 
       Call Iadd_zoef (C,int,idf)
 
+      Call TimerStop('ZNO_0ee')
       End Subroutine ZNO_0ee
 
 
@@ -191,11 +202,14 @@
 !    Calls: Idet_fact, Incode_int, Iadd_zoef.
 !--------------------------------------------------------------------
       Use nljm_orbitals
+      Use Timer
 
       Implicit none
       Integer :: i,j,k1,k2,is,idf,int
       Real(8) :: C
       Integer, external :: Idet_fact, Incode_int
+
+      Call TimerStart('ZNO_1ee')
 
       Do is=1,NSYM
 
@@ -215,6 +229,7 @@
 
       End do
 
+      Call TimerStop('ZNO_1ee')
       End Subroutine ZNO_1ee
 
 
@@ -227,6 +242,7 @@
 !     Calls: Check_boef, Idet_fact, Iadd_zoef.
 !----------------------------------------------------------------------
       Use nljm_orbitals;  Use boef_list
+      Use Timer
 
       Implicit none
       Integer, intent(in) :: i1,i2,j1,j2
@@ -235,6 +251,8 @@
 
       if(mod(Lsym(i1)+Lsym(i2)+Lsym(j1)+Lsym(j2),2).ne.0) Return
       if(Msym(i1)+Msym(i2).ne.Msym(j1)+Msym(j2)) Return
+
+      Call TimerStart('ZNO_2ee')
 
       Call Check_boef(Lsym(i1),Jsym(i1),Msym(i1), &
                       Lsym(i2),Jsym(i2),Msym(i2), &
@@ -268,6 +286,8 @@
 
       End do;  End do;  End do;  End do
 
+      Call TimerStop('ZNO_2ee')
+
       End Subroutine ZNO_2ee
 
 
@@ -285,11 +305,14 @@
 !----------------------------------------------------------------------
       Use dbsr_breit, only: ibd,ibf
       Use nljm_orbitals
+      Use Timer
 
       Implicit none
       Integer, intent(in) :: i1,i2,i3,i4
       Integer :: i, k,k1,k2, is,id,kd
       Integer, external :: Iadd_ndet, Iadd_ndef, ISORT
+
+      Call TimerStart('Idet_fact')
 
       kd = 0
       Do is = 1,NSYM
@@ -306,7 +329,7 @@
         k2 = k2 + 1;  N2(k2) = nnsym2(Isym2(i))
        End do
 
-       if(k1.ne.k2) Stop 'Idet_fact: k1 <> k2'
+       if(k1.ne.k2) Error Stop 'Idet_fact: k1 <> k2'
 
        if(k1.eq.0) Cycle
 
@@ -320,6 +343,8 @@
        kd=kd+1; N3(kd)=id; N4(kd)=1
 
       End do
+
+      Call TimerStop('Idet_fact')
 
       Idet_fact=0; if(kd.eq.0) Return
 
