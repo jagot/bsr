@@ -6,6 +6,7 @@
 !----------------------------------------------------------------------
       Use DBS_grid,         only: ns,ks
       Use DBS_orbitals_pq,  only: p => pq
+      Use DBS_convolutions
 
       Implicit none
       Integer, intent(in) :: i1,j1,i2,j2,k
@@ -46,6 +47,7 @@
 !----------------------------------------------------------------------
       Use DBS_grid,         only: ns,ks
       Use DBS_orbitals_pq,  only: p => pq
+      Use DBS_convolutions
 
       Implicit none
       Integer, intent(in) :: i1,j1,i2,j2,k
@@ -68,6 +70,7 @@
 !----------------------------------------------------------------------
       Use DBS_grid,         only: ns,ks
       Use DBS_orbitals_pq,  only: p => pq
+      Use DBS_convolutions
 
       Implicit none
       Integer, intent(in) :: i1,j1,i2,j2,k
@@ -90,6 +93,7 @@
 !----------------------------------------------------------------------
       Use DBS_grid,         only: ns,ks
       Use DBS_orbitals_pq,  only: p => pq
+      Use DBS_convolutions
 
       Implicit none
       Integer, intent(in) :: i1,j1,i2,j2,k
@@ -112,6 +116,7 @@
 !----------------------------------------------------------------------
       Use DBS_grid,      only: ns,ks
       Use DBS_orbitals_pq,  only: p  => pq
+      Use DBS_convolutions
 
       Implicit none
       Integer, intent(in) :: i1,j1,i2,j2,k

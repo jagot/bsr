@@ -174,6 +174,7 @@
       Subroutine Load_int_core(ik)
 !=====================================================================
       Use hd_core
+      Use DBS_convolutions
 
       Implicit none
       Integer :: j, ii,jj, k, met, ik,io

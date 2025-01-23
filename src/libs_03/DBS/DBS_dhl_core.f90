@@ -182,6 +182,7 @@
 !---------------------------------------------------------------------
       Use DBS_grid,         only: ns,ks,ms
       Use DBS_orbitals_pq,  only: pq
+      Use DBS_convolutions
       Use dhl_core
       Use bk4_data
 

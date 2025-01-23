@@ -27,6 +27,7 @@
       Use dbsr_mchf
       Use df_orbitals
       Use id4_data
+      Use DBS_convolutions
 
       Implicit none
       Integer, intent(in)  :: i
@@ -262,6 +263,7 @@
 !-----------------------------------------------------------------------
       Use dbsr_mchf
       Use df_orbitals
+      Use DBS_convolutions
 
       Implicit none
       Integer, intent(in) :: i

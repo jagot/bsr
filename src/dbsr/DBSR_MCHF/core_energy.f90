@@ -174,6 +174,7 @@
       Use Core_energy
       Use df_orbitals
       Use DBS_grid, only: ns,ks
+      Use DBS_convolutions
 
       Implicit none
       Integer, intent(in) :: ncore

@@ -32,6 +32,7 @@
       ! Rk-integrals the density matrix is contracted with, for use
       ! with this particular storage.
       Real(8), allocatable :: d24_rk(:,:,:)
+      Real(8), allocatable :: d23_rk(:,:,:)
 
       ! storage for Sk-integrals if any
 
@@ -81,13 +82,15 @@
        Allocate(irka(kmin:kmax,ktype))
        Allocate(rka(ns,ns,ks,ks,kmin:kmax,ktype))
        Allocate(d24_rk(ns,ks,ks))
+       Allocate(d23_rk(ns,ns,ks))
        kra_min = kmin
        kra_max = kmax
        irka = -100
        ntype = ktype
        memory_Rk_integrals = ((kmax-kmin+1)*ntype*4 + &
         ns*ns*ks*ks*(kmax-kmin+1)*ktype*8 + &
-        ns*ks*ks*8)/(1024d0*1024d0)
+        ns*ks*ks*8 + &
+        ns*ns*ks*8)/(1024d0*1024d0)
        Call alloc_DBS_moments
       end if
 

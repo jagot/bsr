@@ -7,6 +7,7 @@
 !----------------------------------------------------------------------
       Use dbsr_ci;       Use DBS_grid
       Use c_data;        Use DBS_orbitals_pq
+      Use DBS_convolutions
 
       Implicit none
       Integer, intent(in) :: k,itype

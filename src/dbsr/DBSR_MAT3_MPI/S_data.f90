@@ -48,6 +48,7 @@
 !----------------------------------------------------------------------
       Use dbsr_mat
       Use c_data
+      Use DBS_convolutions
 
       Use accuracy, only: rk
       Use Timer
