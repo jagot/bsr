@@ -53,33 +53,14 @@
 
 ! ... generate the rkb array
 
-      call TimerStart('mrk_qqqq: generate array')
-      rkb=0.d0
-
-      DO jv=1,nv;    jj = 0
-      DO jh = 1,ksq; j  = jv  + jh - 1
-      DO jhp=jh,ksq; jp = jhp - jh + 1
-                     jj = jj  + 1
-
-      DO iv=1,nv;    ii = 0
-      DO ih=  1,ksq; i  = iv  + ih - 1
-      DO ihp=ih,ksq; ip = ihp - ih + 1
-                     ii = ii  + 1
-
-          if     ( iv < jv ) then;   c = rkd1(ii,iv)*rkd2(jj,jv)
-          else if( iv > jv ) then;   c = rkd1(jj,jv)*rkd2(ii,iv)
-          else;                      c = rkd(ii,jj,iv)
-          end if
-
-          rkb(i,j,ip,jp) = rkb(i,j,ip,jp) +  c
-
-      END DO;  END DO;  END DO
-      END DO;  END DO;  END DO
+      call mrk_common_gen_array(ksq, ksq, rkd1, rkd2, rkd1, rkd2)
+#ifdef DEBUG_SPEEDUPS
+      call mrk_qqqq_gen_array_old()
+#endif
 
       if(met.eq.0) irka(k,2)=1
       if(met.eq.1) then; krk1=k; itype1 = 'qqqq'; end if
       krk=k; itype = 'qqqq'
-      call TimerStop('mrk_qqqq: generate array')
 
       call TimerStop('mrk_qqqq')
 
@@ -193,3 +174,52 @@
     Call TimerStop("mrk_qqqq: Second integration")
 
     End Subroutine triang_qqqq
+
+
+#ifdef DEBUG_SPEEDUPS
+    subroutine mrk_qqqq_gen_array_old()
+      Use DBS_grid
+      Use DBS_moments
+      Use DBS_integrals
+      Use Timer
+
+      Implicit none
+      Integer :: i,j, ii,jj, iv,jv, ih,jh, ihp,jhp, ip,jp
+      Real(8) :: c
+
+      Real(8), allocatable :: rkb_ref(:,:,:,:)
+      Real(8) :: discrepancy
+      Real(8), parameter :: tolerance = sqrt(epsilon(1.d0))
+
+      allocate(rkb_ref(1:ns,1:ns,1:ks,1:ks))
+      call TimerStart('mrk_qqqq: generate array')
+      rkb_ref=0.d0
+
+      DO jv=1,nv;    jj = 0
+      DO jh = 1,ksq; j  = jv  + jh - 1
+      DO jhp=jh,ksq; jp = jhp - jh + 1
+                     jj = jj  + 1
+
+      DO iv=1,nv;    ii = 0
+      DO ih=  1,ksq; i  = iv  + ih - 1
+      DO ihp=ih,ksq; ip = ihp - ih + 1
+                     ii = ii  + 1
+
+          if     ( iv < jv ) then;   c = rkd1(ii,iv)*rkd2(jj,jv)
+          else if( iv > jv ) then;   c = rkd1(jj,jv)*rkd2(ii,iv)
+          else;                      c = rkd(ii,jj,iv)
+          end if
+
+          rkb_ref(i,j,ip,jp) = rkb_ref(i,j,ip,jp) +  c
+
+      END DO;  END DO;  END DO
+      END DO;  END DO;  END DO
+      call TimerStop('mrk_qqqq: generate array')
+
+      discrepancy = sum(abs(rkb(1:ns,1:ns,1:ks,1:ks) - rkb_ref(1:ns,1:ns,1:ks,1:ks)))
+      write(*,'("Discrepancy: ",e26.16,", tolerance: ",e26.16)') discrepancy, tolerance
+      if(discrepancy > tolerance) error stop "Discrepancy exceeds tolerance"
+
+      deallocate(rkb_ref)
+    end subroutine mrk_qqqq_gen_array_old
+#endif

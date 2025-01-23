@@ -78,6 +78,7 @@
 ! ... prepare B_spline representation and define symmetries for given
 ! ... type of integrals, indicated by 'icase' in module c_data:
 
+      call TimerStart('S_data B-spline Sk-integrals')
       Select case(atype)
        Case(0);  Call msk_ppqq(kpol)
         Select case(itype)
@@ -104,6 +105,7 @@
          Case(9);     ip1=2; ip2=2; jp1=1; jp2=1;  int=4;            !  I(jp1,ip2;ip1,jp2)   ( . i j .)
         End Select
       End Select
+      call TimerStop('S_data B-spline Sk-integrals')
 
       sym_i='n'; sym_j='n'
       Select case(int)

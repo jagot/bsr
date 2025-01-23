@@ -8,6 +8,7 @@ add_library(dbs
   def_Vnucl.f90            density.f90
   mrk_pppp.f90             mrk_pqpq.f90             mrk_qpqp.f90
   mrk_qqqq.f90             msk_ppqq.f90             msk_pqqp.f90
+  mrk.f90
   pri_int.f90              quadr.f90                quadr_pq.f90
   rk_pq.f90                rk.f90
   sk.f90                   sk_pq.f90                sum_amb.f90
