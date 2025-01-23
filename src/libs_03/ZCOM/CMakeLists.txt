@@ -38,6 +38,9 @@ if (Fortran_COMPILER_NAME MATCHES "gfortran.*")
   list(APPEND ZCOM_SOURCES replace_iargc.f90)
 endif()
 
+# We need to disable the preprocessor for the ancient Fortran in
+# recup_a.f90
+set_source_files_properties(recup_a.f90 PROPERTIES COMPILE_OPTIONS "-nocpp")
 set_source_files_properties(FUN_zcfg.f90 PROPERTIES COMPILE_OPTIONS "-std=legacy")
 set_source_files_properties(blas.f90 PROPERTIES COMPILE_DEFINITIONS "BLA_VENDOR=${BLA_VENDOR}")
 add_library(zcom ${ZCOM_SOURCES})
