@@ -6,6 +6,7 @@
 !------------------------------------------------------------------
       Use dbsr_mchf
       Use df_orbitals
+      Use Timer
 
       Implicit none
       Integer, intent(in)    :: i
@@ -20,6 +21,7 @@
        Call solve_direct (i,hfm,v,rhs); Return
       end if
 
+      Call TimerStart('Solve_eiv')
       write(amethod,'(a)') 'diagonalization MCHF matrix'
 
       eii = e(i)
@@ -114,4 +116,5 @@
 
       end if
 
+      Call TimerStop('Solve_eiv')
       End Subroutine  Solve_eiv

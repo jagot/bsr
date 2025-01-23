@@ -5,6 +5,7 @@
 !---------------------------------------------------------------------
       Use dbsr_mchf
       Use df_orbitals
+      Use Timer
 
       Implicit none
       Real(8) :: hfm(ms,ms), v(ms), et, rhs(ms), hx(ms,ms)
@@ -19,7 +20,7 @@
       dpm = 0.d0
 
       Do it = 1,max_it
-
+       Call TimerStart('SCF iteration')
        write(log,'(/80(''-''))')
        write(log,'(a,i5)') 'Iteration',it
        write(log,'(80(''-''))')
@@ -105,6 +106,7 @@
 
        icore = 0;  if(ncore.gt.0) icore = sum(iord(:))
 
+       Call TimerStop('SCF iteration')
       End do ! over itterations
 
       End subroutine Scf_mchf

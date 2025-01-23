@@ -205,7 +205,7 @@
       Real(8), parameter :: tolerance = sqrt(epsilon(1.d0))
 
       allocate(rkb_ref(1:ns,1:ns,1:ks,1:ks))
-      call TimerStart('mrk_qpqp: generate array')
+      call TimerStart('mrk_qpqp: generate array old')
       rkb_ref=0.d0
 
       DO jv = 1,nv;   jj = 0
@@ -227,7 +227,7 @@
 
       END DO;  END DO;  END DO
       END DO;  END DO;  END DO
-      call TimerStop('mrk_qpqp: generate array')
+      call TimerStop('mrk_qpqp: generate array old')
 
       discrepancy = sum(abs(rkb(1:ns,1:ns,1:ks,1:ks) - rkb_ref(1:ns,1:ns,1:ks,1:ks)))
       write(*,'("Discrepancy: ",e26.16,", tolerance: ",e26.16)') discrepancy, tolerance

@@ -25,6 +25,7 @@
 !----------------------------------------------------------------------
       Use dbsr_mchf, pi_value => pi
       Use df_orbitals, only: nbf,kbs
+      Use Timer
 
       Implicit none
       Integer, Intent(in) :: i,j
@@ -39,6 +40,7 @@
       if(kbs(i).ne.kbs(j)) Return
       if(i.le.ncore.or.j.le.ncore) Return
 
+      Call TimerStart('Rotate_ij')
       g = 0.d0; dg = 0.d0; f = 0.d0
       Call Get_pv_df(i,pi)
       Call Get_pv_df(j,pj)
@@ -87,6 +89,7 @@
       Call Check_tails(i)
       Call Check_tails(j)
 
+      Call TimerStop('Rotate_ij')
       End Subroutine Rotate_ij
 
 

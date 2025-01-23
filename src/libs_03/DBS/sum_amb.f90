@@ -14,6 +14,7 @@
     Character(*), intent(in) :: sym
     Integer :: i,j, imin,imax
     Real(8) :: x
+#warning "Please reimplement me using BLAS-1"
 
     x = 0.d0
 

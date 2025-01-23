@@ -5,6 +5,7 @@
 !---------------------------------------------------------------------
       Use dbsr_mchf
       Use df_orbitals
+      Use Timer
 
       Implicit none
       Integer :: i
@@ -18,6 +19,7 @@
       Real(8) :: y(ms), w(ms)
       Integer :: mm, md, k, info, j, jp, ii, ipos(1)
 
+      Call TimerStart('Solve_direct')
       write(amethod,'(a)') 'direct MCHF solution'
 
       md = ms+nbf
@@ -74,4 +76,5 @@
       ipos=maxloc(abs(v))
       if(v(ipos(1)).lt.0.d0) v=-v
 
+      Call TimerStop('Solve_direct')
       End Subroutine  Solve_direct

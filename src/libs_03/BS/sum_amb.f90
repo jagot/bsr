@@ -16,6 +16,7 @@
 
     INTEGER :: i,j, imin,imax
     REAL(8) :: x
+#warning "Please reimplement me using BLAS-1, and merge with the one in ../DBS"
 
     x = 0.d0
 

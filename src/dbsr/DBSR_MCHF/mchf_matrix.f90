@@ -28,6 +28,7 @@
       Use df_orbitals
       Use id4_data
       Use DBS_convolutions
+      Use Timer
 
       Implicit none
       Integer, intent(in)  :: i
@@ -40,6 +41,7 @@
       Integer, external :: Ipointer
       Real(8), external :: WW, quadr
 
+      Call TimerStart('MCHF matrix')
       Call CPU_time(t1)
 
       hfm = 0.d0; rhs =0.d0; hx = 0.d0
@@ -251,6 +253,7 @@
 
       Call CPU_time(t2); time_matrix = time_matrix + (t2-t1)
 
+      Call TimerStop('MCHF matrix')
       End Subroutine mchf_matrix
 
 

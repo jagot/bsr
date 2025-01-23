@@ -76,11 +76,13 @@
 !     Generates the HD-matrixes and integrals
 !----------------------------------------------------------------------
       Use hd_core
+      Use Timer
 
       Implicit none
       Integer, intent(in) :: ncore,mbreit,kappa
       Integer :: k,ik
 
+      Call TimerStart('Gen_hd_core')
       if(nkap.eq.0) Call Alloc_hd_core(ncore)
 
 !... set up hd matrix:
@@ -103,6 +105,7 @@
 
       end if
 
+      Call TimerStop('Gen_hd_core')
       End Subroutine Gen_hd_core
 
 

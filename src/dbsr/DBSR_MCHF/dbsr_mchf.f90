@@ -15,9 +15,12 @@
 !     where 'atom' is any atomic symbol
 !----------------------------------------------------------------------
       Use dbsr_mchf
+      Use Timer
 
       Implicit none
       Real(8) :: t1,t2
+
+      Call TimerStart('DBSR_MCHF')
 
       Call CPU_time(t1)
 
@@ -63,6 +66,9 @@
       write(log,'(/80(''-'')/)')
 
       Call Debug_time
+
+      Call TimerStop('DBSR_MCHF')
+      Call TimerReport(.true.)
 
       End ! Program DBSR_MCHF
 

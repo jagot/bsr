@@ -6,6 +6,7 @@
 !---------------------------------------------------------------------
       Use dbsr_mchf
       Use df_orbitals
+      Use Timer
 
       Implicit none
       Integer :: i
@@ -22,6 +23,7 @@
 
       Integer :: mm,md, k,  info, j, jp,ii, ipos(1)
 
+      Call TimerStart('Solve_nr')
       write(log,'(a,1Pe12.2)') 'srhs = ', srhs
       write(log,'(a)') 'method - solve_nr'
 
@@ -107,4 +109,5 @@
 
       e(i) = (eii - res(ms+1))
 
+      Call TimerStop('Solve_nr')
       End Subroutine  Solve_nr

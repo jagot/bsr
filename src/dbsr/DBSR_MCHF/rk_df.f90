@@ -8,6 +8,7 @@
       Use DBS_grid,         only: ns,ks
       Use df_orbitals
       Use DBS_convolutions
+      Use Timer
 
       Implicit none
       Integer, intent(in) :: i1,j1,i2,j2,k
@@ -20,6 +21,7 @@
       end if
       if(kk.ne.k) kk=-100
 
+      Call TimerStart('rk_df')
       if(i1.ne.ii1.or.i2.ne.ii2) then
        Call density (ns,ks,dens1,p(1,1,i1),p(1,1,i2),'s')
        Call density (ns,ks,dens3,p(1,2,i1),p(1,2,i2),'s')
@@ -44,13 +46,16 @@
        iconv=iconv+1
       end if
 
+      Call TimerStart('rk_df: SUM_AmB')
       rk =  SUM_AmB(ns,ks,conv1,dens2,'s') + &
             SUM_AmB(ns,ks,conv2,dens4,'s') + &
             SUM_AmB(ns,ks,conv3,dens2,'s') + &
             SUM_AmB(ns,ks,conv4,dens4,'s')
+      Call TimerStop('rk_df: SUM_AmB')
 
       rk_df = rk
 
+      Call TimerStop('rk_df')
       End Function rk_df
 
 !======================================================================

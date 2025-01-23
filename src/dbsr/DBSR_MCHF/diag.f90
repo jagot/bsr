@@ -5,11 +5,14 @@
 !----------------------------------------------------------------------
       Use dbsr_mchf
       Use df_orbitals
+      Use Timer
 
       Implicit none
       Integer :: ib,il
       Real(8) :: et,t1,t2
       Real(8), external ::  Ecore_df
+
+      Call TimerStart('Diag')
 
       Call CPU_time(t1)
 
@@ -37,6 +40,7 @@
       Call CPU_time(t2)
       time_diag = time_diag + (t2-t1)
 
+      Call TimerStop('Diag')
       End Subroutine Diag
 
 
@@ -46,6 +50,7 @@
 ! ... diagonalization of the block ib:
 !----------------------------------------------------------------------
       Use dbsr_mchf
+      Use Timer
 
       Implicit none
       Integer, intent(in) :: ib,nc,ic1,ic2
@@ -54,6 +59,7 @@
       Real(8), external :: rk_df, dhl_value
       Character(256) :: error_msg
 
+      Call TimerStart('Diag_block')
 ! ... set-up Hamitonian matrix for given block:
 
       HM = 0.d0
@@ -114,6 +120,7 @@
        coefs(ip_level(i)+1:ip_level(i)+nc) = HM(1:nc,level(i))
       End do
 
+      Call TimerStop('Diag_block')
       End Subroutine Diag_block
 
 
@@ -146,10 +153,13 @@
 !----------------------------------------------------------------------
       Use dbsr_mchf
       Use df_orbitals
+      Use Timer
 
       Implicit none
       Integer :: i,k,nu
       Real(8), external :: dhc_value, rk_df
+
+      call TimerStart('Update_int')
 
       ! clean rk arrays in module df_orbitals:
       ii1=0;ii2=0;jj1=0;jj2=0;kk=-100
@@ -176,7 +186,7 @@
        Close(nu)
       end if
 
-
+      call TimerStop('Update_int')
       End Subroutine Update_int
 
 
@@ -204,4 +214,3 @@
       End do; End do
 
       End Subroutine Print_int_value
-
