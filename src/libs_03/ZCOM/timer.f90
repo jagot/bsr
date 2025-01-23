@@ -100,7 +100,7 @@ contains
     !
     if (t%active) then
        write (out,"('TimerStart: timer ',a,' is already active')") trim(region)
-       stop 'TimerStart - nested timer'
+       error stop 'TimerStart - nested timer'
     end if
     !
     !  Push the new timer to the timer stack
@@ -134,7 +134,7 @@ contains
     !
     if (.not.t%active) then
        write (out,"('TimerStop: timer ',a,' is not running')") trim(region)
-       stop 'TimerStop - inactive timer'
+       error stop 'TimerStop - inactive timer'
     end if
     !
     !  Get timings for this invocation
@@ -230,7 +230,7 @@ contains
        t => t_table(pos)
        if (.not.t%used) then
           write (out,"('Timer ',i4,' in slot ',i5,' is defined but unused?!')") ord, pos
-          stop 'TimerReport - logic error'
+          error stop 'TimerReport - logic error'
        end if
        !
        ! Calculate active-timer corrections
@@ -467,7 +467,7 @@ contains
           if (t_count>=table_size/5) then
              write (out,"('Too many timers. Increase table_size in "// &
                   "timer.f90 to at least ',i5)") t_count*5
-             stop 'timer%insert_item'
+             error stop 'timer%insert_item'
           end if
           t_appear(t_count)      = pos
           t_table(pos)%used      = .true.
@@ -503,7 +503,7 @@ contains
     !
     if (len_trim(str)>name_len) then
        write (out,"('Timer name length (',i0,') is too long. Timer=""',a,'""')") len_trim(str), trim(str)
-       stop 'timer%string_hash - Timer name too long'
+       error stop 'timer%string_hash - Timer name too long'
     end if
     !
     !    This hash assumes at least 29-bit integers. It is supposedly

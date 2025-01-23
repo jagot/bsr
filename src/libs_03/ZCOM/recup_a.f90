@@ -41,8 +41,8 @@
       Implicit real(8) (A-H,O-Z)
       Integer :: J1(3,*),J2(3,*)
 
-      if(mi.gt.mm) Stop 'RECUP: mi > mm, number of moments'
-      if(n .gt.mc) Stop 'RECUP: n  > mc, number of couplings'
+      if(mi.gt.mm) Error Stop 'RECUP: mi > mm, number of moments'
+      if(n .gt.mc) Error Stop 'RECUP: n  > mc, number of couplings'
 
       Do i=1,N           ! rewriting of j1,j2 to y1,y2
       Do j=1,3           ! because these arrays may be modified
@@ -136,7 +136,7 @@
 	 ! write(*,*) 'nw,nd =', nw,nd
 	  Return              ! Y1=Y2 - end of search
       end if
-      IF(IP.eq.N) STOP ' ZRECUP: Y1 and Y2 are incompatible, step 1'
+      IF(IP.eq.N) ERROR STOP ' ZRECUP: Y1 and Y2 are incompatible, step 1'
 
 !----------------------------------------------------------------------
 !     transformation of scheme Y2 to Y1 by elimentary recouplings
@@ -181,7 +181,7 @@
       End do
       np=np+1
       if(np.gt.N) &
-       STOP 'ZRECUP: schemes Y2 and Y3 are incompatable, step 3'
+       ERROR STOP 'ZRECUP: schemes Y2 and Y3 are incompatable, step 3'
       if(JP1(i1).ne.JT.or.JP2(i2).ne.JT) go to 21
 
       Do i=2,i1                         ! crossing of paths JP1 and JP2
@@ -203,7 +203,7 @@
       end if
       End do        ! over k
       if(kc.eq.0) &
-        STOP 'ZRECUP: schemes Y1 and Y2 are incompatible, step 2'
+        ERROR STOP 'ZRECUP: schemes Y1 and Y2 are incompatible, step 2'
 !----------------------------------------------------------------------
 !                          repeat the above block for selected moments
        k=kc
@@ -275,11 +275,11 @@
        Jsign(M2)=Jsign(M2)+1
        Jsign(M12)=Jsign(M12)-1
       else
-       Stop ' Recup: problems with M1'
+       Error Stop ' Recup: problems with M1'
       end if
 !----------------------------------------------------------------------
       nw=nw+1
-      if(nw.gt.mw)  STOP 'ZRECUP: NW exceeds max. allowed value'
+      if(nw.gt.mw)  ERROR STOP 'ZRECUP: NW exceeds max. allowed value'
       MY=mi+nw
 !----------------------------------------------------------------------
 !                                                     result couplings:
@@ -340,7 +340,7 @@
       S=sqrt(S)
 
       if(nw.eq.0) then
-       if(mod(ks,2).ne.0) STOP 'ZRECUP: invalid sing factor'
+       if(mod(ks,2).ne.0) ERROR STOP 'ZRECUP: invalid sing factor'
        ZRECUP=S*(-1)**(ks/2)
        go to 5
       end if
@@ -400,7 +400,7 @@
        go to 1
       else
        m=ks+IS(nw)
-       IF(MOD(m,2).ne.0) STOP 'ZRECUP: invalid sing factor'
+       IF(MOD(m,2).ne.0) ERROR STOP 'ZRECUP: invalid sing factor'
        RR=RR+R(nw)*(-1)**(m/2)
       end if
 
