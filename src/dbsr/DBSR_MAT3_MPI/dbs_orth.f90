@@ -27,6 +27,7 @@
 !---------------------------------------------------------------------
       Use dbsr_mat
       Use Timer
+      Use SimpleProgress
       Use accuracy, only: rk
 
       Implicit none

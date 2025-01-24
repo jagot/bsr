@@ -6,6 +6,9 @@
       Use dbsr_mchf
       Use df_orbitals
       Use Timer
+      Use SimpleProgress
+
+      Use accuracy, only: rk_t => rk
 
       Implicit none
       Real(8) :: hfm(ms,ms), v(ms), et, rhs(ms), hx(ms,ms)
@@ -13,11 +16,16 @@
       Real(8), external :: quadr
       Integer :: ip, i,j, it
 
+      Real(rk_t) :: starting_time
+
       Call Write_run_par(log)
 
       Call diag(etotal);    et = etotal
 
       dpm = 0.d0
+
+      starting_time = simple_progress_start(.false.)
+      write(scr,'(a22,2a12)') 'etotal','scf_diff','orb_diff'
 
       Do it = 1,max_it
        Call TimerStart('SCF iteration')
@@ -97,8 +105,8 @@
        write(log,'(A,T40,1P2d10.2)') 'Maximum orbital diff (relative): ', orb_diff,orb_tol
        write(log,'(A,T40,1P2d10.2)') 'Energy difference (relative): ', scf_diff,scf_tol
 
-       write(scr,'(a,i5,f22.15,1P4d12.2)') 'it,etotal,scf_diff,orb_diff:', &
-                                            it,etotal,scf_diff,orb_diff
+       call simple_progress(it, max_it, starting_time, .false.)
+       write(scr,'(f22.15,1P4d12.2)') etotal,scf_diff,orb_diff
 
        et = etotal
 
@@ -110,6 +118,3 @@
       End do ! over itterations
 
       End subroutine Scf_mchf
-
-
-

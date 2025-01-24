@@ -11,6 +11,7 @@
 
       Use accuracy, only: hik, xrk, rk
       Use Timer
+      Use SimpleProgress
       Use debug_ram, only: get_ram_size
 
       Implicit none

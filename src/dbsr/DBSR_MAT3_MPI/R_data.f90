@@ -46,6 +46,7 @@
       Use c_data
       Use DBS_convolutions
 
+      Use SimpleProgress
       Use accuracy, only: rk
 
 #ifdef DEBUG_SPEEDUPS

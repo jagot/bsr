@@ -52,6 +52,7 @@
 
       Use accuracy, only: rk
       Use Timer
+      Use SimpleProgress
 
       Implicit none
       Integer :: itype, kpol, ktype

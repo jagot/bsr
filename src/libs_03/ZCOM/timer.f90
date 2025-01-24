@@ -28,10 +28,10 @@ module Timer
   implicit none
   private
   public TimerStart, TimerStop, TimerReport
+  public get_real_time, get_cpu_time
   public timer_disable, timer_name_len
-  public simple_progress, simple_progress_header, simple_progress_start
   public rcsid_timer
-  public timed_section, timed_section_now
+  public timed_section, timed_section_now, print_time
   !
   character(len=clen), save :: rcsid_timer = "$Id: timer.f90,v 1.2 2021/11/13 14:57:26 ps Exp $"
   !
@@ -299,57 +299,6 @@ contains
     call flush(out)
   end subroutine TimerReport
 
-  subroutine seconds2hhmmss(hours, minutes, seconds)
-    integer(ik), intent(out) :: hours, minutes
-    real(rk), intent(inout) :: seconds
-    hours = 0
-    minutes = 0
-    if(seconds > 60) then
-       minutes = int(seconds/60)
-       seconds = seconds - 60*minutes
-    end if
-    if(minutes > 60) then
-       hours = minutes/60
-       minutes = minutes - 60*hours
-    end if
-  end subroutine seconds2hhmmss
-
-  subroutine simple_progress(i, num_steps, starting_time, perf_multiplier)
-    integer(ik), intent(in) :: i, num_steps
-    real(rk), intent(in) :: starting_time
-    real(rk), intent(in), optional :: perf_multiplier
-    real(rk) perf_multiplier_, elapsed, seconds_per_step, eta
-    integer(ik) el_hours, el_minutes, eta_hours, eta_minutes
-    ! perf_multiplier can be e.g. the number of grid points, then
-    ! the quantity that is printed corresponds to space--time grid
-    ! points per second; this is inspired by Ken Schafer.
-    perf_multiplier_ = 1.0_rk
-    if(present(perf_multiplier)) perf_multiplier_ = perf_multiplier
-
-    elapsed = get_real_time() - starting_time
-
-    seconds_per_step = elapsed / i
-    eta = max(num_steps*seconds_per_step - elapsed, 0.0_rk)
-
-    call seconds2hhmmss(el_hours, el_minutes, elapsed)
-    call seconds2hhmmss(eta_hours, eta_minutes, eta)
-
-    write(out, '(i10, 1i4.2,":",1i2.2,":",1i2.2, 1g26.16, " Hz", 1i4.2,":",1i2.2,":",1i2.2)') &
-         i, el_hours, el_minutes, int(elapsed), &
-         perf_multiplier_/seconds_per_step, &
-         eta_hours, eta_minutes, int(eta)
-  end subroutine simple_progress
-
-  subroutine simple_progress_header
-    write(out, '(a10, a10, a29, a10)') &
-         "Step", "Elapsed", "Performance", "ETA"
-  end subroutine simple_progress_header
-
-  function simple_progress_start() result(now)
-    real(rk) :: now
-    call simple_progress_header
-    now = get_real_time()
-  end function simple_progress_start
   !
   !  Support routines
   !
