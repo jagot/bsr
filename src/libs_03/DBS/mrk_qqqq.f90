@@ -54,7 +54,7 @@
 ! ... generate the rkb array
 
       call mrk_common_gen_array(ksq, ksq, rkd1, rkd2, rkd1, rkd2)
-#ifdef DEBUG_SPEEDUPS
+#ifdef DEBUG_SPEEDUPS_MRK
       call mrk_qqqq_gen_array_old()
 #endif
 
@@ -176,7 +176,7 @@
     End Subroutine triang_qqqq
 
 
-#ifdef DEBUG_SPEEDUPS
+#ifdef DEBUG_SPEEDUPS_MRK
     subroutine mrk_qqqq_gen_array_old()
       Use DBS_grid
       Use DBS_moments

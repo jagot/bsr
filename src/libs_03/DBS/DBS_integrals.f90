@@ -21,6 +21,7 @@
       Integer :: ntype = 0
       Integer, allocatable :: irka(:,:)
       Real(8), allocatable, target :: rka(:,:,:,:,:,:)
+      Real(8), allocatable :: rkb_tmp(:,:,:,:)
 
       Real(8), allocatable, target :: rka1(:,:,:,:)
       Integer :: ntype1 = 0
@@ -81,6 +82,7 @@
       if(ktype.gt.0) then
        Allocate(irka(kmin:kmax,ktype))
        Allocate(rka(ns,ns,ks,ks,kmin:kmax,ktype))
+       Allocate(rkb_tmp(1:ns,1:ns,1:ks,1:ks))
        Allocate(d24_rk(ns,ks,ks))
        Allocate(d23_rk(ns,ns,ks))
        kra_min = kmin
@@ -89,6 +91,7 @@
        ntype = ktype
        memory_Rk_integrals = ((kmax-kmin+1)*ntype*4 + &
         ns*ns*ks*ks*(kmax-kmin+1)*ktype*8 + &
+        ns*ns*ks*ks*8 + &
         ns*ks*ks*8 + &
         ns*ns*ks*8)/(1024d0*1024d0)
        Call alloc_DBS_moments
