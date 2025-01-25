@@ -1,4 +1,13 @@
 module ProgressMeter
+#ifdef f2003
+  use, intrinsic :: iso_fortran_env, only : stdin=>input_unit, &
+       stdout=>output_unit, &
+       stderr=>error_unit
+#else
+#define stdin  5
+#define stdout 6
+#define stderr 0
+#endif
   type Progress
      integer :: N ! Number of steps
      real(8) :: tstart
@@ -48,11 +57,12 @@ contains
     eta = (elapsed*p%N)/i
 
     call clear_line(100)
-    write(*,'("Progress: ", f5.2, " %")', advance='no') (100.0*i)/p%N
-    write(*,'(a)', advance='no') " "
+    write(stdout,'("Progress: ", f6.2, " %")', advance='no') (100.0*i)/p%N
+    write(stdout,'(a)', advance='no') " "
     call print_time(elapsed, "Elapsed")
-    write(*,'(a)', advance='no') " "
+    write(stdout,'(a)', advance='no') " "
     call print_time(eta, "ETA")
+    if(i == p%N.or..not.isatty(stdout)) write(stdout,*)
 
     p%tlast_print = tnow
   end subroutine print_progress

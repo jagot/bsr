@@ -13,6 +13,15 @@ Subroutine State_res
   Use Timer
   Use ProgressMeter
   Use debug_ram, only: get_ram_size
+#ifdef f2003
+  use, intrinsic :: iso_fortran_env, only : stdin=>input_unit, &
+       stdout=>output_unit, &
+       stderr=>error_unit
+#else
+#define stdin  5
+#define stdout 6
+#define stderr 0
+#endif
 
   Implicit none
   Real(8) :: C,CC,CCC, t1,t2,t3
@@ -23,7 +32,7 @@ Subroutine State_res
   Integer, parameter :: ib2 = 2**2, ib5 = 2**5, ib10= 2**10
 
   character(len=256) :: common_timer_label, &
-       buffer_timer_label, i_timer_label, j_timer_label, &
+       buffer_timer_label, &
        det_fact_timer_label, add_int_timer_label, &
        add_matrix_timer_label
 
@@ -38,6 +47,7 @@ Subroutine State_res
 
   Call CPU_TIME(t1)
 
+  write(*,'("State_res")')
   if(myid.eq.0) then
      rewind(nub)
      Call Read_symc(nub)
@@ -46,6 +56,7 @@ Subroutine State_res
      Call Read_det (nub)
      Call Read_def (nub)
   end if
+  write(*,'("State_res: header read")')
 
   Call br_dets
 
@@ -63,8 +74,6 @@ Subroutine State_res
 
   write(common_timer_label, '("State_res, icase = ",i0)') icase
   write(buffer_timer_label, '(a,": ",a)') trim(common_timer_label), "buffer loop"
-  write(i_timer_label, '(a,": ",a)') trim(common_timer_label), " i loop"
-  write(j_timer_label, '(a,": ",a)') trim(common_timer_label), " j loop"
   write(det_fact_timer_label, '(a,": ",a)') trim(common_timer_label), " Det_fact_new"
   write(add_int_timer_label, '(a,": ",a)') trim(common_timer_label), " Add_integral"
   write(add_matrix_timer_label, '(a,": ",a)') trim(common_timer_label), " Add_matrix"
@@ -73,10 +82,12 @@ Subroutine State_res
 
   inquire(unit=nub, pos=file_pos)
 
-  write(*,'("Counting number of integrals")')
+  write(*,'("State_res: Counting number of integrals")')
+  flush(stdout)
   num_buffers = 0
   if(myid.eq.0) then
      i = 0
+     call TimerStart('State_res: Count number of integrals')
      pre_read_loop: do
         read(nub,iostat=file_status) Cbuf(1),itb(1),jtb(1),intb(1),idfb(1)
         if (file_status/=0) exit pre_read_loop
@@ -84,8 +95,14 @@ Subroutine State_res
         if(mod(i, mcbuf) == 1) then
            num_buffers = num_buffers + 1
            write(*,'(".")', advance='no')
+           if(mod(num_buffers, 30)==0) then
+              write(*,'(" #integrals: ",e26.16,", #buffers: ",i0,", buffer size: ",i0)') &
+                   (1.0*i), num_buffers, mcbuf
+              flush(stdout)
+           end if
         end if
      end do pre_read_loop
+     call TimerStop('State_res: Count number of integrals')
      write(*,*)
      write(*,'("State_res, number of integrals: ",i0,", number of buffers: ",i0,", buffer size: ",i0)') &
           i, num_buffers, mcbuf
@@ -102,6 +119,8 @@ Subroutine State_res
      Call Read_def (nub)
   end if
 
+  flush(stdout)
+
   !----------------------------------------------------------------------
   ! ... first, fill the buffer:
 
@@ -109,6 +128,11 @@ Subroutine State_res
   ! This probably does not work with the MPI approach, in that other
   ! ranks does not know num_buffers.
   do nnbuf=1,num_buffers
+     cur_ram = get_ram_size()
+     max_ram = max(max_ram, cur_ram)
+     cumul_ram = cumul_ram + cur_ram
+     num_iter = num_iter+1
+     ! write(*,'("nnbuf = ",i0,"/",i0)') nnbuf, num_buffers
 
      t_check = 0.d0
      t_add = 0.d0
@@ -118,6 +142,7 @@ Subroutine State_res
 
      ! ... first, fill the buffer with angular coefficients:
 
+     call TimerStart('State_res: read angular coefficients')
      if(myid.eq.0) then
         read_loop: do i=1,mcbuf
            read(nub, iostat=file_status) Cbuf(i),itb(i),jtb(i),intb(i),idfb(i)
@@ -128,6 +153,7 @@ Subroutine State_res
            end if
         end do read_loop
      end if
+     call TimerStop('State_res: read angular coefficients')
 
      ! ... broadcast the buffer:
 
@@ -140,7 +166,7 @@ Subroutine State_res
 
      nc1 = 0; nc2 = 0
      Do ibuf=1,ncbuf
-        ! call TimerStart(trim(buffer_timer_label))
+        ! if(mod(ibuf, ncbuf/10) == 1) write(*,'("ibuf = ",i0,"/",i0)') ibuf, ncbuf
 
         ! ... decode the integral:
 
@@ -167,16 +193,14 @@ Subroutine State_res
 
         idf = idfb(ibuf)
 
+        call TimerStart(trim(buffer_timer_label))
         ! write(*,'("Loop over states, ik = ",i0,",",i0,", jk = ",i0,",",i0)') is1,is2,js1,j2
-
         !----------------------------------------------------------------------
         ! ... loop over all relevant states:
 
         ! ... loop over all relevant states:
 
         Do ik=is1,is2
-           ! call TimerStart(trim(i_timer_label))
-
            is =IS_order(ik)
            ip1=IP_state(is)
            no1=no_state(is)
@@ -184,12 +208,6 @@ Subroutine State_res
            ich=ich_state(is)
 
            Do jk=js1,js2
-              cur_ram = get_ram_size()
-              max_ram = max(max_ram, cur_ram)
-              cumul_ram = cumul_ram + cur_ram
-              num_iter = num_iter+1
-
-              ! call TimerStart(trim(j_timer_label))
               js= IS_order(jk)
               ip2=IP_state(js)
               no2=no_state(js)
@@ -250,22 +268,18 @@ Subroutine State_res
               ! ... send the final coefficients to archive:
 
               nc1 = nc1 + 1
+              call TimerStart(trim(add_int_timer_label))
               Do i = 1,nndef
                  CCC = CC * Adef(i); io=iof(i); jo=jof(i)
-                 call TimerStart(trim(add_int_timer_label))
                  Call Add_integral (kpol,j1,j2,j3,j4,CCC,ic,jc,io,jo)
-                 call TimerStop(trim(add_int_timer_label))
                  nc2 = nc2 + 1
               End do
-
-              ! call TimerStop(trim(j_timer_label))
+              call TimerStop(trim(add_int_timer_label))
            End do    ! over js
-           ! call TimerStop(trim(i_timer_label))
         End do    ! over is
 
-        ! call TimerStop(trim(buffer_timer_label))
+        call TimerStop(trim(buffer_timer_label))
      End do    !  over buffer
-     write(*,*)
 
      Call CPU_TIME(t2)
 
@@ -284,8 +298,6 @@ Subroutine State_res
           'bufer:',nnbuf, ncbuf,nc1,nc2,(t2-t1)/60,(t3-t2)/60,' min'
      if(myid.eq.0.and.debug.gt.0) &
           write(pri,'(a,i5,T40,f10.2,a)') 'bufer:',nnbuf, (t3-t1)/60,' min'
-
-     ! ... check the data bank again:
 
      call print_progress(progre, nnbuf)
   end do
