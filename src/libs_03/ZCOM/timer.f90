@@ -514,7 +514,7 @@ contains
 
     Real(8) :: tend
 
-    call CPU_time(tend)
+    tend = get_real_time()
     call timed_section(t0, tend, message)
   end subroutine timed_section_now
 end module Timer

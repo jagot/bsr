@@ -16,13 +16,14 @@ module ProgressMeter
   end type Progress
 contains
   subroutine init_progress(p, N)
+    use Timer
     implicit none
     type(Progress), intent(inout) :: p
     integer, intent(in) :: N
 
     p%N = N
     p%dt_print = 0.1
-    call CPU_time(p%tstart)
+    p%tstart = get_real_time()
     p%tlast_print = p%tstart
     write(*,*)
   end subroutine init_progress
@@ -50,7 +51,7 @@ contains
     integer, intent(in) :: i
     real(8) :: tnow, elapsed, eta
 
-    call CPU_time(tnow)
+    tnow = get_real_time()
     elapsed = tnow - p%tstart
     if(tnow - p%tlast_print < p%dt_print) return
 

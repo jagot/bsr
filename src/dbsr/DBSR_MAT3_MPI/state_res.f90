@@ -45,7 +45,7 @@ Subroutine State_res
   !----------------------------------------------------------------------
   ! ... read coef.s from jnt_bnk:
 
-  Call CPU_TIME(t1)
+  t1 = get_real_time()
 
   write(*,'("State_res")')
   if(myid.eq.0) then
@@ -60,7 +60,7 @@ Subroutine State_res
 
   Call br_dets
 
-  Call CPU_TIME(t2)
+  t2 = get_real_time()
 
   if(pri.gt.0.and.icase.eq.0.and.idiag.eq.0.and.debug.gt.0) then
      write(pri,'(/a,i7,i9,a )') &
@@ -138,7 +138,7 @@ Subroutine State_res
      t_add = 0.d0
      t_det = 0.d0
 
-     Call CPU_TIME(t1)
+     t1 = get_real_time()
 
      ! ... first, fill the buffer with angular coefficients:
 
@@ -281,7 +281,7 @@ Subroutine State_res
         call TimerStop(trim(buffer_timer_label))
      End do    !  over buffer
 
-     Call CPU_TIME(t2)
+     t2 = get_real_time()
 
      ! write(*, '("State_res, add_matrix loop, iterations = ",i0)') (kpol2-kpol1+1)*ntype
      call TimerStart(trim(add_matrix_timer_label))
@@ -292,7 +292,7 @@ Subroutine State_res
      End do
      call TimerStop(trim(add_matrix_timer_label))
 
-     Call CPU_TIME(t3)
+     t3 = get_real_time()
 
      if(pri.gt.0.and.myid.gt.0)  write(pri,'(a,i5,3i10,2f9.2,a)') &
           'bufer:',nnbuf, ncbuf,nc1,nc2,(t2-t1)/60,(t3-t2)/60,' min'
