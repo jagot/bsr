@@ -57,8 +57,8 @@ contains
     Select case(icase)
        !----------------------------------------------------------------------
     Case(1)                                          !  I( . a ; . b)
-       write(*,'("convol: I(.a;.b) ",a," ",a,", ks = ",i0,", ns = ",i0,", itype = ",a)') &
-            sym_i, sym_j, ks, ns, itype
+       ! write(*,'("convol: I(.a;.b) ",a," ",a,", ks = ",i0,", ns = ",i0,", itype = ",a)') &
+       !      sym_i, sym_j, ks, ns, itype
 
        if(sym_i.eq.'s'.and.sym_j.eq.'s') then
           call Ipapb_ss(ns, ks, a, d)
@@ -73,8 +73,8 @@ contains
        end if
        !----------------------------------------------------------------------
     Case(2)                                         !  I( a . ; b . )
-       write(*,'("convol: I(a.;b.) ",a," ",a,", ks = ",i0,", ns = ",i0,", itype = ",a)') &
-            sym_i, sym_j, ks, ns, itype
+       ! write(*,'("convol: I(a.;b.) ",a," ",a,", ks = ",i0,", ns = ",i0,", itype = ",a)') &
+       !      sym_i, sym_j, ks, ns, itype
 
        if(sym_i.eq.'s'.and.sym_j.eq.'s') then
           call Iapbp_ss(ns, ks, a, d)
@@ -90,8 +90,8 @@ contains
 
        !----------------------------------------------------------------------
     Case(3)                                         ! I( . a ; b . )
-       write(*,'("convol: I(.a;b.) ",a," ",a,", ks = ",i0,", ns = ",i0,", itype = ",a)') &
-            sym_i, sym_j, ks, ns, itype
+       ! write(*,'("convol: I(.a;b.) ",a," ",a,", ks = ",i0,", ns = ",i0,", itype = ",a)') &
+       !      sym_i, sym_j, ks, ns, itype
        a(1:ns,1:ns) = 0.d0
        if(sym_i.eq.'s'.and.sym_j.eq.'s') then
           call Ipabp_ss(ns, ks, a, d)
@@ -106,8 +106,8 @@ contains
        end if
        !----------------------------------------------------------------------
     Case(4)                                         ! I( a . ; . b )
-       write(*,'("convol: I(a.;.b) ",a," ",a,", ks = ",i0,", ns = ",i0,", itype = ",a)') &
-            sym_i, sym_j, ks, ns, itype
+       ! write(*,'("convol: I(a.;.b) ",a," ",a,", ks = ",i0,", ns = ",i0,", itype = ",a)') &
+       !      sym_i, sym_j, ks, ns, itype
        a(1:ns,1:ns) = 0.d0
 
        if(sym_i.eq.'s'.and.sym_j.eq.'s') then
@@ -633,33 +633,33 @@ contains
     ! Integer :: num_blas_threads
     Real(8) :: c
 
-    call TimerStart('convol: I(.a;b.) s s, new')
+    ! call TimerStart('convol: I(.a;b.) s s, new')
 
-    a(1:ns,1:ns) = 0.d0
+    ! a(1:ns,1:ns) = 0.d0
 
-    ! ! num_blas_threads = blas_get_num_threads()
-    ! ! call blas_set_num_threads(1)
-    ! ! !$omp parallel do collapse(2) default(none) private(ip,jp) shared(ks,ns,rkb,d24_rk)
-    ! do ip=1,ks
-    !    do jp=1,ks
-    !       a( 1:ns-ks+1,1+ks-1:ns) = a( 1:ns-ks+1,1+ks-1:ns) + matmul(rkb(1:ns-ks+1,1:ns-ks+1,ip,jp), d(1+ks-1:ns, 1:ns-ks+1))
+    ! ! ! num_blas_threads = blas_get_num_threads()
+    ! ! ! call blas_set_num_threads(1)
+    ! ! ! !$omp parallel do collapse(2) default(none) private(ip,jp) shared(ks,ns,rkb,d24_rk)
+    ! ! do ip=1,ks
+    ! !    do jp=1,ks
+    ! !       a( 1:ns-ks+1,1+ks-1:ns) = a( 1:ns-ks+1,1+ks-1:ns) + matmul(rkb(1:ns-ks+1,1:ns-ks+1,ip,jp), d(1+ks-1:ns, 1:ns-ks+1))
 
-    !       if(ip.gt.1) then
-    !          a(1+ks-1:ns,1+ks-1:ns) = a(1+ks-1:ns,1+ks-1:ns) + matmul(rkb(1:ns-ks+1,1:ns-ks+1,ip,jp), d( 1:ns-ks+1, 1:ns-ks+1))
-    !       end if
+    ! !       if(ip.gt.1) then
+    ! !          a(1+ks-1:ns,1+ks-1:ns) = a(1+ks-1:ns,1+ks-1:ns) + matmul(rkb(1:ns-ks+1,1:ns-ks+1,ip,jp), d( 1:ns-ks+1, 1:ns-ks+1))
+    ! !       end if
 
-    !       if(jp.gt.1) then
-    !          a( 1:ns-ks+1, 1:ns-ks+1) = a( 1:ns-ks+1, 1:ns-ks+1) + matmul(rkb(1:ns-ks+1,1:ns-ks+1,ip,jp), d(1+ks-1:ns,1+ks-1:ns))
-    !       end if
+    ! !       if(jp.gt.1) then
+    ! !          a( 1:ns-ks+1, 1:ns-ks+1) = a( 1:ns-ks+1, 1:ns-ks+1) + matmul(rkb(1:ns-ks+1,1:ns-ks+1,ip,jp), d(1+ks-1:ns,1+ks-1:ns))
+    ! !       end if
 
-    !       if(ip.gt.1.and.jp.gt.1) then
-    !          a(1+ks-1:ns, 1:ns-ks+1) = a(1+ks-1:ns, 1:ns-ks+1) + matmul(rkb(1:ns-ks+1,1:ns-ks+1,ip,jp), d( 1:ns-ks+1,1+ks-1:ns))
-    !       end if
-    !    end do
-    ! end do
-    ! ! !$omp end parallel do
-    ! ! call blas_set_num_threads(num_blas_threads)
-    call TimerStop('convol: I(.a;b.) s s, new')
+    ! !       if(ip.gt.1.and.jp.gt.1) then
+    ! !          a(1+ks-1:ns, 1:ns-ks+1) = a(1+ks-1:ns, 1:ns-ks+1) + matmul(rkb(1:ns-ks+1,1:ns-ks+1,ip,jp), d( 1:ns-ks+1,1+ks-1:ns))
+    ! !       end if
+    ! !    end do
+    ! ! end do
+    ! ! ! !$omp end parallel do
+    ! ! ! call blas_set_num_threads(num_blas_threads)
+    ! call TimerStop('convol: I(.a;b.) s s, new')
 
 #ifdef DEBUG_SPEEDUPS
     call Ipabp_ss_old(ns, ks, a, d)
@@ -704,12 +704,13 @@ contains
        end do
     end do
     call TimerStop('convol: I(.a;b.) s s, old')
-    discrepancy = sum(abs(a(1:ns,1:ns) - a_ref(1:ns,1:ns)))
-    write(*,'("Discrepancy: ",e26.16,", tolerance: ",e26.16)') discrepancy, tolerance
-    ! if(discrepancy > tolerance) error stop "Discrepancy exceeds tolerance"
-    if(discrepancy > tolerance) then
-       a(1:ns,1:ns) = a_ref(1:ns,1:ns)
-    end if
+    ! discrepancy = sum(abs(a(1:ns,1:ns) - a_ref(1:ns,1:ns)))
+    ! write(*,'("Discrepancy: ",e26.16,", tolerance: ",e26.16)') discrepancy, tolerance
+    ! ! if(discrepancy > tolerance) error stop "Discrepancy exceeds tolerance"
+    ! if(discrepancy > tolerance) then
+    !    a(1:ns,1:ns) = a_ref(1:ns,1:ns)
+    ! end if
+    a(1:ns,1:ns) = a_ref(1:ns,1:ns)
     deallocate(a_ref)
   end subroutine Ipabp_ss_old
 #endif
@@ -861,10 +862,10 @@ contains
     ! Integer :: num_blas_threads
     Real(8) :: c
 
-    call TimerStart('convol: I(a.;.b) s s, new')
+    ! call TimerStart('convol: I(a.;.b) s s, new')
 
-    a(1:ns,1:ns) = 0.d0
-    call TimerStop('convol: I(a.;.b) s s, new')
+    ! a(1:ns,1:ns) = 0.d0
+    ! call TimerStop('convol: I(a.;.b) s s, new')
 
 #ifdef DEBUG_SPEEDUPS
     call Iappb_ss_old(ns, ks, a, d)
@@ -909,12 +910,13 @@ contains
        end do
     end do
     call TimerStop('convol: I(a.;.b) s s, old')
-    discrepancy = sum(abs(a(1:ns,1:ns) - a_ref(1:ns,1:ns)))
-    write(*,'("Discrepancy: ",e26.16,", tolerance: ",e26.16)') discrepancy, tolerance
-    ! if(discrepancy > tolerance) error stop "Discrepancy exceeds tolerance"
-    if(discrepancy > tolerance) then
-       a(1:ns,1:ns) = a_ref(1:ns,1:ns)
-    end if
+    ! discrepancy = sum(abs(a(1:ns,1:ns) - a_ref(1:ns,1:ns)))
+    ! write(*,'("Discrepancy: ",e26.16,", tolerance: ",e26.16)') discrepancy, tolerance
+    ! ! if(discrepancy > tolerance) error stop "Discrepancy exceeds tolerance"
+    ! if(discrepancy > tolerance) then
+    !    a(1:ns,1:ns) = a_ref(1:ns,1:ns)
+    ! end if
+    a(1:ns,1:ns) = a_ref(1:ns,1:ns)
     deallocate(a_ref)
   end subroutine Iappb_ss_old
 #endif
