@@ -46,7 +46,6 @@
       Use c_data
       Use DBS_convolutions
 
-      Use SimpleProgress
       Use accuracy, only: rk
 
 #ifdef DEBUG_SPEEDUPS
@@ -109,7 +108,6 @@
       call TimerStop('R_data B-spline ERIs')
 #endif
 
-      starting_time = simple_progress_start()
 
 ! ... select structure:
 
@@ -119,8 +117,6 @@
 
        iii=0; jjj=0; S=0.d0
        Do j=1,ncdata
-        if (mod(j,600)==0) call simple_progress_header
-        if (mod(j,30)==0) call simple_progress(j, ncdata, starting_time)
 
         i=IPT(j)
 
@@ -198,8 +194,6 @@
 
        jjj=0; iii=0
        Do j=1,ncdata
-        if (mod(j,600)==0) call simple_progress_header
-        if (mod(j,30)==0) call simple_progress(j, ncdata, starting_time)
 
         i=IPT(j)
         jj=k1(i); ii=k2(i); ich=k3(i); io=k4(i)
@@ -249,8 +243,6 @@
 
        xx=0.d0;  CA=0.d0
        Do j=1,ncdata
-        if (mod(j,600)==0) call simple_progress_header
-        if (mod(j,30)==0) call simple_progress(j, ncdata, starting_time)
 
         i=IPT(j); j1=k2(i); j2=k3(i)
 
@@ -289,8 +281,6 @@
 
        xx=0.d0
        Do j=1,ncdata
-        if (mod(j,600)==0) call simple_progress_header
-        if (mod(j,30)==0) call simple_progress(j, ncdata, starting_time)
 
         i=IPT(j); j1=k2(i); j2=k3(i)
 

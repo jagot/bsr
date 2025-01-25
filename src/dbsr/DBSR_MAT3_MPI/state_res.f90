@@ -11,7 +11,6 @@
 
       Use accuracy, only: hik, xrk, rk
       Use Timer
-      Use SimpleProgress
       Use debug_ram, only: get_ram_size
 
       Implicit none
@@ -99,11 +98,8 @@
 !----------------------------------------------------------------------
 ! ... processing the data in buffer:
 
-      starting_time = simple_progress_start()
       nc1 = 0; nc2 = 0
       Do ibuf=1,ncbuf
-         if (mod(ibuf,600)==0) call simple_progress_header
-         if (mod(ibuf,30)==0) call simple_progress(ibuf, ncbuf, starting_time)
          ! call TimerStart(trim(buffer_timer_label))
 
          ! ... decode the integral:
