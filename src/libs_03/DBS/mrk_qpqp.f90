@@ -120,7 +120,7 @@
       Call gauleg(0.d0,1.d0,x,w,ks)
 
 ! ... first integration:
-      Call TimerStart("mrk_qpqp: First integration")
+      ! Call TimerStart("mrk_qpqp: First integration")
 
       left=iv+ks-1;  xbase=t(left)
 
@@ -162,10 +162,10 @@
       End do
 
       END DO    !  over m
-      Call TimerStop("mrk_qpqp: First integration")
+      ! Call TimerStop("mrk_qpqp: First integration")
 
 ! ... second integration
-      Call TimerStart("mrk_qpqp: Second integration")
+      ! Call TimerStart("mrk_qpqp: Second integration")
 
       gx(:) = grw(iv,:)*grm(iv,:)**(k+1)
 
@@ -184,7 +184,7 @@
               rkd(ii,jj,iv) = rkd(ii,jj,iv) + SUM(bq(:)*INTP(j,jp,:))
              END DO; END DO
              END DO; END DO
-      Call TimerStop("mrk_qpqp: Second integration")
+             ! Call TimerStop("mrk_qpqp: Second integration")
 
       End Subroutine triang_qpqp
 

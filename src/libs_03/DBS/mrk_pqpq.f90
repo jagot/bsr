@@ -122,7 +122,7 @@
 
       left=iv+ks-1;  xbase=t(left)
 
-      Call TimerStart("mrk_pqpq: First integration")
+      ! Call TimerStart("mrk_pqpq: First integration")
       DO m=1,ks
 
 ! .. the absolute coordinate at the new gaussian point
@@ -161,10 +161,10 @@
       End do
 
       END DO !  over m
-      Call TimerStop("mrk_pqpq: First integration")
+      ! Call TimerStop("mrk_pqpq: First integration")
 
 ! ... second integration
-      Call TimerStart("mrk_pqpq: Second integration")
+      ! Call TimerStart("mrk_pqpq: Second integration")
 
       gx(:) = grw(iv,:)*grm(iv,:)**(k+1)
 
@@ -183,7 +183,7 @@
               rkd(jj,ii,iv) = rkd(jj,ii,iv) + SUM(bq(:)*INTP(j,jp,:))
              END DO; END DO
              END DO; END DO
-      Call TimerStop("mrk_pqpq: Second integration")
+             ! Call TimerStop("mrk_pqpq: Second integration")
 
       End Subroutine triang_pqpq
 

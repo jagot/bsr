@@ -18,7 +18,7 @@
       Real(8) :: t1,t2
 
       Call CPU_time(t1)
-      Call TimerStart('Density')
+      ! Call TimerStart('Density')
 
       if(type.eq.'s'.or.type.eq.'u') then
 
@@ -53,7 +53,7 @@
         end do; end do
 
       end if
-      Call TimerStop('Density')
+      ! Call TimerStop('Density')
 
       Call CPU_time(t2)
       ic_density=ic_density+1

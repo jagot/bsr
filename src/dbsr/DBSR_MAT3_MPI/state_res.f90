@@ -193,7 +193,7 @@ Subroutine State_res
 
         idf = idfb(ibuf)
 
-        call TimerStart(trim(buffer_timer_label))
+        ! call TimerStart(trim(buffer_timer_label))
         ! write(*,'("Loop over states, ik = ",i0,",",i0,", jk = ",i0,",",i0)') is1,is2,js1,j2
         !----------------------------------------------------------------------
         ! ... loop over all relevant states:
@@ -260,25 +260,25 @@ Subroutine State_res
 
               ! ... find overlap factors with extracted continuum:
 
-              call TimerStart(trim(det_fact_timer_label))
+              ! call TimerStart(trim(det_fact_timer_label))
               Call Det_fact_new (idf,np1,np2,ipbs)
-              call TimerStop(trim(det_fact_timer_label))
+              ! call TimerStop(trim(det_fact_timer_label))
               if(nndef.eq.0) Cycle
 
               ! ... send the final coefficients to archive:
 
               nc1 = nc1 + 1
-              call TimerStart(trim(add_int_timer_label))
+              ! call TimerStart(trim(add_int_timer_label))
               Do i = 1,nndef
                  CCC = CC * Adef(i); io=iof(i); jo=jof(i)
                  Call Add_integral (kpol,j1,j2,j3,j4,CCC,ic,jc,io,jo)
                  nc2 = nc2 + 1
               End do
-              call TimerStop(trim(add_int_timer_label))
+              ! call TimerStop(trim(add_int_timer_label))
            End do    ! over js
         End do    ! over is
 
-        call TimerStop(trim(buffer_timer_label))
+        ! call TimerStop(trim(buffer_timer_label))
      End do    !  over buffer
 
      t2 = get_real_time()
