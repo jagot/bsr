@@ -76,13 +76,13 @@
         elseif(io.gt.0.and.jo.eq.0) then
          jo=ii
         else
-         Stop 'Det_fact: problems with io,jo'
+         Error Stop 'Det_fact: problems with io,jo'
         end if
        else
         if(io.eq.0) then
          io=ii;jo=jj
         else
-         Stop 'Det_fact: problems with io,jo'
+         Error Stop 'Det_fact: problems with io,jo'
         end if
        end if
       End do
