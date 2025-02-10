@@ -1,5 +1,5 @@
 !======================================================================
-      Subroutine diag_mat
+      Subroutine diag_mat(num_sol)
 !======================================================================
 !     Diagonalization procedure:
 !
@@ -14,11 +14,18 @@
 !        Results in array "a".
 !----------------------------------------------------------------------
       Use dbsr_hd
+      Use Timer
+      Use LAPACK
 
       Implicit none
+      Integer, intent(out) :: num_sol
       Character(1) :: uplo, job, trans
       Integer ::  info, ibtype
       Integer ::  i,j, ich,jch, i1,i2, j1,j2, ip,jp
+
+      call TimerStart('diag_mat')
+
+      num_sol = khm
 
 !----------------------------------------------------------------------
 ! ... read overlap matrix:
@@ -98,9 +105,13 @@
 
       if(diag_ovl.eq.0) then
 
+       call TimerStart('diag_mat: Cholesky factorization')
+
        Call DPOTRF (uplo, khm, b, khm, info)
 
        if(info.ne.0) Error Stop 'DPOTRF info > 0 - Cholesky factorization failed'
+
+       call TimerStop('diag_mat: Cholesky factorization')
 
       end if
 !----------------------------------------------------------------------
@@ -110,9 +121,13 @@
 
       if(diag_ovl.eq.0) then
 
+       call TimerStart('diag_mat: xform to standard eigval')
+
        Call DSYGST( ibtype, uplo, khm, A, khm, B, khm, INFO )
 
        if(info.ne.0) Error Stop 'DSYGST: info > 0 '
+
+       call TimerStop('diag_mat: xform to standard eigval')
 
       end if
 
@@ -130,7 +145,19 @@
 
       if(allocated(eval)) deallocate(eval); allocate(eval(khm))
 
-      Call LAP_DSYEV(job,uplo,khm,khm,A,eval,INFO)
+       call TimerStart('diag_mat: diagonalization')
+
+       if(Emin/=0.and.Emin<Emax) then
+          write(*,'("Finding solutions with energies in the interval (",e0.8,", ",e0.8,"]")') &
+               Emin, Emax
+          num_sol = herm_eig_mrrr(job,uplo,A,eval,Emin,Emax)
+          write(*,'("Found ",i0," solutions")') num_sol
+       else
+          write(*,'("Finding all ",i0," solutions")') khm
+          num_sol = herm_eig_mrrr(job,uplo,A,eval)
+       end if
+
+       call TimerStop('diag_mat: diagonalization')
 
       if(info.ne.0) Error Stop 'DSYEV: info > 0 '
 
@@ -149,11 +176,17 @@
 
       if(diag_ovl.eq.0) then
 
+       call TimerStart('diag_mat: back-xform')
+
        Call DTRSM('left', uplo, trans, 'Non-unit', khm, khm, ONE, &
                   B, khm, A, khm )
+
+       call TimerStop('diag_mat: back-xform')
 
       end if ! over diag_ovl
 
       Deallocate(b)
+
+      call TimerStop('diag_mat')
 
       End Subroutine Diag_mat

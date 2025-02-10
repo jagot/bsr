@@ -38,9 +38,12 @@
 !     "nnn" indicates the index of partial wave
 !=====================================================================
       Use dbsr_hd
+      Use Timer
 
       Implicit none
       Real(8) :: t0, t1
+
+      call TimerStart('DBSR_HD')
 
 ! ... read target information:
 
@@ -67,6 +70,7 @@
 
       End do
 
-      End  ! program DBSR_HD
+      call TimerStop('DBSR_HD')
+      call TimerReport(.true.)
 
-
+      End program  ! program DBSR_HD

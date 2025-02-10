@@ -1,13 +1,17 @@
 !=======================================================================
-      Subroutine b_out
+      Subroutine b_out(num_sol)
 !=======================================================================
 !     output bound-like solutions in bound.nnn
 !-----------------------------------------------------------------------
       Use dbsr_hd
+      Use Timer
 
       Implicit none
+      Integer, intent(in) :: num_sol
       Real(8), allocatable :: Ebind(:)
       Integer :: i,j,ic,jc,is,js,ic1,ic2,k,n,ich,it,nbound,i1,i2,j1,j2
+
+      call TimerStart('b_out')
 
 ! ... output file:
 
@@ -17,12 +21,12 @@
 
 ! ... local allocations:
 
-      Allocate(Ebind(khm));  Ebind = 0.d0
+      Allocate(Ebind(num_sol));  Ebind = 0.d0
 
 !----------------------------------------------------------------------
 !                                        define number of bound states:
       nbound = 0
-      Do is = 1,khm
+      Do is = 1,num_sol
        if(eval(is).gt.Emax.and.Emax.ne.0.d0) Cycle
        if(eval(is).lt.Emin.and.Emin.ne.0.d0) Cycle
        ich = isol(is)   ! dominant channel
@@ -40,7 +44,9 @@
       write(nuu) mhm,nch,npert,ns,jpar,ipar,nbound
 
       js = 0
-      Do is = 1,khm; if(Ebind(is).eq.0.d0) cycle; js=js+1
+      Do is = 1,num_sol
+       if(Ebind(is).eq.0.d0) cycle
+       js=js+1
 
        Call Find_channel_label_jj(isol(is),1,is,eval(is),Lab)
 
@@ -66,15 +72,13 @@
 
       End do
 
-      write(nuu) khm
-      Ebind(1:khm) = (eval(1:khm)-etarg(1))*2
-      write(nuu) Ebind(1:khm)
+      write(nuu) num_sol
+      Ebind(1:num_sol) = (eval(1:num_sol)-etarg(1))*2
+      write(nuu) Ebind(1:num_sol)
 
       Close(nuu)
       Deallocate(Ebind)
 
+      call TimerStop('b_out')
+
       End Subroutine b_out
-
-
-
-

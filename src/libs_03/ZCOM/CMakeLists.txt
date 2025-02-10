@@ -30,7 +30,7 @@ set(ZCOM_SOURCES
   derivatives.f90          check_bsr_name.f90
   Coulomb_integrals_0.f90  Coulomb_integrals_Z.f90 file.f90
   accuracy.f90 timer.f90 debug_ram.f90
-  progress.f90   blas.f90)
+  progress.f90   blas.f90 lapack.f90)
 
 # Gfortran no longer provides an implementation of iargc, so this
 # simple routine is added when Gfortran is the compiler used.

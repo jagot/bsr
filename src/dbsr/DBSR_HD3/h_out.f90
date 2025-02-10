@@ -1,5 +1,5 @@
 !======================================================================
-      Subroutine H_OUT
+      Subroutine H_OUT(num_sol)
 !======================================================================
 !     Output results in H.DAT file (unit 'nuh') for further asymptotic
 !     calculations
@@ -7,6 +7,7 @@
       Use dbsr_hd
 
       Implicit none
+      Integer, intent(in) :: num_sol
       Integer :: NCONAT(ntarg)
       Integer :: i,j,k,km, LRANG2,NPTY
       Real(8), allocatable :: acf(:,:,:)   ! asymptotic coefficients
@@ -43,7 +44,7 @@
       if(ipar.eq.+1) NPTY=0
       if(ipar.eq.-1) NPTY=1
 
-      write(nuh) jpar,0,NPTY,nch,khm,0
+      write(nuh) jpar,0,NPTY,nch,num_sol,0
 
 ! ... number of channels, coupled to each target state:
 
@@ -61,11 +62,11 @@
 
 ! ... R_matrix poles in dereasing order:
 
-      write(nuh) (eval(i),i=khm,1,-1)
+      write(nuh) (eval(i),i=num_sol,1,-1)
 
 ! ... surface amplitudes:
 
-      write(nuh) ((WMAT(i,j),i=1,nch),j=khm,1,-1)
+      write(nuh) ((WMAT(i,j),i=1,nch),j=num_sol,1,-1)
 
       Close(nuh)
 
@@ -73,7 +74,7 @@
 
 
 !======================================================================
-      Subroutine H_OUT_exp
+      Subroutine H_OUT_exp(num_sol)
 !======================================================================
 !     Output results in H.DAT file (unit 'nuh') for further asymptotic
 !     calculations
@@ -81,6 +82,7 @@
       Use dbsr_hd
 
       Implicit none
+      Integer, intent(in) :: num_sol
       Integer :: NCONAT(ntarg), npch(nch)
       Integer :: i,j,k,km,it,ich, LRANG2,NPTY
       Real(8), allocatable :: acf(:,:,:)   ! asymptotic coefficients
@@ -117,7 +119,7 @@
       if(ipar.eq.+1) NPTY=0
       if(ipar.eq.-1) NPTY=1
 
-      write(nuh) jpar,0,NPTY,nch,khm,0
+      write(nuh) jpar,0,NPTY,nch,num_sol,0
 
 ! ... number of channels, coupled to each target state:
 
@@ -150,11 +152,11 @@
 
 ! ... R_matrix poles in dereasing order:
 
-      write(nuh) (eval(i),i=khm,1,-1)
+      write(nuh) (eval(i),i=num_sol,1,-1)
 
 ! ... surface amplitudes:
 
-      write(nuh) ((WMAT(npch(i),j),i=1,nch),j=khm,1,-1)
+      write(nuh) ((WMAT(npch(i),j),i=1,nch),j=num_sol,1,-1)
 
       Close(nuh)
 
