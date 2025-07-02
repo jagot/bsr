@@ -60,6 +60,11 @@ Subroutine DD_OUT
   End do
 
   ! write(*,*) "Matrix sizes:"
+  ! write(*,'(a10," = ",i10)') "kdm1", kdm1
+  ! write(*,'(a10," = ",i10)') "kdm2", kdm2
+  ! write(*,'(a10," = ",i10)') "nstate1", nstate1
+  ! write(*,'(a10," = ",i10)') "nstate2", nstate2
+
   ! write(*,'(a10,"(",i10,",",i10,")")') "DL", size(DL,1), size(DL,2)
   ! write(*,'(a10,"(",i10,",",i10,")")') "DV", size(DV,1), size(DV,2)
   ! write(*,'(a10,"(",i10,",",i10,")")') "Cbra", size(Cbra,1), size(Cbra,2)

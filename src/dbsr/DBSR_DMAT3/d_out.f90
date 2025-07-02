@@ -70,6 +70,15 @@
       Allocate(CL(nstate2),CV(nstate2))
       if(allocated(C2)) Deallocate(C2); Allocate(C2(kdm2))
 
+      ! write(*,*) "Matrix sizes:"
+      ! write(*,'(a10," = ",i10)') "kdm1", kdm1
+      ! write(*,'(a10," = ",i10)') "kdm2", kdm2
+      ! write(*,'(a10," = ",i10)') "istate1", istate1
+      ! write(*,'(a10," = ",i10)') "nstate2", nstate2
+
+      ! write(*,'(a10,"(",i10,",",i10,")")') "DL", size(DL,1), size(DL,2)
+      ! write(*,'(a10,"(",i10,",",i10,")")') "DV", size(DV,1), size(DV,2)
+
       !... loop over final set:
 
       Do isol=1,nstate2
@@ -93,6 +102,7 @@
       write(*,*) 'jot1,0,parity1,E1,Label1',jot1,0,parity1,E1, Label1
 
       write(nud) (cl(i),cv(i),i=nstate2,1,-1)
+      ! write(*,'(2e26.16)') (cl(i),cv(i),i=nstate2,1,-1)
 
       Deallocate(CL,CV,eval)
 
