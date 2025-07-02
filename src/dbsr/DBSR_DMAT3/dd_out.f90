@@ -82,7 +82,7 @@ Subroutine DD_OUT
   Allocate (AAL(nstate1,nstate2),AAV(nstate1,nstate2))
 
   AAL = MATMUL (Cket,BBL)
-  AAV = MATMUL (Cket,BBV)
+  AAV = MATMUL (Cket,BBV)*c_au
 
   Deallocate (BBL,BBV)
 
