@@ -96,6 +96,10 @@
       uplo   = 'L'   ! use lower triangles of A and B matrices
       trans  = 'T'   ! when uplo=L, otherwise trans = 'N'
 
+      info   = 0     ! init to zero; if the overlap matrix is diagonal
+                     ! we avoid the Cholesky factorization, which
+                     ! would otherwise set info.
+
 !----------------------------------------------------------------------
 ! ... Form a Cholesky factorization of the overlap matrix:
 ! ... The factorization has the form
